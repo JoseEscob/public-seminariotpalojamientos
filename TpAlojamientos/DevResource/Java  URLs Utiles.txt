@@ -1,0 +1,6 @@
+http://www.avajava.com/tutorials/lessons/what-is-log4j-and-how-do-i-use-it.html
+https://winterbe.com/posts/2009/09/25/customizing-eclipse/
+
+Window> Preferences >General>Keys
+Ctrl+Shift+D Copy Lines
+https://stackoverflow.com/questions/168426/how-do-i-add-a-shortcut-key-to-eclipse-3-2-java-plug-in-to-build-the-current-pro

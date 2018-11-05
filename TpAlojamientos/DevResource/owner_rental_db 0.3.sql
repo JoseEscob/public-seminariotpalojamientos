@@ -3,15 +3,15 @@ create database owner_rental_db character set utf8mb4 collate utf8mb4_bin;
 use owner_rental_db;
 
 
-create table usuarios(
+create table USUARIOS(
 	id int not null auto_increment,
 	nombre varchar(50) not null,
 	apellido varchar(50) not null,
 	dni varchar(15) not null,
-	nacimiento date not null,
+	fechaNac date not null,
 	mail varchar(50) not null,
-	usuario varchar(50) not null,
-	puntaje float not null,
+	nroUsuario varchar(50) not null,
+	puntaje float not null, -- TODO @David128.96 . Entiendo que es para obtener el promedio total
 	clave varchar(50) not null,
 	constraint pk_usuarios primary key(id)
 );
@@ -81,8 +81,8 @@ create table solicitudes(
 	fecha_confirmacion datetime null,
 	fecha_baja datetime null,
 	dias int not null,
-	reserva tinyint(1) not null, -- si no es reserva(huesped) es alojamiento(anfitrion)
-	tipo_estado int not null,
+	esDeReserva tinyint(1) not null, -- si no es reserva(huesped) es alojamiento(anfitrion)
+	id_tipo_estado int not null,
 	constraint pk_solicitudes primary key(id),
 	constraint fk_solicitudes_usuarios foreign key(id_usuario) references usuarios(id),
 	constraint fk_solicitudes_publicaciones foreign key(id_publicacion) references publicaciones(id_usuario),
@@ -113,7 +113,8 @@ create table comentarios(
 	constraint fk_comentarios_publicaciones foreign key(id_publicacion) references publicaciones(id_usuario)
 );
 
-create table favoritos(
+create table FAVORITOS(
+	id_favorita int not null,
 	id_usuario int not null,
 	id_publicacion int not null,
 	habilitado tinyint(1) not null default 1,
@@ -130,7 +131,7 @@ create table imagenes(
 	constraint fk_imagenes_publicaciones foreign key(id_publicacion) references publicaciones(id_usuario)
 );
 
-create table telefonos(
+create table telefonos(-- TODO @jescob09 Me parece q se debería obtener el teléfono del anfitrión 
 	id int not null auto_increment,
 	id_publicacion int not null,
 	numero varchar(20) not null,
