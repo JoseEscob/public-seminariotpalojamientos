@@ -1,6 +1,6 @@
 package Principal;
 
-import Usuario.DAOUsuario;
+import controladoresDAO.DAOUsuario;
 import modelo.Usuario;
 
 public class Principal {
