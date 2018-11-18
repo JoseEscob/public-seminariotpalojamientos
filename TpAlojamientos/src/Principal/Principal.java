@@ -1,7 +1,7 @@
 package Principal;
 
-import Modelo.Usuario;
 import Usuario.DAOUsuario;
+import modelo.Usuario;
 
 public class Principal {
 

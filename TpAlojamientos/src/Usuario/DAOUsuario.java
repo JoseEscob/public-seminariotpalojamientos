@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 
 import Controlador.ConexionHB;
-import Modelo.Usuario;
+import modelo.Usuario;
 
 public class DAOUsuario {
 	public static void addNuevoUsuario(Usuario user) {
