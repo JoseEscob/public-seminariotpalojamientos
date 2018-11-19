@@ -12,10 +12,8 @@ public class Usuario {
 	private Date fechaNac;
 	private String nroUsuario;
 	private String claveUsuario;
-
 	private float puntaje;
-
-	private int estadoUsuario;
+	private boolean habilitado;
 
 	public int getIdUsuario() {
 		return idUsuario;
@@ -89,12 +87,12 @@ public class Usuario {
 		this.puntaje = puntaje;
 	}
 
-	public int getEstadoUsuario() {
-		return estadoUsuario;
+	public boolean isHabilitado() {
+		return habilitado;
 	}
 
-	public void setEstadoUsuario(int estadoUsuario) {
-		this.estadoUsuario = estadoUsuario;
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
 	}
 
 }

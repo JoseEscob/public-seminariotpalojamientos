@@ -13,6 +13,7 @@ create table USUARIOS(
 	nroUsuario varchar(50) not null,
 	puntaje float not null, -- Es para obtener el promedio total
 	clave varchar(50) not null,
+	habilitado tinyint(1) not null default 1,
 	constraint pk_usuarios primary key(id_usuario)
 );
 
