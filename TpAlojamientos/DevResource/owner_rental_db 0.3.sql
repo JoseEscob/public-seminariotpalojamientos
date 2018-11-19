@@ -51,7 +51,7 @@ create table publicaciones(
 	idLocalidad int not null,
 	codPostal int not null,
 	coordenadas varchar(50) not null,
-	preciNoche float not null,
+	precioNoche float not null,
 	metrosCuadrados int not null,
 	cantPersonas int not null,
 	cantAmbientes int not null,

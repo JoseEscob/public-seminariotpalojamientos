@@ -1,8 +1,8 @@
 package modelo;
 
 public class Favoritos {
-	private int id_favorita;
-	private int id_usuario;
-	private int id_publicacion;
+	private int idFavorita;
+	private int idUsuario;
+	private int idPublicacion;
 	private boolean habilitado;
 }

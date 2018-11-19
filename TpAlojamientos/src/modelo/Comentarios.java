@@ -1,8 +1,8 @@
 package modelo;
 
 public class Comentarios {
-	private int id_usuario;
-	private int id_publicacion;
+	private int idUsuario;
+	private int idPublicacion;
 	private String descripcion;
 	private int puntaje;
 	private boolean habilitado;

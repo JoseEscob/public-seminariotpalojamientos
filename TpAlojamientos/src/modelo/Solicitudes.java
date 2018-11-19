@@ -3,14 +3,15 @@ package modelo;
 import java.util.Date;
 
 public class Solicitudes {
-	private int id_solicitud;
-	private int id_usuario;
-	private int id_publicacion;
-	private Date fecha_alta;
-	private Date fecha_confirmacion;
-	private Date fecha_baja;
+	private int idSolicitud;
+	private int idUsuario;
+	private int idPublicacion;
+	private Date fechaAlta;
+	private Date fechaConfirmacion;
+	private Date fechaBaja;
 	private int cantDias;
-	private int id_estadoSolicitud;
 	private boolean esDeReserva;
+	private int idEstadoSolicitud;
+	private boolean habilitado;
 
 }
