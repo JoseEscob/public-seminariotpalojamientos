@@ -110,7 +110,7 @@
 							</div>
 						</div>
 						<div class="p-t-15">
-							<button class="btn btn--radius-2 btn--blue" type="submit">Enviar</button>
+							<button class="btn btn--radius-2 btn--blue" type="submit">Guardar</button>
 						</div>
 					</form>
 				</div>
