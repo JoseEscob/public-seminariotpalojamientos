@@ -16,13 +16,13 @@ public class Principal {
 		
 		Usuarios users = new Usuarios();
 		Usuario user = new Usuario();
-		user.setDni("11111");
-		user.setClaveUsuario("123");
-		user.setNombre("nUsuario");
-		user.setApellido("aUsuario");
+		user.setDni("32123");
+		user.setClaveUsuario("234");
+		user.setNombre("nUsuaasdsdrio");
+		user.setApellido("ggggdfgd");
 		user.setFechaNac(d);
-		user.setMail("mail");
-		user.setNroUsuario("123");
+		user.setMail("rtghjk");
+		user.setNroUsuario("1233");
 		
 		
 		users.insert(user);
@@ -30,6 +30,16 @@ public class Principal {
 		for(Usuario s : users.getAll()) {
 			System.out.println(s.getNombre());
 		}
+		
+		user.setIdUsuario(1);
+		user = users.get(user);
+		System.out.println(user.getNombre());
+		user.setNombre("David");
+		users.update(user);
+		
+		user.setIdUsuario(users.getCount()-1);
+		users.remove(user);
+		
 		/*DAOUsuario.addNuevoUsuario(user);
 		DAOUsuario.readAllUsuario();
 */
