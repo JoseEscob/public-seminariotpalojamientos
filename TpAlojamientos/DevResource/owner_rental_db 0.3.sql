@@ -85,7 +85,7 @@ create table solicitudes(
 	fechaAlta datetime not null default current_timestamp,
 	fechaConfirmacion datetime null,
 	fechaBaja datetime null,
-	dias int not null,
+	cantDias int not null,
 	esDeReserva tinyint(1) not null, -- si no es reserva(huesped) es alojamiento(anfitrion)
 	idEstadoSolicitud int not null,
 	habilitado tinyint(1) not null default 1,
