@@ -1,6 +1,6 @@
 package modelo;
 
-public class TiposEstadosSolicitudes {
+public class TipoEstadoSolicitud {
 	private int idEstadoSolicitud;
 	private String descripcion;
 

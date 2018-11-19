@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.Date;
 
-public class Comprobantes {
+public class Comprobante {
 	private int idComprobante;
 	private int idSolicitud;
 	private String nombreAnfitrion;

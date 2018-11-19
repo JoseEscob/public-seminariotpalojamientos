@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.Date;
 
-public class Solicitudes {
+public class Solicitud {
 	private int idSolicitud;
 	private int idUsuario;
 	private int idPublicacion;

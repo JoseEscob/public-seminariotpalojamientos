@@ -40,9 +40,6 @@ public class Principal {
 		user.setIdUsuario(users.getCount()-1);
 		users.remove(user);
 		
-		/*DAOUsuario.addNuevoUsuario(user);
-		DAOUsuario.readAllUsuario();
-*/
 	}
 
 }

@@ -1,6 +1,6 @@
 package modelo;
 
-public class TiposAlojamientos {
+public class TipoAlojamiento {
 	private int idTipoAlojamiento;
 	private String descripcion;
 	private boolean habilitado;

@@ -1,6 +1,6 @@
 package modelo;
 
-public class Partidos {
+public class Partido {
 	private int idPartido;
 	private String nombre;
 	private boolean habilitado;

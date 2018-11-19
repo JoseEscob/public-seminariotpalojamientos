@@ -1,6 +1,6 @@
 package modelo;
 
-public class Imagenes {
+public class Imagen {
 	private int idImagen;
 	private int idPublicacion;
 	private String ruta;

@@ -1,6 +1,6 @@
 package modelo;
 
-public class Telefonos {
+public class Telefono {
 	private int idTelefono;
 	private int idPublicacion;
 	private String numero;

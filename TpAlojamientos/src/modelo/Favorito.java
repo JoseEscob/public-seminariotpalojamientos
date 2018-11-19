@@ -1,10 +1,8 @@
 package modelo;
 
-public class Comentarios {
+public class Favorito {
+	private int idFavorita;
 	private int idUsuario;
 	private int idPublicacion;
-	private String descripcion;
-	private int puntaje;
 	private boolean habilitado;
-
 }
