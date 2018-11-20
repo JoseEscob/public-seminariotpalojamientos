@@ -3,12 +3,14 @@ package controllers.servlets;
 import java.io.IOException;
 import java.sql.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import extra.Constantes;
 import modelo.Usuario;
 
 /**
@@ -17,6 +19,7 @@ import modelo.Usuario;
 @WebServlet("/UsuarioServlet")
 public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private String paginaJsp = "/UsuarioAlta.jsp";
 
 	public UsuarioServlet() {
 		super();
@@ -29,6 +32,8 @@ public class UsuarioServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String message = null;
+
 		if (request.getParameter("btnNuevoUsuario") != null) {
 			Usuario obj = new Usuario();
 			// 1- recuperar valores del formulario JSP
@@ -42,6 +47,9 @@ public class UsuarioServlet extends HttpServlet {
 			String dni = request.getParameter("dni").toString();
 			String telefono = request.getParameter("telefono").toString();
 			// 2- validar información obtenida JSP
+			if (!claveUno.equals(claveDos)) {
+				message = "Las claves son diferentes. Por favor revisar que sean identicas";
+			}
 			// 3- guardar información validada
 			obj.setMail(mail);
 			obj.setClaveUsuario(claveUno);
@@ -52,8 +60,13 @@ public class UsuarioServlet extends HttpServlet {
 			obj.setDni(dni);// obj.setTelefono(telefono);
 			// 4- verificar correcto almacenamiento en DB
 			// 5- Informar estado
+			message = Constantes.REGISTROEXITOSO;
+			request.setAttribute("message", message);
+
+			paginaJsp = "/UsuarioAlta.jsp";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
 		}
-		doGet(request, response);
 	}
 
 }

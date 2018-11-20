@@ -41,6 +41,7 @@
 			<div class="card card-4">
 				<div class="card-body">
 					<h1 class="title">Registración</h1>
+					<!-- ${pageContext.request.contextPath}/ -->
 					<form method="POST" action="UsuarioServlet">
 						<div class="col-2">
 							<div class="input-group">
@@ -67,13 +68,15 @@
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Nombre</label> <input
-										class="input--style-4" type="text" name="nombre">
+										class="input--style-4" onkeypress="return soloLetras(event)"
+										type="text" name="nombre">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Apellido</label> <input
-										class="input--style-4" type="text" name="apellido">
+										class="input--style-4" onkeypress="return soloLetras(event)"
+										type="text" name="apellido">
 								</div>
 							</div>
 						</div>
@@ -107,13 +110,15 @@
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">DNI</label> <input class="input--style-4"
-										type="text" name="dni">
+										onkeypress="return soloNros(event)" onpaste="return false"
+										autocomplete="off" type="text" name="dni">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Nro de Teléfono</label> <input
-										class="input--style-4" type="text" name="telefono">
+										class="input--style-4" onkeypress="return soloNros(event)"
+										type="text" name="telefono">
 								</div>
 							</div>
 						</div>
@@ -132,8 +137,8 @@
 							</div>
 						</div>
 						 -->
-						<div class="p-t-15">
-							<button class="btn btn--radius-2 btn--blue" type="submit"
+						<div class="p-t-15">								
+								<button class="btn btn--radius-2 btn--blue" type="submit"
 								name="btnNuevoUsuario">Guardar</button>
 						</div>
 					</form>
@@ -151,8 +156,7 @@
 
 	<!-- Main JS-->
 	<script src="js/global.js"></script>
-
-
+	<script src="js/JSValidar.js"></script>
 
 </body>
 </html>
