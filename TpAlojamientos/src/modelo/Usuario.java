@@ -13,6 +13,7 @@ public class Usuario {
 	private String claveUsuario;
 	private float puntaje;
 	private boolean habilitado;
+	private boolean sexo;
 
 	public int getIdUsuario() {
 		return idUsuario;
@@ -92,6 +93,14 @@ public class Usuario {
 
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+
+	public boolean getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(boolean sexo) {
+		this.sexo = sexo;
 	}
 
 }

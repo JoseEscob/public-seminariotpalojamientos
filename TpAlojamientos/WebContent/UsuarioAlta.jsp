@@ -40,8 +40,29 @@
 		<div class="wrapper wrapper--w680">
 			<div class="card card-4">
 				<div class="card-body">
-					<h2 class="title">Registración</h2>
-					<form method="POST">
+					<h1 class="title">Registración</h1>
+					<form method="POST" action="UsuarioServlet">
+						<div class="col-2">
+							<div class="input-group">
+								<label class="label">Email</label> <input class="input--style-4"
+									type="email" name="mail">
+							</div>
+						</div>
+						<div class="row row-space">
+							<div class="col-2">
+								<div class="input-group">
+									<label class="label">Contraseña</label> <input
+										class="input--style-4" type="text" name="claveUno">
+								</div>
+							</div>
+							<div class="col-2">
+								<div class="input-group">
+									<label class="label">Repita Contraseña</label> <input
+										class="input--style-4" type="text" name="claveDos">
+								</div>
+							</div>
+						</div>
+						<h3 class="title">Datos Personales</h3>
 						<div class="row row-space">
 							<div class="col-2">
 								<div class="input-group">
@@ -85,8 +106,8 @@
 						<div class="row row-space">
 							<div class="col-2">
 								<div class="input-group">
-									<label class="label">Email</label> <input
-										class="input--style-4" type="email" name="email">
+									<label class="label">DNI</label> <input class="input--style-4"
+										type="text" name="dni">
 								</div>
 							</div>
 							<div class="col-2">
@@ -96,6 +117,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- 
 						<div class="input-group">
 							<label class="label">Subject</label>
 							<div class="rs-select2 js-select-simple select--no-search">
@@ -109,8 +131,10 @@
 								<div class="select-dropdown"></div>
 							</div>
 						</div>
+						 -->
 						<div class="p-t-15">
-							<button class="btn btn--radius-2 btn--blue" type="submit">Guardar</button>
+							<button class="btn btn--radius-2 btn--blue" type="submit"
+								name="btnNuevoUsuario">Guardar</button>
 						</div>
 					</form>
 				</div>

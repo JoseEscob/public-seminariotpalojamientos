@@ -12,6 +12,7 @@ create table usuarios(
     fechaNac date not null,
 	nroUsuario varchar(50) not null,
     clave varchar(50) not null,
+    sexo tinyint(1) not null default 1,
 	puntaje float not null, -- Es para obtener el promedio total
 	habilitado tinyint(1) not null default 1,
 
