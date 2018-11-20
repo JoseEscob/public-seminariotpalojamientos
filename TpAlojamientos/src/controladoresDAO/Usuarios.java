@@ -11,7 +11,7 @@ import extra.LOG;
 import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
-
+//comentario!
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		{
 			put("all", "select * from usuarios");
