@@ -65,7 +65,6 @@ public class Publicaciones implements Connectable<Publicacion> {
 				 o.setBitCochera(rs.getBoolean(17));
 				 o.setBitMascotas(rs.getBoolean(18));
 				 o.setBitFumadores(rs.getBoolean(19));
-				 
 				 o.setBitAmoblada(rs.getBoolean(20));
 				 o.setBitDesayuno(rs.getBoolean(21));
 				 o.setFechaAlta(rs.getDate(22));
@@ -245,7 +244,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 			localidad.setIdLocalidad(obj.getIdLocalidad());
 			if(localidades.get(localidad) == null)
 				return false;
-			
+
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps.setInt(1, obj.getIdUsuario());
 			ps.setInt(2, obj.getIdTipoAlojamiento());
@@ -269,6 +268,8 @@ public class Publicaciones implements Connectable<Publicacion> {
 			ps.setBoolean(20, obj.isBitDesayuno());
 			ps.setDate(21, obj.getFechaAlta());
 			ps.setFloat(22, obj.getPuntaje());
+			ps.setBoolean(22, obj.isHabilitado());
+			ps.setInt(23, obj.getIdPublicacion());
 			if(ps.executeUpdate() != 0)
 				correcto = true;
 			

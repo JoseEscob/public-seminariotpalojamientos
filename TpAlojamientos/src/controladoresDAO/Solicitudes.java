@@ -152,16 +152,14 @@ public class Solicitudes implements Connectable<Solicitud> {
 				return false;
 			
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setInt(1, obj.getIdSolicitud());
-			ps.setInt(2, obj.getIdUsuario());
-			ps.setInt(3, obj.getIdPublicacion());
-			ps.setDate(4, obj.getFechaAlta());
-			ps.setDate(5, obj.getFechaConfirmacion());
-			ps.setDate(6, obj.getFechaBaja());
-			ps.setInt(7, obj.getCantDias());
-			ps.setBoolean(8, obj.isEsDeReserva());
-			ps.setInt(9, obj.getIdEstadoSolicitud());
-			ps.setBoolean(10, obj.isHabilitado());
+			ps.setInt(1, obj.getIdUsuario());
+			ps.setInt(2, obj.getIdPublicacion());
+			ps.setDate(3, obj.getFechaAlta());
+			ps.setDate(4, obj.getFechaConfirmacion());
+			ps.setDate(5, obj.getFechaBaja());
+			ps.setInt(6, obj.getCantDias());
+			ps.setBoolean(7, obj.isEsDeReserva());
+			ps.setInt(8, obj.getIdEstadoSolicitud());
 			ps.executeUpdate();
 			correcto = true;
 		}catch(Exception e) {
@@ -200,16 +198,16 @@ public class Solicitudes implements Connectable<Solicitud> {
 				return false;
 			
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));	
-			ps.setInt(1, obj.getIdSolicitud());
-			ps.setInt(2, obj.getIdUsuario());
-			ps.setInt(3, obj.getIdPublicacion());
-			ps.setDate(4, obj.getFechaAlta());
-			ps.setDate(5, obj.getFechaConfirmacion());
-			ps.setDate(6, obj.getFechaBaja());
-			ps.setInt(7, obj.getCantDias());
-			ps.setBoolean(8, obj.isEsDeReserva());
-			ps.setInt(9, obj.getIdEstadoSolicitud());
-			ps.setBoolean(10, obj.isHabilitado());
+			ps.setInt(1, obj.getIdUsuario());
+			ps.setInt(2, obj.getIdPublicacion());
+			ps.setDate(3, obj.getFechaAlta());
+			ps.setDate(4, obj.getFechaConfirmacion());
+			ps.setDate(5, obj.getFechaBaja());
+			ps.setInt(6, obj.getCantDias());
+			ps.setBoolean(7, obj.isEsDeReserva());
+			ps.setInt(8, obj.getIdEstadoSolicitud());
+			ps.setBoolean(9, obj.isHabilitado());
+			ps.setInt(10, obj.getIdSolicitud());
 			if(ps.executeUpdate() != 0)
 				correcto = true;
 			

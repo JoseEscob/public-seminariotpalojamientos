@@ -171,15 +171,15 @@ public class Comprobantes implements Connectable<Comprobante> {
 				return false;
 			
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));	
-			ps.setInt(1, obj.getIdComprobante());
-			ps.setInt(2, obj.getIdSolicitud());
-			ps.setString(3, obj.getNombreAnfitrion());
-			ps.setString(4, obj.getApellidoAnfitrion());
-			ps.setString(5, obj.getNombreHuesped());
-			ps.setString(6, obj.getApellidoHuesped());
-			ps.setString(7, obj.getDescripcionPublicacion());
-			ps.setInt(8, obj.getPrecioFinal());
-			ps.setBoolean(9, obj.isHabilitado());
+			ps.setInt(1, obj.getIdSolicitud());
+			ps.setString(2, obj.getNombreAnfitrion());
+			ps.setString(3, obj.getApellidoAnfitrion());
+			ps.setString(4, obj.getNombreHuesped());
+			ps.setString(5, obj.getApellidoHuesped());
+			ps.setString(6, obj.getDescripcionPublicacion());
+			ps.setInt(7, obj.getPrecioFinal());
+			ps.setBoolean(8, obj.isHabilitado());
+			ps.setInt(9, obj.getIdComprobante());
 			if(ps.executeUpdate() != 0)
 				correcto = true;
 			
