@@ -3,7 +3,7 @@ package controladoresDAO;
 import java.util.ArrayList;
 
 import modelo.Baja;
-//comentario
+
 public class Bajas implements Connectable<Baja> {
 
 	@Override

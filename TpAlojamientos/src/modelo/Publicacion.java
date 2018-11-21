@@ -1,13 +1,15 @@
 package modelo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Publicacion {
+
 	private int idPublicacion;
 	private int idUsuario;
 	private int idTipoAlojamiento;
 	private String nombre;
 	private String descripcion;
+	private String domicilio;
 	private int idLocalidad;
 	private int codPostal;
 	private String coordenadas;
@@ -167,6 +169,12 @@ public class Publicacion {
 	}
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+	public String getDomicilio() {
+		return domicilio;
+	}
+	public void setDomicilio(String domicilio) {
+		this.domicilio = domicilio;
 	}
 
 	
