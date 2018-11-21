@@ -1,4 +1,4 @@
-package controllers.servlets;
+package controllersServlets;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import extra.Constantes;
+import extra.Utilitario;
 import modelo.Usuario;
 
 /**
@@ -42,7 +43,7 @@ public class UsuarioServlet extends HttpServlet {
 			String claveDos = request.getParameter("claveDos").toString();
 			String nombre = request.getParameter("nombre").toString();
 			String apellido = request.getParameter("apellido").toString();
-			Date fechaNac = Date.valueOf(request.getParameter("fechaNac"));
+			Date fechaNac = Utilitario.textoAFecha(request.getParameter("fechaNac"));
 			boolean sexo = Boolean.valueOf(request.getParameter("sexo"));
 			String dni = request.getParameter("dni").toString();
 			String telefono = request.getParameter("telefono").toString();

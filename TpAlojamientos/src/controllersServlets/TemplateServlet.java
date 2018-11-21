@@ -1,4 +1,4 @@
-package controllers.servlets;
+package controllersServlets;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -14,7 +14,7 @@ import modelo.Usuario;
 /**
  * Servlet implementation class UsuarioServlet
  */
-@WebServlet("/UsuarioServlet")
+@WebServlet("/templateServlet")
 public class TemplateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

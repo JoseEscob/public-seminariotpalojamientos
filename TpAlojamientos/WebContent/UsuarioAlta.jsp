@@ -36,7 +36,7 @@
 </head>
 <body>
 
-	<div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+	<div class="page-wrapper bg-skyblue p-t-130 p-b-100 font-poppins">
 		<div class="wrapper wrapper--w680">
 			<div class="card card-4">
 				<div class="card-body">
@@ -46,20 +46,20 @@
 						<div class="col-2">
 							<div class="input-group">
 								<label class="label">Email</label> <input class="input--style-4"
-									type="email" name="mail">
+									type="email" name="mail" value="asd@gmail.com">
 							</div>
 						</div>
 						<div class="row row-space">
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Contraseña</label> <input
-										class="input--style-4" type="text" name="claveUno">
+										class="input--style-4" type="text" name="claveUno" value="asd123">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Repita Contraseña</label> <input
-										class="input--style-4" type="text" name="claveDos">
+										class="input--style-4" type="text" name="claveDos" value="asd1234">
 								</div>
 							</div>
 						</div>
@@ -69,14 +69,14 @@
 								<div class="input-group">
 									<label class="label">Nombre</label> <input
 										class="input--style-4" onkeypress="return soloLetras(event)"
-										type="text" name="nombre">
+										type="text" name="nombre" value="José">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Apellido</label> <input
 										class="input--style-4" onkeypress="return soloLetras(event)"
-										type="text" name="apellido">
+										type="text" name="apellido" value="Apelli">
 								</div>
 							</div>
 						</div>
@@ -111,9 +111,10 @@
 								<div class="input-group">
 									<label class="label">DNI</label> <input class="input--style-4"
 										onkeypress="return soloNros(event)" onpaste="return false"
-										autocomplete="off" type="text" name="dni">
+										autocomplete="off" type="text" name="dni" value="123">
 								</div>
 							</div>
+							<!-- 
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Nro de Teléfono</label> <input
@@ -121,6 +122,7 @@
 										type="text" name="telefono">
 								</div>
 							</div>
+							 -->
 						</div>
 						<!-- 
 						<div class="input-group">
@@ -137,9 +139,9 @@
 							</div>
 						</div>
 						 -->
-						<div class="p-t-15">								
-								<button class="btn btn--radius-2 btn--blue" type="submit"
-								name="btnNuevoUsuario">Guardar</button>
+						<div class="p-t-15">
+							<input class="btn btn--radius-2 btn--blue" type="submit"
+								name="btnNuevoUsuario" value="Guardar"></input>
 						</div>
 					</form>
 				</div>
