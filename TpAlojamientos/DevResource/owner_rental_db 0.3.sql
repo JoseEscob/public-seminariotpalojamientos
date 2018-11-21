@@ -76,6 +76,7 @@ create table publicaciones(
 create table tiposEstadosSolicitudes(
 	idEstadoSolicitud int not null auto_increment,
 	descripcion varchar(50) not null,
+	habilitado tinyint(1) not null default 1, 
 	constraint pk_tipos_estados_solicitudes primary key(idEstadoSolicitud)
 );
 
@@ -122,7 +123,7 @@ create table comentarios(
 	constraint fk_comentarios_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
 
-create table FAVORITOS(
+create table favoritos(
 	idFavorita int not null,
 	idUsuario int not null,
 	idPublicacion int not null,

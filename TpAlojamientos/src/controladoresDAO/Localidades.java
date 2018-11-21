@@ -20,12 +20,7 @@ public class Localidades implements Connectable<Localidad> {
 		put("like", "");
 			
 	}};
-	
-	private int idLocalidad;
-	private int idPartido;
-	private String nombre;
-	private boolean habilitado;
-	
+
 	private Conexion cn;
 	private ArrayList<Localidad> m;
 	
@@ -157,10 +152,10 @@ public class Localidades implements Connectable<Localidad> {
 			
 			
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(3,obj.getIdPartido());		
-			ps.setString(1, obj.getNombre());
-			ps.setBoolean(2, obj.isHabilitado());
-			ps.setInt(3,obj.getIdLocalidad());
+			ps.setInt(1,obj.getIdPartido());		
+			ps.setString(2, obj.getNombre());
+			ps.setBoolean(3, obj.isHabilitado());
+			ps.setInt(4,obj.getIdLocalidad());
 			if(ps.executeUpdate() != 0)
 				correcto = true;
 			
