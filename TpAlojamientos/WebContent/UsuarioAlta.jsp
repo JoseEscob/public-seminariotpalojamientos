@@ -5,37 +5,12 @@
 
 <html>
 <head>
-<!-- Required meta tags-->
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Colorlib Templates">
-<meta name="author" content="Colorlib">
-<meta name="keywords" content="Colorlib Templates">
 
-<!-- Icons font CSS-->
-<link href="vendor/mdi-font/css/material-design-iconic-font.min.css"
-	rel="stylesheet" media="all">
-<link href="vendor/font-awesome-4.7/css/font-awesome.min.css"
-	rel="stylesheet" media="all">
-<!-- Font special for pages-->
-<link
-	href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
-	rel="stylesheet">
-
-<!-- Vendor CSS-->
-<link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
-<link href="vendor/datepicker/daterangepicker.css" rel="stylesheet"
-	media="all">
-
-<!-- Main CSS-->
-<link href="css/main.css" rel="stylesheet" media="all">
-
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Completar Formulario</title>
 </head>
 <body>
-
+	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->
+	<%@ include file="Banner.jsp"%>
 	<div class="page-wrapper bg-skyblue p-t-130 p-b-100 font-poppins">
 		<div class="wrapper wrapper--w680">
 			<div class="card card-4">
@@ -53,13 +28,15 @@
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Contraseña</label> <input
-										class="input--style-4" type="text" name="claveUno" value="asd123">
+										class="input--style-4" type="text" name="claveUno"
+										value="asd123">
 								</div>
 							</div>
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Repita Contraseña</label> <input
-										class="input--style-4" type="text" name="claveDos" value="asd1234">
+										class="input--style-4" type="text" name="claveDos"
+										value="asd1234">
 								</div>
 							</div>
 						</div>
@@ -140,7 +117,9 @@
 						</div>
 						 -->
 						<div class="p-t-15">
-							<input class="btn btn--radius-2 btn--blue" type="submit"
+							<input type="hidden" id="buscarAction" name="buscarAction"
+								value="nuevo"></input> <input
+								class="btn btn--radius-2 btn--blue" type="submit"
 								name="btnNuevoUsuario" value="Guardar"></input>
 						</div>
 					</form>
@@ -148,6 +127,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<!-- Jquery JS-->
 	<script src="vendor/jquery/jquery.min.js"></script>
@@ -159,6 +139,5 @@
 	<!-- Main JS-->
 	<script src="js/global.js"></script>
 	<script src="js/JSValidar.js"></script>
-
 </body>
 </html>
