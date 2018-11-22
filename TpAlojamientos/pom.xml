@@ -159,7 +159,14 @@
 			<artifactId>tomcat-websocket-api</artifactId>
 			<version>8.0.53</version>
 		</dependency>
+		<!-- IMPORTACIONES DE DEPENDENCIAS PARA EL PROYECTO -->
 
+		<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.9</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/jstl/jstl -->
 		<dependency>
