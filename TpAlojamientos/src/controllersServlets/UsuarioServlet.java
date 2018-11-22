@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import controladoresDAO.Usuarios;
 import exceptions.ValidacionException;
@@ -47,14 +48,104 @@ public class UsuarioServlet extends HttpServlet {
 			case "editar":
 				// buscarPorNombre(request, response);
 				break;
-			case "listar":
-				// nuevoEstudiante(request, response);
+			case "ver":
+				VerInfoUsuario(request, response);
 				break;
 			}
 		}
 	}
 
 	private void AltaUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Usuario obj = new Usuario();
+		String message = null;
+
+		try {
+			// 1- recuperar valores del formulario JSP
+			String mail = request.getParameter("mail").toString();
+			String claveUno = request.getParameter("claveUno").toString();
+			String claveDos = request.getParameter("claveDos").toString();
+			String nombre = request.getParameter("nombre").toString();
+			String apellido = request.getParameter("apellido").toString();
+			String fechaNac = request.getParameter("fechaNac");
+			boolean sexo = Boolean.valueOf(request.getParameter("sexo"));
+			String dni = request.getParameter("dni").toString();
+			// String telefono = request.getParameter("telefono").toString();
+
+			// 2- validar información obtenida JSP
+			if (!claveUno.equals(claveDos)) {
+				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
+			}
+			if (!Utilitario.esMayorDeEdad(fechaNac)) {
+				throw new ValidacionException("El usuario debe ser mayor de edad");
+			}
+
+			// 3- guardar información validada
+			obj.setMail(mail);
+			obj.setClaveUsuario(claveUno);
+			obj.setNombre(nombre);
+			obj.setApellido(apellido);
+			obj.setFechaNac(Utilitario.textoAFecha(fechaNac));
+			obj.setSexo(sexo);
+			obj.setDni(dni);// obj.setTelefono(telefono);
+			// 4- verificar correcto almacenamiento en DB
+			if (!usuarioDAO.insert(obj))
+				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
+			// ÉXITO
+			message = Constantes.REGISTROEXITOSO;
+
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+
+			paginaJsp = "/UsuarioAlta.jsp";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
+		}
+	}
+
+	// ********* VER DATOS
+	private void VerInfoUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Usuario obj = new Usuario();
+		String message = null;
+
+		try {
+			// 1- recuperar valores del formulario JSP
+			HttpSession session = request.getSession();
+			String idUsuario = null;// getParameter("txtHiddenIdUsuario")
+
+			// 2- validar información obtenida JSP
+			if (request.getParameter("idUsuario") != null) {
+				idUsuario = request.getParameter("idUsuario").toString();
+			}
+			session.setAttribute("sessionJSP", idUsuario);// session.getAttribute("sessionJSP");
+			
+			// 3- guardar información validada
+			obj.setIdUsuario(Integer.parseInt(idUsuario));
+			// 4- verificar correcto almacenamiento en DB
+			if (usuarioDAO.get(obj) == null)
+				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
+			
+			request.setAttribute("obj", obj);
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+
+			paginaJsp = "/UsuarioAlta.jsp";
+			// response.sendRedirect(request.getContextPath()+ paginaJsp);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
+		}
+	}
+
+	// ********* LOGIN
+
+	private void LoginUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Usuario obj = new Usuario();
 		String message = null;
