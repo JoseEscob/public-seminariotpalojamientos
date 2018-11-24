@@ -2,6 +2,7 @@ package controllersServlets;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,6 +43,9 @@ public class UsuarioServlet extends HttpServlet {
 		LOG.info("JSP - Acción: " + action);
 		if (action != null) {
 			switch (action) {
+			case "login":
+				LoginUsuario(request, response);
+				break;
 			case "nuevo":
 				AltaUsuario(request, response);
 				break;
@@ -122,13 +126,13 @@ public class UsuarioServlet extends HttpServlet {
 				idUsuario = request.getParameter("idUsuario").toString();
 			}
 			session.setAttribute("sessionJSP", idUsuario);// session.getAttribute("sessionJSP");
-			
+
 			// 3- guardar información validada
 			obj.setIdUsuario(Integer.parseInt(idUsuario));
 			// 4- verificar correcto almacenamiento en DB
 			if (usuarioDAO.get(obj) == null)
 				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
-			
+
 			request.setAttribute("obj", obj);
 		} catch (Exception e) {
 			message = e.getMessage();
@@ -147,43 +151,38 @@ public class UsuarioServlet extends HttpServlet {
 
 	private void LoginUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Usuario obj = new Usuario();
+		// 0- declaracion de variables locales
 		String message = null;
-
+		Usuarios usuarios = new Usuarios();
+		Usuario usr = new Usuario();
+		ArrayList<Usuario> alles = new ArrayList<Usuario>();
+		boolean existe = false;
 		try {
 			// 1- recuperar valores del formulario JSP
-			String mail = request.getParameter("mail").toString();
-			String claveUno = request.getParameter("claveUno").toString();
-			String claveDos = request.getParameter("claveDos").toString();
-			String nombre = request.getParameter("nombre").toString();
-			String apellido = request.getParameter("apellido").toString();
-			String fechaNac = request.getParameter("fechaNac");
-			boolean sexo = Boolean.valueOf(request.getParameter("sexo"));
-			String dni = request.getParameter("dni").toString();
-			// String telefono = request.getParameter("telefono").toString();
-
+			String nombreUsuario = request.getParameter("txtUser").toString();
+			String claveUsuario = request.getParameter("txtPass").toString();
 			// 2- validar información obtenida JSP
-			if (!claveUno.equals(claveDos)) {
-				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
+			if (nombreUsuario.trim().length() != 0) {
+				if (claveUsuario.trim().length() != 0) {
+					alles = usuarios.getAll();
+					for (Usuario usuario : alles) {
+						if (usuario.getNombre().compareTo(nombreUsuario) == 0) {
+							if (usuario.getClaveUsuario().compareTo(claveUsuario) == 0) {
+								usr = usuario;
+								existe = true;
+								break;
+							}
+						}
+					}
+				}
 			}
-			if (!Utilitario.esMayorDeEdad(fechaNac)) {
-				throw new ValidacionException("El usuario debe ser mayor de edad");
-			}
-
-			// 3- guardar información validada
-			obj.setMail(mail);
-			obj.setClaveUsuario(claveUno);
-			obj.setNombre(nombre);
-			obj.setApellido(apellido);
-			obj.setFechaNac(Utilitario.textoAFecha(fechaNac));
-			obj.setSexo(sexo);
-			obj.setDni(dni);// obj.setTelefono(telefono);
-
+			// 3- guardar información validada DAO
+			// --no necesario--
 			// 4- verificar correcto almacenamiento en DB
-			if (!usuarioDAO.insert(obj))
-				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
-			// ÉXITO
-			message = Constantes.REGISTROEXITOSO;
+			// SE ALMACENA LA VARIABLE SESSION
+			request.getSession().setAttribute("usuario", usr);
+			// 5- Informar estado
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
 
 		} catch (Exception e) {
 			message = e.getMessage();
@@ -191,7 +190,7 @@ public class UsuarioServlet extends HttpServlet {
 			// 5- Informar estado
 			request.setAttribute("message", message);
 
-			paginaJsp = "/UsuarioAlta.jsp";
+			paginaJsp = "/Inicio.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}

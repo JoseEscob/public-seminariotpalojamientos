@@ -159,7 +159,7 @@ h6 {
 }
 
 /* ==========================================================================
-   #BACKGROUND
+   #BACKGROUND https://webgradients.com/
    ========================================================================== */
 .bg-blue {
   background: #2c6ed5;
@@ -173,6 +173,14 @@ h6 {
   background: #87CEEB;/*SKYBLUE;*/
 }
 
+.bg-gra-turquesa-purpura {
+	background-image: linear-gradient(to top, #b490ca 0%, #5ee7df 100%);
+}
+
+.bg-gra-00 {
+	background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
 .bg-gra-01 {
   background: -webkit-gradient(linear, left bottom, left top, from(#fbc2eb), to(#a18cd1));
   background: -webkit-linear-gradient(bottom, #fbc2eb 0%, #a18cd1 100%);
@@ -180,6 +188,7 @@ h6 {
   background: -o-linear-gradient(bottom, #fbc2eb 0%, #a18cd1 100%);
   background: linear-gradient(to top, #fbc2eb 0%, #a18cd1 100%);
 }
+
 
 .bg-gra-02 {
   background: -webkit-gradient(linear, left bottom, right top, from(#fc2c77), to(#6c4079));
