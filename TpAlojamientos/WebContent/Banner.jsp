@@ -62,7 +62,7 @@
 			<ul class="nav navbar-nav">
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
-						Santiago</a>
+						<c:out value="${usuario.nombre}"/></a>
 					<ul class="dropdown-menu">
 						<li><a href="#"><span class="glyphicon glyphicon-user" /></span>
 								Mi Perfil</a></li>

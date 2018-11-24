@@ -57,13 +57,25 @@
 								class="input--style-4" type="password" name="txtPass"
 								value="asd123">
 						</div>
+
+
 						<div class="row row-space"></div>
-						<div class="row row-space"></div>
-						<div class="input-group">
-							<label class="label"><a href="UsuarioAlta.jsp">Registrarse</a></label>
+						<div class="row row-space">
+
+							<div class="col-2">
+								<div class="input-group">
+									<label class="label"><a href="UsuarioAlta.jsp">Registrarse</a></label>
+								</div>
+							</div>
+							<div class="col-2">
+								<div class="input-group">
+									<label class="label">${message}</label>
+								</div>
+							</div>
 						</div>
+
 						<input type="hidden" id="buscarAction" name="buscarAction"
-								value="login"></input>
+							value="login"></input>
 						<div class="p-t-15">
 							<input class="btn btn--radius-2 btn--blue" type="submit"
 								name="btnLogin" value="Iniciar Sesión"></input>

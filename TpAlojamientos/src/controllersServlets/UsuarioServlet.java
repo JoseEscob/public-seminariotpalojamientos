@@ -25,7 +25,7 @@ import modelo.Usuario;
 @WebServlet("/UsuarioServlet")
 public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String paginaJsp = "/UsuarioAlta.jsp";
+	private String paginaJsp = null;// "/UsuarioAlta.jsp";
 	private Usuarios usuarioDAO = new Usuarios();
 
 	public UsuarioServlet() {
@@ -153,7 +153,7 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// 0- declaracion de variables locales
 		String message = null;
-		Usuarios usuarios = new Usuarios();
+
 		Usuario usr = new Usuario();
 		ArrayList<Usuario> alles = new ArrayList<Usuario>();
 		boolean existe = false;
@@ -164,7 +164,7 @@ public class UsuarioServlet extends HttpServlet {
 			// 2- validar información obtenida JSP
 			if (nombreUsuario.trim().length() != 0) {
 				if (claveUsuario.trim().length() != 0) {
-					alles = usuarios.getAll();
+					alles = usuarioDAO.getAll();
 					for (Usuario usuario : alles) {
 						if (usuario.getNombre().compareTo(nombreUsuario) == 0) {
 							if (usuario.getClaveUsuario().compareTo(claveUsuario) == 0) {
@@ -176,21 +176,25 @@ public class UsuarioServlet extends HttpServlet {
 					}
 				}
 			}
-			// 3- guardar información validada DAO
-			// --no necesario--
-			// 4- verificar correcto almacenamiento en DB
+			// 3- verificar resultado
+
 			// SE ALMACENA LA VARIABLE SESSION
 			request.getSession().setAttribute("usuario", usr);
 			// 5- Informar estado
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
 			// 5- Informar estado
+			if (!existe) {
+				message = "El usuario no esta registrado";
+				paginaJsp = "/IniciarSesion.jsp";
+			} else
+				paginaJsp = "/Inicio.jsp";
+
 			request.setAttribute("message", message);
 
-			paginaJsp = "/Inicio.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
