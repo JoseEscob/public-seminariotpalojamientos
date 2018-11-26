@@ -4,3 +4,15 @@ https://winterbe.com/posts/2009/09/25/customizing-eclipse/
 Window> Preferences >General>Keys
 Ctrl+Shift+D Copy Lines
 https://stackoverflow.com/questions/168426/how-do-i-add-a-shortcut-key-to-eclipse-3-2-java-plug-in-to-build-the-current-pro
+
+
+
+Diseño CSS/Bootstrap
+- https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-list-groups.php
+- https://www.w3schools.com/bootstrap/bootstrap_ref_css_images.asp
+
+Usuarios
+https://bootsnipp.com/snippets/featured/flat-user-profile-interface-ui
+
+comprobante: 
+https://bootsnipp.com/snippets/featured/bs4-clean-amp-simple-invoice-template

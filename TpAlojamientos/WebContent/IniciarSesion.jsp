@@ -70,6 +70,7 @@
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">${message}</label>
+									<p class="text-danger">${message}</p>   
 								</div>
 							</div>
 						</div>

@@ -12,11 +12,19 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- BOOTSTRAP ONLINE-->
-<!-- BOOTSTRAP ONLINE Corregir-->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!-- BOOTSTRAP ONLINE Corregir-->
+<!-- BOOTSTRAP ONLINE-->
+<!-- BOOTSTRAP ONLINE Nuevo-->
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- BOOTSTRAP ONLINE Nuevo-->
 
 <title></title>
 </head>
@@ -62,7 +70,7 @@
 			<ul class="nav navbar-nav">
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
-						<c:out value="${usuario.nombre}"/></a>
+						<c:out value="${usuario.nombre}" /></a>
 					<ul class="dropdown-menu">
 						<li><a href="#"><span class="glyphicon glyphicon-user" /></span>
 								Mi Perfil</a></li>

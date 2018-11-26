@@ -65,6 +65,7 @@
 										name="claveDos" value="asd1234">
 								</div>
 							</div>
+
 						</div>
 						<h3 class="title">Datos Personales</h3>
 						<div class="row row-space">
@@ -116,6 +117,11 @@
 										onkeypress="return soloNros(event)" onpaste="return false"
 										autocomplete="off" type="text" name="dni" value="123"
 										maxlength="10">
+								</div>
+							</div>
+							<div class="col-2">
+								<div class="input-group">
+									<label class="label">${message}</label>
 								</div>
 							</div>
 							<!-- 

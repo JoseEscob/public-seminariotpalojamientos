@@ -19,6 +19,8 @@
 	Sesion iniciada. Bienvenido 
 	<%=usuario.getNombre()%>
 	<%
+		}else{
+			//Redireccionar
 		}
 	%>
 	
