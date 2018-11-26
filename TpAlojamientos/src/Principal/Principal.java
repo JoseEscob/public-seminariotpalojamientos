@@ -22,7 +22,7 @@ public class Principal {
 		user.setApellido("ggggdfgd");
 		user.setFechaNac(d);
 		user.setMail("rtghjk");
-		user.setNroUsuario("1233");
+		user.setUsuario("1233");
 		
 		
 		users.insert(user);

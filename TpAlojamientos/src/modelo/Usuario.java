@@ -9,11 +9,29 @@ public class Usuario {
 	private String dni;
 	private String mail;
 	private Date fechaNac;
-	private String nroUsuario;
+	private String usuario;
 	private String claveUsuario;
 	private float puntaje;
-	private boolean habilitado;
 	private boolean sexo;
+	private boolean admin;
+	private boolean habilitado;
+	
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String suario) {
+		this.usuario = suario;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
 
 	public int getIdUsuario() {
 		return idUsuario;
@@ -61,14 +79,6 @@ public class Usuario {
 
 	public void setFechaNac(Date fechaNac) {
 		this.fechaNac = fechaNac;
-	}
-
-	public String getNroUsuario() {
-		return nroUsuario;
-	}
-
-	public void setNroUsuario(String nroUsuario) {
-		this.nroUsuario = nroUsuario;
 	}
 
 	public String getClaveUsuario() {

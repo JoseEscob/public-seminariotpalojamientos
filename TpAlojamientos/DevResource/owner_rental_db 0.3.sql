@@ -1,4 +1,4 @@
--- owner rental database version 0.3 by David Martinez
+-- owner rental database version 0.6 by David Martinez
 create database owner_rental_db character set utf8mb4 collate utf8mb4_bin;
 use owner_rental_db;
 
@@ -10,9 +10,10 @@ create table usuarios(
 	dni varchar(15) not null,
 	mail varchar(50) not null,
     fechaNac date not null,
-	nroUsuario varchar(50) not null,
+	usuario varchar(50) not null,
     clave varchar(20) not null,
     sexo tinyint(1) not null default 1,
+    admin tinyint(1) not null default 0,
 	puntaje float not null, -- Es para obtener el promedio total
 	habilitado tinyint(1) not null default 1,
 

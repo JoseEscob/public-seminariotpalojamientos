@@ -166,7 +166,7 @@ public class UsuarioServlet extends HttpServlet {
 				if (claveUsuario.trim().length() != 0) {
 					alles = usuarioDAO.getAll();
 					for (Usuario usuario : alles) {
-						if (usuario.getNombre().compareTo(nombreUsuario) == 0) {
+						if (usuario.getUsuario().compareTo(nombreUsuario) == 0) {
 							if (usuario.getClaveUsuario().compareTo(claveUsuario) == 0) {
 								usr = usuario;
 								existe = true;
@@ -190,8 +190,11 @@ public class UsuarioServlet extends HttpServlet {
 			if (!existe) {
 				message = "El usuario no esta registrado";
 				paginaJsp = "/IniciarSesion.jsp";
-			} else
+			} else if (!usr.isAdmin()) {
 				paginaJsp = "/Inicio.jsp";
+			}else {
+				paginaJsp = "/InicioAdmin.jsp";
+			}
 
 			request.setAttribute("message", message);
 
