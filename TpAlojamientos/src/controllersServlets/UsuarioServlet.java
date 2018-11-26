@@ -18,6 +18,8 @@ import extra.Constantes;
 import extra.LOG;
 import extra.Utilitario;
 import modelo.Usuario;
+import controladoresDAO.Publicaciones;
+import modelo.Publicacion;
 
 /**
  * Servlet implementation class UsuarioServlet
@@ -27,6 +29,7 @@ public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String paginaJsp = null;// "/UsuarioAlta.jsp";
 	private Usuarios usuarioDAO = new Usuarios();
+	private Publicaciones publicacionDAO = new Publicaciones();
 
 	public UsuarioServlet() {
 		super();
@@ -193,6 +196,8 @@ public class UsuarioServlet extends HttpServlet {
 			} else if (!usr.isAdmin()) {
 				paginaJsp = "/Inicio.jsp";
 			}else {
+				request.setAttribute("usuariosBajoPuntaje", usuariosBajoPuntaje());
+				request.setAttribute("publicacionesBajoPuntaje", publicacionesBajoPuntaje());
 				paginaJsp = "/InicioAdmin.jsp";
 			}
 
@@ -201,6 +206,30 @@ public class UsuarioServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
+	}
+	
+	// Esto es para cargar los datos a mostrar en la vista de admin
+	public ArrayList<Usuario> usuariosBajoPuntaje() {
+		ArrayList<Usuario> todos = usuarioDAO.getAll();
+		ArrayList<Usuario> usuariosBajoPuntaje = new ArrayList<Usuario>();
+		for(Usuario u : todos) {
+			if(u.getPuntaje() < 2) {
+				usuariosBajoPuntaje.add(u);
+			}
+		}
+		return usuariosBajoPuntaje;
+	}
+	
+	public ArrayList<Publicacion> publicacionesBajoPuntaje() {
+		ArrayList<Publicacion> todos = publicacionDAO.getAll();
+		ArrayList<Publicacion> publicacionesBajoPuntaje = new ArrayList<Publicacion>();
+		for(Publicacion u : todos) {
+			if(u.getPuntaje() < 2) {
+				publicacionesBajoPuntaje.add(u);
+			}
+		}
+		
+		return publicacionesBajoPuntaje;
 	}
 
 }
