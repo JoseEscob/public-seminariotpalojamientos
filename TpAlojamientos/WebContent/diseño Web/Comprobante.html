@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Demo - Comprobante</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+</head>
+<body>
+  <div class="container">
+    <h2>Comprobante de Reserva</h2>
+  </div>
+  <!-- FORMULARIO: inicio-->
+	  <div class="container">
+	  	<div class="col-sm-6">
+	        <form class="form-horizontal" action="/action_page.php">
+	        	<div class="form-group">
+	            <label class="control-label col-sm-2">Nro Reserva:</label>
+	                  <div class="col-sm-10">          
+	                    <input class="form-control" value="00112233" disabled>
+	                  </div>
+	          	</div>
+	        </form>
+	    </div> 
+	    <br>
+	  	<div class="col-sm-6">
+	        <form class="form-horizontal" action="/action_page.php">
+	          <div class="form-group">
+	            <label class="control-label col-sm-2">Fecha generación: </label>
+	            <div class="control-text col-sm-10">
+	              <input class="form-control" value="14-10-18" disabled>
+	            </div>
+	          </div>
+	        </form>
+	    </div>
+	    <br>
+
+	    <div class="col-sm-6"><!-- Form Izq-->
+	        <form class="form-horizontal" action="/action_page.php">
+	          <div class="form-group">
+	            <label class="control-label col-sm-2">Sr/a:</label>
+	            <div class="col-sm-10">
+	            	<input class="form-control" value="José de San Martín" disabled>
+	            </div>
+	          </div>
+	          <div class="form-group"> 
+	            <label class="control-label col-sm-2" for="pwd">Localidad:</label>
+	            <div class="col-sm-10">          
+	                <input class="form-control" value="Belgrano" disabled>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="control-label col-sm-2" for="email">FechaEntrada: </label>
+	            <div class="col-sm-10">          
+	              <input class="form-control" value="14-11-18" disabled>
+	            </div>
+	          </div>
+
+	          <br>
+	          <div class="form-group"> 
+	            <label class="control-label col-sm-2" for="pwd">Cant de Pasajeros - Adultos:</label>
+	            <div class="col-sm-10">          
+	                <div class="dropdown">
+					    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">0
+					    <span class="caret"></span></button>
+					    <ul class="dropdown-menu">
+					      <li><a>1</a></li>
+					      <li class="disabled"><a>2</a></li>
+					      <li class="active"><a>3</a></li>
+					      <li><a href="#">4</a></li>
+					    </ul>
+					  </div>
+	            </div>
+	          </div>
+	        </form>
+	    </div><!--Fin de Form Izq-->
+	    
+	    <div class="col-sm-6"><!-- Form Der-->
+	        <form class="form-horizontal" action="/action_page.php">
+	          <div class="form-group">
+	            <label class="control-label col-sm-2" for="pwd">Teléfono: </label>
+	            <div class="col-sm-10">          
+	              <input class="form-control" value="5777-6555" disabled>
+	            </div>
+	          </div>
+	          <div class="form-group"> 
+	            <label class="control-label col-sm-2">Dirección:</label>
+	            <div class="col-sm-10">          
+	                <input class="form-control" value="Av. Cabildo 5555" disabled>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <label class="control-label col-sm-2">FechaSalida: </label>
+	            <div class="col-sm-10">
+	              <input class="form-control" value="14-11-18" disabled>
+	            </div>
+	          </div>
+	          <div class="form-group"> 
+	          </div>
+	        </form>
+	    </div> <!--Fin de Form Der-->
+	  </div>
+  <!-- FORMULARIO: fin   -->
+  <div class="container"></div>
+  <!-- TABLA: inicio -->
+	  <div class="container">
+	    <h3>Detalle de Servicios</h3>
+	    <table class="table">
+	      <thead>
+	        <tr>
+	          <th>Nro Servicio</th>
+	          <th>Descripción</th>
+	          <th>Precio</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <tr>
+	          <td>02210</td>
+	          <td>Desayuno</td>
+	          <td>Incluído</td>
+	        </tr>        <tr>
+	          <td>02211</td>
+	          <td>Amoblado</td>
+	          <td>Incluído</td>
+	        </tr>
+	        <tr>
+	          <td>02212</td>
+	          <td>Apto para mascotas</td>
+	          <td>Incluído</td>
+	        </tr>
+	        <tr>
+	          <td>02213</td>
+	          <td>Electrodomésticos</td>
+	          <td>Incluído</td>
+	        </tr>
+	        <tr>
+	          <td>02214</td>
+	          <td>asd</td>
+	          <td>Incluído</td>
+	        </tr>
+	        <tr>
+	          <td>02215</td>
+	          <td>asd</td>
+	          <td>$ 7000.00</td>
+	        </tr>
+	        <tr class="success">
+	          <td></td>
+	          <td>Total:</td>
+	          <td>$ 12400.00</td>
+	        </tr>
+	      </tbody>
+	    </table>
+	  </div>
+  <!-- TABLA: fin    -->
+  <!-- DEMÁS: inicio -->
+	  <div class="container">
+	      <div class="col-sm-12">
+	        <form class="form-horizontal" action="/action_page.php">
+	           <div class="form-group"> 
+	            <label class="checkbox-inline"><input type="checkbox" value="" checked="true">checkbox 1</label>
+	            <label class="checkbox-inline"><input type="checkbox" value="">checkbox 2</label>
+	            <label class="checkbox-inline"><input type="checkbox" value="">checkbox 3</label>
+	          </div>
+
+
+	          <div class="form-group">
+	            <label for="comment">Observaciones:</label>
+	              <textarea class="form-control" rows="5" id="comment">Comentario</textarea>
+	          </div>
+	        </form>
+	      </div>
+	  </div>
+	  <div class="container">
+	    <h3>Tables</h3>
+	    <table class="table">
+	      <thead>
+	        <tr>
+	          <th>state</th>
+	          <th>name</th>
+	          <th>e-mail</th>
+	          <th>Precio Unitario</th>
+	          <th>Total</th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	        <tr class="success">
+	          <td>Success</td>
+	          <td>Doe</td>
+	          <td>john@example.com</td>
+	        </tr>
+	        <tr class="danger">
+	          <td>Danger</td>
+	          <td>Moe</td>
+	          <td>mary@example.com</td>
+	        </tr>
+	        <tr class="info">
+	          <td>Info</td>
+	          <td>Dooley</td>
+	          <td>july@example.com</td>
+	        </tr>
+	        <tr class="warning">
+	          <td>Warning</td>
+	          <td>Refs</td>
+	          <td>bo@example.com</td>
+	        </tr>
+	        <tr class="active">
+	          <td>Active</td>
+	          <td>Activeson</td>
+	          <td>act@example.com</td>
+	        </tr>
+	        <tr>
+	          <td></td>
+	          <td></td>
+	          <td></td>
+	          <td></td>
+	          <td></td>
+	        </tr>
+	      </tbody>
+	    </table>
+	  </div>
+  <!-- DEMÁS: fin -->
+</body>
+</html>

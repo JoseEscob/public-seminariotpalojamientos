@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse"> <!-- BEGIN: Menú Superior -->
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="home" title="Ir a la página de Inicio" style="color:MEDIUMTURQUOISE;">OwnerRental</a>
+    </div>
+
+    <!-- BEGIN: Menú Superior - Opciones -->
+    <ul class="nav navbar-nav">
+      
+      <li><a href="#">Mis publicaciones</a></li>
+      <li><a href="#">Solicitudes</a></li>
+      <li><a href="#"></a></li>
+      <li><a href="#"></a></li>
+    </ul>
+    <!-- END: Menú Superior - Opciones -->
+    <!-- BEGIN: Menú Superior - Búsqueda -->
+    <form class="navbar-form navbar-left" action="/action_page.php">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar alojamiento en..." name="search">
+        <div class="input-group-btn">
+          <button class="btn btn-default" type="submit" title="Te permite realizar una búsqueda">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+    <!-- END: Menú Superior - Búsqueda -->
+
+    <div class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> Santiago</a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Opción 1</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-cog"/></span> Configuraciones</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-log-out"/></span> Salir</a></li>
+          </ul>
+        </li>
+    </div>
+  </div>
+</nav> <!-- END: Menú Superior -->
+
+<div class="container">
+  <h3>Dpto frente Obelisco</h3>
+  <div class="media-left media-middle">
+      <img src="imagenes/1-comentarioPuntuacion.jpg" class="media-object" style="height:200px; width:350px;">
+  </div>
+  <div class="media-right media-top">
+      <h4>Ubicada en 9 de Julio</h4>
+
+        <form class="form-horizontal" action="/action_page.php">
+          <div class="form-group">
+            <label class="control-label col-sm-10">Cant. de Habitaciones:</label>
+            <div class="col-sm-2">
+              <label class="control-label">4</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-10">Amoblamiento: </label>
+            <div class="col-sm-2">
+              <label class="control-label">Total</label>
+            </div>
+          </div>
+          <div class="form-group">        
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <label><input type="checkbox">Incluir Garage</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">        
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Ver Galería</button>
+            </div>
+          </div>
+        </form>
+
+  </div>
+</div>
+
+<div class="container">
+  <h3>Comentarios de la publicación</h3>
+  <h5><b>Puntuación General 5/5</b></h5>
+ 
+  <div class="media">
+    <div class="media-left media-middle">
+      <img src="imagenes/user1.jpg" class="media-object" style="height:50px; width:50px;">
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading"><a>Nombre Usuario 1</a></h4>
+      <p>
+        <b>Puntuación 5/5</b> <text style="color:SILVER;"> 23 Oct 18</text>
+      </p>
+      <p>Muy buena atención. El lugar muy cómodo y una hermosa vista</p>
+    </div>
+  </div>
+  <hr>
+  <div class="media">
+    <div class="media-left media-middle">
+      <img src="imagenes/user2.jpg" class="media-object" style="height:50px; width:50px;">
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading"><a>Nombre Usuario 2</a></h4>
+      <p>
+        <b>Puntuación 4/5</b> <text style="color:SILVER;"> 25 May 18</text>
+      </p>
+      <p>Recomendable lugar para pasar la estadía</p>
+    </div>
+  </div>
+  <hr>
+</div>
+
+</body>
+</html>
+
