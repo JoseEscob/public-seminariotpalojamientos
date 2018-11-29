@@ -68,7 +68,7 @@
 								<div class="input-group">
 									<label class="label">Repita Contraseña</label> <input
 										class="input--style-4" type="password" maxlength="20"
-										name="claveDos" value="asd1234">
+										name="claveDos" value="asd123">
 								</div>
 							</div>
 
@@ -96,7 +96,8 @@
 									<label class="label">Fecha de Nacimiento</label>
 									<div class="input-group-icon">
 										<input class="input--style-4 js-datepicker" type="text"
-											name="fechaNac" readonly> <i
+											pattern="^\d{2}-\d{2}-\d{4}$" name="fechaNac" maxlength="10"
+											placeholder="dd-MM-yyyy" required="true" readonly> <i
 											class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
 									</div>
 								</div>
@@ -169,14 +170,14 @@
 
 
 	<!-- Jquery JS-->
-	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="login/vendor/jquery/jquery.min.js"></script>
 	<!-- Vendor JS-->
-	<script src="vendor/select2/select2.min.js"></script>
-	<script src="vendor/datepicker/moment.min.js"></script>
-	<script src="vendor/datepicker/daterangepicker.js"></script>
+	<script src="login/vendor/select2/select2.min.js"></script>
+	<script src="login/vendor/datepicker/moment.min.js"></script>
+	<script src="login/vendor/datepicker/daterangepicker.js"></script>
 
 	<!-- Main JS-->
-	<script src="js/global.js"></script>
-	<script src="js/JSValidar.js"></script>
+	<script src="login/js/global.js"></script>
+	<script src="login/js/JSValidar.js"></script>
 </body>
 </html>

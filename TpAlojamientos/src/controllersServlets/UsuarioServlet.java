@@ -92,7 +92,7 @@ public class UsuarioServlet extends HttpServlet {
 			obj.setClaveUsuario(claveUno);
 			obj.setNombre(nombre);
 			obj.setApellido(apellido);
-			obj.setFechaNac(Utilitario.textoAFecha(fechaNac));
+			obj.setFechaNac(Utilitario.textoAFechaSQL(fechaNac));
 			obj.setSexo(sexo);
 			obj.setDni(dni);// obj.setTelefono(telefono);
 			// 4- verificar correcto almacenamiento en DB

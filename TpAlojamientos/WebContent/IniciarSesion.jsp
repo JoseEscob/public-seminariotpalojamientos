@@ -52,7 +52,7 @@
 						</div>
 
 						<div class="row row-space"></div>
-						<div class="input-group">
+						<div class="input-group pass_show">
 							<label class="label">Contraseña</label> <input
 								class="input--style-4" type="password" name="txtPass"
 								value="asd123">
@@ -89,14 +89,14 @@
 
 
 	<!-- Jquery JS-->
-	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="login/vendor/jquery/jquery.min.js"></script>
 	<!-- Vendor JS-->
-	<script src="vendor/select2/select2.min.js"></script>
-	<script src="vendor/datepicker/moment.min.js"></script>
-	<script src="vendor/datepicker/daterangepicker.js"></script>
+	<script src="login/vendor/select2/select2.min.js"></script>
+	<script src="login/vendor/datepicker/moment.min.js"></script>
+	<script src="login/vendor/datepicker/daterangepicker.js"></script>
 
 	<!-- Main JS-->
-	<script src="js/global.js"></script>
-	<script src="js/JSValidar.js"></script>
+	<script src="login/js/global.js"></script>
+	<script src="login/js/JSValidar.js"></script>
 </body>
 </html>
