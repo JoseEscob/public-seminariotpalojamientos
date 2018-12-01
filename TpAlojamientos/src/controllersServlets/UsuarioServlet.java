@@ -162,14 +162,14 @@ public class UsuarioServlet extends HttpServlet {
 		boolean existe = false;
 		try {
 			// 1- recuperar valores del formulario JSP
-			String nombreUsuario = request.getParameter("txtUser").toString();
+			String correoUsuario = request.getParameter("txtUser").toString();
 			String claveUsuario = request.getParameter("txtPass").toString();
 			// 2- validar información obtenida JSP
-			if (nombreUsuario.trim().length() != 0) {
+			if (correoUsuario.trim().length() != 0) {
 				if (claveUsuario.trim().length() != 0) {
 					alles = usuarioDAO.getAll();
 					for (Usuario usuario : alles) {
-						if (usuario.getUsuario().compareTo(nombreUsuario) == 0) {
+						if (usuario.getMail().compareTo(correoUsuario) == 0) {
 							if (usuario.getClaveUsuario().compareTo(claveUsuario) == 0) {
 								usr = usuario;
 								existe = true;
