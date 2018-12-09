@@ -7,12 +7,19 @@ https://stackoverflow.com/questions/168426/how-do-i-add-a-shortcut-key-to-eclips
 
 
 
-Diseño CSS/Bootstrap
+DiseÃ±o CSS/Bootstrap
 - https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-list-groups.php
 - https://www.w3schools.com/bootstrap/bootstrap_ref_css_images.asp
 
 Usuarios
 https://bootsnipp.com/snippets/featured/flat-user-profile-interface-ui
 
+Comentarios: Media objects and Badgets
+https://getbootstrap.com/docs/3.3/components/
+https://bootstrapdocs.com/v3.3.6/docs/css/?
+
 comprobante: 
 https://bootsnipp.com/snippets/featured/bs4-clean-amp-simple-invoice-template
+
+Tips JSTL/ Spring
+https://www.javatips.net/blog/spring-tutorial

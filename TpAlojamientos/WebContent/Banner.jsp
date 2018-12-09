@@ -78,8 +78,19 @@ BOOTSTRAP ONLINE Nuevo
 					data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
 						<c:out value="${usuario.nombre}" /></a>
 					<ul class="dropdown-menu">
-						<li><a href="#"><span class="glyphicon glyphicon-user" /></span>
-								Mi Perfil</a></li>
+						<li><a href="UsuarioServlet"><span
+								class="glyphicon glyphicon-user" /></span> <input
+							type="hidden" id="buscarAction" name="buscarAction"
+							value="verInfoUsuario"></input>
+							<input
+							type="submit"
+								name="btnNuevoUsuario" value="Mi Perfil"></input>
+							</a>
+							
+							
+							
+							
+							</li>
 						<li><a href="#"><span class="glyphicon glyphicon-cog" /></span>
 								Configuraciones</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-off" /></span>

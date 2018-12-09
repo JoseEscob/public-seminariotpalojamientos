@@ -48,14 +48,14 @@
 						<div class="input-group">
 							<label class="label">Usuario</label> <input
 								class="input--style-4" type="text" name="txtUser"
-								value="soyUsuario">
+								value="jescobar@gmail.com">
 						</div>
 
 						<div class="row row-space"></div>
 						<div class="input-group pass_show">
 							<label class="label">Contraseña</label> <input
 								class="input--style-4" type="password" name="txtPass"
-								value="asd123">
+								value="je123">
 						</div>
 
 

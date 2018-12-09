@@ -37,7 +37,19 @@ public class UsuarioServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		// response.getWriter().append("Served at: ").append(request.getContextPath());
+		// por <a> href pasa por GET. sino Usar submit para POST
+		VerInfoUsuario(request, response);
+		
+		String action = request.getParameter("buscarAction");
+		LOG.info("JSP - Acción - GET Banner: " + action);
+		if (action != null) {
+			switch (action) {
+			case "verInfoUsuario":
+				VerInfoUsuario(request, response);
+				break;
+			}
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -55,9 +67,9 @@ public class UsuarioServlet extends HttpServlet {
 			case "editar":
 				// buscarPorNombre(request, response);
 				break;
-			case "ver":
-				VerInfoUsuario(request, response);
-				break;
+			// case "verInfoUsuario":
+			// VerInfoUsuario(request, response);
+			// break;
 			}
 		}
 	}
@@ -116,34 +128,35 @@ public class UsuarioServlet extends HttpServlet {
 	// ********* VER DATOS
 	private void VerInfoUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Usuario obj = new Usuario();
+		Usuario user = null;
 		String message = null;
 
 		try {
-			// 1- recuperar valores del formulario JSP
-			HttpSession session = request.getSession();
-			String idUsuario = null;// getParameter("txtHiddenIdUsuario")
+			// 1- Recuperar valores del formulario JSP
 
-			// 2- validar información obtenida JSP
-			if (request.getParameter("idUsuario") != null) {
-				idUsuario = request.getParameter("idUsuario").toString();
+			// HttpSession session = request.getSession();
+			// String idUsuario = null;// getParameter("txtHiddenIdUsuario")
+			user = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
+
+			// 2- Validar información obtenida JSP
+			if (user == null) {
+				message = "ERROR: No se pudo recuperar la variable Session: " + Constantes.sessionUser;
+				LOG.info(message);
+				throw new ValidacionException(message);
 			}
-			session.setAttribute("sessionJSP", idUsuario);// session.getAttribute("sessionJSP");
-
-			// 3- guardar información validada
-			obj.setIdUsuario(Integer.parseInt(idUsuario));
-			// 4- verificar correcto almacenamiento en DB
-			if (usuarioDAO.get(obj) == null)
-				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
-
-			request.setAttribute("obj", obj);
+			// 3- Recuperar info de la DB
+			if (usuarioDAO.get(user) == null)
+				throw new ValidacionException(
+						"SQL: Ocurrió un error al recuperar usuario con id" + user.getIdUsuario());
+			// 4- Devolver información recuperada a la jsp
+			request.setAttribute("user", user);
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
 			// 5- Informar estado
 			request.setAttribute("message", message);
 
-			paginaJsp = "/UsuarioAlta.jsp";
+			paginaJsp = "/UsuarioViewModif.jsp";
 			// response.sendRedirect(request.getContextPath()+ paginaJsp);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
@@ -182,7 +195,7 @@ public class UsuarioServlet extends HttpServlet {
 			// 3- verificar resultado
 
 			// SE ALMACENA LA VARIABLE SESSION
-			request.getSession().setAttribute("usuario", usr);
+			request.getSession().setAttribute(Constantes.sessionUser, usr);
 			// 5- Informar estado
 			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 
@@ -195,7 +208,7 @@ public class UsuarioServlet extends HttpServlet {
 				paginaJsp = "/IniciarSesion.jsp";
 			} else if (!usr.isAdmin()) {
 				paginaJsp = "/Inicio.jsp";
-			}else {
+			} else {
 				request.setAttribute("usuariosBajoPuntaje", usuariosBajoPuntaje());
 				request.setAttribute("publicacionesBajoPuntaje", publicacionesBajoPuntaje());
 				paginaJsp = "/InicioAdmin.jsp";
@@ -207,28 +220,28 @@ public class UsuarioServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 	}
-	
+
 	// Esto es para cargar los datos a mostrar en la vista de admin
 	public ArrayList<Usuario> usuariosBajoPuntaje() {
 		ArrayList<Usuario> todos = usuarioDAO.getAll();
 		ArrayList<Usuario> usuariosBajoPuntaje = new ArrayList<Usuario>();
-		for(Usuario u : todos) {
-			if(u.getPuntaje() < 2) {
+		for (Usuario u : todos) {
+			if (u.getPuntaje() < 2) {
 				usuariosBajoPuntaje.add(u);
 			}
 		}
 		return usuariosBajoPuntaje;
 	}
-	
+
 	public ArrayList<Publicacion> publicacionesBajoPuntaje() {
 		ArrayList<Publicacion> todos = publicacionDAO.getAll();
 		ArrayList<Publicacion> publicacionesBajoPuntaje = new ArrayList<Publicacion>();
-		for(Publicacion u : todos) {
-			if(u.getPuntaje() < 2) {
+		for (Publicacion u : todos) {
+			if (u.getPuntaje() < 2) {
 				publicacionesBajoPuntaje.add(u);
 			}
 		}
-		
+
 		return publicacionesBajoPuntaje;
 	}
 

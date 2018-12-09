@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	
-<%@ page import="modelo.Usuario, extra.Tag"%>
+
+<%@ page import="modelo.Usuario, extra.Tag, extra.Constantes"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,16 +13,16 @@
 
 
 	<%
-		if (request.getSession().getAttribute("usuario") != null) {
-			Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+		if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
+			Usuario usuario = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
 	%>
-	Sesion iniciada. Bienvenido 
+	Sesion iniciada. Bienvenido
 	<%=usuario.getNombre()%>
 	<%
-		}else{
+		} else {
 			//Redireccionar
 		}
 	%>
-	
+
 </body>
 </html>

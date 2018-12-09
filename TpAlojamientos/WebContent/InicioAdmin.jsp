@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	
-<%@ page import="modelo.Usuario, extra.Tag, modelo.Publicacion, java.util.ArrayList"%>
+
+<%@ page
+	import="modelo.Usuario, extra.Tag, modelo.Publicacion, java.util.ArrayList, extra.Constantes"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,22 +12,22 @@
 <body>
 
 	<%
-	// Variables necesarias
-	ArrayList<Usuario> usuarios = null;
-	ArrayList<Publicacion> publicaciones = null;
-	// control de sesion
-		if (request.getSession().getAttribute("usuario") != null) {
-			Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
-			if(usuario.isAdmin()){
-				
+		// Variables necesarias
+		ArrayList<Usuario> usuarios = null;
+		ArrayList<Publicacion> publicaciones = null;
+		// control de sesion
+		if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
+			Usuario usuario = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
+			if (usuario.isAdmin()) {
+
 				usuarios = (ArrayList<Usuario>) request.getAttribute("usuariosBajoPuntaje");
 				publicaciones = (ArrayList<Publicacion>) request.getAttribute("publicacionesBajoPuntaje");
 				//Siempre deberiamos mostrar primer las publicaciones.
-				
-			}else{
+
+			} else {
 				//Redireccionar
 			}
-		}else{
+		} else {
 			//Redireccionar
 		}
 	%>
