@@ -44,7 +44,10 @@ public class UsuarioServlet extends HttpServlet {
 		if (action != null) {
 			switch (action) {
 			case "MiPerfil":
-				VerInfoUsuario(request, response);
+				verInfoUsuario(request, response);
+				break;
+			case "Logout":
+				cerrarSesion(request, response);
 				break;
 			}
 		}
@@ -57,22 +60,22 @@ public class UsuarioServlet extends HttpServlet {
 		if (action != null) {
 			switch (action) {
 			case "login":
-				LoginUsuario(request, response);
+				loginUsuario(request, response);
 				break;
 			case "nuevo":
-				AltaUsuario(request, response);
+				altaUsuario(request, response);
 				break;
 			case "editar":
 				// buscarPorNombre(request, response);
 				break;
 			case "verInfoUsuario":
-				VerInfoUsuario(request, response);
+				verInfoUsuario(request, response);
 				break;
 			}
 		}
 	}
 
-	private void AltaUsuario(HttpServletRequest request, HttpServletResponse response)
+	private void altaUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Usuario obj = new Usuario();
 		String message = null;
@@ -126,7 +129,7 @@ public class UsuarioServlet extends HttpServlet {
 	}
 
 	// ********* VER DATOS
-	private void VerInfoUsuario(HttpServletRequest request, HttpServletResponse response)
+	private void verInfoUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Usuario user = null;
 		String message = null;
@@ -164,9 +167,9 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
-	// ********* LOGIN
+	// ********* LOGIN ************* //
 
-	private void LoginUsuario(HttpServletRequest request, HttpServletResponse response)
+	private void loginUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- declaracion de variables locales
 		String message = null;
@@ -217,6 +220,30 @@ public class UsuarioServlet extends HttpServlet {
 
 			request.setAttribute("message", message);
 
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
+		}
+	}
+
+	private void cerrarSesion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		try {
+			// 1- Recuperar valores del formulario JSP
+			// 2- Validar información obtenida JSP
+			if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
+				request.getSession().setAttribute(Constantes.sessionUser, null);
+				throw new ValidacionException("Se cerró su sesión exitosamente. Hasta luego");
+			} else {
+				throw new ValidacionException("La sesión no fue iniciada. No se pudo finalizar");
+			}
+
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+			paginaJsp = "/IniciarSesion.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}

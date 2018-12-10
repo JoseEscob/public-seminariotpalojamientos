@@ -92,7 +92,7 @@ BOOTSTRAP ONLINE Nuevo
 								class="glyphicon glyphicon-user" /></span> Ver mi Perfil</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-cog" /></span>
 								Configuraciones</a></li>
-						<li><a href="#"><span class="glyphicon glyphicon-off" /></span>
+						<li><a href="UsuarioServlet?accion=Logout"><span class="glyphicon glyphicon-off" /></span>
 								Salir</a></li>
 					</ul></li>
 		</div>

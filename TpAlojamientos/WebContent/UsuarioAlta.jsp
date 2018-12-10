@@ -58,9 +58,9 @@
 						</div>
 						<div class="row row-space">
 							<div class="col-2">
-								<div class="input-group">
-									<label class="label">Contraseña</label> <input
-										class="input--style-4" type="password" maxlength="20"
+								<div class="input-group pass_show">
+									<label class="label" >Contraseña</label> <input
+										class="input--style-4 " type="password" maxlength="20"
 										name="claveUno" value="asd123">
 								</div>
 							</div>
@@ -68,7 +68,7 @@
 								<div class="input-group">
 									<label class="label">Repita Contraseña</label> <input
 										class="input--style-4" type="password" maxlength="20"
-										name="claveDos" value="asd123">
+										name="claveDos" value="asd123" onpaste="return false">
 								</div>
 							</div>
 
