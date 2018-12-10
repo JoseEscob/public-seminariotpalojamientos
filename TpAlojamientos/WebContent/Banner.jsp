@@ -32,6 +32,8 @@ BOOTSTRAP ONLINE Nuevo
 <script src="bootstrap3/js/bootstrap.min.js"></script>
 <link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
 
+<script src="login/js/JSValidar.js"></script>
+
 <title></title>
 </head>
 <body>
@@ -78,19 +80,16 @@ BOOTSTRAP ONLINE Nuevo
 					data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
 						<c:out value="${usuario.nombre}" /></a>
 					<ul class="dropdown-menu">
-						<li><a href="UsuarioServlet"><span
-								class="glyphicon glyphicon-user" /></span> <input
-							type="hidden" id="buscarAction" name="buscarAction"
-							value="verInfoUsuario"></input>
-							<input
-							type="submit"
-								name="btnNuevoUsuario" value="Mi Perfil"></input>
-							</a>
-							
-							
-							
-							
-							</li>
+
+						<li><a><span class="glyphicon glyphicon-user" /></span>
+								<form method="post" action="UsuarioServlet">
+									<input type="hidden" id="buscarAction" name="buscarAction"
+										value="verInfoUsuario"></input> <input type="submit"
+										name="btnNuevoUsuario" value="Mi Perfil"></input>
+								</form> </a></li>
+
+						<li><a href="UsuarioServlet?accion=MiPerfil"><span
+								class="glyphicon glyphicon-user" /></span> Ver mi Perfil</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-cog" /></span>
 								Configuraciones</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-off" /></span>
@@ -100,19 +99,6 @@ BOOTSTRAP ONLINE Nuevo
 	</div>
 	</nav>
 	<!-- END: Menú Superior -->
-
-
-
-	<!-- Jquery JS-->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<!-- Vendor JS-->
-	<script src="vendor/select2/select2.min.js"></script>
-	<script src="vendor/datepicker/moment.min.js"></script>
-	<script src="vendor/datepicker/daterangepicker.js"></script>
-
-	<!-- Main JS-->
-	<script src="js/global.js"></script>
-	<script src="js/JSValidar.js"></script>
 
 </body>
 </html>

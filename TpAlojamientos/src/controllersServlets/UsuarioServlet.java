@@ -1,7 +1,6 @@
 package controllersServlets;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -10,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import controladoresDAO.Usuarios;
 import exceptions.ValidacionException;
@@ -28,7 +26,7 @@ import modelo.Publicacion;
 public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String paginaJsp = null;// "/UsuarioAlta.jsp";
-	private Usuarios usuarioDAO = new Usuarios();
+	private final Usuarios usuarioDAO = new Usuarios();
 	private Publicaciones publicacionDAO = new Publicaciones();
 
 	public UsuarioServlet() {
@@ -39,13 +37,13 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
 		// por <a> href pasa por GET. sino Usar submit para POST
-		VerInfoUsuario(request, response);
-		
-		String action = request.getParameter("buscarAction");
+		// VerInfoUsuario(request, response);
+
+		String action = request.getParameter("accion");
 		LOG.info("JSP - Acción - GET Banner: " + action);
 		if (action != null) {
 			switch (action) {
-			case "verInfoUsuario":
+			case "MiPerfil":
 				VerInfoUsuario(request, response);
 				break;
 			}
@@ -67,9 +65,9 @@ public class UsuarioServlet extends HttpServlet {
 			case "editar":
 				// buscarPorNombre(request, response);
 				break;
-			// case "verInfoUsuario":
-			// VerInfoUsuario(request, response);
-			// break;
+			case "verInfoUsuario":
+				VerInfoUsuario(request, response);
+				break;
 			}
 		}
 	}
@@ -98,7 +96,8 @@ public class UsuarioServlet extends HttpServlet {
 			if (!Utilitario.esMayorDeEdad(fechaNac)) {
 				throw new ValidacionException("El usuario debe ser mayor de edad");
 			}
-
+			// 2.2 Validar con la DB
+			usuarioDAO.validarCamposUnicos(obj);
 			// 3- guardar información validada
 			obj.setMail(mail);
 			obj.setClaveUsuario(claveUno);
@@ -118,6 +117,7 @@ public class UsuarioServlet extends HttpServlet {
 		} finally {
 			// 5- Informar estado
 			request.setAttribute("message", message);
+			response.getWriter().append("<script>alert(" + message + ")</script>");
 
 			paginaJsp = "/UsuarioAlta.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
@@ -156,6 +156,7 @@ public class UsuarioServlet extends HttpServlet {
 			// 5- Informar estado
 			request.setAttribute("message", message);
 
+			request.setAttribute("rutaDefaultFoto", Constantes.RUTAuserNoPhoto);
 			paginaJsp = "/UsuarioViewModif.jsp";
 			// response.sendRedirect(request.getContextPath()+ paginaJsp);
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);

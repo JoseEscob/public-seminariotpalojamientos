@@ -39,7 +39,7 @@
 						<label for="nombre" class="control-label col-xs-3">Nombre:
 						</label>
 						<div class="col-xs-9">
-							<input type="text" name="nombre" id="nombre" class="form-control"
+							<input type="text" name="nombre"  class="form-control"
 								value="${user.nombre}" onkeypress="return soloLetras(event)"
 								required="true">
 						</div>
@@ -59,7 +59,7 @@
 						<div class="col-xs-9">
 							<input type="date" name="fechaNac" id="fechaNac"
 								class="form-control" value="${user.fechaNac}"
-								pattern="^\d{2}-\d{2}-\d{4}$" maxlength="8"
+								pattern="^\d{2}-\d{2}-\d{4}$" maxlength="10"
 								placeholder="dd-MM-yyyy" required="true">
 						</div>
 					</div>
@@ -90,22 +90,23 @@
 			<div class="col-md-6">
 				<h3>Foto del Usuario</h3>
 
-				<form class="form-horizontal" action="/action_page.php">
-					<div id="fotoPerfil" class="form-group">
-						<c:if test="${not empty rutaFotoPerfil}">
-							<img class="img-rounded" alt=" " width="60" height="60"
-								src="${rutaFotoPerfil}" />
-						</c:if>
 
-						<c:if test="${empty rutaFotoPerfil}">
-							<!-- <img class="img-rounded" alt=" " width="60" height="60"
+				<div id="fotoPerfil" class="form-group" align="center">
+					<c:if test="${not empty rutaFotoPerfil}">
+						<img class="img-rounded" alt=" " width="250" height="250"
+							src="${rutaFotoPerfil}" />
+					</c:if>
+
+					<c:if test="${empty rutaFotoPerfil}">
+						<!-- <img class="img-rounded" alt=" " width="60" height="60"
 								src="<c:url value='${url.currentModule}/${rutaDefaultFoto}'/>" />
 							 -->
-							<img class="img-rounded" alt=" " width="60" height="60"
-								src="${rutaDefaultFoto}" />
+						<img class="img-rounded" alt=" " width="250" height="250"
+							src="${rutaDefaultFoto}" />
 
-						</c:if>
-					</div>
+					</c:if>
+				</div>
+				<form class="form-horizontal" action="/action_page.php">
 					<div class="form-group">
 						<div class="col-sm-12" align="right">
 							<button class="btn btn-info">Cambiar foto</button>
@@ -116,5 +117,6 @@
 
 			<div class="row"></div>
 		</div>
+			
 </body>
 </html>
