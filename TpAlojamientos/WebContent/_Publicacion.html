@@ -1,0 +1,417 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ page import="modelo.Usuario, extra.Tag"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+
+
+	<script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
+	<script src="bootstrap3/js/bootstrap.min.js"></script>
+	<link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
+
+	<script src="login/js/JSValidar.js"></script>
+
+	<title>Publicación - Alta</title>
+</head>
+<body>
+	<%@ include file="Banner.jsp"%>
+
+	<div class="container">
+		<h2>Publicación</h2>
+		<hr />
+		<!--Horizantal line divider  <div class="page-header"/> -->
+	</div>
+
+	<div class="container">
+		<h4>Ubicación - Zona del Domicilio</h4>
+		<div class="row">
+			<div class="col-md-4"><!-- Combos de Zona  -->
+					<div class="form-group" style="">
+						<label>Partido</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+					<div class="form-group" style="">
+						<label>Localidad</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+					<div class="form-group" style="">
+						<label>Zona</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+			</div>
+		
+			<!-- <h4>Ubicación - Domicilio</h4> -->
+			<div class="col-md-4">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="calle" class="control-label">Dirección Calle</label>
+						<input type="text" name="calle"  class="form-control"
+								value="${obj.calle}" onkeypress="return soloLetras(event)"
+								required="true"  maxlength="50">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="altura" class="control-label">Altura </label>
+							<input type="text" name="altura" id="altura" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="${obj.altura}" required="true" maxlength="8">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="codPostal" class="control-label">Código Postal </label>
+							<input type="text" name="codPostal" id="codPostal" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="${obj.codPostal}" required="true" maxlength="6">
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="piso" class="control-label">Piso </label>
+							<input type="text" name="piso" id="piso" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="${obj.piso}" required="true" maxlength="2" placeholder="4">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="dpto" class="control-label">Departamento </label>
+							<input type="text" name="dpto" id="dpto" class="form-control"
+									onkeypress="return soloLetras(event)" onpaste="return false"
+									value="${obj.dpto}" required="true" maxlength="1" placeholder="B">
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-4"> <!-- Ubicación en Mapa  -->
+					<div class="form-group" align="center">
+							<form class="form-horizontal" action="/action_page.php">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<button class="btn btn-info">Ver en Mapa</button>
+									</div>
+								</div>
+
+
+								<div id="fotoEnMapa" class="form-group" align="center">
+									<c:if test="${not empty fotoEnMapa}">
+										<img class="img-rounded" alt=" " width="250" height="250"
+											src="${fotoEnMapa}" />
+									</c:if>
+
+									<c:if test="${empty fotoEnMapa}">
+										<img class="img-rounded" alt=" " width="250" height="250"
+											src="${no encontrado}" />
+
+									</c:if>
+								</div>
+
+							</form>
+					</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<h3>Características principales</h3>
+		<hr />
+		<div class="row">
+			<div class="col-md-4"> <!-- Características - Superficie Espacio  -->
+					<div class="form-group" style="">
+						<label>Tipo de Alojamiento</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+
+					<div class="form-group">
+						<label for="calle" class="control-label">Superficie Cubierta (m²)</label>
+						<input type="text" name="calle"  class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="${obj.supCubierta}" required="true" maxlength="2">
+					</div>
+
+					<div class="form-group">
+						<label for="calle" class="control-label">Superficie Descubierta (m²)</label>
+						<input type="text" name="calle"  class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="${obj.supDescubierta}" required="true" maxlength="2">
+					</div>
+			</div>
+
+			<div class="col-md-4"> <!-- Características - Combos de cantidades  -->
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Personas</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Ambientes</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Dormitorios</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Baños</label><select class="form-control">
+							<option value="value1">Text 1</option>
+							<option value="value2">Text 2</option>
+							<option value="value3">Text 3</option></select>
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="col-md-4"> <!-- Características - Precio  -->
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="radio"><input type="radio" name="chkExpensas" value="0">No tiene expensas</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="radio"><input type="radio" name="chkExpensas" value="1">Tiene expensas</label>
+						</div>
+					</div>
+				</div>
+				</br>
+				<div class="col-md-12 form-group">
+					<label for="precioExpensas" class="control-label">Precio Expensas</label>
+					<div class="input-group">
+					  <span class="input-group-addon">$</span>
+					  <input type="text" class="form-control" onkeypress="return soloNros(event)" onpaste="return false"
+									name="precioExpensas" value="${obj.precioExpensas}" required="true" 
+									maxlength="6" aria-label="Pesos">
+					  <span class="input-group-addon">.00</span>
+					</div>
+				</div>
+
+				<div class="col-md-12 form-group">
+					<label for="precioNoche" class="control-label">Precio por noche</label>
+					<div class="input-group">
+					  <span class="input-group-addon">$</span>
+					  <input type="text" class="form-control" onkeypress="return soloNros(event)" onpaste="return false"
+									name="precioNoche" value="${obj.precioNoche}" required="true" 
+									maxlength="6" aria-label="Pesos">
+					  <span class="input-group-addon">.00</span>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container">
+		<h3>Servicios - Facilidades</h3>
+		<p>Seleccione los Servicios que ofrece su publicación</p>
+		<hr />
+		<div class="row">
+			<div class="col-md-4"><!--   -->
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 1</label>
+					</div>
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 3</label>
+					</div>
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 5</label>
+					</div>
+
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 2</label>
+					</div>
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 4</label>
+					</div>
+					<div class="form-group">
+						<label class="checkbox"><input type="checkbox" name="fruit" value="">Checkbox 6</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+
+				Instalaciones del edificio
+					Gimnasio
+					Pileta
+					Sauna
+					Parrilla
+
+				Servicios del edificio
+					Agua corriente
+					Cocina
+					Electricidad
+					Gas natural
+					Seguridad
+					Telefono
+					Mascotas;
+					Fumadores;
+					Amoblada;
+					Desayuno;
+
+				Ambientes del departamento
+					Balcon
+					Baño
+					Baulera
+					Cochera
+					Cocina
+					Dormitorio
+					Jardin
+					Living comedor
+					Suite
+					Vestidor
+
+			
+
+
+            </div>	
+
+
+            <div class="col-md-4">
+            </div>	
+
+		</div>
+	</div>
+
+
+
+
+	<!-- -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Datos Personales</h3>
+				<form class="form-horizontal" action="/action_page.php">
+					<!-- <div class="row" id="configuracion">
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label">Identificador</label>
+                        <div class="col-sm-10">
+                          <p class="form-control-static">${user.idUsuario}</p>
+                        </div>
+                      </div>
+                  </div>
+                -->
+					<div class="form-group">
+						<label for="nombre" class="control-label col-xs-3">Nombre:
+						</label>
+						<div class="col-xs-9">
+							<input type="text" name="nombre"  class="form-control"
+								value="${user.nombre}" onkeypress="return soloLetras(event)"
+								required="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="apellido" class="control-label col-xs-3">Apellido:
+						</label>
+						<div class="col-xs-9">
+							<input type="text" name="apellido" id="apellido"
+								class="form-control" onkeypress="return soloLetras(event)"
+								value="${user.apellido}" required="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="fechaNac" class="control-label col-xs-3">Fecha
+							de Nacimiento: </label>
+						<div class="col-xs-9">
+							<input type="date" name="fechaNac" id="fechaNac"
+								class="form-control" value="${user.fechaNac}"
+								pattern="^\d{2}-\d{2}-\d{4}$" maxlength="10"
+								placeholder="dd-MM-yyyy" required="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="dni" class="control-label col-sm-3">DNI: </label>
+						<div class="col-sm-9">
+							<input type="text" name="dni" id="dni" class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="${user.dni}" required="true" maxlength="10">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="mail" class="control-label col-sm-3">Mail: </label>
+						<div class="col-sm-9">
+							<input type="email" name="mail" id="mail" class="form-control"
+								onpaste="return false" value="${user.mail}" required="true">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10" align="right">
+							<button class="btn btn-info">Modificar Datos</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+			<div class="col-md-6">
+				<h3>Foto del Usuario</h3>
+
+
+				<div id="fotoPerfil" class="form-group" align="center">
+					<c:if test="${not empty rutaFotoPerfil}">
+						<img class="img-rounded" alt=" " width="250" height="250"
+							src="${rutaFotoPerfil}" />
+					</c:if>
+
+					<c:if test="${empty rutaFotoPerfil}">
+						<!-- <img class="img-rounded" alt=" " width="60" height="60"
+								src="<c:url value='${url.currentModule}/${rutaDefaultFoto}'/>" />
+							 -->
+						<img class="img-rounded" alt=" " width="250" height="250"
+							src="${rutaDefaultFoto}" />
+
+					</c:if>
+				</div>
+				<form class="form-horizontal" action="/action_page.php">
+					<div class="form-group">
+						<div class="col-sm-12" align="right">
+							<button class="btn btn-info">Cambiar foto</button>
+
+						</div>
+
+						<div class="form-group" style="">
+							<input type="file" class="form-control">
+						</div>
+					</div>
+				</form>
+			</div>
+
+
+
+
+			<div class="row"></div>
+		</div>
+			
+</body>
+</html>
