@@ -15,7 +15,7 @@ public class Usuarios implements Connectable<Usuario> {
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		{
 			put("all", "select * from usuarios");
-			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,defaut,?,default)");
+			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,default,?,default)");
 			put("count", "select count(*) as cantidad from usuarios");
 			put("update",
 					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?, sexo=?, admin=?, puntaje=?, habilitado=? where idUsuario=?");
@@ -154,8 +154,7 @@ public class Usuarios implements Connectable<Usuario> {
 			ps.setString(6, obj.getUsuario());
 			ps.setString(7, obj.getClaveUsuario());
 			ps.setBoolean(8, obj.getSexo());
-			ps.setBoolean(9, obj.isAdmin());
-			ps.setFloat(10, obj.getPuntaje());
+			ps.setFloat(9, obj.getPuntaje());
 
 			ps.executeUpdate();
 			correcto = true;

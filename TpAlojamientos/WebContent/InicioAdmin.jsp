@@ -41,25 +41,13 @@
 					<th>idUsuario</th>
 					<th>idTipoAlojamiento</th>
 					<th>nombre</th>
-					<th>descripcion</th>
-					<th>domicilio</th>
-					<th>idLocalidad</th>
-					<th>CodPostal</th>
-					<th>coordenadas</th>
-					<th>precioNoche</th>
-					<th>metrosCuadrados</th>
-					<th>cantPersonas</th>
-					<th>cantAmbientes</th>
-					<th>cantBaños</th>
-					<th>cantHabitaciones</th>
-					<th>jardin</th>
-					<th>cochera</th>
-					<th>mascotas</th>
-					<th>fumadores</th>
-					<th>amoblada</th>
-					<th>desayuno</th>
-					<th>fechaAlta</th>
 					<th>puntaje</th>
+					<th>precioNoche</th>
+					<% 
+					//imagenes
+					//usuario: nombre, imagen de perfil, puntaje
+					%>
+					
 					<th>habilitado</th>
 				</tr>
 			</thead>
@@ -70,24 +58,7 @@
 						<td><c:out value="${obj.idUsuario}" /></td>
 						<td><c:out value="${obj.idTipoAlojamiento}" /></td>
 						<td><c:out value="${obj.nombre}" /></td>
-						<td><c:out value="${obj.descripcion}" /></td>
-						<td><c:out value="${obj.domicilio}" /></td>
-						<td><c:out value="${obj.idLocalidad}" /></td>
-						<td><c:out value="${obj.codPostal}" /></td>
-						<td><c:out value="${obj.coordenadas}" /></td>
 						<td><c:out value="${obj.precioNoche}" /></td>
-						<td><c:out value="${obj.metrosCuadrados}" /></td>
-						<td><c:out value="${obj.cantPersonas}" /></td>
-						<td><c:out value="${obj.cantAmbientes}" /></td>
-						<td><c:out value="${obj.cantBanios}" /></td>
-						<td><c:out value="${obj.cantHabitaciones}" /></td>
-						<td><c:out value="${obj.bitJardin}" /></td>
-						<td><c:out value="${obj.bitCochera}" /></td>
-						<td><c:out value="${obj.bitMascotas}" /></td>
-						<td><c:out value="${obj.bitFumadores}" /></td>
-						<td><c:out value="${obj.bitAmoblada}" /></td>
-						<td><c:out value="${obj.bitDesayuno}" /></td>
-						<td><c:out value="${obj.fechaAlta}" /></td>
 						<td><c:out value="${obj.puntaje}" /></td>
 						<td><c:out value="${obj.habilitado}" /></td>
 					</tr>
