@@ -1,11 +1,4 @@
-http://www.avajava.com/tutorials/lessons/what-is-log4j-and-how-do-i-use-it.html
-https://winterbe.com/posts/2009/09/25/customizing-eclipse/
-
-Window> Preferences >General>Keys
-Ctrl+Shift+D Copy Lines
-https://stackoverflow.com/questions/168426/how-do-i-add-a-shortcut-key-to-eclipse-3-2-java-plug-in-to-build-the-current-pro
-
-
+******** MODULOS ********
 
 Diseño CSS/Bootstrap
 - https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-list-groups.php
@@ -18,8 +11,32 @@ Comentarios: Media objects and Badgets
 https://getbootstrap.com/docs/3.3/components/
 https://bootstrapdocs.com/v3.3.6/docs/css/?
 
-comprobante: 
-https://bootsnipp.com/snippets/featured/bs4-clean-amp-simple-invoice-template
+Comprobante: 
+	https://bootsnipp.com/snippets/featured/bs4-clean-amp-simple-invoice-template
+
+
+
+******** FUENTE/ REFERENCIA DE DATOS ********
 
 Tips JSTL/ Spring
-https://www.javatips.net/blog/spring-tutorial
+	https://www.javatips.net/blog/spring-tutorial
+
+Localidades Partidos BSAS
+	"partidos y localidades buenos aires codigo postal arba"
+	-BSAS : http://www.arba.gov.ar/Archivos/Publicaciones/arsellos-tablacplocalidadesypartidos.xls
+	-CABA : http://www.arba.gov.ar/bajadas/Fiscalizacion/Operativos/TransporteBienes/Documentacion/RemitoElectronicoLocalidades.xls
+	-Filtro de excel SQL: https://analystcave.com/create-microsoft-query-excel-excel-query/
+
+Window> Preferences >General>Keys
+	Ctrl+Shift+D Copy Lines
+	https://stackoverflow.com/questions/168426/how-do-i-add-a-shortcut-key-to-eclipse-3-2-java-plug-in-to-build-the-current-pro
+	
+	http://www.avajava.com/tutorials/lessons/what-is-log4j-and-how-do-i-use-it.html
+	https://winterbe.com/posts/2009/09/25/customizing-eclipse/
+	
+	soportealojamientos@com  - tpalojamientos00
+	baalojamientosavisos@com - tpalojamientos01
+
+Google Maps API / formato de publicación
+	https://www.youtube.com/watch?v=hSsOCbG6LQI
+	https://www.argenprop.com/Propiedades/Detalles/9629320--Departamento-de-2-Dormitorios-en-Alquiler-en-Capital-Federal?ViewNameResult=VistaResultados

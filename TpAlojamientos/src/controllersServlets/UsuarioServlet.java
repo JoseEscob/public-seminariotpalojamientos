@@ -120,7 +120,7 @@ public class UsuarioServlet extends HttpServlet {
 		} finally {
 			// 5- Informar estado
 			request.setAttribute("message", message);
-			response.getWriter().append("<script>alert(" + message + ")</script>");
+			// response.getWriter().append("<script>alert(" + message + ")</script>");
 
 			paginaJsp = "/UsuarioAlta.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
@@ -232,7 +232,10 @@ public class UsuarioServlet extends HttpServlet {
 			// 1- Recuperar valores del formulario JSP
 			// 2- Validar información obtenida JSP
 			if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
-				request.getSession().setAttribute(Constantes.sessionUser, null);
+				// request.getSession().setAttribute(Constantes.sessionUser, null);
+				request.getSession().removeAttribute(Constantes.sessionUser);
+				request.getSession().invalidate();
+
 				throw new ValidacionException("Se cerró su sesión exitosamente. Hasta luego");
 			} else {
 				throw new ValidacionException("La sesión no fue iniciada. No se pudo finalizar");
