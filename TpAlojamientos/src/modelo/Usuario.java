@@ -94,7 +94,12 @@ public class Usuario {
 	}
 
 	public void setPuntaje(float puntaje) {
-		this.puntaje = puntaje;
+		if(puntaje < 0)
+			this.puntaje = 0;
+		else if (puntaje > 5)
+			this.puntaje = 5;
+		else
+			this.puntaje = puntaje;
 	}
 
 	public boolean isHabilitado() {
