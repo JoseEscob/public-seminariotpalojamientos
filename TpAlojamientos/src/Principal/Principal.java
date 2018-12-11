@@ -1,6 +1,8 @@
 package Principal;
 
-import java.sql.Date;
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,8 +21,7 @@ public class Principal {
 	static String[] mails = {"miko@gmail.com","josipe@gmail.com","atrameo@gmail.com","juko@gmail.com","trepber@gmail.com","luzet@gmail.com","dazert@gmail.com","zerak@gmail.com","jako@gmail.com"};
 	
 	public static void main(String[] args) {
-
-		/*
+/*
 		//Las siguientes tres lineas es lo que hay que hacer para convertir el tipo de dato java.utl.Date a java.sql.Date
 		Calendar calendario = Calendar.getInstance();
 		java.util.Date date = calendario.getTime();
@@ -33,20 +34,8 @@ public class Principal {
 		Usuarios usuarios = new Usuarios();
 		
 		//usuarios
-	/*	Usuario usuario = new Usuario();
-		usuario.setNombre("David");
-		usuario.setApellido("Martinez");
-		usuario.setDni("39846388");
-		usuario.setMail("david@gmail.com");
-		usuario.setFechaNac(nuevaFecha("30/08/1996"));
-		usuario.setUsuario("jekombrecka");
-		usuario.setClaveUsuario("rader");
-		usuario.setPuntaje(5);
-		usuario.setSexo(true);
-		usuario.setAdmin(true);
-		*/
 		for(Usuario a : newUsers())
-			usuarios.insert();
+			usuarios.insert(a);
 		
 		System.out.println("done!");
 
@@ -73,7 +62,6 @@ public class Principal {
 			usuario.setNombre(nombres[i]);
 			usuario.setApellido(apellidos[i]);
 			usuario.setDni(documentos[i]);
-			
 			usuario.setFechaNac(nuevaFecha("30/08/1996"));
 			usuario.setClaveUsuario("clave");
 			usuario.setMail(mails[i]);
