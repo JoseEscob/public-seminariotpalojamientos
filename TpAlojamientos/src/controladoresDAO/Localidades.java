@@ -13,12 +13,12 @@ public class Localidades implements Connectable<Localidad> {
 
 	private static HashMap<String,String> queries = new HashMap<String, String>(){{
 		put("all", "select * from localidades");
-		put("insert", "insert into localidades values(null,?,?,default)");
+		put("insert", "insert into localidades values(null,?,?,?,default)");
 		put("count", "select count(*) as cantidad from localidades");
-		put("update","update localidades set idPartido=?, nombre=?, habilitado=? where idLocalidad=?");
+		put("update","update localidades set idPartido=?, nombre=?, codPostal=?, habilitado=? where idLocalidad=?");
 		put("get","select * from localidades where idLocalidad=?");
 		put("like", "");
-			
+		put("getByIdPartido","select * from localidades where idPartido=?");	
 	}};
 
 	private Conexion cn;
@@ -39,7 +39,8 @@ public class Localidades implements Connectable<Localidad> {
 				 o.setIdLocalidad(rs.getInt(1));
 				 o.setIdPartido(rs.getInt(2));
 				 o.setNombre(rs.getString(3));
-				 o.setHabilitado(rs.getBoolean(4));
+				 o.setCodPostal(rs.getInt(4));
+				 o.setHabilitado(rs.getBoolean(5));
 				 m.add(o);
 			 }
 			 
@@ -95,7 +96,8 @@ public class Localidades implements Connectable<Localidad> {
 				o.setIdLocalidad(rs.getInt(1));
 				o.setIdPartido(rs.getInt(2));
 				o.setNombre(rs.getString(3));
-				o.setHabilitado(rs.getBoolean(4));
+				o.setCodPostal(rs.getInt(4));
+				o.setHabilitado(rs.getBoolean(5));
 			}
 			
 		}catch(Exception e) {
@@ -104,6 +106,35 @@ public class Localidades implements Connectable<Localidad> {
 			cn.close();
 		}
 		return o;
+	}
+
+	public ArrayList<Localidad> getByIdPartido(int idPartido) {
+		cn = new Conexion();
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByIdPartido"));
+			ps.setInt(1, idPartido);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			 {					
+				 Localidad o = new Localidad();
+				 o.setIdLocalidad(rs.getInt(1));
+				 o.setIdPartido(rs.getInt(2));
+				 o.setNombre(rs.getString(3));
+				 o.setCodPostal(rs.getInt(4));
+				 o.setHabilitado(rs.getBoolean(5));
+				 m.add(o);
+			 }
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 finally
+		 {
+			 cn.close();
+		 }
+		 return m;
 	}
 
 	@Override
@@ -124,6 +155,7 @@ public class Localidades implements Connectable<Localidad> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps.setInt(1, obj.getIdPartido());
 			ps.setString(1, obj.getNombre());
+			ps.setInt(1, obj.getCodPostal());
 			ps.executeUpdate();
 			correcto = true;
 		}catch(Exception e) {
@@ -152,10 +184,11 @@ public class Localidades implements Connectable<Localidad> {
 			
 			
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(1,obj.getIdPartido());		
+			ps.setInt(1,obj.getIdPartido());				
 			ps.setString(2, obj.getNombre());
-			ps.setBoolean(3, obj.isHabilitado());
-			ps.setInt(4,obj.getIdLocalidad());
+			ps.setInt(3,obj.getCodPostal());
+			ps.setBoolean(4, obj.isHabilitado());
+			ps.setInt(5,obj.getIdLocalidad());
 			if(ps.executeUpdate() != 0)
 				correcto = true;
 			

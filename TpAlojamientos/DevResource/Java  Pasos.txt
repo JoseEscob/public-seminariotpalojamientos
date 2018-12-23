@@ -1,0 +1,48 @@
+
+* DAO Encargada de las transacciones con la DB *
+	IDAO: interfáz dao funciona como molde, modelo de los métodos a implementar por las clasesDAO
+	nombreClaseDAO: implementación correspondiente a los métodos de interfáz IDAO
+
+* Servlets(Se realizan las acciones de negocio: ABML-CRUD) *
+	variables: 
+		String  paginaJsp
+		DAO final ImplDAO
+
+	doGet
+		recupera info por url
+	doPost
+		recupera info por "actionParam"
+
+	Alta
+		// 0- cargar los componentes con los valores de la DB
+		// 1- recuperar valores del formulario JSP
+		// 2- validar información obtenida JSP
+		// 2.2 Validar con la DB
+		// 3- guardar información validada
+		// 4- verificar correcto almacenamiento en DB
+		// 5- Informar estado en interfaz (jsp)
+	Baja
+		// 1- recuperar valores del formulario JSP
+		// 2- validar información obtenida JSP
+		// 3- realizar la transacción con la DB
+		// 4- verificar estado de transacción en DB
+		// 5- Informar estado en interfaz (jsp)
+	Modif
+		idem Alta
+	Listado
+		// 0- cargar los componentes con los valores de la DB
+		// 1- recuperar valores del formulario JSP
+		// 2- validar información obtenida JSP
+		// 3- realizar el filtrado
+		// 4- obtener información actualizada de la DB
+		// 5- Informar estado/resultado en interfaz (jsp)
+
+*JSPs - Interfaz web *
+	
+	Banner.jsp
+	 - HEAD: Importaciones de archivos (js, css, jquery)
+	 - BODY: Menú de la página y validación de sessionLogin
+
+	OtraPagina.jsp
+	 - HEAD: El título de la página
+	 - BODY: incluye al archivo "Banner.jsp"

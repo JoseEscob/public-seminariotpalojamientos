@@ -50,8 +50,12 @@ BOOTSTRAP ONLINE Nuevo
 				data-toggle="dropdown"><span
 					class="glyphicon glyphicon-chevron-down"></span> Publicaciones</a>
 				<ul class="dropdown-menu">
+
 					<li><a href="#"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
+
+					<li><a href="PublicacionServlet?accion=Nuevo"> Nueva
+							Publicación</a></li>
 					<li><a href="#"><span class="glyphicon glyphicon-star" /></span>
 							Favoritas</a></li>
 					<li><a href="#"></a></li>
@@ -92,8 +96,8 @@ BOOTSTRAP ONLINE Nuevo
 								class="glyphicon glyphicon-user" /></span> Ver mi Perfil</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-cog" /></span>
 								Configuraciones</a></li>
-						<li><a href="UsuarioServlet?accion=Logout"><span class="glyphicon glyphicon-off" /></span>
-								Salir</a></li>
+						<li><a href="UsuarioServlet?accion=Logout"><span
+								class="glyphicon glyphicon-off" /></span> Salir</a></li>
 					</ul></li>
 		</div>
 	</div>

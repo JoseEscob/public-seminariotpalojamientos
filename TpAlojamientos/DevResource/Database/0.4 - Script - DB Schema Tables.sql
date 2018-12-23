@@ -52,6 +52,7 @@ create table publicaciones(
 	descripcion varchar(50) not null,
 	domicilio varchar(100) not null,
 	idLocalidad int not null,
+	codPostal int not null,
 	coordenadas varchar(50) not null,
 	precioNoche float not null,
 	metrosCuadrados int not null,
