@@ -92,12 +92,12 @@
 
 
 				<div id="fotoPerfil" class="form-group" align="center">
-					<c:if test="${not empty rutaFotoPerfil}">
+					<c:if test="${not empty user.rutaFotoPerfil}">
 						<img class="img-rounded" alt=" " width="250" height="250"
-							src="${rutaFotoPerfil}" />
+							src="${user.rutaFotoPerfil}" />
 					</c:if>
 
-					<c:if test="${empty rutaFotoPerfil}">
+					<c:if test="${empty user.rutaFotoPerfil}">
 						<!-- <img class="img-rounded" alt=" " width="60" height="60"
 								src="<c:url value='${url.currentModule}/${rutaDefaultFoto}'/>" />
 							 -->

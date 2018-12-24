@@ -15,10 +15,10 @@ public class Usuarios implements Connectable<Usuario> {
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		{
 			put("all", "select * from usuarios");
-			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,default,?,default)");
+			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,?,default,?,default)");
 			put("count", "select count(*) as cantidad from usuarios");
 			put("update",
-					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?, sexo=?, admin=?, puntaje=?, habilitado=? where idUsuario=?");
+					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?, rutaFotoPerfil=?, sexo=?, admin=?, puntaje=?, habilitado=? where idUsuario=?");
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
 
@@ -46,10 +46,11 @@ public class Usuarios implements Connectable<Usuario> {
 				o.setFechaNac(rs.getDate(6));
 				o.setUsuario(rs.getString(7));
 				o.setClaveUsuario(rs.getString(8));
-				o.setSexo(rs.getBoolean(9));
-				o.setAdmin(rs.getBoolean(10));
-				o.setPuntaje(rs.getFloat(11));
-				o.setHabilitado(rs.getBoolean(12));
+				o.setRutaFotoPerfil(rs.getString("rutaFotoPerfil"));
+				o.setSexo(rs.getBoolean(10));
+				o.setAdmin(rs.getBoolean(11));
+				o.setPuntaje(rs.getFloat(12));
+				o.setHabilitado(rs.getBoolean(13));
 				m.add(o);
 			}
 
@@ -122,10 +123,11 @@ public class Usuarios implements Connectable<Usuario> {
 				o.setFechaNac(rs.getDate(6));
 				o.setUsuario(rs.getString(7));
 				o.setClaveUsuario(rs.getString(8));
-				o.setSexo(rs.getBoolean(9));
-				o.setAdmin(rs.getBoolean(10));
-				o.setPuntaje(rs.getFloat(11));
-				o.setHabilitado(rs.getBoolean(12));
+				o.setRutaFotoPerfil(rs.getString(9));
+				o.setSexo(rs.getBoolean(10));
+				o.setAdmin(rs.getBoolean(11));
+				o.setPuntaje(rs.getFloat(12));
+				o.setHabilitado(rs.getBoolean(13));
 			}
 
 		} catch (Exception e) {
@@ -153,8 +155,9 @@ public class Usuarios implements Connectable<Usuario> {
 			ps.setDate(5, obj.getFechaNac());
 			ps.setString(6, obj.getUsuario());
 			ps.setString(7, obj.getClaveUsuario());
-			ps.setBoolean(8, obj.getSexo());
-			ps.setFloat(9, obj.getPuntaje());
+			ps.setString(8, obj.getRutaFotoPerfil());
+			ps.setBoolean(9, obj.getSexo());
+			ps.setFloat(10, obj.getPuntaje());
 
 			ps.executeUpdate();
 			correcto = true;
@@ -182,11 +185,12 @@ public class Usuarios implements Connectable<Usuario> {
 			ps.setDate(5, obj.getFechaNac());
 			ps.setString(6, obj.getUsuario());
 			ps.setString(7, obj.getClaveUsuario());
-			ps.setBoolean(8, obj.getSexo());
-			ps.setBoolean(9, obj.isAdmin());
-			ps.setFloat(10, obj.getPuntaje());
-			ps.setBoolean(11, obj.isHabilitado());
-			ps.setInt(12, obj.getIdUsuario());
+			ps.setString(8, obj.getRutaFotoPerfil());
+			ps.setBoolean(9, obj.getSexo());
+			ps.setBoolean(10, obj.isAdmin());
+			ps.setFloat(11, obj.getPuntaje());
+			ps.setBoolean(12, obj.isHabilitado());
+			ps.setInt(13, obj.getIdUsuario());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 

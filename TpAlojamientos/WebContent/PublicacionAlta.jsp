@@ -133,6 +133,7 @@
 
 		</div>
 	</div>
+<input type="file" class="filestyle" data-buttonText="Find file">
 
 	<div class="container" id="footer"></div>
 

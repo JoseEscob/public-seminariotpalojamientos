@@ -11,11 +11,11 @@ public class Usuario {
 	private Date fechaNac;
 	private String usuario;
 	private String claveUsuario;
+	private String rutaFotoPerfil;
 	private float puntaje;
 	private boolean sexo;
 	private boolean admin;
 	private boolean habilitado;
-	
 
 	public String getUsuario() {
 		return usuario;
@@ -94,7 +94,7 @@ public class Usuario {
 	}
 
 	public void setPuntaje(float puntaje) {
-		if(puntaje < 0)
+		if (puntaje < 0)
 			this.puntaje = 0;
 		else if (puntaje > 5)
 			this.puntaje = 5;
@@ -116,6 +116,14 @@ public class Usuario {
 
 	public void setSexo(boolean sexo) {
 		this.sexo = sexo;
+	}
+
+	public String getRutaFotoPerfil() {
+		return rutaFotoPerfil;
+	}
+
+	public void setRutaFotoPerfil(String rutaFotoPerfil) {
+		this.rutaFotoPerfil = rutaFotoPerfil;
 	}
 
 }

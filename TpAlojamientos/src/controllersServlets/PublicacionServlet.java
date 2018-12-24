@@ -15,6 +15,7 @@ import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
 import exceptions.ServidorException;
 import extra.LOG;
+import modelo.Comentario;
 import modelo.Localidad;
 import modelo.Partido;
 
@@ -148,6 +149,22 @@ public class PublicacionServlet extends HttpServlet {
 		} finally {
 			// 5- Informar estado
 			paginaJsp = "/PublicacionAlta.jsp";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
+		}
+	}
+
+	private void comentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		ArrayList<Comentario> listaComentarios = null;
+		try {
+			request.setAttribute("listaComentarios", listaComentarios);
+		} catch (Exception e) {
+			message = e.getMessage();
+
+		} finally {
+			paginaJsp = "/PublicacionComentarios.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
