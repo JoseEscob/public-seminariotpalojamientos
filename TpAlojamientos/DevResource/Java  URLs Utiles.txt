@@ -8,18 +8,26 @@ Usuarios
 https://bootsnipp.com/snippets/featured/flat-user-profile-interface-ui
 
 Comentarios: Media objects and Badgets
-https://getbootstrap.com/docs/3.3/components/
-https://bootstrapdocs.com/v3.3.6/docs/css/?
+    https://www.jqueryscript.net/other/Simple-jQuery-Star-Rating-System-For-Bootstrap-3.html
+    https://getbootstrap.com/docs/3.3/components/
+    https://bootstrapdocs.com/v3.3.6/docs/css/?
 
 Comprobante: 
 	https://bootsnipp.com/snippets/featured/bs4-clean-amp-simple-invoice-template
 
+Publicacion - Reservas
+    https://www.jqueryscript.net/time-clock/Date-Range-Picker-For-Twitter-Bootstrap.html
 
-
+Publicacion - Alta
+    https://www.jqueryscript.net/other/jQuery-Plugin-For-Sliding-Message-Bar-with-Boostrap-Alerts-Component-Bootstrap-Msg.html
+    https://www.jqueryscript.net/form/Nice-Clean-File-Input-Plugin-With-jQuery-Bootstrap-3-Bootstrap-Fileinput.html
+    https://www.jqueryscript.net/demo/Lightweight-Form-Validation-Plugin-For-jQuery-Bootstrap-jbootvalidator/
+    https://www.youtube.com/watch?v=VPOlrSnA82I
 ******** FUENTE/ REFERENCIA DE DATOS ********
 
 Tips JSTL/ Spring
 	https://www.javatips.net/blog/spring-tutorial
+	http://www.java2s.com/Tutorial/Java/0380__JSTL/UseJSTLtoCreateURLFromFormInput.htm
 
 Localidades Partidos BSAS
 	"partidos y localidades buenos aires codigo postal arba"
