@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controladoresDAO.Partidos;
+import controladoresDAO.Comentarios;
 import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
 import exceptions.ServidorException;
@@ -29,6 +30,7 @@ public class PublicacionServlet extends HttpServlet {
 	private final Publicaciones publicacionDAO = new Publicaciones();
 	private final Partidos partidosDAO = new Partidos();
 	private final Localidades localidadDAO = new Localidades();
+	private final Comentarios comentarioDAO = new Comentarios();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -56,6 +58,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
 				// altaPublicacion(request, response);
+				break;
+			case "VerComentarios":
+				comentariosPublicacion(request, response);
 				break;
 			}
 		} catch (ServidorException e) {
@@ -154,16 +159,35 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
+	@SuppressWarnings({ "null", "unused" })
 	private void comentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
 		ArrayList<Comentario> listaComentarios = null;
 		try {
+			Comentario objComentarioPub = null;
+			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			objComentarioPub.setIdPublicacion(idPublicacion);
+
+			listaComentarios = comentarioDAO.getAll();
+			ArrayList<Comentario> listaComentariosFiltrada = null;
+
+			listaComentarios.forEach(item -> {
+				if (item.getIdPublicacion() == idPublicacion)
+					listaComentariosFiltrada.add(item);
+			});
+
+			if (listaComentariosFiltrada != null)
+				message = "Se filtró la lista";
+			else
+				message = "ERROR al filtrar la lista de Comentarios para la publicación: " + idPublicacion;
+			listaComentarios = listaComentariosFiltrada;
 			request.setAttribute("listaComentarios", listaComentarios);
+
 		} catch (Exception e) {
 			message = e.getMessage();
-
 		} finally {
+			request.setAttribute("message", message);
 			paginaJsp = "/PublicacionComentarios.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);

@@ -40,8 +40,10 @@ BOOTSTRAP ONLINE Nuevo
 	<nav class="navbar navbar-inverse"> <!-- BEGIN: Menú Superior -->
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="home" title="Ir a la página de Inicio"
-				style="color: MEDIUMTURQUOISE;">OwnerRental</a>
+			<a class="navbar-brand" href="Inicio.jsp" title="Ir a la página de Inicio"
+				style="color: MEDIUMTURQUOISE;">
+			<img alt="Home" src="imagenes/icon-home.jpg" style="width:82px; height:86px">
+			</a>
 		</div>
 		<ul class="nav navbar-nav">
 
@@ -56,6 +58,7 @@ BOOTSTRAP ONLINE Nuevo
 
 					<li><a href="PublicacionServlet?accion=Nuevo"> Nueva
 							Publicación</a></li>
+					<li><a href="PublicacionServlet?accion=VerComentarios&idPublicacion=1"> Test Comentario</a></li>
 					<li><a href="#"><span class="glyphicon glyphicon-star" /></span>
 							Favoritas</a></li>
 					<li><a href="#"></a></li>

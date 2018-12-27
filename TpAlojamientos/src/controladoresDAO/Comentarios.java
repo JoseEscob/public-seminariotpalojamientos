@@ -35,6 +35,9 @@ public class Comentarios implements Connectable<Comentario> {
 		cn = new Conexion();
 		m = new ArrayList<Comentario>();
 
+		String nombreApellidoUsuario = null;
+		String rutaFotoPerfilUsuario = null;
+
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("all"));
@@ -46,6 +49,10 @@ public class Comentarios implements Connectable<Comentario> {
 				o.setFechaComentario(rs.getDate("fechaComentario"));
 				o.setPuntaje(rs.getInt(5));
 				o.setHabilitado(rs.getBoolean(6));
+				rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
+				nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
+				o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
+				o.setNombreApellidoUsuario(nombreApellidoUsuario);
 				m.add(o);
 			}
 
@@ -92,12 +99,13 @@ public class Comentarios implements Connectable<Comentario> {
 			ps.setInt(1, obj.getIdUsuario());
 			ps.setInt(2, obj.getIdPublicacion());
 			ResultSet rs = ps.executeQuery();
-
+			// TODO revisar de cambiar posicionamiento por nombreColumna
 			if (rs.next()) {
 				o = new Comentario();
 				o.setIdUsuario(rs.getInt(1));
 				o.setIdPublicacion(rs.getInt(2));
 				o.setDescripcion(rs.getString(3));
+				o.setFechaComentario(rs.getDate("fechaComentario"));
 				o.setPuntaje(rs.getInt(4));
 				o.setHabilitado(rs.getBoolean(5));
 			}
@@ -199,4 +207,17 @@ public class Comentarios implements Connectable<Comentario> {
 		return this.update(u);
 	}
 
+	private String getNombreApellido_Usuario(int idUsuario) {
+		Usuarios usuarioDAO = new Usuarios();
+		Usuario objUsuario = new Usuario();
+		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario.getNombre() + objUsuario.getApellido();
+	}
+
+	private String getRutaFotoPerfil_Usuario(int idUsuario) {
+		Usuarios usuarioDAO = new Usuarios();
+		Usuario objUsuario = new Usuario();
+		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario.getRutaFotoPerfil();
+	}
 }

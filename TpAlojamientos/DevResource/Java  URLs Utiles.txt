@@ -29,6 +29,9 @@ Tips JSTL/ Spring
 	https://www.javatips.net/blog/spring-tutorial
 	http://www.java2s.com/Tutorial/Java/0380__JSTL/UseJSTLtoCreateURLFromFormInput.htm
 
+Lambda Expressions
+	https://stackoverflow.com/questions/23407014/return-from-lambda-foreach-in-java
+
 Localidades Partidos BSAS
 	"partidos y localidades buenos aires codigo postal arba"
 	-BSAS : http://www.arba.gov.ar/Archivos/Publicaciones/arsellos-tablacplocalidadesypartidos.xls
@@ -48,3 +51,4 @@ Window> Preferences >General>Keys
 Google Maps API / formato de publicación
 	https://www.youtube.com/watch?v=hSsOCbG6LQI
 	https://www.argenprop.com/Propiedades/Detalles/9629320--Departamento-de-2-Dormitorios-en-Alquiler-en-Capital-Federal?ViewNameResult=VistaResultados
+	
