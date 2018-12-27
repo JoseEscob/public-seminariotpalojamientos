@@ -23,14 +23,22 @@ Publicacion - Alta
     https://www.jqueryscript.net/form/Nice-Clean-File-Input-Plugin-With-jQuery-Bootstrap-3-Bootstrap-Fileinput.html
     https://www.jqueryscript.net/demo/Lightweight-Form-Validation-Plugin-For-jQuery-Bootstrap-jbootvalidator/
     https://www.youtube.com/watch?v=VPOlrSnA82I
+    
+
+    
+    
 ******** FUENTE/ REFERENCIA DE DATOS ********
 
 Tips JSTL/ Spring
 	https://www.javatips.net/blog/spring-tutorial
 	http://www.java2s.com/Tutorial/Java/0380__JSTL/UseJSTLtoCreateURLFromFormInput.htm
+	http://tutorials.jenkov.com/java/java-project-overview-compilation-and-execution.html
+	http://tutorials.jenkov.com/java/annotations.html
+	http://tutorials.jenkov.com/java/lambda-expressions.html
 
 Lambda Expressions
 	https://stackoverflow.com/questions/23407014/return-from-lambda-foreach-in-java
+	https://www.mkyong.com/java8/java-8-streams-filter-examples/
 
 Localidades Partidos BSAS
 	"partidos y localidades buenos aires codigo postal arba"
