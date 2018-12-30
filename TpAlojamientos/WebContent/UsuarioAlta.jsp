@@ -157,7 +157,7 @@
 						</div>
 						 -->
 						<div class="p-t-15">
-							<input type="hidden" id="buscarAction" name="buscarAction"
+							<input type="hidden" id="buscarAction" name="accionPOST"
 								value="nuevo"></input> <input
 								class="btn btn--radius-2 btn--blue" type="submit"
 								name="btnNuevoUsuario" value="Guardar"></input>

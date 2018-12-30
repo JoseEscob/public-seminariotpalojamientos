@@ -9,4 +9,6 @@ public class Constantes {
 	public static String DDMMYYYY = "dd/MM/yyyy";// "dd/MM/yyyy";"
 	public static String RUTAuserNoPhoto = "imagenes/no-profile-picture.png";
 	public static String sessionUser = "sessionUser";
+	public static String accionGET = "accionGET";
+	public static String accionPOST = "accionPOST";
 }

@@ -15,6 +15,7 @@ import controladoresDAO.Comentarios;
 import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
 import exceptions.ServidorException;
+import extra.Constantes;
 import extra.LOG;
 import modelo.Comentario;
 import modelo.Localidad;
@@ -49,12 +50,12 @@ public class PublicacionServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 
 		try {
-			String accion = request.getParameter("accion");
-			if (accion == null) {
+			String accionGET = request.getParameter(Constantes.accionGET);
+			if (accionGET == null) {
 				throw new ServidorException("NULL Param: accion");
 			}
-
-			switch (accion) {
+			LOG.info("JSP - Acción GET: " + accionGET);
+			switch (accionGET) {
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
 				// altaPublicacion(request, response);
@@ -159,26 +160,25 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
-	@SuppressWarnings({ "null", "unused" })
+	@SuppressWarnings({ "unused" })
 	private void comentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
 		ArrayList<Comentario> listaComentarios = null;
+		ArrayList<Comentario> listaComentariosFiltrada = new ArrayList<Comentario>();
 		try {
-			Comentario objComentarioPub = null;
+			// Comentario objComentarioPub = new Comentario();
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			objComentarioPub.setIdPublicacion(idPublicacion);
+			// objComentarioPub.setIdPublicacion(idPublicacion);
 
 			listaComentarios = comentarioDAO.getAll();
-			ArrayList<Comentario> listaComentariosFiltrada = null;
-
 			listaComentarios.forEach(item -> {
 				if (item.getIdPublicacion() == idPublicacion)
 					listaComentariosFiltrada.add(item);
 			});
 
 			if (listaComentariosFiltrada != null)
-				message = "Se filtró la lista";
+				message = listaComentariosFiltrada.isEmpty() ? "Está vacía" : "Se filtró la lista";
 			else
 				message = "ERROR al filtrar la lista de Comentarios para la publicación: " + idPublicacion;
 			listaComentarios = listaComentariosFiltrada;

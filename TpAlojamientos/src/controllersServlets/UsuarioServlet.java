@@ -39,10 +39,10 @@ public class UsuarioServlet extends HttpServlet {
 		// por <a> href pasa por GET. sino Usar submit para POST
 		// VerInfoUsuario(request, response);
 
-		String action = request.getParameter("accion");
-		LOG.info("JSP - Acción - GET Banner: " + action);
-		if (action != null) {
-			switch (action) {
+		String accionGET = request.getParameter(Constantes.accionGET);
+		LOG.info("JSP - Acción - GET Banner: " + accionGET);
+		if (accionGET != null) {
+			switch (accionGET) {
 			case "MiPerfil":
 				verInfoUsuario(request, response);
 				break;
@@ -55,7 +55,8 @@ public class UsuarioServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String action = request.getParameter("buscarAction");
+		// String action = request.getParameter("buscarAction");
+		String action = request.getParameter(Constantes.accionPOST);
 		LOG.info("JSP - Acción: " + action);
 		if (action != null) {
 			switch (action) {

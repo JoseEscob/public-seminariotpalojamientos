@@ -39,12 +39,31 @@ BOOTSTRAP ONLINE Nuevo
 <body>
 	<nav class="navbar navbar-inverse"> <!-- BEGIN: Menú Superior -->
 	<div class="container-fluid">
+
+
+
+		<!-- Image and text 
+		<nav class="navbar navbar-light bg-light"> <a
+			class="navbar-brand" href="Inicio.jsp"
+			style="color: MEDIUMTURQUOISE;"> <img
+			src="imagenes/icon-home.jpg" width="30" height="30"
+			class="d-inline-block align-top" alt="Home"> OwnerRental
+		</a> </nav>-->
 		<div class="navbar-header">
-			<a class="navbar-brand" href="Inicio.jsp" title="Ir a la página de Inicio"
-				style="color: MEDIUMTURQUOISE;">
-			<img alt="Home" src="imagenes/icon-home.jpg" style="width:82px; height:86px">
+			<a class="navbar-brand" href="Inicio.jsp"
+				style="color: MEDIUMTURQUOISE;"> <img
+				src="imagenes/icon-home.jpg" width="30" height="30"
+				class="d-inline-block align-top" alt="Home">OwnerRental
 			</a>
 		</div>
+		<!--
+		<div class="navbar-header">
+			<a class="navbar-brand" href="Inicio.jsp"
+				title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;"><img
+				alt="Home" src="imagenes/icon-home.jpg"
+				style="width: 100px; height: 80px"> </a>
+		</div>
+		-->
 		<ul class="nav navbar-nav">
 
 
@@ -56,9 +75,11 @@ BOOTSTRAP ONLINE Nuevo
 					<li><a href="#"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
 
-					<li><a href="PublicacionServlet?accion=Nuevo"> Nueva
+					<li><a href="PublicacionServlet?accionGET=Nuevo"> Nueva
 							Publicación</a></li>
-					<li><a href="PublicacionServlet?accion=VerComentarios&idPublicacion=1"> Test Comentario</a></li>
+					<li><a
+						href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
+							Test Comentario</a></li>
 					<li><a href="#"><span class="glyphicon glyphicon-star" /></span>
 							Favoritas</a></li>
 					<li><a href="#"></a></li>
@@ -85,7 +106,7 @@ BOOTSTRAP ONLINE Nuevo
 			<ul class="nav navbar-nav">
 				<li class="dropdown"><a class="dropdown-toggle"
 					data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>
-						<c:out value="${usuario.nombre}" /></a>
+						<c:out value="${sessionScope.usuario.nombre}" /></a>
 					<ul class="dropdown-menu">
 
 						<li><a><span class="glyphicon glyphicon-user" /></span>
@@ -95,11 +116,11 @@ BOOTSTRAP ONLINE Nuevo
 										name="btnNuevoUsuario" value="Mi Perfil"></input>
 								</form> </a></li>
 
-						<li><a href="UsuarioServlet?accion=MiPerfil"><span
+						<li><a href="UsuarioServlet?accionGET=MiPerfil"><span
 								class="glyphicon glyphicon-user" /></span> Ver mi Perfil</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-cog" /></span>
 								Configuraciones</a></li>
-						<li><a href="UsuarioServlet?accion=Logout"><span
+						<li><a href="UsuarioServlet?accionGET=Logout"><span
 								class="glyphicon glyphicon-off" /></span> Salir</a></li>
 					</ul></li>
 		</div>

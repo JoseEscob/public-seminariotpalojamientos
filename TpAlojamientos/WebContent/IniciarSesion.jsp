@@ -75,7 +75,7 @@
 							</div>
 						</div>
 
-						<input type="hidden" id="buscarAction" name="buscarAction"
+						<input type="hidden" id="buscarAction" name="accionPOST"
 							value="login"></input>
 						<div class="p-t-15">
 							<input class="btn btn--radius-2 btn--blue" type="submit"
