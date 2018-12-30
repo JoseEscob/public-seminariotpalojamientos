@@ -167,9 +167,11 @@ public class PublicacionServlet extends HttpServlet {
 		ArrayList<Comentario> listaComentarios = null;
 		ArrayList<Comentario> listaComentariosFiltrada = new ArrayList<Comentario>();
 		try {
-			// Comentario objComentarioPub = new Comentario();
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			// objComentarioPub.setIdPublicacion(idPublicacion);
+
+			// float publicacionPuntaje =
+			// publicacionDAO.getObjectByID(idPublicacion).getPuntaje();
+			float publicacionPuntaje = 1;
 
 			listaComentarios = comentarioDAO.getAll();
 			listaComentarios.forEach(item -> {
@@ -183,6 +185,7 @@ public class PublicacionServlet extends HttpServlet {
 				message = "ERROR al filtrar la lista de Comentarios para la publicación: " + idPublicacion;
 			listaComentarios = listaComentariosFiltrada;
 			request.setAttribute("listaComentarios", listaComentarios);
+			request.setAttribute("publicacionPuntaje", publicacionPuntaje);
 
 		} catch (Exception e) {
 			message = e.getMessage();

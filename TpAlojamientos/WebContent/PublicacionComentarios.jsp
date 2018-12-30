@@ -18,9 +18,7 @@
 	<!--https://www.w3schools.com/howto/howto_css_rounded_images.asp-->
 	<div class="container">
 		<h2>Comentarios de la publicación</h2>
-		<h4>
-			
-		</h4>
+		<h4>Puntuación Gral. ${publicacionPuntaje}&nbsp;/5</h4>
 		<hr />
 		<!--Horizantal line divider  <div class="page-header"/> -->
 	</div>
@@ -41,8 +39,6 @@
 							</h4>
 							<p>
 								<b>Puntuación ${objComentario.puntaje}&nbsp;/5</b>
-								<text style="color:SILVER;">
-								${objComentario.fechaComentario}</text>
 							</p>
 							<p>${objComentario.descripcion}</p>
 						</div>

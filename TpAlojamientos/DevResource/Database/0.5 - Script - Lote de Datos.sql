@@ -1,10 +1,8 @@
-
-INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '1' , `nombre` = 'UTN', `apellido` = 'FRGP', `dni` = '11111', `mail` = 'utn@frgp.com', `fechaNac` = STR_TO_DATE('01/01/1990','%d/%m/%Y'), `usuario` = 'utnfrgp', `clave` = 'utn123', `sexo` = '1', `rutaFotoPerfil` = 'imagenes/usuarios/Usuario_1/fotoUsuario_1.jpg', `admin` = '1', `puntaje` = '0', `habilitado` = '1';
+﻿INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '1' , `nombre` = 'UTN', `apellido` = 'FRGP', `dni` = '11111', `mail` = 'utn@frgp.com', `fechaNac` = STR_TO_DATE('01/01/1990','%d/%m/%Y'), `usuario` = 'utnfrgp', `clave` = 'utn123', `sexo` = '1', `rutaFotoPerfil` = 'imagenes/usuarios/Usuario_1/fotoUsuario_1.jpg', `admin` = '1', `puntaje` = '0', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '2' , `nombre` = 'David', `apellido` = 'Martinez', `dni` = '22222', `mail` = 'dmartinez@gmail.com', `fechaNac` = STR_TO_DATE('21/11/1991','%d/%m/%Y'), `usuario` = 'dm123', `clave` = 'utn123', `sexo` = '1', `rutaFotoPerfil` = '', `admin` = '1', `puntaje` = '5', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '3' , `nombre` = 'José', `apellido` = 'Escobar', `dni` = '33333', `mail` = 'jescobar@gmail.com', `fechaNac` = STR_TO_DATE('31/12/2000','%d/%m/%Y'), `usuario` = 'je123', `clave` = 'je123', `sexo` = '1', `rutaFotoPerfil` = 'imagenes/usuarios/Usuario_3/fotoUsuario_3.jpg', `admin` = '1', `puntaje` = '5', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '4' , `nombre` = 'Gabriela', `apellido` = 'Quevedo', `dni` = '44444', `mail` = 'gquevedo@gmail.com', `fechaNac` = STR_TO_DATE('21/11/1993','%d/%m/%Y'), `usuario` = 'gq123', `clave` = 'gq123', `sexo` = '0', `rutaFotoPerfil` = 'imagenes/usuarios/Usuario_4/fotoUsuario_4.jpg', `admin` = '0', `puntaje` = '4', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`usuarios` 	SET `idUsuario`= '5' , `nombre` = 'Santiago', `apellido` = 'López', `dni` = '55555', `mail` = 'slopez@gmail.com', `fechaNac` = STR_TO_DATE('21/11/1994','%d/%m/%Y'), `usuario` = 'sl123', `clave` = 'sl123', `sexo` = '1', `rutaFotoPerfil` = 'imagenes/usuarios/Usuario_5/fotoUsuario_5.jpg', `admin` = '0', `puntaje` = '3', `habilitado` = '1';
-
 
 INSERT INTO `owner_rental_db`.`tiposalojamientos` (`idTipoAlojamiento`, `descripcion`, `habilitado`) VALUES	('1', 'Casa', '1');
 INSERT INTO `owner_rental_db`.`tiposalojamientos` (`idTipoAlojamiento`, `descripcion`, `habilitado`) VALUES	('2', 'Cabaña', '1');
@@ -13,63 +11,11 @@ INSERT INTO `owner_rental_db`.`tiposalojamientos` (`idTipoAlojamiento`, `descrip
 INSERT INTO `owner_rental_db`.`tiposalojamientos` (`idTipoAlojamiento`, `descripcion`, `habilitado`) VALUES	('5', 'Suite', '1');
 INSERT INTO `owner_rental_db`.`tiposalojamientos` (`idTipoAlojamiento`, `descripcion`, `habilitado`) VALUES	('6', 'Hostel', '1');
 
-
-INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('084', 'Pilar‎', '1');
 INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('096', 'San Fernando‎', '1');
 INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('097', 'San Isidro‎', '1');
-INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('103', 'Tandil‎', '1');
 INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('057', 'Tigre‎', '1');
+INSERT INTO `owner_rental_db`.`partidos` (`idPartido`, `nombre`, `habilitado`) VALUES	('110', 'Vte. Lopez‎', '1');
 
-
-
-
-
-
-
-
-
-
-
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1987',`idPartido`= '084',`nombre`= 'ALMIRANTE IRIZAR',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1988',`idPartido`= '084',`nombre`= 'BARRIO SAN ALEJO',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1989',`idPartido`= '084',`nombre`= 'ESTABLECIMIENTO SAN MIGUEL',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1990',`idPartido`= '084',`nombre`= 'KILOMETRO 61 (APEADERO FCGB)',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1991',`idPartido`= '084',`nombre`= 'MANZANARES',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1992',`idPartido`= '084',`nombre`= 'PILAR',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1993',`idPartido`= '084',`nombre`= 'VILLA AGUEDA',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1994',`idPartido`= '084',`nombre`= 'VILLA BUIDE',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1995',`idPartido`= '084',`nombre`= 'VILLA SANTA MARIA',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1996',`idPartido`= '084',`nombre`= 'VILLA VERDE',`codPostal`= '1629',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1997',`idPartido`= '084',`nombre`= 'VILLA ROSA',`codPostal`= '1631',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1998',`idPartido`= '084',`nombre`= 'EMPALME',`codPostal`= '1633',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '1999',`idPartido`= '084',`nombre`= 'FATIMA',`codPostal`= '1633',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2000',`idPartido`= '084',`nombre`= 'MANZONE',`codPostal`= '1633',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2001',`idPartido`= '084',`nombre`= 'VILLA ASTOLFI',`codPostal`= '1633',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2002',`idPartido`= '084',`nombre`= 'KILOMETRO 45 (APEADERO FCGU) (PTE. DERQUI-PDO. PILAR)',`codPostal`= '1635',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2003',`idPartido`= '084',`nombre`= 'PRESIDENTE DERQUI',`codPostal`= '1635',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2004',`idPartido`= '084',`nombre`= 'TORO',`codPostal`= '1635',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2005',`idPartido`= '084',`nombre`= 'BARRIO CHELITO',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2006',`idPartido`= '084',`nombre`= 'BARRIO LA GRANJA',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2007',`idPartido`= '084',`nombre`= 'BARRIO LA QUERENCIA',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2008',`idPartido`= '084',`nombre`= 'BARRIO LOS GALLITOS',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2009',`idPartido`= '084',`nombre`= 'BARRIO PARQUE KANMAR',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2010',`idPartido`= '084',`nombre`= 'BARRIO YEI-PORA',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2011',`idPartido`= '084',`nombre`= 'EL CALLAO',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2012',`idPartido`= '084',`nombre`= 'EL PALENQUE',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2013',`idPartido`= '084',`nombre`= 'KILOMETRO 40 (TORTUGUITAS-PDO. PILAR)',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2014',`idPartido`= '084',`nombre`= 'LOS PERALES',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2015',`idPartido`= '084',`nombre`= 'MANUEL ALBERTI (APEADERO FCGB)',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2016',`idPartido`= '084',`nombre`= 'RUTA 8 KILOMETRO 37,500 AL 41',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2017',`idPartido`= '084',`nombre`= 'TORTUGUITAS',`codPostal`= '1667',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2018',`idPartido`= '084',`nombre`= 'BARRIO LOS CACHORROS',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2019',`idPartido`= '084',`nombre`= 'BARRIO PARQUE PERO',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2020',`idPartido`= '084',`nombre`= 'BARRIO PINAZO',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2021',`idPartido`= '084',`nombre`= 'DEL VISO',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2022',`idPartido`= '084',`nombre`= 'LA LOMA (DEL VISO-PDO. GRAL. SARMIENTO)',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2023',`idPartido`= '084',`nombre`= 'LA LONJA',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2024',`idPartido`= '084',`nombre`= 'RUTA 8 KILOMETRO 41,100 AL 46',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2025',`idPartido`= '084',`nombre`= 'RUTA 8 KILOMETRO 47',`codPostal`= '1669',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2026',`idPartido`= '084',`nombre`= 'VILLA DEL CARMEN (DEL VISO-PDO. GRAL. SARMIENTO)',`codPostal`= '1669',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2275',`idPartido`= '096',`nombre`= 'DOCTOR ALBERT SCHWEITZER (PARADA FCGM)',`codPostal`= '1644',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2276',`idPartido`= '096',`nombre`= 'VICTORIA',`codPostal`= '1644',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2277',`idPartido`= '096',`nombre`= 'BARRIO SAN JORGE (SAN FERNANDO-PDO. SAN FERNANDO)',`codPostal`= '1646',`habilitado`= '1';
@@ -345,28 +291,6 @@ INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2546',`idPartid
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2547',`idPartido`= '097',`nombre`= 'MONTE VIEJO',`codPostal`= '1642',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2548',`idPartido`= '097',`nombre`= 'SAN ISIDRO',`codPostal`= '1642',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2549',`idPartido`= '097',`nombre`= 'BECCAR',`codPostal`= '1643',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2685',`idPartido`= '103',`nombre`= 'BARRIO VILLA GAUCHO',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2686',`idPartido`= '103',`nombre`= 'CANTERA ALBION',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2687',`idPartido`= '103',`nombre`= 'CANTERA LA FEDERACION',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2688',`idPartido`= '103',`nombre`= 'CANTERA SAN LUIS',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2689',`idPartido`= '103',`nombre`= 'CERRO DE LOS LEONES',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2690',`idPartido`= '103',`nombre`= 'EL GALLO',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2691',`idPartido`= '103',`nombre`= 'LA NUMANCIA',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2692',`idPartido`= '103',`nombre`= 'TANDIL',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2693',`idPartido`= '103',`nombre`= 'VILLA GALICIA',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2694',`idPartido`= '103',`nombre`= 'VILLA ITALIA (TANDIL-PDO. TANDIL)',`codPostal`= '7000',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2695',`idPartido`= '103',`nombre`= 'CERRO LEONES',`codPostal`= '7001',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2696',`idPartido`= '103',`nombre`= 'LA PASTORA (PDO. TANDIL)',`codPostal`= '7001',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2697',`idPartido`= '103',`nombre`= 'ACEILAN',`codPostal`= '7003',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2698',`idPartido`= '103',`nombre`= 'GARDEY',`codPostal`= '7003',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2699',`idPartido`= '103',`nombre`= 'MARIA IGNACIA',`codPostal`= '7003',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2700',`idPartido`= '103',`nombre`= 'VELA',`codPostal`= '7003',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2701',`idPartido`= '103',`nombre`= 'FULTON',`codPostal`= '7007',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2702',`idPartido`= '103',`nombre`= 'LA AZOTEA',`codPostal`= '7007',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2703',`idPartido`= '103',`nombre`= 'SAN PASCUAL',`codPostal`= '7007',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2704',`idPartido`= '103',`nombre`= 'IRAOLA',`codPostal`= '7009',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2705',`idPartido`= '103',`nombre`= 'LA AURORA (IRAOLA-PDO. TANDIL)',`codPostal`= '7009',`habilitado`= '1';
-INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2706',`idPartido`= '103',`nombre`= 'DE LA CANAL',`codPostal`= '7013',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2717',`idPartido`= '057',`nombre`= 'BARRIO BAIRES',`codPostal`= '1611',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2718',`idPartido`= '057',`nombre`= 'BARRIO DOCTOR RICARDO GUTIERREZ',`codPostal`= '1611',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2719',`idPartido`= '057',`nombre`= 'DON TORCUATO',`codPostal`= '1611',`habilitado`= '1';
@@ -397,3 +321,28 @@ INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2743',`idPartid
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2744',`idPartido`= '057',`nombre`= 'TIGRE',`codPostal`= '1648',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2745',`idPartido`= '057',`nombre`= 'VILLA LA #ATA',`codPostal`= '1648',`habilitado`= '1';
 INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2746',`idPartido`= '057',`nombre`= 'NORDELTA',`codPostal`= '1670',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2885',`idPartido`= '110',`nombre`= 'ARISTOBULO DEL VALLE',`codPostal`= '1602',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2886',`idPartido`= '110',`nombre`= 'DOCTOR ANTONIO CETRANGOLO (PARADA FCGM)',`codPostal`= '1602',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2887',`idPartido`= '110',`nombre`= 'FLORIDA',`codPostal`= '1602',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2888',`idPartido`= '110',`nombre`= 'JUAN B. JUSTO (ESTACION FCGM) (FLORIDA-PDO. VICENTE LOPEZ)',`codPostal`= '1602',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2889',`idPartido`= '110',`nombre`= 'PUENTE SAAVEDRA',`codPostal`= '1602',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2890',`idPartido`= '110',`nombre`= 'VILLA MARTELLI',`codPostal`= '1603',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2891',`idPartido`= '110',`nombre`= 'MUNRO',`codPostal`= '1605',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2892',`idPartido`= '110',`nombre`= 'CARAPACHAY',`codPostal`= '1606',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2893',`idPartido`= '110',`nombre`= 'BARTOLOME MITRE (ESTACION FCGM)',`codPostal`= '1636',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2894',`idPartido`= '110',`nombre`= 'BORGES',`codPostal`= '1636',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2895',`idPartido`= '110',`nombre`= 'LA LUCILA',`codPostal`= '1636',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2896',`idPartido`= '110',`nombre`= 'OLIVOS',`codPostal`= '1636',`habilitado`= '1';
+INSERT INTO `owner_rental_db`.`localidades` 	SET `idLocalidad`= '2897',`idPartido`= '110',`nombre`= 'VICENTE LOPEZ',`codPostal`= '1638',`habilitado`= '1';
+
+
+INSERT INTO `owner_rental_db`.`publicaciones` 	SET `idPublicacion`= '1', `idUsuario` ='1', `idTipoAlojamiento` ='1', `nombre` ='', `descripcion` ='Casa - Test', `idLocalidad` ='2744', `codPostal` ='1648', `coordenadas` ='', `calle` ='Av. alguna parte', `altura` ='3000', `piso` ='0', `dpto` ='0', `supCubierta` ='700', `supDescubierta` ='50', `precioExpensas` ='0', `precioNoche` ='700', `cantPersonas` ='4', `cantAmbientes` ='4', `cantBanios` ='2', `cantHabitaciones` ='2', `fechaAlta` =STR_TO_DATE('30/01/2019','%d/%m/%Y'), `puntaje` ='3.5', `habilitado` ='1';
+INSERT INTO `owner_rental_db`.`publicaciones` 	SET `idPublicacion`= '2', `idUsuario` ='1', `idTipoAlojamiento` ='2', `nombre` ='', `descripcion` ='Cabaña  - Test', `idLocalidad` ='2278', `codPostal` ='1646', `coordenadas` ='', `calle` ='Los pasos', `altura` ='2500', `piso` ='0', `dpto` ='0', `supCubierta` ='450', `supDescubierta` ='40', `precioExpensas` ='1500', `precioNoche` ='400', `cantPersonas` ='3', `cantAmbientes` ='4', `cantBanios` ='1', `cantHabitaciones` ='3', `fechaAlta` =STR_TO_DATE('30/12/2018','%d/%m/%Y'), `puntaje` ='2.5', `habilitado` ='1';
+INSERT INTO `owner_rental_db`.`publicaciones` 	SET `idPublicacion`= '3', `idUsuario` ='1', `idTipoAlojamiento` ='3', `nombre` ='', `descripcion` ='Dpto - Test', `idLocalidad` ='2278', `codPostal` ='1646', `coordenadas` ='', `calle` ='Av. Italia', `altura` ='2000', `piso` ='4', `dpto` ='b', `supCubierta` ='500', `supDescubierta` ='50', `precioExpensas` ='2000', `precioNoche` ='750', `cantPersonas` ='4', `cantAmbientes` ='6', `cantBanios` ='2', `cantHabitaciones` ='4', `fechaAlta` =STR_TO_DATE('01/01/2019','%d/%m/%Y'), `puntaje` ='4', `habilitado` ='1';
+INSERT INTO `owner_rental_db`.`publicaciones` 	SET `idPublicacion`= '4', `idUsuario` ='2', `idTipoAlojamiento` ='4', `nombre` ='', `descripcion` ='Hotel - Test', `idLocalidad` ='2278', `codPostal` ='1646', `coordenadas` ='', `calle` ='Reconquista', `altura` ='1500', `piso` ='0', `dpto` ='0', `supCubierta` ='500', `supDescubierta` ='50', `precioExpensas` ='0', `precioNoche` ='800', `cantPersonas` ='4', `cantAmbientes` ='6', `cantBanios` ='2', `cantHabitaciones` ='4', `fechaAlta` =STR_TO_DATE('01/01/2019','%d/%m/%Y'), `puntaje` ='5', `habilitado` ='1';
+
+INSERT INTO `owner_rental_db`.`comentarios` (`idUsuario`, `idPublicacion`, `descripcion`, `fechaComentario`, `puntaje`, `habilitado`) VALUES	('4', '1', 'comentario - test 1', STR_TO_DATE('30/11/2018','%d/%m/%Y'), '5', '1');
+INSERT INTO `owner_rental_db`.`comentarios` (`idUsuario`, `idPublicacion`, `descripcion`, `fechaComentario`, `puntaje`, `habilitado`) VALUES	('2', '1', 'comentario - test 2', STR_TO_DATE('30/11/2018','%d/%m/%Y'), '5', '1');
+INSERT INTO `owner_rental_db`.`comentarios` (`idUsuario`, `idPublicacion`, `descripcion`, `fechaComentario`, `puntaje`, `habilitado`) VALUES	('3', '2', 'comentario - test 3', STR_TO_DATE('30/12/2018','%d/%m/%Y'), '3', '1');
+INSERT INTO `owner_rental_db`.`comentarios` (`idUsuario`, `idPublicacion`, `descripcion`, `fechaComentario`, `puntaje`, `habilitado`) VALUES	('4', '2', 'comentario - test 4', STR_TO_DATE('13/01/2019','%d/%m/%Y'), '5', '1');
+INSERT INTO `owner_rental_db`.`comentarios` (`idUsuario`, `idPublicacion`, `descripcion`, `fechaComentario`, `puntaje`, `habilitado`) VALUES	('5', '2', 'comentario - test 5', STR_TO_DATE('08/01/2019','%d/%m/%Y'), '4', '1');

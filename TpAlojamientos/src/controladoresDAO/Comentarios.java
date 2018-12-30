@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.Constantes;
 import modelo.Comentario;
 import modelo.Publicacion;
 import modelo.Usuario;
@@ -51,6 +52,8 @@ public class Comentarios implements Connectable<Comentario> {
 				o.setHabilitado(rs.getBoolean(6));
 				rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
 				nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
+				if (rutaFotoPerfilUsuario.isEmpty())
+					rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
 				o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
 				o.setNombreApellidoUsuario(nombreApellidoUsuario);
 				m.add(o);
@@ -211,7 +214,7 @@ public class Comentarios implements Connectable<Comentario> {
 		Usuarios usuarioDAO = new Usuarios();
 		Usuario objUsuario = new Usuario();
 		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
-		return objUsuario.getNombre() + objUsuario.getApellido();
+		return objUsuario.getNombre() + " " + objUsuario.getApellido();
 	}
 
 	private String getRutaFotoPerfil_Usuario(int idUsuario) {
