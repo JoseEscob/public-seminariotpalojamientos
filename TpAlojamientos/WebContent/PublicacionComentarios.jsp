@@ -19,6 +19,18 @@
 	<div class="container">
 		<h2>Comentarios de la publicación</h2>
 		<h4>Puntuación Gral. ${publicacionPuntaje}&nbsp;/5</h4>
+		<c:choose>
+			<c:when test="${fn:length(listaComentarios) gt 0}">
+				<h4>
+					<small>Cant. de Comentarios: ${fn:length(listaComentarios)}</small>
+				</h4>
+			</c:when>
+			<c:otherwise>
+				<h4>
+					<small>No se encontraron comentarios para esta publicación</small>
+				</h4>
+			</c:otherwise>
+		</c:choose>
 		<hr />
 		<!--Horizantal line divider  <div class="page-header"/> -->
 	</div>
@@ -43,7 +55,7 @@
 							<p>${objComentario.descripcion}</p>
 						</div>
 					</div>
-					<div class="page-header" />
+					<hr />
 				</c:forEach>
 			</div>
 

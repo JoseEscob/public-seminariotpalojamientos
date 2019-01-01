@@ -2,13 +2,12 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
-import com.mysql.jdbc.JDBC4PreparedStatement;
-
 import extra.Conexion;
+import extra.ConstantesPublicacion;
 import extra.LOG;
 import modelo.Localidad;
 import modelo.Publicacion;
@@ -16,17 +15,17 @@ import modelo.TipoAlojamiento;
 import modelo.Usuario;
 
 public class Publicaciones implements Connectable<Publicacion> {
-
+	private static final ConstantesPublicacion cPubli = new ConstantesPublicacion();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		{
 			put("all", "select * from publicaciones");
-			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
+			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update",
 					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, nombre=?, descripcion=?, "
-							+ "domicilio=?, idLocalidad=?, codPostal=?, coordenadas=?, precioNoche=?, "
-							+ "metrosCuadrados=?, cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?,"
-							+ " bitJardin=?, bitCochera=?, bitMascotas=?, bitFumadores=?, bitAmoblada=?, bitDesayuno=?,"
+							+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
+							+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?,"
+							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?,"
 							+ "fechaAlta=?, puntaje=?, habilitado=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("like", "");
@@ -47,30 +46,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
 				Publicacion o = new Publicacion();
-				o.setIdPublicacion(rs.getInt(1));
-				o.setIdUsuario(rs.getInt(2));
-				o.setIdTipoAlojamiento(rs.getInt(3));
-				o.setNombre(rs.getString(4));
-				o.setDescripcion(rs.getString(5));
-				o.setDomicilio(rs.getString(6));
-				o.setIdLocalidad(rs.getInt(7));
-				o.setCodPostal(rs.getInt(8));
-				o.setCoordenadas(rs.getString(9));
-				o.setPrecioNoche(rs.getFloat(10));
-				o.setMetrosCuadrados(rs.getInt(11));
-				o.setCantPersonas(rs.getInt(12));
-				o.setCantAmbientes(rs.getInt(13));
-				o.setCantBanios(rs.getInt(14));
-				o.setCantHabitaciones(rs.getInt(15));
-				o.setBitJardin(rs.getBoolean(16));
-				o.setBitCochera(rs.getBoolean(17));
-				o.setBitMascotas(rs.getBoolean(18));
-				o.setBitFumadores(rs.getBoolean(19));
-				o.setBitAmoblada(rs.getBoolean(20));
-				o.setBitDesayuno(rs.getBoolean(21));
-				o.setFechaAlta(rs.getDate(22));
-				o.setPuntaje(rs.getFloat(23));
-				o.setHabilitado(rs.getBoolean(24));
+				o = readPs_Publicacion(rs);
 				LOG.info(rs.getStatement().toString());
 				m.add(o);
 			}
@@ -120,30 +96,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 			if (rs.next()) {
 				o = new Publicacion();
-				o.setIdPublicacion(rs.getInt(1));
-				o.setIdUsuario(rs.getInt(2));
-				o.setIdTipoAlojamiento(rs.getInt(3));
-				o.setNombre(rs.getString(4));
-				o.setDescripcion(rs.getString(5));
-				o.setDomicilio(rs.getString(6));
-				o.setIdLocalidad(rs.getInt(7));
-				o.setCodPostal(rs.getInt(8));
-				o.setCoordenadas(rs.getString(9));
-				o.setPrecioNoche(rs.getFloat(10));
-				o.setMetrosCuadrados(rs.getInt(11));
-				o.setCantPersonas(rs.getInt(12));
-				o.setCantAmbientes(rs.getInt(13));
-				o.setCantBanios(rs.getInt(14));
-				o.setCantHabitaciones(rs.getInt(15));
-				o.setBitJardin(rs.getBoolean(16));
-				o.setBitCochera(rs.getBoolean(17));
-				o.setBitMascotas(rs.getBoolean(18));
-				o.setBitFumadores(rs.getBoolean(19));
-				o.setBitAmoblada(rs.getBoolean(20));
-				o.setBitDesayuno(rs.getBoolean(21));
-				o.setFechaAlta(rs.getDate(22));
-				o.setPuntaje(rs.getFloat(23));
-				o.setHabilitado(rs.getBoolean(24));
+				o = readPs_Publicacion(rs);
 			}
 
 		} catch (Exception e) {
@@ -163,7 +116,8 @@ public class Publicaciones implements Connectable<Publicacion> {
 		boolean correcto = false;
 		;
 		try {
-
+			// FALSE: Si no existe el id en los registros de Usuarios, TiposAlojamientos,
+			// Localidades
 			Usuarios usuarios = new Usuarios();
 			Usuario usuario = new Usuario();
 			usuario.setIdUsuario(obj.getIdUsuario());
@@ -183,34 +137,14 @@ public class Publicaciones implements Connectable<Publicacion> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setInt(1, obj.getIdUsuario());
-			ps.setInt(2, obj.getIdTipoAlojamiento());
-			ps.setString(3, obj.getNombre());
-			ps.setString(4, obj.getDescripcion());
-			ps.setString(5, obj.getDomicilio());
-			ps.setInt(6, obj.getIdLocalidad());
-			ps.setInt(7, obj.getCodPostal());
-			ps.setString(8, obj.getCoordenadas());
-			ps.setFloat(9, obj.getPrecioNoche());
-			ps.setInt(10, obj.getMetrosCuadrados());
-			ps.setInt(11, obj.getCantPersonas());
-			ps.setInt(12, obj.getCantAmbientes());
-			ps.setInt(13, obj.getCantBanios());
-			ps.setInt(14, obj.getCantHabitaciones());
-			ps.setBoolean(15, obj.isBitJardin());
-			ps.setBoolean(16, obj.isBitCochera());
-			ps.setBoolean(17, obj.isBitMascotas());
-			ps.setBoolean(18, obj.isBitFumadores());
-			ps.setBoolean(19, obj.isBitAmoblada());
-			ps.setBoolean(20, obj.isBitDesayuno());
-			ps.setDate(21, obj.getFechaAlta());
-			ps.setFloat(22, obj.getPuntaje());
+			ps = writePs_Publicacion(obj, ps);
 			ps.executeUpdate();
 			// LOG.info(ps.getS);
 			correcto = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			// por más q haya un return pasa por finally
 			cn.close();
 		}
 		return correcto;
@@ -244,28 +178,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(1, obj.getIdUsuario());
-			ps.setInt(2, obj.getIdTipoAlojamiento());
-			ps.setString(3, obj.getNombre());
-			ps.setString(4, obj.getDescripcion());
-			ps.setString(5, obj.getDomicilio());
-			ps.setInt(6, obj.getIdLocalidad());
-			ps.setInt(7, obj.getCodPostal());
-			ps.setString(8, obj.getCoordenadas());
-			ps.setFloat(9, obj.getPrecioNoche());
-			ps.setInt(10, obj.getMetrosCuadrados());
-			ps.setInt(11, obj.getCantPersonas());
-			ps.setInt(12, obj.getCantAmbientes());
-			ps.setInt(13, obj.getCantBanios());
-			ps.setInt(14, obj.getCantHabitaciones());
-			ps.setBoolean(15, obj.isBitJardin());
-			ps.setBoolean(16, obj.isBitCochera());
-			ps.setBoolean(17, obj.isBitMascotas());
-			ps.setBoolean(18, obj.isBitFumadores());
-			ps.setBoolean(19, obj.isBitAmoblada());
-			ps.setBoolean(20, obj.isBitDesayuno());
-			ps.setDate(21, obj.getFechaAlta());
-			ps.setFloat(22, obj.getPuntaje());
+			ps = writePs_Publicacion(obj, ps);
 			ps.setBoolean(22, obj.isHabilitado());
 			ps.setInt(23, obj.getIdPublicacion());
 			if (ps.executeUpdate() != 0)
@@ -286,6 +199,66 @@ public class Publicaciones implements Connectable<Publicacion> {
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
+	}
+
+	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+
+	private Publicacion readPs_Publicacion(ResultSet rs) throws SQLException {
+		Publicacion o = new Publicacion();
+		o.setIdPublicacion(rs.getInt(cPubli.idPublicacion));
+		o.setIdUsuario(rs.getInt(cPubli.idUsuario));
+		o.setIdTipoAlojamiento(rs.getInt(cPubli.idTipoAlojamiento));
+		o.setNombre(rs.getString(cPubli.nombre));
+		o.setDescripcion(rs.getString(cPubli.descripcion));
+
+		o.setIdLocalidad(rs.getInt(cPubli.idLocalidad));
+		o.setCodPostal(rs.getInt(cPubli.codPostal));
+		o.setCoordenadas(rs.getString(cPubli.coordenadas));
+		o.setCalle(rs.getString(cPubli.calle));
+		o.setAltura(rs.getInt(cPubli.altura));
+		o.setPiso(rs.getInt(cPubli.piso));
+		o.setDpto(rs.getString(cPubli.dpto));
+
+		o.setSupCubierta(rs.getInt(cPubli.supCubierta));
+		o.setSupDescubierta(rs.getInt(cPubli.supDescubierta));
+		o.setPrecioExpensas(rs.getInt(cPubli.precioExpensas));
+		o.setPrecioNoche(rs.getInt(cPubli.precioNoche));
+
+		o.setCantPersonas(rs.getInt(cPubli.cantPersonas));
+		o.setCantAmbientes(rs.getInt(cPubli.cantAmbientes));
+		o.setCantBanios(rs.getInt(cPubli.cantBanios));
+		o.setCantHabitaciones(rs.getInt(cPubli.cantHabitaciones));
+
+		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
+		o.setPuntaje(rs.getFloat(cPubli.puntaje));
+		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
+		return o;
+	}
+
+	private PreparedStatement writePs_Publicacion(Publicacion obj, PreparedStatement ps) throws SQLException {
+		ps.setInt(1, obj.getIdUsuario());
+		ps.setInt(2, obj.getIdTipoAlojamiento());
+		ps.setString(3, obj.getNombre());
+		ps.setString(4, obj.getDescripcion());
+		ps.setInt(5, obj.getIdLocalidad());
+		ps.setInt(6, obj.getCodPostal());
+		ps.setString(7, obj.getCoordenadas());
+		ps.setString(8, obj.getCalle());
+		ps.setInt(9, obj.getAltura());
+		ps.setInt(10, obj.getPiso());
+		ps.setString(11, obj.getDpto());
+		ps.setInt(12, obj.getSupCubierta());
+		ps.setInt(13, obj.getSupDescubierta());
+		ps.setInt(14, obj.getPrecioExpensas());
+		ps.setInt(15, obj.getPrecioNoche());
+
+		ps.setInt(16, obj.getCantPersonas());
+		ps.setInt(17, obj.getCantAmbientes());
+		ps.setInt(18, obj.getCantBanios());
+		ps.setInt(19, obj.getCantHabitaciones());
+		ps.setDate(20, obj.getFechaAlta());
+		ps.setFloat(21, obj.getPuntaje());
+		return ps;
 	}
 
 	// ************* //

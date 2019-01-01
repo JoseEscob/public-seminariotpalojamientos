@@ -166,13 +166,12 @@ public class PublicacionServlet extends HttpServlet {
 		String message = null;
 		ArrayList<Comentario> listaComentarios = null;
 		ArrayList<Comentario> listaComentariosFiltrada = new ArrayList<Comentario>();
+		float publicacionPuntaje = 0;
 		try {
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-
-			// float publicacionPuntaje =
-			// publicacionDAO.getObjectByID(idPublicacion).getPuntaje();
-			float publicacionPuntaje = 1;
-
+			
+			publicacionPuntaje = publicacionDAO.getObjectByID(idPublicacion).getPuntaje();
+			
 			listaComentarios = comentarioDAO.getAll();
 			listaComentarios.forEach(item -> {
 				if (item.getIdPublicacion() == idPublicacion)
