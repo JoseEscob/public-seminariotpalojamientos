@@ -12,6 +12,7 @@
 <body>
 
 	<%
+	//Respecto al diseño habria que ver la forma de agregar un boton o una seccion donde se puedan ver las publicaciones deshabilitadas.
 		// Variables necesarias
 		ArrayList<Usuario> usuarios = null;
 		ArrayList<Publicacion> publicaciones = null;
@@ -25,15 +26,15 @@
 				//Siempre deberiamos mostrar primer las publicaciones.
 
 			} else {
-				//Redireccionar
+				//Redireccionar usuario logeado no administrador
 			}
 		} else {
-			//Redireccionar
+			//Redireccionar usuario no logeado
 		}
 	%>
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
-		<h3>Lista de Usuarios</h3>
+		<h3>Lista de Publicaciones</h3>
 		<table class="table">
 			<thead>
 				<tr>
@@ -61,6 +62,9 @@
 						<td><c:out value="${obj.precioNoche}" /></td>
 						<td><c:out value="${obj.puntaje}" /></td>
 						<td><c:out value="${obj.habilitado}" /></td>
+						<td><input type="button" value="Ver publicacion"/></td>
+						<td><input type="button" value="Ver perfil"/></td>
+						<td><input type="button" value="Deshabilitar"/></td>
 					</tr>
 				</c:forEach>
 

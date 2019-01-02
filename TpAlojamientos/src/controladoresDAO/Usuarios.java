@@ -46,7 +46,7 @@ public class Usuarios implements Connectable<Usuario> {
 				o.setFechaNac(rs.getDate(6));
 				o.setUsuario(rs.getString(7));
 				o.setClaveUsuario(rs.getString(8));
-				o.setRutaFotoPerfil(rs.getString("rutaFotoPerfil"));
+				o.setRutaFotoPerfil(rs.getString(9));
 				o.setSexo(rs.getBoolean(10));
 				o.setAdmin(rs.getBoolean(11));
 				o.setPuntaje(rs.getFloat(12));

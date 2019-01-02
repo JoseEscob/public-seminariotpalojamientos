@@ -1,0 +1,133 @@
+.med-badge-fix{
+	margin-left: 5px;
+}
+
+.med-glyphicon-fix{
+	padding: 2px;
+	margin-right: 10px;
+}
+
+.med-navbar-fix{
+	padding-left: 0px;
+}
+
+.med-navbar-title{
+	padding: 0px; 
+	margin-top: -15px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #555;
+	color: white;
+}
+
+.med-main-fix{
+	margin-top: 50px;
+}
+
+.med-sidebar-fix{
+	border: 2px solid #555;
+	border-radius: 4px;
+	background-color: #222;
+	height: 800px;
+
+  	/*position: fixed;
+	height: 100%;
+  	z-index: 1;
+	top: 5.4%;
+	left: 0;
+	background-color: #111;
+	overflow-x: hidden;*/
+
+}
+
+
+.med-sidebar-section-title{
+	background-color: #888;
+	border-color: #000;
+	color: white;
+	font-size: 12pt;
+	padding: 5px;
+	padding-left: 10px;
+	border-radius: 5px;
+	display: inline-block;
+}
+
+.med-sidebar-section-fix{
+	border-bottom: 1px solid #555;
+	margin-bottom: 5px;
+}
+
+.med-sidebar-section-fix > div{
+	margin-bottom: 10px;
+	overflow: auto;
+	z-index: 1;
+	color: #FFF;
+
+}
+.med-sidebar-section-fix > div:hover{
+	color: #FFF;
+
+}
+
+.med-nav{
+	position: relative;
+	text-decoration: none;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	background-color: #222;
+}
+
+.med-nav li{
+	background-color: #222;
+	padding: 0;
+	
+}
+
+.med-nav > li > a{
+	text-decoration: none;
+	color: white;
+	background-color: #222;
+	padding: 5px;
+	padding-left: 40px;
+	display: inline-block;
+	width: 100%;
+	border-radius: 5px;
+	text-align: left;
+	transition: all 1s;
+
+}
+.med-nav > li > a:hover{
+	width: 110%;
+	background-color: #FFF;
+	color: #111;
+	text-decoration: none;
+	padding-left: 80px;
+	font-weight: bold;
+	transition: all 200ms ease-out;
+
+}
+
+.med-text-main{
+	font-size: 15pt;
+}
+
+.med-nav-item-active{
+	width: 110% !important;
+	background-color: #FFF !important;
+	color: #111 !important;
+	text-decoration: none !important;
+	padding-left: 80px !important;
+	font-weight: bold !important;
+}
+
+.med-container{
+	border-top: 1px solid #555;
+	border-bottom: 1px solid #555;
+	margin: 0;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	width: 50%;
+	padding: 20px;
+	border-radius: 5px;
+
+}
