@@ -19,35 +19,34 @@
 
 	<div class="container" id="a_ubicacionDomicilio">
 		<h4>Ubicación - Zona del Domicilio</h4>
-
 		<div class="row">
 			<div class="col-md-4">
 				<!-- Combos de Zona  -->
-				<div class="form-group" style="">
-					<form method="POST" action="PublicacionServlet">
-						<label>Partido</label> <select class="form-control"
-							name="cmbPartido" onchange="this.form.submit()">
-							<option selected value="null">Seleccionar un partido</option>
-
+				<form method="POST" action="PublicacionServlet">					
+					<div class="form-group">
+						<label for="partidos">Partido</label> 
+						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido"  onchange="this.form.submit();">
+							<option selected value="null" disabled>Seleccionar un partido</option>
 							<c:forEach items="${listaPartidos}" var="item">
 								<option value="${item.idPartido}">${item.nombre}</option>
 							</c:forEach>
 						</select>
-						<noscript>
-							<input type="submit">
-						</noscript>
-						<input type="hidden" name="actionPublicacion" value="cmbPartidoSubmit">
-					</form>
-				</div>
+					</div>
+					<noscript>
+						<input type="submit">
+					</noscript>
+					<input type="hidden" name="actionPublicacion" value="cmbPartidoSubmit">
 
-				<div class="form-group" style="">
-					<label>Localidad</label> <select class="form-control"
-						name="cmbLocalidad">
-						<c:forEach items="${listaLocalidades}" var="item">
-							<option value="${item.idLocalidad}">${item.nombre}</option>
-						</c:forEach>
-					</select>
-				</div>
+					<div class="form-group">
+						<label for="localidades">Localidad</label> 
+						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad">
+							<option selected value="null" disabled>Seleccionar una localidad</option>
+							<c:forEach items="${listaLocalidades}" var="item">
+								<option value="${item.idLocalidad}">${item.nombre}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</form>
 				<div class="form-group" style="">
 					<label>Localidad</label><select class="form-control">
 						<option value="value1">Text 1</option>
@@ -137,5 +136,23 @@
 
 	<div class="container" id="footer"></div>
 
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("[name='cmbPartido']").change(function(){
+		//Working on it
+		/*$.ajax({
+			url: $(this).attr('action'),
+			type: $(this).attr('method'),
+			data:{
+				idPartido:$("[name='cmbPartido'] option:selected").val()
+			}
+		});*/
+		
+	});
+});
+
+
+</script>
 </body>
 </html>

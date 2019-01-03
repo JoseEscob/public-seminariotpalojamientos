@@ -31,6 +31,8 @@ BOOTSTRAP ONLINE Nuevo
 <script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
 <script src="bootstrap3/js/bootstrap.min.js"></script>
 <link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 
 <script src="login/js/JSValidar.js"></script>
 

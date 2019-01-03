@@ -110,6 +110,7 @@ public class Localidades implements Connectable<Localidad> {
 
 	public ArrayList<Localidad> getByIdPartido(int idPartido) {
 		cn = new Conexion();
+		m = new ArrayList<Localidad>();
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByIdPartido"));
 			ps.setInt(1, idPartido);

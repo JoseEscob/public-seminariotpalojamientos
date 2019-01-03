@@ -84,7 +84,6 @@ public class PublicacionServlet extends HttpServlet {
 
 			switch (actionPublicacion) {
 			case "cmbPartidoSubmit":
-				LOG.info("entro por POST");
 				cargarComponentesAltaPublicacion(request, response);
 				break;
 			case "create":
@@ -122,7 +121,6 @@ public class PublicacionServlet extends HttpServlet {
 				int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
 				listaLocalidades = localidadDAO.getByIdPartido(idPartido);
 			}
-
 			request.setAttribute("listaPartidos", listaPartidos);
 			request.setAttribute("listaLocalidades", listaLocalidades);
 			message = "Se cargó el cmb";
