@@ -2,60 +2,58 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import constantesDAO.ConstantesNombreCampos;
 import extra.Conexion;
-import modelo.Favorito;
 import modelo.Imagen;
 import modelo.Publicacion;
-import modelo.Usuario;
 
 public class Imagenes implements Connectable<Imagen> {
+	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
 
+	private static HashMap<String, String> queries = new HashMap<String, String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1494952309320462666L;
 
-	private static HashMap<String,String> queries = new HashMap<String, String>(){{
-		put("all", "select * from imagenes");
-		put("insert", "insert into imagenes values(?,?,?,default)");
-		put("count", "select count(*) as cantidad from imagenes");
-		put("update","update imagenes set ruta=?, habilitado=? where idImagen=? and idPublicacion=?");
-		put("get","select * from imagenes where idImagen=? and idPublicacion=?");
-		put("like", "");
-			
-	}};
+		{
+			put("all", "select * from imagenes");
+			put("insert", "insert into imagenes values(?,?,?,default)");
+			put("count", "select count(*) as cantidad from imagenes");
+			put("update", "update imagenes set " + cCampo.rutaImgPublicacion + "=?, " + cCampo.habilitado + "=? where "
+					+ cCampo.idImagen + "=? and " + cCampo.idPublicacion + "=?");
+			put("get", "select * from imagenes where " + cCampo.idImagen + "=? and " + cCampo.idPublicacion + "=?");
+			put("like", "");
+
+		}
+	};
 
 	private Conexion cn;
 	private ArrayList<Imagen> m;
-	
+
 	@Override
 	public ArrayList<Imagen> getAll() {
 		cn = new Conexion();
 		m = new ArrayList<Imagen>();
-		
-		 try
-		 {
-			 cn.Open();
-			 ResultSet rs= cn.query(queries.get("all"));
-			 while(rs.next())
-			 {					
-				 Imagen o = new Imagen();
-				 o.setIdImagen(rs.getInt(1));
-				 o.setIdPublicacion(rs.getInt(2));
-				 o.setRuta(rs.getString(3));
-				 o.setHabilitado(rs.getBoolean(4));
-				 m.add(o);
-			 }
-			 
-		 }
-		 catch(Exception e)
-		 {
-			 e.printStackTrace();
-		 }
-		 finally
-		 {
-			 cn.close();
-		 }
-		 return m;
+
+		try {
+			cn.Open();
+			ResultSet rs = cn.query(queries.get("all"));
+			while (rs.next()) {
+				Imagen o = new Imagen();
+				o = readPS_Imagen(rs);
+				m.add(o);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return m;
 	}
 
 	@Override
@@ -71,14 +69,14 @@ public class Imagenes implements Connectable<Imagen> {
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("count"));
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				cantidad = rs.getInt("cantidad");
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cn.close();
 		}
 		return cantidad;
@@ -93,18 +91,15 @@ public class Imagenes implements Connectable<Imagen> {
 			ps.setInt(1, obj.getIdImagen());
 			ps.setInt(2, obj.getIdPublicacion());
 			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				o = new Imagen();
-				o.setIdImagen(rs.getInt(1));
-				o.setIdPublicacion(rs.getInt(2));
-				o.setRuta(rs.getString(3));
-				o.setHabilitado(rs.getBoolean(4));
+				o = readPS_Imagen(rs);
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cn.close();
 		}
 		return o;
@@ -112,28 +107,29 @@ public class Imagenes implements Connectable<Imagen> {
 
 	@Override
 	public boolean insert(Imagen obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
-		boolean correcto = false;;
+		boolean correcto = false;
+		;
 		try {
 
 			Publicaciones publicaciones = new Publicaciones();
 			Publicacion publicacion = new Publicacion();
 			publicacion.setIdPublicacion(obj.getIdPublicacion());
-			if(publicaciones.get(publicacion) == null)
+			if (publicaciones.get(publicacion) == null)
 				return false;
-			
+
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps.setInt(1, obj.getIdImagen());
 			ps.setInt(2, obj.getIdPublicacion());
-			ps.setString(3, obj.getRuta());
+			ps.setString(3, obj.getRutaImgPublicacion());
 			ps.executeUpdate();
 			correcto = true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -141,31 +137,30 @@ public class Imagenes implements Connectable<Imagen> {
 
 	@Override
 	public boolean update(Imagen obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
-			
+
 			Publicaciones publicaciones = new Publicaciones();
 			Publicacion publicacion = new Publicacion();
 			publicacion.setIdPublicacion(obj.getIdPublicacion());
-			if(publicaciones.get(publicacion) == null)
+			if (publicaciones.get(publicacion) == null)
 				return false;
-			
+
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setString(1, obj.getRuta());
+			ps.setString(1, obj.getRutaImgPublicacion());
 			ps.setBoolean(2, obj.isHabilitado());
 			ps.setInt(3, obj.getIdImagen());
 			ps.setInt(4, obj.getIdPublicacion());
-			if(ps.executeUpdate() != 0)
+			if (ps.executeUpdate() != 0)
 				correcto = true;
-			
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -181,5 +176,14 @@ public class Imagenes implements Connectable<Imagen> {
 		return this.update(u);
 	}
 
+	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	private Imagen readPS_Imagen(ResultSet rs) throws SQLException {
+		Imagen o = new Imagen();
+		o.setIdImagen(rs.getInt(cCampo.idImagen));
+		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
+		o.setRutaImgPublicacion(rs.getString(cCampo.rutaImgPublicacion));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
+	}
 
 }

@@ -2,23 +2,32 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import constantesDAO.ConstantesNombreCampos;
 import exceptions.ValidacionException;
 import extra.Conexion;
+import extra.LOG;
 import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
-
+	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1712263006671542535L;
+
 		{
 			put("all", "select * from usuarios");
-			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,?,default,?,default)");
+			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
 			put("count", "select count(*) as cantidad from usuarios");
 			put("update",
-					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?, rutaFotoPerfil=?, sexo=?, admin=?, puntaje=?, habilitado=? where idUsuario=?");
+					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?"
+							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta=?" + ","
+							+ cCampo.fechaUltConexion + "=?,verificado=?,habilitado=? where idUsuario=?");
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
 
@@ -38,19 +47,7 @@ public class Usuarios implements Connectable<Usuario> {
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
 				Usuario o = new Usuario();
-				o.setIdUsuario(rs.getInt(1));
-				o.setNombre(rs.getString(2));
-				o.setApellido(rs.getString(3));
-				o.setDni(rs.getString(4));
-				o.setMail(rs.getString(5));
-				o.setFechaNac(rs.getDate(6));
-				o.setUsuario(rs.getString(7));
-				o.setClaveUsuario(rs.getString(8));
-				o.setRutaFotoPerfil(rs.getString(9));
-				o.setSexo(rs.getBoolean(10));
-				o.setAdmin(rs.getBoolean(11));
-				o.setPuntaje(rs.getFloat(12));
-				o.setHabilitado(rs.getBoolean(13));
+				o = readPs_Usuario(rs);
 				m.add(o);
 			}
 
@@ -115,19 +112,7 @@ public class Usuarios implements Connectable<Usuario> {
 
 			if (rs.next()) {
 				o = new Usuario();
-				o.setIdUsuario(rs.getInt(1));
-				o.setNombre(rs.getString(2));
-				o.setApellido(rs.getString(3));
-				o.setDni(rs.getString(4));
-				o.setMail(rs.getString(5));
-				o.setFechaNac(rs.getDate(6));
-				o.setUsuario(rs.getString(7));
-				o.setClaveUsuario(rs.getString(8));
-				o.setRutaFotoPerfil(rs.getString(9));
-				o.setSexo(rs.getBoolean(10));
-				o.setAdmin(rs.getBoolean(11));
-				o.setPuntaje(rs.getFloat(12));
-				o.setHabilitado(rs.getBoolean(13));
+				o = readPs_Usuario(rs);
 			}
 
 		} catch (Exception e) {
@@ -148,17 +133,8 @@ public class Usuarios implements Connectable<Usuario> {
 		;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setString(1, obj.getNombre());
-			ps.setString(2, obj.getApellido());
-			ps.setString(3, obj.getDni());
-			ps.setString(4, obj.getMail());
-			ps.setDate(5, obj.getFechaNac());
-			ps.setString(6, obj.getUsuario());
-			ps.setString(7, obj.getClaveUsuario());
-			ps.setString(8, obj.getRutaFotoPerfil());
-			ps.setBoolean(9, obj.getSexo());
-			ps.setFloat(10, obj.getPuntaje());
-
+			ps = writePs_Usuario(obj, ps);
+			LOG.info("INSERT Usuarios: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
 		} catch (Exception e) {
@@ -178,19 +154,11 @@ public class Usuarios implements Connectable<Usuario> {
 		boolean correcto = false;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setString(1, obj.getNombre());
-			ps.setString(2, obj.getApellido());
-			ps.setString(3, obj.getDni());
-			ps.setString(4, obj.getMail());
-			ps.setDate(5, obj.getFechaNac());
-			ps.setString(6, obj.getUsuario());
-			ps.setString(7, obj.getClaveUsuario());
-			ps.setString(8, obj.getRutaFotoPerfil());
-			ps.setBoolean(9, obj.getSexo());
-			ps.setBoolean(10, obj.isAdmin());
-			ps.setFloat(11, obj.getPuntaje());
-			ps.setBoolean(12, obj.isHabilitado());
-			ps.setInt(13, obj.getIdUsuario());
+
+			ps = writePs_Usuario(obj, ps);
+			ps.setBoolean(15, obj.isHabilitado());
+			ps.setInt(16, obj.getIdUsuario());
+			LOG.info("UPDATE Usuarios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -209,6 +177,47 @@ public class Usuarios implements Connectable<Usuario> {
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
+	}
+
+	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+
+	private Usuario readPs_Usuario(ResultSet rs) throws SQLException {
+		Usuario o = new Usuario();
+		o.setIdUsuario(rs.getInt(cCampo.idUsuario));
+		o.setNombre(rs.getString(cCampo.nombre));
+		o.setApellido(rs.getString(cCampo.apellido));
+		o.setDni(rs.getString(cCampo.dni));
+		o.setMail(rs.getString(cCampo.mail));
+		o.setFechaNac(rs.getDate(cCampo.fechaNac));
+		o.setUsuario(rs.getString(cCampo.usuario));
+		o.setClave(rs.getString(cCampo.clave));
+		o.setSexo(rs.getBoolean(cCampo.sexo));
+		o.setRutaFotoPerfil(rs.getString(cCampo.rutaFotoPerfil));
+		o.setAdmin(rs.getBoolean(cCampo.admin));
+		o.setPuntaje(rs.getFloat(cCampo.puntaje));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		o.setFechaAlta(rs.getDate(cCampo.fechaAlta));
+		o.setFechaUltConexion(rs.getDate(cCampo.fechaUltConexion));
+		o.setVerificado(rs.getBoolean(cCampo.verificado));
+		return o;
+	}
+
+	private PreparedStatement writePs_Usuario(Usuario obj, PreparedStatement ps) throws SQLException {
+		ps.setString(1, obj.getNombre());
+		ps.setString(2, obj.getApellido());
+		ps.setString(3, obj.getDni());
+		ps.setString(4, obj.getMail());
+		ps.setDate(5, obj.getFechaNac());
+		ps.setString(6, obj.getUsuario());
+		ps.setString(7, obj.getClave());
+		ps.setBoolean(9, obj.isSexo());
+		ps.setString(8, obj.getRutaFotoPerfil());
+		ps.setBoolean(10, obj.isAdmin());
+		ps.setFloat(11, obj.getPuntaje());
+		ps.setDate(12, obj.getFechaAlta());
+		ps.setDate(13, obj.getFechaUltConexion());
+		ps.setBoolean(14, obj.isVerificado());
+		return ps;
 	}
 
 	/**

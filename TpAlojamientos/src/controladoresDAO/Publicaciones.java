@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import constantesDAO.ConstantesNombreCampos;
+import constantesDAO.ConstantesPublicacion;
 import extra.Conexion;
-import extra.ConstantesPublicacion;
 import extra.LOG;
 import modelo.Localidad;
 import modelo.Publicacion;
@@ -16,17 +17,23 @@ import modelo.Usuario;
 
 public class Publicaciones implements Connectable<Publicacion> {
 	private static final ConstantesPublicacion cPubli = new ConstantesPublicacion();
+	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -2096761465575252395L;
+
 		{
 			put("all", "select * from publicaciones");
-			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
+			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update",
 					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, nombre=?, descripcion=?, "
 							+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
 							+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?,"
 							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?,"
-							+ "fechaAlta=?, puntaje=?, habilitado=? where idPublicacion=?");
+							+ "fechaAlta=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("like", "");
 
@@ -179,8 +186,8 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps = writePs_Publicacion(obj, ps);
-			ps.setBoolean(22, obj.isHabilitado());
-			ps.setInt(23, obj.getIdPublicacion());
+			ps.setBoolean(23, obj.isHabilitado());
+			ps.setInt(24, obj.getIdPublicacion());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -232,6 +239,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
 		o.setPuntaje(rs.getFloat(cPubli.puntaje));
 		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
+		o.setVerificado(rs.getBoolean(cCampo.verificado));
 		return o;
 	}
 
@@ -258,6 +266,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		ps.setInt(19, obj.getCantHabitaciones());
 		ps.setDate(20, obj.getFechaAlta());
 		ps.setFloat(21, obj.getPuntaje());
+		ps.setBoolean(22, obj.isVerificado());
 		return ps;
 	}
 
@@ -268,4 +277,5 @@ public class Publicaciones implements Connectable<Publicacion> {
 		obj = this.getAll().stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst().orElse(null);
 		return obj;
 	}
+
 }

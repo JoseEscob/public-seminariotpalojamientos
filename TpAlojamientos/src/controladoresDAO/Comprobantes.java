@@ -12,7 +12,12 @@ import modelo.Solicitud;
 public class Comprobantes implements Connectable<Comprobante> {
 
 
-	private static HashMap<String,String> queries = new HashMap<String, String>(){{
+	private static HashMap<String,String> queries = new HashMap<String, String>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8651650972239809763L;
+
+	{
 		put("all", "select * from comprobantes");
 		put("insert", "insert into comprobantes values(null,?,?,?,?,?,?,?,default)");
 		put("count", "select count(*) as cantidad from comprobantes");

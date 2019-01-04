@@ -31,6 +31,7 @@ public class Publicacion {
 	private Date fechaAlta;
 	private float puntaje;
 	private boolean habilitado;
+	private boolean verificado;
 
 	public int getIdPublicacion() {
 		return idPublicacion;
@@ -222,6 +223,14 @@ public class Publicacion {
 
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+
+	public boolean isVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(boolean verificado) {
+		this.verificado = verificado;
 	}
 
 }

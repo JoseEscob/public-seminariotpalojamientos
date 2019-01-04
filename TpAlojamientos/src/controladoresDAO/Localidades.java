@@ -11,7 +11,12 @@ import modelo.Partido;
 
 public class Localidades implements Connectable<Localidad> {
 
-	private static HashMap<String,String> queries = new HashMap<String, String>(){{
+	private static HashMap<String,String> queries = new HashMap<String, String>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5716418584259670866L;
+
+	{
 		put("all", "select * from localidades");
 		put("insert", "insert into localidades values(null,?,?,?,default)");
 		put("count", "select count(*) as cantidad from localidades");

@@ -10,28 +10,15 @@ public class Usuario {
 	private String mail;
 	private Date fechaNac;
 	private String usuario;
-	private String claveUsuario;
-	private String rutaFotoPerfil;
-	private float puntaje;
+	private String clave;
 	private boolean sexo;
+	private String rutaFotoPerfil;
 	private boolean admin;
+	private float puntaje;
 	private boolean habilitado;
-
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String suario) {
-		this.usuario = suario;
-	}
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
+	private Date fechaAlta;
+	private Date fechaUltConexion;
+	private boolean verificado;
 
 	public int getIdUsuario() {
 		return idUsuario;
@@ -81,36 +68,23 @@ public class Usuario {
 		this.fechaNac = fechaNac;
 	}
 
-	public String getClaveUsuario() {
-		return claveUsuario;
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public void setClaveUsuario(String claveUsuario) {
-		this.claveUsuario = claveUsuario;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
-	public float getPuntaje() {
-		return puntaje;
+	public String getClave() {
+		return clave;
 	}
 
-	public void setPuntaje(float puntaje) {
-		if (puntaje < 0)
-			this.puntaje = 0;
-		else if (puntaje > 5)
-			this.puntaje = 5;
-		else
-			this.puntaje = puntaje;
+	public void setClave(String clave) {
+		this.clave = clave;
 	}
 
-	public boolean isHabilitado() {
-		return habilitado;
-	}
-
-	public void setHabilitado(boolean habilitado) {
-		this.habilitado = habilitado;
-	}
-
-	public boolean getSexo() {
+	public boolean isSexo() {
 		return sexo;
 	}
 
@@ -124,6 +98,54 @@ public class Usuario {
 
 	public void setRutaFotoPerfil(String rutaFotoPerfil) {
 		this.rutaFotoPerfil = rutaFotoPerfil;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public float getPuntaje() {
+		return puntaje;
+	}
+
+	public void setPuntaje(float puntaje) {
+		this.puntaje = puntaje;
+	}
+
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+	public Date getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(Date fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public Date getFechaUltConexion() {
+		return fechaUltConexion;
+	}
+
+	public void setFechaUltConexion(Date fechaUltConexion) {
+		this.fechaUltConexion = fechaUltConexion;
+	}
+
+	public boolean isVerificado() {
+		return verificado;
+	}
+
+	public void setVerificado(boolean verificado) {
+		this.verificado = verificado;
 	}
 
 }

@@ -2,9 +2,11 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import constantesDAO.ConstantesNombreCampos;
 import extra.Conexion;
 import extra.Constantes;
 import modelo.Comentario;
@@ -12,7 +14,7 @@ import modelo.Publicacion;
 import modelo.Usuario;
 
 public class Comentarios implements Connectable<Comentario> {
-
+	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 
@@ -44,12 +46,7 @@ public class Comentarios implements Connectable<Comentario> {
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
 				Comentario o = new Comentario();
-				o.setIdUsuario(rs.getInt(1));
-				o.setIdPublicacion(rs.getInt(2));
-				o.setDescripcion(rs.getString(3));
-				o.setFechaComentario(rs.getDate("fechaComentario"));
-				o.setPuntaje(rs.getInt(5));
-				o.setHabilitado(rs.getBoolean(6));
+				o = readPs_Comentario(rs);
 				rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
 				nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
 				if (rutaFotoPerfilUsuario.isEmpty())
@@ -102,15 +99,9 @@ public class Comentarios implements Connectable<Comentario> {
 			ps.setInt(1, obj.getIdUsuario());
 			ps.setInt(2, obj.getIdPublicacion());
 			ResultSet rs = ps.executeQuery();
-			// TODO revisar de cambiar posicionamiento por nombreColumna
 			if (rs.next()) {
 				o = new Comentario();
-				o.setIdUsuario(rs.getInt(1));
-				o.setIdPublicacion(rs.getInt(2));
-				o.setDescripcion(rs.getString(3));
-				o.setFechaComentario(rs.getDate("fechaComentario"));
-				o.setPuntaje(rs.getInt(4));
-				o.setHabilitado(rs.getBoolean(5));
+				o = readPs_Comentario(rs);
 			}
 
 		} catch (Exception e) {
@@ -210,6 +201,20 @@ public class Comentarios implements Connectable<Comentario> {
 		return this.update(u);
 	}
 
+	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+
+	private Comentario readPs_Comentario(ResultSet rs) throws SQLException {
+		Comentario o = new Comentario();
+		o.setIdUsuario(rs.getInt(cCampo.idUsuario));
+		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
+		o.setDescripcion(rs.getString(cCampo.descripcion));
+		o.setFechaComentario(rs.getDate(cCampo.fechaComentario));
+		o.setPuntaje(rs.getInt(cCampo.puntaje));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
+	}
+
+	/// ********************* MÉTODOS LAMBDA ********************** ///
 	private String getNombreApellido_Usuario(int idUsuario) {
 		Usuarios usuarioDAO = new Usuarios();
 		Usuario objUsuario = new Usuario();
@@ -223,4 +228,5 @@ public class Comentarios implements Connectable<Comentario> {
 		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
 		return objUsuario.getRutaFotoPerfil();
 	}
+
 }

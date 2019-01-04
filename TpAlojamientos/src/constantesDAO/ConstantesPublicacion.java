@@ -1,4 +1,4 @@
-package extra;
+package constantesDAO;
 
 /**
  * Clase para definir constantes

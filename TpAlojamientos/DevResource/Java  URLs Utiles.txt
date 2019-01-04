@@ -56,6 +56,7 @@ Window> Preferences >General>Keys
 	soportealojamientos@com  - tpalojamientos00
 	baalojamientosavisos@com - tpalojamientos01
 https://www.genbeta.com/desarrollo/branching-haciendo-crecer-nuestro-arbol-del-repositorio-de-codigo
+https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html
 
 Google Maps API / formato de publicación
 	https://www.youtube.com/watch?v=hSsOCbG6LQI

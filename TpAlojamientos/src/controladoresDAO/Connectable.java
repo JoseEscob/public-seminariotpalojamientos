@@ -1,5 +1,7 @@
 package controladoresDAO;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public interface Connectable<T> {
@@ -15,4 +17,7 @@ public interface Connectable<T> {
 	public boolean insert(T obj);
 	public boolean update(T obj);
 	public boolean remove(T obj);
+	
+//	T readPs_Clase(ResultSet rs);
+//	PreparedStatement writePs_Clase(T obj, PreparedStatement ps);
 }

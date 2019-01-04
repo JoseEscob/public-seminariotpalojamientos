@@ -104,7 +104,7 @@ public class UsuarioServlet extends HttpServlet {
 			usuarioDAO.validarCamposUnicos(obj);
 			// 3- guardar información validada
 			obj.setMail(mail);
-			obj.setClaveUsuario(claveUno);
+			obj.setClave(claveUno);
 			obj.setNombre(nombre);
 			obj.setApellido(apellido);
 			obj.setFechaNac(Utilitario.textoAFechaSQL(fechaNac));
@@ -188,7 +188,7 @@ public class UsuarioServlet extends HttpServlet {
 					alles = usuarioDAO.getAll();
 					for (Usuario usuario : alles) {
 						if (usuario.getMail().compareTo(correoUsuario) == 0) {
-							if (usuario.getClaveUsuario().compareTo(claveUsuario) == 0) {
+							if (usuario.getClave().compareTo(claveUsuario) == 0) {
 								usr = usuario;
 								existe = true;
 								break;
