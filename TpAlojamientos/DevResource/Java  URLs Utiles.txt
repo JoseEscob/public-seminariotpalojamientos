@@ -23,7 +23,7 @@ Publicacion - Alta
     https://www.jqueryscript.net/form/Nice-Clean-File-Input-Plugin-With-jQuery-Bootstrap-3-Bootstrap-Fileinput.html
     https://www.jqueryscript.net/demo/Lightweight-Form-Validation-Plugin-For-jQuery-Bootstrap-jbootvalidator/
     https://www.youtube.com/watch?v=VPOlrSnA82I
-    
+    https://www.w3schools.com/tags/att_form_name.asp
 
     
     
@@ -35,6 +35,7 @@ Tips JSTL/ Spring
 	http://tutorials.jenkov.com/java/java-project-overview-compilation-and-execution.html
 	http://tutorials.jenkov.com/java/annotations.html
 	http://tutorials.jenkov.com/java/lambda-expressions.html
+	https://www.codejava.net/java-ee/jstl/jstl-core-tag-url
 
 Lambda Expressions
 	https://stackoverflow.com/questions/23407014/return-from-lambda-foreach-in-java
@@ -62,3 +63,15 @@ Google Maps API / formato de publicación
 	https://www.youtube.com/watch?v=hSsOCbG6LQI
 	https://www.argenprop.com/Propiedades/Detalles/9629320--Departamento-de-2-Dormitorios-en-Alquiler-en-Capital-Federal?ViewNameResult=VistaResultados
 	
+File Handling
+http://www.avajava.com/tutorials/lessons/how-do-i-copy-a-file-to-a-directory.html
+https://commons.apache.org/proper/commons-io/javadocs/api-2.5/org/apache/commons/io/FileUtils.html
+new File("/path/directory").mkdirs();
+https://www.javabrahman.com/quick-tips/copy-move-file-java-one-location-another-examples/
+https://www.geeksforgeeks.org/image-processing-java-set-1-read-write/
+
+
+https://www.codejava.net/java-se/graphics/how-to-resize-images-in-java
+https://stackoverflow.com/questions/15558202/how-to-resize-image-in-java
+https://www.dyclassroom.com/image-processing-project/how-to-read-and-write-image-file-in-java
+https://medium.com/@adigunhammedolalekan/how-to-resize-images-for-better-upload-download-performance-android-development-fb7297f9ec24
