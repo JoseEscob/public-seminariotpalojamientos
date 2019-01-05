@@ -17,7 +17,9 @@ create table usuarios(
     admin tinyint(1) not null default 0,
 	puntaje float not null, -- Es para obtener el promedio total
 	habilitado tinyint(1) not null default 1,
-
+	fechaAlta date not null,
+	fechaUltConexion date not null,
+	verificado tinyint(1) not null default 1,
 	constraint pk_usuarios primary key(idUsuario)
 );
 
@@ -69,6 +71,7 @@ create table publicaciones(
 	fechaAlta datetime not null default current_timestamp,
 	puntaje float not null,
 	habilitado tinyint(1) not null default 1,
+	verificado tinyint(1) not null default 1,
 	constraint pk_publicaciones primary key(idPublicacion),
 	constraint fk_publicaciones_usuarios foreign key(idUsuario) references usuarios(idUsuario),
 	constraint fk_publicaciones_tipos_alojamientos foreign key(idTipoAlojamiento) references tiposAlojamientos(idTipoAlojamiento),
@@ -76,15 +79,74 @@ create table publicaciones(
 );
 
 create table servicios(
+	idServicio int not null,
+	idTipoServicio tinyint(1) not null,
+	descripcion varchar(50) not null,
+	constraint pk_servicios primary key(idServicio)
+	-- ,	constraint fk_servicios foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
+create table serviciosPublicaciones(
+	idServicio int not null,
 	idPublicacion int not null,
-	bitJardin tinyint(1) not null,
-	bitCochera tinyint(1) not null,
-	bitMascotas tinyint(1) not null,
-	bitFumadores tinyint(1) not null,
-	bitAmoblada tinyint(1) not null,
-	bitDesayuno tinyint(1) not null,
-	constraint pk_serv_publicaciones primary key(idPublicacion),
+	constraint pk_serv_publicaciones primary key(idServicio),
 	constraint fk_serv_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+-- (+)fechaComentario
+create table comentarios(
+	idUsuario int not null,
+	idPublicacion int not null,
+	descripcion varchar(300) not null,
+	fechaComentario datetime not null default current_timestamp,
+	puntaje int not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_comentarios primary key(idUsuario, idPublicacion),
+	constraint fk_comentarios_usuarios foreign key(idUsuario) references usuarios(idUsuario),
+	constraint fk_comentarios_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
+create table favoritos(
+	idFavorita int not null,
+	idUsuario int not null,
+	idPublicacion int not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_favoritos primary key(idUsuario, idPublicacion),
+	constraint fk_favoritos_usuarios foreign key(idUsuario) references usuarios(idUsuario),
+	constraint fk_favoritos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
+create table imagenes(
+	idImagen int not null,
+	idPublicacion int not null,
+	rutaImgPublicacion varchar(50) not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_imagenes primary key(idImagen, idPublicacion),
+	constraint fk_imagenes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
+create table telefonos(
+	idTelefono int not null auto_increment,
+	-- idUsuario int not null,
+	idPublicacion int not null,
+	nroTelefono varchar(20) not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_telefonos primary key(idTelefono),
+	constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
+create table bajas(
+	idBaja int not null auto_increment,
+	idUsuario int not null,
+	idPublicacion int not null,
+	fechaBaja datetime not null default current_timestamp,
+	fechaSolucion datetime null,
+	solucionado tinyint(1) not null default 0,
+	razonBaja varchar(300) not null,
+	habilitado tinyint(1) not null default 1,
+
+	constraint pk_bajas primary key(idBaja),
+	constraint fk_bajas_usuarios foreign key(idUsuario) references usuarios(idUsuario),
+	constraint fk_bajas_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
 
 create table tiposEstadosSolicitudes(
@@ -124,59 +186,4 @@ create table comprobantes(
 	habilitado tinyint(1) not null default 1,
 	constraint pk_comprobantes primary key(idComprobante),
 	constraint fk_comprobantes_solicitures foreign key(idSolicitud) references solicitudes(idSolicitud)
-);
--- (+)fechaComentario
-create table comentarios(
-	idUsuario int not null,
-	idPublicacion int not null,
-	descripcion varchar(300) not null,
-	fechaComentario datetime not null default current_timestamp,
-	puntaje int not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_comentarios primary key(idUsuario, idPublicacion),
-	constraint fk_comentarios_usuarios foreign key(idUsuario) references usuarios(idUsuario),
-	constraint fk_comentarios_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
-create table favoritos(
-	idFavorita int not null,
-	idUsuario int not null,
-	idPublicacion int not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_favoritos primary key(idUsuario, idPublicacion),
-	constraint fk_favoritos_usuarios foreign key(idUsuario) references usuarios(idUsuario),
-	constraint fk_favoritos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
-create table imagenes(
-	idImagen int not null,
-	idPublicacion int not null,
-	ruta varchar(50) not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_imagenes primary key(idImagen, idPublicacion),
-	constraint fk_imagenes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
-create table telefonos(
-	idTelefono int not null auto_increment,
-	idPublicacion int not null,
-	numero varchar(20) not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_telefonos primary key(idTelefono),
-	constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
-create table bajas(
-	idBaja int not null auto_increment,
-	idUsuario int not null,
-	idPublicacion int not null,
-	fechaBaja datetime not null default current_timestamp,
-	fechaSolucion datetime null,
-	solucionado tinyint(1) not null default 0,
-	razonBaja varchar(300) not null,
-	habilitado tinyint(1) not null default 1,
-
-	constraint pk_bajas primary key(idBaja),
-	constraint fk_bajas_usuarios foreign key(idUsuario) references usuarios(idUsuario),
-	constraint fk_bajas_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
