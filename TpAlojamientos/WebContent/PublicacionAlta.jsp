@@ -41,9 +41,7 @@
 						<label for="localidades">Localidad</label> 
 						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad">
 							<option selected value="null" disabled>Seleccionar una localidad</option>
-							<c:forEach items="${listaLocalidades}" var="item">
-								<option value="${item.idLocalidad}">${item.nombre}</option>
-							</c:forEach>
+							
 						</select>
 					</div>
 				</form>
@@ -148,6 +146,9 @@ $(document).ready(function(){
 				idPartido:$("[name='cmbPartido'] option:selected").val()
 			}
 		});*/
+		$.post("TestServlet",{"nombre":"david","lenguajes":["español","ingles","aleman","koreano","hebreo"]}, function(result){
+			console.log(result);
+		});
 		
 	});
 });

@@ -7,22 +7,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import controladoresDAO.Usuarios;
 import modelo.Usuario;
+import com.google.gson.*;
 
 public class Principal {
 
-	static String[] nombres = { "David", "Tamara", "Jose", "Roberto", "Josefina", "Ana", "Ruperto", "Alberto",
-			"Mario" };
-	static String[] apellidos = { "Martinez", "Pumares", "Escobar", "James", "Gomez", "Castelar", "Carba", "Lopez",
-			"Ponce de Leon" };
-	static String[] documentos = { "39846356", "35468478", "21456789", "36987653", "23567897", "54321654", "39846345",
-			"12345678", "14568978" };
-	static String[] usuarios = { "miko", "josipe", "atrameo", "juko", "trepber", "luzet", "dazert", "zerak", "jako" };
-	static String[] mails = { "miko@gmail.com", "josipe@gmail.com", "atrameo@gmail.com", "juko@gmail.com",
-			"trepber@gmail.com", "luzet@gmail.com", "dazert@gmail.com", "zerak@gmail.com", "jako@gmail.com" };
+	
 
 	public static void main(String[] args) {
 		/*
@@ -32,14 +26,39 @@ public class Principal {
 		 * java.sql.Date d = new java.sql.Date(date.getTime());
 		 */
 
-		// Lote de datos de prueba
-		// variables
-		Usuarios usuarios = new Usuarios();
+		
+		
+		 String json1 = "[{\"dorsal\":6," + "\"name\":\"Iniesta\","
+	                + "\"demarcation\":[\"Right winger\",\"Midfielder\"],"
+	                + "\"team\":\"FC Barcelona\"}]";
 
-		// usuarios
-		for (Usuario a : newUsers())
-			usuarios.insert(a);
+	        JsonParser parser = new JsonParser();
 
+	        // Obtain Array
+	        JsonArray gsonArr = parser.parse(json1).getAsJsonArray();
+
+	        // for each element of array
+	        for (JsonElement obj : gsonArr) {
+
+	            // Object of array
+	            JsonObject gsonObj = obj.getAsJsonObject();
+
+	            // Primitives elements of object
+	            int dorsal = gsonObj.get("dorsal").getAsInt();
+	            String name = gsonObj.get("name").getAsString();
+	            String team = gsonObj.get("team").getAsString();
+
+	            // List of primitive elements
+	            JsonArray demarcation = gsonObj.get("demarcation").getAsJsonArray();
+	            List listDemarcation = new ArrayList();
+	            for (JsonElement demarc : demarcation) {
+	                listDemarcation.add(demarc.getAsString());
+	            }
+
+	            System.out.println(gsonObj.toString());
+		
+	        }
+		
 		System.out.println("done!");
 
 	}
@@ -55,28 +74,6 @@ public class Principal {
 			e.printStackTrace();
 		}
 		return new java.sql.Date(date.getTime());
-	}
-
-	public static ArrayList<Usuario> newUsers() {
-		ArrayList<Usuario> list = new ArrayList<Usuario>();
-
-		for (int i = 0; i < 9; i++) {
-			Usuario usuario = new Usuario();
-			usuario.setNombre(nombres[i]);
-			usuario.setApellido(apellidos[i]);
-			usuario.setDni(documentos[i]);
-			usuario.setFechaNac(nuevaFecha("30/08/1996"));
-			// usuario.setClaveUsuario("clave");
-			usuario.setMail(mails[i]);
-			usuario.setUsuario(usuarios[i]);
-			usuario.setPuntaje(i);
-			usuario.setSexo(true);
-			usuario.setAdmin(false);
-			list.add(usuario);
-
-		}
-
-		return list;
 	}
 
 }
