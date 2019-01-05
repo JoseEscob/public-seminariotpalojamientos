@@ -2,6 +2,8 @@ package controllersServlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 
 import controladoresDAO.Partidos;
 import controladoresDAO.Comentarios;
@@ -18,6 +22,7 @@ import exceptions.ServidorException;
 import extra.Constantes;
 import extra.LOG;
 import modelo.Comentario;
+import modelo.Favorito;
 import modelo.Localidad;
 import modelo.Partido;
 
@@ -75,7 +80,8 @@ public class PublicacionServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// doGet(request, response);
+		// doGet(request, response);	
+		
 		try {
 			String actionPublicacion = request.getParameter("actionPublicacion");
 			if (actionPublicacion == null) {
@@ -83,6 +89,10 @@ public class PublicacionServlet extends HttpServlet {
 			}
 
 			switch (actionPublicacion) {
+			case "getLocalidades": 
+				//nombre provisorio
+				cargarLocalidadesAjax(request, response);
+				break;
 			case "cmbPartidoSubmit":
 				cargarComponentesAltaPublicacion(request, response);
 				break;
@@ -192,6 +202,32 @@ public class PublicacionServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
+	}
+	
+	private void cargarLocalidadesAjax(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
+		
+		if(request.getParameter("idPartido") != null) {
+		
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			ArrayList<Localidad> localidades = new ArrayList<Localidad>();
+			
+			int idPartido = Integer.parseInt(request.getParameter("idPartido"));
+			localidades = localidadDAO.getByIdPartido(idPartido);
+			
+			if(localidades != null) {
+				resultMap.put("localidades", localidades);				
+			}
+			else {
+				resultMap.put("error", "no se pudo realizar la carga de localidaes");				
+			}
+		
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().append(new Gson().toJson(resultMap));
+		}
+		
 	}
 
 }

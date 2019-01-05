@@ -37,25 +37,6 @@
 </head>
 <body>
 	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->
-	
-		<div class="form-group">
-						<label for="partidos">Partido</label> 
-						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido">
-							<option selected value="null" disabled>Seleccionar un partido</option>
-							<option value="1" >Seleccionar uno </option>
-							<option value="2" >Seleccionar dos </option>
-							<option value="3" >Seleccionar tres </option>
-							<option value="4" >Seleccionar cuatro </option>
-						</select>
-					</div>
-	
-	<div class="form-group">
-						<label for="localidades">Localidad</label> 
-						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad">
-							<option selected value="null" disabled>Seleccionar una localidad</option>
-							
-						</select>
-					</div>
 	<div class="page-wrapper bg-gra-turquesa-purpura p-t-130 p-b-100 font-poppins">
 		<div class="wrapper wrapper--w680">
 			<div class="card card-4">
@@ -115,22 +96,6 @@
 	<!-- Main JS-->
 	<script src="login/js/global.js"></script>
 	<script src="login/js/JSValidar.js"></script>
-	<script type="text/javascript">
 	
-		$(document).ready(function(){
-			$("[name='cmbPartido']").change(function(){
-				//Working on it
-				$.post("TestServlet",{"id":$("[name='cmbPartido'] option:selected").val()}, function(result){
-					$("[name='cmbLocalidad']").empty();
-					$("[name='cmbLocalidad']").append($('<option />').text("Seleccionar una localidad"));
-					$.each(result.datos, function(index, value){
-						console.log(value);
-						$("[name='cmbLocalidad']").append($('<option />').val(value.idUsuario).text(value.idPublicacion));
-						
-					});
-				});				
-			});
-		});	
-	</script>
 </body>
 </html>

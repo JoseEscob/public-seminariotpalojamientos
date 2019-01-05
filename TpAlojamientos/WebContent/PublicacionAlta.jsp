@@ -25,7 +25,7 @@
 				<form method="POST" action="PublicacionServlet">					
 					<div class="form-group">
 						<label for="partidos">Partido</label> 
-						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido"  onchange="this.form.submit();">
+						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido">
 							<option selected value="null" disabled>Seleccionar un partido</option>
 							<c:forEach items="${listaPartidos}" var="item">
 								<option value="${item.idPartido}">${item.nombre}</option>
@@ -39,9 +39,8 @@
 
 					<div class="form-group">
 						<label for="localidades">Localidad</label> 
-						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad">
-							<option selected value="null" disabled>Seleccionar una localidad</option>
-							
+						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad" disabled>
+							<option selected value="null" disabled>Se debe seleccionar un partido antes</option>
 						</select>
 					</div>
 				</form>
@@ -138,19 +137,17 @@
 
 $(document).ready(function(){
 	$("[name='cmbPartido']").change(function(){
-		//Working on it
-		/*$.ajax({
-			url: $(this).attr('action'),
-			type: $(this).attr('method'),
-			data:{
-				idPartido:$("[name='cmbPartido'] option:selected").val()
-			}
-		});*/
-		$.post("TestServlet",{"nombre":"david","lenguajes":["español","ingles","aleman","koreano","hebreo"]}, function(result){
-			console.log(result);
+		//MAGIA
+		$.post("PublicacionServlet",{"idPartido":$("[name='cmbPartido'] option:selected").val(),"actionPublicacion":"getLocalidades"}, function(result){
+			$("#localidades").empty();
+			$("#localidades").append($('<option />').text("Seleccionar una localidad"));
+			$("#localidades").prop("disabled",false);
+			$.each(result.localidades, function(index, value){
+				$("#localidades").append($('<option />').val(value.idLocalidad).text(value.nombre));
+			});
+			$("#localidades").selectpicker("refresh");			
 		});
-		
-	});
+	});	
 });
 
 

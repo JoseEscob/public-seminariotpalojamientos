@@ -10,12 +10,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import modelo.Favorito;
+import modelo.Localidad;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonParser;
+
+import controladoresDAO.Localidades;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -51,7 +55,8 @@ public class TestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost - TestServlet");
 		// TODO Auto-generated method stub
-
+		
+		Localidades localidadDao = new Localidades();
 			
 		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
 
@@ -60,43 +65,28 @@ public class TestServlet extends HttpServlet {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		ArrayList<Favorito> datos = new ArrayList<Favorito>();
 		
-		switch(r) {
 		
-		case "1": 
+		String coso = request.getParameter("accionPublicacion");
+		
+		switch(coso) {
+		case "getLocalidades":
 			
-			for(int i = 0; i < 20; i++) {
-				Favorito f = new Favorito();
-				f.setIdPublicacion(1);
-				f.setIdUsuario(i);
-				f.setHabilitado(true);
-				datos.add(f);
+			ArrayList<Localidad> localidades = new ArrayList<Localidad>();
+			int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
+			localidades = localidadDao.getByIdPartido(idPartido);
+			
+			if(localidades == null) {
+				System.out.println("localidades : NULL");
 			}
-			resultMap.put("isValid", true);
-			resultMap.put("datos", datos);
+			
+			resultMap.put("localidades", localidades);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().append(new Gson().toJson(resultMap));
 			break;
-			
-			case "2": 
-				
-				for(int i = 0; i < 20; i++) {
-					Favorito f = new Favorito();
-					f.setIdPublicacion(2);
-					f.setIdUsuario(i);
-					f.setHabilitado(true);
-					datos.add(f);
-				}
-				resultMap.put("isValid", true);
-				resultMap.put("datos", datos);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().append(new Gson().toJson(resultMap));
-				break;
-			default:break;
+		default:break;
 		}
 		
-	
 		
 		
 		
