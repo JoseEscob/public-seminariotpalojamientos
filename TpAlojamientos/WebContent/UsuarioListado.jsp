@@ -6,6 +6,7 @@
 <html>
 <head>
 <title>Listado</title>
+<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->

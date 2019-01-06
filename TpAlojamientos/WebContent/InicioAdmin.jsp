@@ -8,6 +8,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Inicio - Alojamientos</title>
+<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 

@@ -56,7 +56,7 @@ public class TestServlet extends HttpServlet {
 		System.out.println("doPost - TestServlet");
 		// TODO Auto-generated method stub
 		
-		Localidades localidadDao = new Localidades();
+		/*Localidades localidadDao = new Localidades();
 			
 		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
 
@@ -84,19 +84,22 @@ public class TestServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().append(new Gson().toJson(resultMap));
 			break;
-		default:break;
+		default:break;*/
+			String toPage = "";
+			switch(request.getParameter("accion")) {
+			case "toReservas":
+				toPage = "Reservas.jsp";
+				break;
+				default:break;
+			
+			}
+			
+			request.getRequestDispatcher(toPage).forward(request, response);
+		
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 	
 		
-	}
-
 }
+
+

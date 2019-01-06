@@ -7,6 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Perfil del Usuario</title>
+<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>

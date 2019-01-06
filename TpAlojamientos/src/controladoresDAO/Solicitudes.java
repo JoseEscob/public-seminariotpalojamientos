@@ -21,6 +21,7 @@ public class Solicitudes implements Connectable<Solicitud> {
 		put("update","update solicitudes set idUsuario=?, idPublicacion=?, fechaAlta=?, fechaConfirmacion=?, "
 				+ "fechaBaja=?, cantDias=?, esDeReserva=?, idEstadoSolicitud=?, habilitado=? where idSolicitud=?");
 		put("get","select * from solicitudes where idSolicitud=?");
+		put("getByidUsuario", "select * from solicitudes where idUsuario=?");
 		put("like", "");
 			
 	}};
@@ -227,6 +228,40 @@ public class Solicitudes implements Connectable<Solicitud> {
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
+	}
+	
+	public ArrayList<Solicitud> getByidUsuario(int idUsuario){
+		cn = new Conexion();
+		m = new ArrayList<Solicitud>();
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByidUsuario"));
+			ps.setInt(1, idUsuario);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){					
+				Solicitud o = new Solicitud();
+				o.setIdSolicitud(rs.getInt(1));
+				o.setIdUsuario(rs.getInt(2));
+				o.setIdPublicacion(rs.getInt(3));
+				o.setFechaAlta(rs.getDate(4));
+				o.setFechaConfirmacion(rs.getDate(5));
+				o.setFechaBaja(rs.getDate(6));
+				o.setCantDias(rs.getInt(7));
+				o.setEsDeReserva(rs.getBoolean(8));
+				o.setIdEstadoSolicitud(rs.getInt(9));
+				o.setHabilitado(rs.getBoolean(10));
+				m.add(o);
+			 }
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 finally
+		 {
+			 cn.close();
+		 }
+		 return m;
 	}
 
 }

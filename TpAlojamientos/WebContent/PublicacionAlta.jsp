@@ -7,6 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Publicación - Alta</title>
+<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>
@@ -140,7 +141,7 @@ $(document).ready(function(){
 		//MAGIA
 		$.post("PublicacionServlet",{"idPartido":$("[name='cmbPartido'] option:selected").val(),"actionPublicacion":"getLocalidades"}, function(result){
 			$("#localidades").empty();
-			$("#localidades").append($('<option />').text("Seleccionar una localidad"));
+			$("#localidades").append($('<option selected disabled />').text("Seleccionar una localidad"));
 			$("#localidades").prop("disabled",false);
 			$.each(result.localidades, function(index, value){
 				$("#localidades").append($('<option />').val(value.idLocalidad).text(value.nombre));
