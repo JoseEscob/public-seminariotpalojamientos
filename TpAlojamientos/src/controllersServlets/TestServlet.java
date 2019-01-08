@@ -23,9 +23,7 @@ import controladoresDAO.Localidades;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-
-
+		
 /**
  * Servlet implementation class TestServlet
  */

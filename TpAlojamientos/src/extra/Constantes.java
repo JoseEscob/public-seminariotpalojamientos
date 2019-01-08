@@ -3,6 +3,8 @@ package extra;
 /**
  * Clase para definir constantes
  *
+ * Rutas constantes para fotos de perfil y de publicacion.
+ * 
  */
 public class Constantes {
 	public final static String REGISTROEXITOSO = "Se registraron los datos de forma éxitosa";

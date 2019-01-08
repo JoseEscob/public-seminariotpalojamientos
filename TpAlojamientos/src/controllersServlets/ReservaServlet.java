@@ -15,6 +15,7 @@ import extra.Constantes;
 import modelo.Usuario;
 import modelo.Solicitud;
 import controladoresDAO.Solicitudes;
+
 /**
  * Servlet implementation class ReservaServlet
  */
@@ -46,7 +47,7 @@ public class ReservaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String actionPublicacion = request.getParameter("actionReserva");
+			String actionPublicacion = request.getParameter(Constantes.accionPOST);
 			if (actionPublicacion == null) {
 				throw new ServidorException("NULL Param: actionReserva");
 			}
