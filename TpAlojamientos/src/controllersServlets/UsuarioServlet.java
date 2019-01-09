@@ -15,6 +15,7 @@ import exceptions.ValidacionException;
 import extra.Constantes;
 import extra.LOG;
 import extra.Utilitario;
+import extra.ORSesion;
 import modelo.Usuario;
 import controladoresDAO.Publicaciones;
 import modelo.Publicacion;
@@ -200,7 +201,8 @@ public class UsuarioServlet extends HttpServlet {
 			// 3- verificar resultado
 
 			// SE ALMACENA LA VARIABLE SESSION
-			request.getSession().setAttribute(Constantes.sessionUser, usr);
+			//request.getSession().setAttribute(Constantes.sessionUser, usr);
+			ORSesion.nuevaSesion(request, usr);
 			// 5- Informar estado
 			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 
@@ -232,11 +234,12 @@ public class UsuarioServlet extends HttpServlet {
 		try {
 			// 1- Recuperar valores del formulario JSP
 			// 2- Validar información obtenida JSP
-			if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
-				// request.getSession().setAttribute(Constantes.sessionUser, null);
-				request.getSession().removeAttribute(Constantes.sessionUser);
-				request.getSession().invalidate();
-
+			//if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
+			if(ORSesion.sesionActiva(request)) {
+				//--// request.getSession().setAttribute(Constantes.sessionUser, null);
+				//request.getSession().removeAttribute(Constantes.sessionUser);
+				//request.getSession().invalidate();
+				ORSesion.cerrarSesion(request);
 				throw new ValidacionException("Se cerró su sesión exitosamente. Hasta luego");
 			} else {
 				throw new ValidacionException("La sesión no fue iniciada. No se pudo finalizar");

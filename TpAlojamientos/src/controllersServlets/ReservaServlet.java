@@ -49,13 +49,17 @@ public class ReservaServlet extends HttpServlet {
 		try {
 			String actionPublicacion = request.getParameter(Constantes.accionPOST);
 			if (actionPublicacion == null) {
-				throw new ServidorException("NULL Param: actionReserva");
+				throw new ServidorException("NULL Param: "+Constantes.accionPOST+" en ReservaServlet");
 			}
 
 			switch (actionPublicacion) {
 			case "toReservasPage":
 				buscarReservasUsuario(request, response);
 				break;
+			case "toSoliciudesPage":
+				buscarReservasUsuario(request, response);
+				break;
+				default:break;
 			}
 		} catch (ServidorException e) {
 			e.printStackTrace();
@@ -81,6 +85,27 @@ public class ReservaServlet extends HttpServlet {
 			}			
 		}
 		paginaJsp = "/Reservas.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+private void buscarSolicitudesReservassUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if(request.getSession().getAttribute(Constantes.sessionUser) != null) {
+			//Hay sesion activa
+			Usuario usuario = new Usuario();
+			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
+			ArrayList<Solicitud> alojamientos = new ArrayList<Solicitud>();
+			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
+			if(!solicitudes.isEmpty()) {
+				//Hay solicitudes
+				for(Solicitud solicitud: solicitudes) {
+					if(!solicitud.isEsDeReserva()) {
+						alojamientos.add(solicitud);
+					}
+				}
+				request.setAttribute("solicitudesAlojamientos", alojamientos);
+			}			
+		}
+		paginaJsp = "/Solicitudes.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 
