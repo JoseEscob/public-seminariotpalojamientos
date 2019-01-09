@@ -36,7 +36,7 @@
 					<noscript>
 						<input type="submit">
 					</noscript>
-					<input type="hidden" name="actionPublicacion" value="cmbPartidoSubmit">
+					<input type="hidden" name="accionPOST" value="cmbPartidoSubmit">
 
 					<div class="form-group">
 						<label for="localidades">Localidad</label> 
@@ -139,7 +139,7 @@
 $(document).ready(function(){
 	$("[name='cmbPartido']").change(function(){
 		//MAGIA
-		$.post("PublicacionServlet",{"idPartido":$("[name='cmbPartido'] option:selected").val(),"actionPublicacion":"getLocalidades"}, function(result){
+		$.post("PublicacionServlet",{"idPartido":$("[name='cmbPartido'] option:selected").val(),"accionPOST":"getLocalidades"}, function(result){
 			$("#localidades").empty();
 			$("#localidades").append($('<option selected disabled />').text("Seleccionar una localidad"));
 			$("#localidades").prop("disabled",false);

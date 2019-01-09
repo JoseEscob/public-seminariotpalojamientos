@@ -92,6 +92,10 @@ BOOTSTRAP ONLINE Nuevo
 					Solicitudes</a></li>
 			<li><a href="ReservaServlet"><span class="glyphicon glyphicon-check" /></span>
 					Reservas</a></li>
+			<li><a href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span class="glyphicon glyphicon-check" /></span>
+					Ver publicacion</a></li>
+			<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span class="glyphicon glyphicon-check" /></span>
+					Todas las publicaciones</a></li>
 
 		</ul>
 		<form class="navbar-form navbar-left" action="/action_page.php">

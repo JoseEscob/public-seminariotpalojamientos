@@ -18,6 +18,8 @@ import controladoresDAO.Partidos;
 import controladoresDAO.Comentarios;
 import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
+import controladoresDAO.Usuarios;
+import controladoresDAO.Imagenes;
 import exceptions.ServidorException;
 import extra.Constantes;
 import extra.LOG;
@@ -25,6 +27,9 @@ import modelo.Comentario;
 import modelo.Favorito;
 import modelo.Localidad;
 import modelo.Partido;
+import modelo.Publicacion;
+import modelo.Imagen;
+import modelo.Usuario;
 
 /**
  * Servlet implementation class PublicacionServlet
@@ -37,7 +42,8 @@ public class PublicacionServlet extends HttpServlet {
 	private final Partidos partidosDAO = new Partidos();
 	private final Localidades localidadDAO = new Localidades();
 	private final Comentarios comentarioDAO = new Comentarios();
-
+	private final Usuarios usuarioDAO = new Usuarios();
+	private final Imagenes imagenDAO = new Imagenes();	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -57,10 +63,16 @@ public class PublicacionServlet extends HttpServlet {
 		try {
 			String accionGET = request.getParameter(Constantes.accionGET);
 			if (accionGET == null) {
-				throw new ServidorException("NULL Param: accion");
+				throw new ServidorException("NULL Param: "+Constantes.accionGET+" en PublicacionServlet");
 			}
 			LOG.info("JSP - Acción GET: " + accionGET);
 			switch (accionGET) {
+			case "VerPublicacion":
+				verPublicacion(request, response);
+				break;
+			case "VerPublicaciones":
+				verPublicaciones(request, response);
+				break;
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
 				// altaPublicacion(request, response);
@@ -83,9 +95,10 @@ public class PublicacionServlet extends HttpServlet {
 		// doGet(request, response);	
 		
 		try {
-			String actionPublicacion = request.getParameter("actionPublicacion");
+			//Cambio de actionPublicacion a Constantes.accionPOST
+			String actionPublicacion = request.getParameter(Constantes.accionPOST);
 			if (actionPublicacion == null) {
-				throw new ServidorException("NULL Param: actionPublicacion");
+				throw new ServidorException("NULL Param: "+Constantes.accionPOST+" en PublicacionServlet");
 			}
 
 			switch (actionPublicacion) {
@@ -204,6 +217,11 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 	
+	
+	/**********************************************************************/
+	/*******************************AJAX***********************************/
+	/**********************************************************************/
+
 	private void cargarLocalidadesAjax(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
@@ -225,9 +243,52 @@ public class PublicacionServlet extends HttpServlet {
 		
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().append(new Gson().toJson(resultMap));
+			response.getWriter().append(new Gson().toJson(resultMap)); //<----- AJAX RESPONDE SIN REDIRIGIR
 		}
 		
+	}
+	
+	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		if(request.getParameter("idPublicacion") != null) {
+			//Primero buscamos la publicacion
+			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			Publicacion mostrar = publicacionDAO.getObjectByID(idPublicacion);
+			if(mostrar != null) {
+				request.setAttribute("publicacion", mostrar);
+			
+				//Buscamos los datos del usuario de la publicacion
+				Usuario u = new Usuario();
+				u.setIdUsuario(mostrar.getIdUsuario());
+				Usuario usuario = usuarioDAO.get(u);
+				if(usuario != null) {
+					request.setAttribute("usuarioPublicacion", usuario);
+				}
+			
+				//Ahora buscamos las rutas de las imagenes de la publicacion
+				//ArrayList<Imgen> imagenes = imagenDAO.get
+			
+				//Despues buscamos los comentarios
+			
+			
+			} //Validaciones del else?	
+			
+		} //Validaciones del else?
+		
+		paginaJsp = "/Publicacion.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+		
+	}
+	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+
+		ArrayList<Publicacion> publicaciones = publicacionDAO.getAll();
+		if(publicaciones != null) {
+			request.setAttribute("publicaciones", publicaciones);
+		} //Validaciones del else?
+		//Buscar las imagenes
+		//Buscar los usuarios correspondientes
+		
+		paginaJsp = "/Publicaciones.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);		
 	}
 
 }
