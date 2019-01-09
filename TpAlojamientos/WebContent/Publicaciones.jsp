@@ -1,6 +1,6 @@
-<!--<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>-->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
 <body>
 <link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
 
-<!--<%@ include file="Banner.jsp"%>-->
+	<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h2>Publicaciones</h2>
 		<hr/>
@@ -20,7 +20,7 @@
 			Filtros
 		</div>
 		<div class="col-md-9">
-			
+			<!--Foreach, para la paginacion hay que traer primero todos los datos, despues dividirlo por la cantidad de registros que vamos a mostrar y te daria la cantidad de paginas-->
 			<div class="row">
 				<div class="col-md-6">
 					{carrousel}
@@ -67,7 +67,7 @@
 		</div>
 		
 	</div>
-<!--<%@ include file="Footer.jsp"%>-->
+<%@ include file="Footer.jsp"%>
 
 <script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
 <script src="bootstrap3/js/bootstrap.min.js"></script>

@@ -1,6 +1,6 @@
-<!--<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>-->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
 <body>
 <link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
 
-<!--<%@ include file="Banner.jsp"%>-->
+<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h2>{nombre o titulo publicacion}</h2>
 		<hr/>
@@ -70,9 +70,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<h4>{Footer {medios de contacto, mapa del sitio?}: ideas extraidas de argenprop}</h4>
-	</div>
+<%@ include file="Footer.jsp"%>
+
 <script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
 <script src="bootstrap3/js/bootstrap.min.js"></script>
 <script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
