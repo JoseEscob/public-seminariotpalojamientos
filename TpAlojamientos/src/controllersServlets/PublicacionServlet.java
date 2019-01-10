@@ -261,7 +261,7 @@ public class PublicacionServlet extends HttpServlet {
 		ArrayList<Imagen> temp = new ArrayList<Imagen>();
 		ArrayList<ComentarioView> comentariosPublicacion = new ArrayList<ComentarioView>();
 		cantidadComentarios = 0;
-		
+		System.out.println("dentro de funcion verPublicacion en PublicacionServlet");
 		if(request.getParameter("idPublicacion") != null) {
 			//Primero buscamos la publicacion
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
@@ -304,6 +304,7 @@ public class PublicacionServlet extends HttpServlet {
 			
 		} //Validaciones del else?
 		
+		System.out.println(request.getParameter("idPublicacion"));
 		paginaJsp = "/Publicacion.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 		
