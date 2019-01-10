@@ -11,7 +11,7 @@ public class PublicacionView {
 		private Publicacion publicacion;
 		private Usuario usuario;
 		private ArrayList<Imagen> imagenes;
-		private ArrayList<ComentarioView> comentarios;
+		private int comentarios;
 		public PublicacionView() {
 			
 		}
@@ -33,12 +33,13 @@ public class PublicacionView {
 		public void setImagenes(ArrayList<Imagen> imagenes) {
 			this.imagenes = imagenes;
 		}
-		public ArrayList<ComentarioView> getComentarios() {
+		public int getComentarios() {
 			return comentarios;
 		}
-		public void setComentarios(ArrayList<ComentarioView> comentarios) {
+		public void setComentarios(int comentarios) {
 			this.comentarios = comentarios;
 		}
-
+	
+	
 		
 }

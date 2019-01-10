@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -45,6 +47,27 @@
 						</select>
 					</div>
 				</form>
+				<c:when test="${fn:length(vistaPublicacion.comentarios) gt 0}">
+						<c:forEach items="${vistaPublicacion.comentarios}" var="coment">
+							<div class="media">
+								<div class="media-left media-middle">
+									<img src="${coment.usuario.rutaFotoPerfil}"
+										class="media-object" style="height: 50px; width: 50px;">
+								</div>
+								<div class="media-body">
+									<h4 class="media-heading">
+										<a> <c:out value="${coment.usuario.nombre}"></c:out>
+										</a> <small><i> ${coment.comentario.fechaComentario} </i></small>
+									</h4>
+									<p>
+										<b>Puntuación ${coment.comentario.puntaje}&nbsp;/5</b>
+									</p>
+									<p>${coment.comentario.descripcion}</p>
+								</div>
+							</div>
+							<hr />
+						</c:forEach>
+					</c:when>
 			</div>
 		</div>
 	</div>

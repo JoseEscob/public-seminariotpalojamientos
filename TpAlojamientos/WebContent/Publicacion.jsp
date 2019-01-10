@@ -16,6 +16,7 @@
 <%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h2>${vistaPublicacion.publicacion.nombre}</h2>
+		<h4>Puntuación Gral. ${vistaPublicacion.publicacion.puntaje}&nbsp;/5</h4>
 		<hr/>
 		<div class="row">
 			<!--Seccion de las imagenes de la publicacion-->
@@ -72,38 +73,17 @@
 		<!--Seccion de los comentarios abajo-->
 		<!--Hay que verificar existencia de comentarios -->
 		<div class="row">
-			<h2>Comentarios de la publicacion</h2>
-			<h4>Puntuacion Gral. ${vistaPublicacion.publicacion.puntaje}&nbsp;/5</h4>
+			
 			<div class="col-md-8">
 				<c:choose>
-					<c:when test="${fn:length(vistaPublicacion.comentarios) gt 0}">
-						<c:forEach items="${vistaPublicacion.comentarios}" var="coment">
-							<div class="media">
-								<div class="media-left media-middle">
-								<script type="text/javascript">
-									<c:set var="cc" value="coment"/>
-									console.log('${cc}');
-									console.log("sjdofisdfoi");
-								</script>
-									<img src="${coment.usuario.rutaFotoPerfilUsuario}"
-										class="media-object" style="height: 50px; width: 50px;">
-								</div>
-								<div class="media-body">
-									<h4 class="media-heading">
-										<a> <c:out value="${coment.usuario.nombre}"></c:out>
-										</a> <small><i> ${coment.comentario.fechaComentario} </i></small>
-									</h4>
-									<p>
-										<b>PuntuaciÃ³n ${coment.comentario.puntaje}&nbsp;/5</b>
-									</p>
-									<p>${coment.comentario.descripcion}</p>
-								</div>
-							</div>
-							<hr />
-						</c:forEach>
+					<c:when test="${vistaPublicacion.comentarios gt 0}">
+						<h4>Comentarios de la publicación: ${vistaPublicacion.comentarios}</h4>
+						<form action="PublicacionServlet?accionPOST=VerComentarios&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}" method="post">
+							<button class="btn btn-info">Ver los comentarios de esta publicación</button>
+						</form>
 					</c:when>
 					<c:otherwise>
-						No hay comentarios para esta publicacion
+						<h4>No hay comentarios para esta publicación.</h4>
 					</c:otherwise>
 				</c:choose>
 			</div>
