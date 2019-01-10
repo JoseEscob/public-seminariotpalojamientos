@@ -75,3 +75,15 @@ https://www.codejava.net/java-se/graphics/how-to-resize-images-in-java
 https://stackoverflow.com/questions/15558202/how-to-resize-image-in-java
 https://www.dyclassroom.com/image-processing-project/how-to-read-and-write-image-file-in-java
 https://medium.com/@adigunhammedolalekan/how-to-resize-images-for-better-upload-download-performance-android-development-fb7297f9ec24
+
+
+******************JSTL*******************************
+https://www.tutorialspoint.com/jsp/jsp_standard_tag_library.htm
+
+
+************************FOOTER************************
+https://mdbootstrap.com/docs/jquery/navigation/footer/
+
+
+
+*************************AJAX*************************

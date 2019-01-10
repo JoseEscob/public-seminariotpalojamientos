@@ -4,7 +4,6 @@ import modelo.Usuario;
 
 public class ComentarioEmb {
 	private Usuario usuario;
-	private PublicacionEmb publicacion;
 	private String descripcion;
 	private int puntaje;
 	private boolean habilitado;
@@ -33,13 +32,4 @@ public class ComentarioEmb {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	public PublicacionEmb getPublicacion() {
-		return publicacion;
-	}
-	public void setPublicacion(PublicacionEmb publicacion) {
-		this.publicacion = publicacion;
-	}
-	
-	
-
 }

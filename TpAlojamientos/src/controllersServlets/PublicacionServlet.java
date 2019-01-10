@@ -30,6 +30,8 @@ import modelo.Partido;
 import modelo.Publicacion;
 import modelo.Imagen;
 import modelo.Usuario;
+import views.ComentarioView;
+import views.PublicacionView;
 
 /**
  * Servlet implementation class PublicacionServlet
@@ -249,6 +251,11 @@ public class PublicacionServlet extends HttpServlet {
 	}
 	
 	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		PublicacionView vistaPublicacion = new PublicacionView();
+		ArrayList<Imagen> temp = new ArrayList<Imagen>();
+		ArrayList<ComentarioView> comentariosPublicacion = new ArrayList<ComentarioView>();
+		
 		if(request.getParameter("idPublicacion") != null) {
 			//Primero buscamos la publicacion
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
@@ -256,19 +263,39 @@ public class PublicacionServlet extends HttpServlet {
 			if(mostrar != null) {
 				request.setAttribute("publicacion", mostrar);
 			
+				vistaPublicacion.setPublicacion(mostrar);
 				//Buscamos los datos del usuario de la publicacion
 				Usuario u = new Usuario();
 				u.setIdUsuario(mostrar.getIdUsuario());
 				Usuario usuario = usuarioDAO.get(u);
 				if(usuario != null) {
 					request.setAttribute("usuarioPublicacion", usuario);
+					vistaPublicacion.setUsuario(usuario);
 				}
 			
 				//Ahora buscamos las rutas de las imagenes de la publicacion
-				//ArrayList<Imgen> imagenes = imagenDAO.get
-			
+				ArrayList<Imagen> imagenes = imagenDAO.getAll();
+				if(imagenes != null) {
+					imagenes.forEach(item -> {
+						if (item.getIdPublicacion() == idPublicacion)
+							temp.add(item);
+					});
+					vistaPublicacion.setImagenes(temp);
+				}
 				//Despues buscamos los comentarios
-			
+				ArrayList<Comentario> comentarios = comentarioDAO.getAll();
+				if(comentarios != null) {
+					comentarios.forEach(item -> {
+						if(item.getIdUsuario() == idPublicacion) {
+							Usuario e = new Usuario();
+							e.setIdUsuario(item.getIdUsuario());							
+							comentariosPublicacion.add(new ComentarioView(item,	usuarioDAO.get(e)));
+						}
+					});
+					vistaPublicacion.setComentarios(comentariosPublicacion);
+				}
+				
+				request.setAttribute("vistaPublicacion", vistaPublicacion);
 			
 			} //Validaciones del else?	
 			
