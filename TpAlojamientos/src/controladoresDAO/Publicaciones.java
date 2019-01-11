@@ -35,7 +35,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?,"
 							+ "fechaAlta=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
-			put("like", "");
+			put("limit", "select * from publicaciones limit ?, ?");
 
 		}
 	};
@@ -151,7 +151,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// por más q haya un return pasa por finally
+			// por mï¿½s q haya un return pasa por finally
 			cn.close();
 		}
 		return correcto;
@@ -208,7 +208,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		return this.update(u);
 	}
 
-	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	/// ********************* DAO - Mï¿½TODOS READ/ WRITE ********************** ///
 
 	private Publicacion readPs_Publicacion(ResultSet rs) throws SQLException {
 		Publicacion o = new Publicacion();
@@ -276,6 +276,39 @@ public class Publicaciones implements Connectable<Publicacion> {
 		Publicacion obj = new Publicacion();
 		obj = this.getAll().stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst().orElse(null);
 		return obj;
+	}
+	
+	// Esto es para que funcione la paginacion, se recupera con una consulta una cantidad de datos predefinida por los parametros//
+	
+	public ArrayList<Publicacion> getLimit(int  paginaActual, int cantidadRegistros){
+		
+		cn = new Conexion();
+		m = null;
+		
+		int inicio = paginaActual * cantidadRegistros - cantidadRegistros;
+
+		try {
+			cn.Open();
+			m = new ArrayList<Publicacion>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
+			ps.setInt(1, inicio);
+			ps.setInt(2, cantidadRegistros);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Publicacion o = new Publicacion();
+				o = readPs_Publicacion(rs);
+				LOG.info(rs.getStatement().toString());
+				m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+	   return m;	     
 	}
 
 }

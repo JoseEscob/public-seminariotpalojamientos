@@ -86,4 +86,5 @@ https://mdbootstrap.com/docs/jquery/navigation/footer/
 
 
 
-*************************AJAX*************************
+************************PAGINACION*************************
+http://zetcode.com/articles/javaservletpagination/

@@ -310,56 +310,63 @@ public class PublicacionServlet extends HttpServlet {
 		
 	}
 	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-
-		ArrayList<Publicacion> publicaciones = publicacionDAO.getAll();
-		ArrayList<PublicacionView> vistas = new ArrayList<PublicacionView>();
-
-		if(publicaciones != null) {
-			for(Publicacion p: publicaciones) {
-				ArrayList<Imagen> temp = new ArrayList<Imagen>();
-				PublicacionView vistaPublicacion = new PublicacionView(); 
-				cantidadComentarios = 0;
-				
-				//Primero buscamos la publicacion
-				int idPublicacion = p.getIdPublicacion();
-				Publicacion mostrar = publicacionDAO.getObjectByID(idPublicacion);
-				if(mostrar != null) {
-					request.setAttribute("publicacion", mostrar);
-				
-					vistaPublicacion.setPublicacion(mostrar);
-					//Buscamos los datos del usuario de la publicacion
-					Usuario u = new Usuario();
-					u.setIdUsuario(mostrar.getIdUsuario());
-					Usuario usuario = usuarioDAO.get(u);
-					if(usuario != null) {
-						request.setAttribute("usuarioPublicacion", usuario);
-						vistaPublicacion.setUsuario(usuario);
-					}//Validaciones del else?	
-				
-					//Ahora buscamos las rutas de las imagenes de la publicacion
-					ArrayList<Imagen> imagenes = imagenDAO.getAll();
-					if(imagenes != null) {
-						imagenes.forEach(item -> {
-							if (item.getIdPublicacion() == idPublicacion)
-								temp.add(item);
-						});
-						vistaPublicacion.setImagenes(temp);
-					}//Validaciones del else?	
-					//Despues buscamos la cantidad de comentarios
-					ArrayList<Comentario> comentarios = comentarioDAO.getAll();
-					if(comentarios != null) {
-						comentarios.forEach(item -> {
-							if(item.getIdPublicacion() == idPublicacion) 
-								cantidadComentarios++;
-						});
-						vistaPublicacion.setComentarios(cantidadComentarios);
-					}//Validaciones del else?	
-					vistas.add(vistaPublicacion);					
-				} //Validaciones del else?		
-			}
-		} //Validaciones del else?
 		
+		if(request.getParameter("Pagina") != null) {
+			int paginaActual = Integer.parseInt(request.getParameter("Pagina"));
+			int total = publicacionDAO.getCount();
+			int paginas = ((int)Math.ceil(total/10)+1);
+			
+		//en contruccion
+		
+			ArrayList<Publicacion> publicaciones = publicacionDAO.getLimit(paginaActual, 10);
+			ArrayList<PublicacionView> vistas = new ArrayList<PublicacionView>();
+	
+			if(publicaciones != null) {
+				for(Publicacion p: publicaciones) {
+					ArrayList<Imagen> temp = new ArrayList<Imagen>();
+					PublicacionView vistaPublicacion = new PublicacionView(); 
+					cantidadComentarios = 0;
+					
+					//Primero buscamos la publicacion
+					int idPublicacion = p.getIdPublicacion();
+					Publicacion mostrar = publicacionDAO.getObjectByID(idPublicacion);
+					if(mostrar != null) {
+						request.setAttribute("publicacion", mostrar);
+					
+						vistaPublicacion.setPublicacion(mostrar);
+						//Buscamos los datos del usuario de la publicacion
+						Usuario u = new Usuario();
+						u.setIdUsuario(mostrar.getIdUsuario());
+						Usuario usuario = usuarioDAO.get(u);
+						if(usuario != null) {
+							request.setAttribute("usuarioPublicacion", usuario);
+							vistaPublicacion.setUsuario(usuario);
+						}//Validaciones del else?	
+					
+						//Ahora buscamos las rutas de las imagenes de la publicacion
+						ArrayList<Imagen> imagenes = imagenDAO.getAll();
+						if(imagenes != null) {
+							imagenes.forEach(item -> {
+								if (item.getIdPublicacion() == idPublicacion)
+									temp.add(item);
+							});
+							vistaPublicacion.setImagenes(temp);
+						}//Validaciones del else?	
+						//Despues buscamos la cantidad de comentarios
+						ArrayList<Comentario> comentarios = comentarioDAO.getAll();
+						if(comentarios != null) {
+							comentarios.forEach(item -> {
+								if(item.getIdPublicacion() == idPublicacion) 
+									cantidadComentarios++;
+							});
+							vistaPublicacion.setComentarios(cantidadComentarios);
+						}//Validaciones del else?	
+						vistas.add(vistaPublicacion);					
+					} //Validaciones del else?		
+				}
+			} //Validaciones del else?		
 		request.setAttribute("publicaciones", vistas);
+		}
 		
 		paginaJsp = "/Publicaciones.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);		

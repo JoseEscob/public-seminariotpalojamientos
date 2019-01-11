@@ -59,10 +59,7 @@
 								{datos de la publicacion}
 								{puntuacion}
 								<div class="row container">
-								
-									<form action="PublicacionServlet?accionPOST=VerPublicacion&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}" method="post">									
-										<button class="btn btn-info">Ver detalles</button>
-									</form>
+										<a class="btn btn-info" href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}">Ver publicacion</a>
 								</div>
 							</div>
 						</div>
