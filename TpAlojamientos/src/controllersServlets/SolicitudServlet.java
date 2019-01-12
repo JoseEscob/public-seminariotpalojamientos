@@ -9,12 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controladoresDAO.Publicaciones;
 import controladoresDAO.Solicitudes;
+import controladoresDAO.TiposEstadosSolicitudes;
 import exceptions.ServidorException;
+import exceptions.CargaViewException;
 import extra.Constantes;
+import extra.ORSesion;
 import modelo.Solicitud;
 import modelo.Usuario;
-
+import modelo.TipoEstadoSolicitud;
+import views.PaginacionView;
+import views.PublicacionView;
+import views.SolicitudView;
 /**
  * Servlet implementation class SolicitudServlet
  */
@@ -23,6 +30,8 @@ public class SolicitudServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String paginaJsp = null;
 	private Solicitudes solicitudDao = new Solicitudes();
+	private Publicaciones publicacionDAO = new Publicaciones();
+	private TiposEstadosSolicitudes tesDAO = new TiposEstadosSolicitudes();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -49,10 +58,13 @@ public class SolicitudServlet extends HttpServlet {
 				break;
 			case "SolicitudesAlojamiento":
 				//Usamos el mismo metodo que en reservas...
-				buscarReservasUsuario(request, response);
+				buscarAlijamientosUsuario(request, response);
 				break;
 			}
 		} catch (ServidorException e) {
+			e.printStackTrace();
+		} catch (CargaViewException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -69,56 +81,78 @@ public class SolicitudServlet extends HttpServlet {
 			}
 
 			switch (actionPublicacion) {
-			case "toSoliciudesPage":
+			case "SolicitudesReserva":
 				//Usamos el mismo metodo que en reservas...
 				buscarReservasUsuario(request, response);
+				break;
+			case "SolicitudesAlojamiento":
+				//Usamos el mismo metodo que en reservas...
+				buscarAlijamientosUsuario(request, response);
 				break;
 			}
 		} catch (ServidorException e) {
 			e.printStackTrace();
+		} catch (CargaViewException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	private void buscarReservasUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void buscarReservasUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException {
 		
-		if(request.getSession().getAttribute(Constantes.sessionUser) != null) {
-			//Hay sesion activa
-			Usuario usuario = new Usuario();
+		if(ORSesion.sesionActiva(request)) {
+			Usuario usuario = ORSesion.usuarioSesion(request);
+			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
 			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
-			ArrayList<Solicitud> alojamientos = new ArrayList<Solicitud>();
 			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
-			if(!solicitudes.isEmpty()) {
-				//Hay solicitudes
-				for(Solicitud solicitud: solicitudes) {
-					if(solicitud.isEsDeReserva()) {
-						alojamientos.add(solicitud);
-					}
+			for(Solicitud solicitud : solicitudes) {
+				if(solicitud.isEsDeReserva()) {
+					SolicitudView solicitudVista = new SolicitudView();
+					solicitudVista.setSolicitud(solicitud);
+					solicitudVista.setUsuario(usuario);
+					solicitudVista.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					TipoEstadoSolicitud tes = new TipoEstadoSolicitud();
+					tes.setIdEstadoSolicitud(solicitud.getIdEstadoSolicitud());
+					solicitudVista.setEstadoSolicitud(tesDAO.get(tes));
+					solicitudesVistas.add(solicitudVista);
 				}
-				request.setAttribute("solicitudesAlojamientos", alojamientos);
-			}			
-		}
+			}
+			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudesVistas.size());
+			request.setAttribute("paginacion", pagination);
+			request.setAttribute("solicitudesReservas", solicitudesVistas);
+
+		}//else = no hay sesion iniciada
+		
+
 		paginaJsp = "/Reservas.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 	
-	private void buscarAlijamientosUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if(request.getSession().getAttribute(Constantes.sessionUser) != null) {
-			//Hay sesion activa
-			Usuario usuario = new Usuario();
+	private void buscarAlijamientosUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException {
+		if(ORSesion.sesionActiva(request)) {
+			Usuario usuario = ORSesion.usuarioSesion(request);
+			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
 			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
-			ArrayList<Solicitud> alojamientos = new ArrayList<Solicitud>();
 			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
-			if(!solicitudes.isEmpty()) {
-				//Hay solicitudes
-				for(Solicitud solicitud: solicitudes) {
-					if(!solicitud.isEsDeReserva()) {
-						alojamientos.add(solicitud);
-					}
+			for(Solicitud solicitud : solicitudes) {
+				if(!solicitud.isEsDeReserva()) {
+					SolicitudView solicitudVista = new SolicitudView();
+					solicitudVista.setSolicitud(solicitud);
+					solicitudVista.setUsuario(usuario);
+					solicitudVista.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					TipoEstadoSolicitud tes = new TipoEstadoSolicitud();
+					tes.setIdEstadoSolicitud(solicitud.getIdEstadoSolicitud());
+					solicitudVista.setEstadoSolicitud(tesDAO.get(tes));
+					solicitudesVistas.add(solicitudVista);
 				}
-				request.setAttribute("solicitudesAlojamientos", alojamientos);
-			}			
-		}
+			}
+			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudesVistas.size());
+			request.setAttribute("paginacion", pagination);
+			request.setAttribute("solicitudesAlojamientos", solicitudesVistas);
+
+		}//else = no hay sesion iniciada
+		
+
 		paginaJsp = "/Alojamientos.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}

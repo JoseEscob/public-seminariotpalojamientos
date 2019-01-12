@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import modelo.Usuario;
 import modelo.Imagen;
 import modelo.Publicacion;
+import exceptions.CargaViewException;
 /**
  * Prototipo 1
  * */
@@ -38,6 +39,20 @@ public class PublicacionView {
 		}
 		public void setComentarios(int comentarios) {
 			this.comentarios = comentarios;
+		}
+		
+		public void cargarImagenes(ArrayList<Imagen> imagenes)throws CargaViewException {
+			
+			if(imagenes == null)
+				throw new CargaViewException("El parametro de la funcion cargarImagenes de PublicacionView es nulo");
+			
+			ArrayList<Imagen> temp = new ArrayList<Imagen>();
+			imagenes.forEach(item -> {
+				if (item.getIdPublicacion() == this.publicacion.getIdPublicacion())
+					temp.add(item);
+			});
+			this.setImagenes(temp);
+			
 		}
 	
 	

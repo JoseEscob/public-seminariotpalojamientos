@@ -42,9 +42,15 @@ public class PaginacionView {
 
 	public void setTotalElementos(int totalElementos) {
 		this.totalElementos = totalElementos;
+		this.calcularCantPaginas();
 	}
 	public void calcularCantPaginas() {
 		this.paginas = ((int)Math.ceil(this.totalElementos/this.cantidadElementos)+1);
 	}
-	
+	public static PaginacionView crearPaginacion(String parameter, int countElements){
+		PaginacionView pagination = new PaginacionView();
+		pagination.setPaginaActual(parameter != null? Integer.parseInt(parameter) : 1);
+		pagination.setTotalElementos(countElements);
+		return pagination;
+	}
 }

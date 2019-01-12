@@ -21,6 +21,7 @@ import controladoresDAO.Publicaciones;
 import controladoresDAO.Usuarios;
 import controladoresDAO.Imagenes;
 import exceptions.ServidorException;
+import exceptions.CargaViewException;
 import extra.Constantes;
 import extra.LOG;
 import modelo.Comentario;
@@ -90,6 +91,8 @@ public class PublicacionServlet extends HttpServlet {
 				break;
 			}
 		} catch (ServidorException e) {
+			e.printStackTrace();
+		} catch (CargaViewException e) {
 			e.printStackTrace();
 		}
 	}
@@ -259,7 +262,7 @@ public class PublicacionServlet extends HttpServlet {
 		
 	}
 	
-	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException{
 		
 		PublicacionView vistaPublicacion = new PublicacionView();
 		ArrayList<Imagen> temp = new ArrayList<Imagen>();
@@ -283,14 +286,8 @@ public class PublicacionServlet extends HttpServlet {
 				}
 			
 				//Ahora buscamos las rutas de las imagenes de la publicacion
-				ArrayList<Imagen> imagenes = imagenDAO.getAll();
-				if(imagenes != null) {
-					imagenes.forEach(item -> {
-						if (item.getIdPublicacion() == idPublicacion)
-							temp.add(item);
-					});
-					vistaPublicacion.setImagenes(temp);
-				}
+				vistaPublicacion.cargarImagenes(imagenDAO.getAll());
+				
 				//Despues buscamos la cantidad de comentarios
 				ArrayList<Comentario> comentarios = comentarioDAO.getAll();
 				if(comentarios != null) {
@@ -311,9 +308,9 @@ public class PublicacionServlet extends HttpServlet {
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 		
 	}
-	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, CargaViewException{
 		
-			PaginacionView pagination = crearPaginacion(request, response);
+			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), publicacionDAO.getCount());
 			
 			ArrayList<Publicacion> publicaciones = publicacionDAO.getLimit(pagination.getPaginaActual(), pagination.getCantidadElementos());
 			ArrayList<PublicacionView> vistas = new ArrayList<PublicacionView>();
@@ -340,14 +337,9 @@ public class PublicacionServlet extends HttpServlet {
 						}//Validaciones del else?	
 					
 						//Ahora buscamos las rutas de las imagenes de la publicacion
-						ArrayList<Imagen> imagenes = imagenDAO.getAll();
-						if(imagenes != null) {
-							imagenes.forEach(item -> {
-								if (item.getIdPublicacion() == idPublicacion)
-									temp.add(item);
-							});
-							vistaPublicacion.setImagenes(temp);
-						}//Validaciones del else?	
+						vistaPublicacion.cargarImagenes(imagenDAO.getAll());
+					
+					
 						//Despues buscamos la cantidad de comentarios
 						ArrayList<Comentario> comentarios = comentarioDAO.getAll();
 						cantidadComentarios = 0;
@@ -373,13 +365,5 @@ public class PublicacionServlet extends HttpServlet {
 	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		//Modulo de busqueda
 	}
-	
-	private PaginacionView crearPaginacion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		PaginacionView pagination = new PaginacionView();
-		pagination.setPaginaActual(request.getParameter("Pagina") != null? Integer.parseInt(request.getParameter("Pagina")) : 1);
-		pagination.setTotalElementos(publicacionDAO.getCount());
-		pagination.setCantidadElementos(10);
-		pagination.calcularCantPaginas();
-		return pagination;
-	}
+
 }
