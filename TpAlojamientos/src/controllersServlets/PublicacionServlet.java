@@ -32,6 +32,7 @@ import modelo.Imagen;
 import modelo.Usuario;
 import views.ComentarioView;
 import views.PublicacionView;
+import views.PaginacionView;
 
 /**
  * Servlet implementation class PublicacionServlet
@@ -83,6 +84,9 @@ public class PublicacionServlet extends HttpServlet {
 				break;
 			case "VerComentarios":
 				comentariosPublicacion(request, response);
+				break;
+			case "Buscar":
+				buscarPublicaciones(request, response);
 				break;
 			}
 		} catch (ServidorException e) {
@@ -311,21 +315,15 @@ public class PublicacionServlet extends HttpServlet {
 	}
 	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
-		if(request.getParameter("Pagina") != null) {
-			int paginaActual = Integer.parseInt(request.getParameter("Pagina"));
-			int total = publicacionDAO.getCount();
-			int paginas = ((int)Math.ceil(total/10)+1);
+			PaginacionView pagination = crearPaginacion(request, response);
 			
-		//en contruccion
-		
-			ArrayList<Publicacion> publicaciones = publicacionDAO.getLimit(paginaActual, 10);
+			ArrayList<Publicacion> publicaciones = publicacionDAO.getLimit(pagination.getPaginaActual(), pagination.getCantidadElementos());
 			ArrayList<PublicacionView> vistas = new ArrayList<PublicacionView>();
 	
 			if(publicaciones != null) {
 				for(Publicacion p: publicaciones) {
 					ArrayList<Imagen> temp = new ArrayList<Imagen>();
 					PublicacionView vistaPublicacion = new PublicacionView(); 
-					cantidadComentarios = 0;
 					
 					//Primero buscamos la publicacion
 					int idPublicacion = p.getIdPublicacion();
@@ -354,6 +352,7 @@ public class PublicacionServlet extends HttpServlet {
 						}//Validaciones del else?	
 						//Despues buscamos la cantidad de comentarios
 						ArrayList<Comentario> comentarios = comentarioDAO.getAll();
+						cantidadComentarios = 0;
 						if(comentarios != null) {
 							comentarios.forEach(item -> {
 								if(item.getIdPublicacion() == idPublicacion) 
@@ -366,10 +365,23 @@ public class PublicacionServlet extends HttpServlet {
 				}
 			} //Validaciones del else?		
 		request.setAttribute("publicaciones", vistas);
-		}
+		request.setAttribute("paginacion", pagination);
+		
 		
 		paginaJsp = "/Publicaciones.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);		
 	}
-
+	
+	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		//Modulo de busqueda
+	}
+	
+	private PaginacionView crearPaginacion(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		PaginacionView pagination = new PaginacionView();
+		pagination.setPaginaActual(request.getParameter("Pagina") != null? Integer.parseInt(request.getParameter("Pagina")) : 1);
+		pagination.setTotalElementos(publicacionDAO.getCount());
+		pagination.setCantidadElementos(10);
+		pagination.calcularCantPaginas();
+		return pagination;
+	}
 }

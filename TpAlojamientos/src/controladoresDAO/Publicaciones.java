@@ -290,7 +290,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		try {
 			cn.Open();
 			m = new ArrayList<Publicacion>();
-			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("limit"));
 			ps.setInt(1, inicio);
 			ps.setInt(2, cantidadRegistros);
 

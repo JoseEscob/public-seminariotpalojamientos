@@ -16,6 +16,9 @@
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h2>Publicaciones</h2>
+		<c:if test="${fn:length(publicaciones) gt 1 }">
+			<h5>Se encontraron <c:out value="${fn:length(publicaciones)}"/> publicaciones.</h5>
+		</c:if>
 		<hr/>
 		<div class="col-md-3">
 			Filtros
@@ -72,19 +75,27 @@
 					</div>
 				</c:otherwise>				
 			</c:choose>
+			
+			<c:choose>
+				<c:when test="${not empty paginacion}">
+					<ul class="pagination">
+						<c:forEach var="item" begin="1" end="${paginacion.paginas}">
+							<c:choose>
+								<c:when test="${item eq paginacion.paginaActual}">
+									<li class="active"><a href="#"><c:out value="${item}"/></a></li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="#"><c:out value="${item}"/></a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					NO.
+				</c:otherwise>
+			</c:choose>
 
-
-			<ul class="pagination">
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">6</a></li>
-				<li class="disabled"><a href="#">7</a></li>
-				<li class="disabled"><a href="#">8</a></li>
-				<li class="disabled"><a href="#">9</a></li>
-			</ul>
 		</div>
 		
 	</div>
