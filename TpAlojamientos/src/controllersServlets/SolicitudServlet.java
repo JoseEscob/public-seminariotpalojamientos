@@ -36,8 +36,25 @@ public class SolicitudServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		buscarReservasUsuario(request, response);
+		try {
+			String actionPublicacion = request.getParameter(Constantes.accionGET);
+			if (actionPublicacion == null) {
+				throw new ServidorException("NULL Param: "+Constantes.accionGET+"en SolicitudServlet");
+			}
+
+			switch (actionPublicacion) {
+			case "SolicitudesReserva":
+				//Usamos el mismo metodo que en reservas...
+				buscarReservasUsuario(request, response);
+				break;
+			case "SolicitudesAlojamiento":
+				//Usamos el mismo metodo que en reservas...
+				buscarReservasUsuario(request, response);
+				break;
+			}
+		} catch (ServidorException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -46,9 +63,9 @@ public class SolicitudServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String actionPublicacion = request.getParameter("actionSolicitud");
+			String actionPublicacion = request.getParameter(Constantes.accionPOST);
 			if (actionPublicacion == null) {
-				throw new ServidorException("NULL Param: actionSolicitud");
+				throw new ServidorException("NULL Param: "+Constantes.accionPOST+"en SolicitudServlet");
 			}
 
 			switch (actionPublicacion) {
@@ -73,6 +90,28 @@ public class SolicitudServlet extends HttpServlet {
 			if(!solicitudes.isEmpty()) {
 				//Hay solicitudes
 				for(Solicitud solicitud: solicitudes) {
+					if(solicitud.isEsDeReserva()) {
+						alojamientos.add(solicitud);
+					}
+				}
+				request.setAttribute("solicitudesAlojamientos", alojamientos);
+			}			
+		}
+		paginaJsp = "/Reservas.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+	
+	private void buscarAlijamientosUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if(request.getSession().getAttribute(Constantes.sessionUser) != null) {
+			//Hay sesion activa
+			Usuario usuario = new Usuario();
+			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
+			ArrayList<Solicitud> alojamientos = new ArrayList<Solicitud>();
+			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
+			if(!solicitudes.isEmpty()) {
+				//Hay solicitudes
+				for(Solicitud solicitud: solicitudes) {
 					if(!solicitud.isEsDeReserva()) {
 						alojamientos.add(solicitud);
 					}
@@ -80,7 +119,7 @@ public class SolicitudServlet extends HttpServlet {
 				request.setAttribute("solicitudesAlojamientos", alojamientos);
 			}			
 		}
-		paginaJsp = "/Solicitudes.jsp";
+		paginaJsp = "/Alojamientos.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 }

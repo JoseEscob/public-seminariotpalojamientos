@@ -88,10 +88,16 @@ BOOTSTRAP ONLINE Nuevo
 							Favoritas</a></li>
 					<li><a href="#"></a></li>
 				</ul></li>
-			<li><a href="SolicitudServlet"><span class="glyphicon glyphicon-retweet" /></span>
-					Solicitudes</a></li>
-			<li><a href="ReservaServlet"><span class="glyphicon glyphicon-check" /></span>
-					Reservas</a></li>
+				
+			<li class="dropdown"><a class="dropdown-toggle"
+			data-toggle="dropdown"><span
+				class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
+			<ul class="dropdown-menu">
+
+				<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
+
+				<li><a href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
+			</ul></li>
 			<li><a href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span class="glyphicon glyphicon-check" /></span>
 					Ver publicacion</a></li>
 			<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span class="glyphicon glyphicon-check" /></span>

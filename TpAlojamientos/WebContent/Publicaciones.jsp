@@ -7,12 +7,8 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Publicaciones</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
 </head>
 <body>
-<link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
-
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h2>Publicaciones</h2>
@@ -101,8 +97,5 @@
 	</div>
 <%@ include file="Footer.jsp"%>
 
-<script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
-<script src="bootstrap3/js/bootstrap.min.js"></script>
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
 </body>
 </html>
