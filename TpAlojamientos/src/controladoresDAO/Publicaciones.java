@@ -9,6 +9,7 @@ import java.util.HashMap;
 import constantesDAO.ConstantesNombreCampos;
 import constantesDAO.ConstantesPublicacion;
 import extra.Conexion;
+import extra.Constantes;
 import extra.LOG;
 import modelo.Localidad;
 import modelo.Publicacion;
@@ -29,10 +30,10 @@ public class Publicaciones implements Connectable<Publicacion> {
 			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update",
-					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, nombre=?, descripcion=?, "
+					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, descripcion=?, "
 							+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
 							+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?,"
-							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?,"
+							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?, aniosAntiguedad=?,"
 							+ "fechaAlta=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("limit", "select * from publicaciones limit ?, ?");
@@ -151,7 +152,6 @@ public class Publicaciones implements Connectable<Publicacion> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			// por m�s q haya un return pasa por finally
 			cn.close();
 		}
 		return correcto;
@@ -208,21 +208,37 @@ public class Publicaciones implements Connectable<Publicacion> {
 		return this.update(u);
 	}
 
-	/// ********************* DAO - M�TODOS READ/ WRITE ********************** ///
+	/// ********************* DAO - Métodos READ/ WRITE ********************** ///
 
 	private Publicacion readPs_Publicacion(ResultSet rs) throws SQLException {
 		Publicacion o = new Publicacion();
+
 		o.setIdPublicacion(rs.getInt(cPubli.idPublicacion));
 		o.setIdUsuario(rs.getInt(cPubli.idUsuario));
-		o.setIdTipoAlojamiento(rs.getInt(cPubli.idTipoAlojamiento));
-		o.setNombre(rs.getString(cPubli.nombre));
+
+		int idTipoAlojamiento = rs.getInt(cPubli.idTipoAlojamiento);
+		String callePublicacion = rs.getString(cPubli.calle);
+		int alturaPublicacion = rs.getInt(cPubli.altura);
+
+		o.setIdTipoAlojamiento(idTipoAlojamiento);
+		TiposAlojamientos tiposAlojamientosDAO = new TiposAlojamientos();
+		String descTipoAlojamiento = tiposAlojamientosDAO.getTipoAlojamiento(idTipoAlojamiento).getDescripcion();
+		String nombrePublicacion = "";
+		if (descTipoAlojamiento.isEmpty()) {
+			nombrePublicacion = String.format("%s en %s al %d", Constantes.nombreTipoAlojamiento, callePublicacion,
+					alturaPublicacion);
+		} else {
+			nombrePublicacion = String.format("%s en %s al %d", descTipoAlojamiento, callePublicacion,
+					alturaPublicacion);
+		}
+		o.setNombre(nombrePublicacion);
 		o.setDescripcion(rs.getString(cPubli.descripcion));
 
 		o.setIdLocalidad(rs.getInt(cPubli.idLocalidad));
 		o.setCodPostal(rs.getInt(cPubli.codPostal));
 		o.setCoordenadas(rs.getString(cPubli.coordenadas));
-		o.setCalle(rs.getString(cPubli.calle));
-		o.setAltura(rs.getInt(cPubli.altura));
+		o.setCalle(callePublicacion);
+		o.setAltura(alturaPublicacion);
 		o.setPiso(rs.getInt(cPubli.piso));
 		o.setDpto(rs.getString(cPubli.dpto));
 
@@ -235,56 +251,59 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setCantAmbientes(rs.getInt(cPubli.cantAmbientes));
 		o.setCantBanios(rs.getInt(cPubli.cantBanios));
 		o.setCantHabitaciones(rs.getInt(cPubli.cantHabitaciones));
+		o.setAniosAntiguedad(rs.getInt(cPubli.aniosAntiguedad));
 
 		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
 		o.setPuntaje(rs.getFloat(cPubli.puntaje));
-		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
+		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
 		return o;
 	}
 
 	private PreparedStatement writePs_Publicacion(Publicacion obj, PreparedStatement ps) throws SQLException {
 		ps.setInt(1, obj.getIdUsuario());
 		ps.setInt(2, obj.getIdTipoAlojamiento());
-		ps.setString(3, obj.getNombre());
-		ps.setString(4, obj.getDescripcion());
-		ps.setInt(5, obj.getIdLocalidad());
-		ps.setInt(6, obj.getCodPostal());
-		ps.setString(7, obj.getCoordenadas());
-		ps.setString(8, obj.getCalle());
-		ps.setInt(9, obj.getAltura());
-		ps.setInt(10, obj.getPiso());
-		ps.setString(11, obj.getDpto());
-		ps.setInt(12, obj.getSupCubierta());
-		ps.setInt(13, obj.getSupDescubierta());
-		ps.setInt(14, obj.getPrecioExpensas());
-		ps.setInt(15, obj.getPrecioNoche());
-
-		ps.setInt(16, obj.getCantPersonas());
-		ps.setInt(17, obj.getCantAmbientes());
-		ps.setInt(18, obj.getCantBanios());
-		ps.setInt(19, obj.getCantHabitaciones());
+		ps.setString(3, obj.getDescripcion());
+		ps.setInt(4, obj.getIdLocalidad());
+		ps.setInt(5, obj.getCodPostal());
+		ps.setString(6, obj.getCoordenadas());
+		ps.setString(7, obj.getCalle());
+		ps.setInt(8, obj.getAltura());
+		ps.setInt(9, obj.getPiso());
+		ps.setString(10, obj.getDpto());
+		ps.setInt(11, obj.getSupCubierta());
+		ps.setInt(12, obj.getSupDescubierta());
+		ps.setInt(13, obj.getPrecioExpensas());
+		ps.setInt(14, obj.getPrecioNoche());
+		ps.setInt(15, obj.getCantPersonas());
+		ps.setInt(16, obj.getCantAmbientes());
+		ps.setInt(17, obj.getCantBanios());
+		ps.setInt(18, obj.getCantHabitaciones());
+		ps.setInt(19, obj.getAniosAntiguedad());
 		ps.setDate(20, obj.getFechaAlta());
 		ps.setFloat(21, obj.getPuntaje());
 		ps.setBoolean(22, obj.isVerificado());
 		return ps;
 	}
 
-	// ************* //
+	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
 	public Publicacion getObjectByID(int idPublicacion) {
 		Publicacion obj = new Publicacion();
 		obj = this.getAll().stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst().orElse(null);
 		return obj;
 	}
-	
-	// Esto es para que funcione la paginacion, se recupera con una consulta una cantidad de datos predefinida por los parametros//
-	
-	public ArrayList<Publicacion> getLimit(int  paginaActual, int cantidadRegistros){
-		
+
+	/// ********************* Demás Funcionalidades ************************ ///
+
+	// Esto es para que funcione la paginacion, se recupera con una consulta una
+	// cantidad de datos predefinida por los parametros//
+
+	public ArrayList<Publicacion> getLimit(int paginaActual, int cantidadRegistros) {
+
 		cn = new Conexion();
 		m = null;
-		
+
 		int inicio = paginaActual * cantidadRegistros - cantidadRegistros;
 
 		try {
@@ -308,7 +327,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		} finally {
 			cn.close();
 		}
-	   return m;	     
+		return m;
 	}
 
 }

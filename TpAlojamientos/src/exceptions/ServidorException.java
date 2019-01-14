@@ -10,7 +10,7 @@ public class ServidorException extends Exception {
 	private String messageError = "";
 
 	public ServidorException() {
-		this.messageError = "ServidorException: Ocurrió un error al validar";
+		this.messageError = "ServidorException: OcurriÃ³ un error al validar";
 	}
 
 	public ServidorException(String messageError) {

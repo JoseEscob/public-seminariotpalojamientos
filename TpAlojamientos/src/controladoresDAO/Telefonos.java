@@ -171,7 +171,7 @@ public class Telefonos implements Connectable<Telefono> {
 		u.setHabilitado(false);
 		return this.update(u);
 	}
-	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
 
 	private Telefono readPs_Telefono(ResultSet rs) throws SQLException {
 		Telefono o = new Telefono();

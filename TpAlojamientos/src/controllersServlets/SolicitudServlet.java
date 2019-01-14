@@ -101,7 +101,7 @@ public class SolicitudServlet extends HttpServlet {
 	private void buscarReservasUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException {
 		
 		if(ORSesion.sesionActiva(request)) {
-			Usuario usuario = ORSesion.usuarioSesion(request);
+			Usuario usuario = ORSesion.getUsuarioBySesion(request);
 			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
 			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
@@ -130,7 +130,7 @@ public class SolicitudServlet extends HttpServlet {
 	
 	private void buscarAlijamientosUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException {
 		if(ORSesion.sesionActiva(request)) {
-			Usuario usuario = ORSesion.usuarioSesion(request);
+			Usuario usuario = ORSesion.getUsuarioBySesion(request);
 			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
 			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
 			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());

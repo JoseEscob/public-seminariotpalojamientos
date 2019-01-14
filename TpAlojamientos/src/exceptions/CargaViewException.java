@@ -10,10 +10,10 @@ public class CargaViewException extends Exception{
 	private String messageError = "";
 	
 	public CargaViewException() {
-		this.messageError = "Ecurrio un error al cargar los elementos de la vista";
+		this.messageError = "CargaViewException: Ocurrió un error al cargar los elementos de la vista";
 	}
-	public CargaViewException(String err) {
-		this.messageError = err;
+	public CargaViewException(String messageError) {
+		this.messageError = messageError;
 	}
 	
 	public String getMessage() {

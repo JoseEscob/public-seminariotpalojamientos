@@ -27,7 +27,8 @@ public class Publicacion {
 	private int cantAmbientes;
 	private int cantBanios;
 	private int cantHabitaciones;
-
+	private int aniosAntiguedad;
+	
 	private Date fechaAlta;
 	private float puntaje;
 	private boolean habilitado;
@@ -231,6 +232,14 @@ public class Publicacion {
 
 	public void setVerificado(boolean verificado) {
 		this.verificado = verificado;
+	}
+
+	public int getAniosAntiguedad() {
+		return aniosAntiguedad;
+	}
+
+	public void setAniosAntiguedad(int aniosAntiguedad) {
+		this.aniosAntiguedad = aniosAntiguedad;
 	}
 
 }

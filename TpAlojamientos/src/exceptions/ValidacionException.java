@@ -10,7 +10,7 @@ public class ValidacionException extends Exception {
 	private String messageError = "";
 
 	public ValidacionException() {
-		this.messageError = "ValidacionException: Ocurrió un error al validar";
+		this.messageError = "ValidacionException: OcurriÃ³ un error al validar";
 	}
 
 	public ValidacionException(String messageError) {

@@ -30,7 +30,7 @@ public class Usuarios implements Connectable<Usuario> {
 							+ cCampo.fechaUltConexion + "=?,verificado=?,habilitado=? where idUsuario=?");
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
-
+			put("updateFechaUltConexion", "update usuarios set fechaUltConexion=? where idUsuario=?");
 		}
 	};
 
@@ -179,7 +179,28 @@ public class Usuarios implements Connectable<Usuario> {
 		return this.update(u);
 	}
 
-	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	public boolean updateFechaUltConexion(Usuario obj) {
+		if (obj == null) {
+			return false;
+		}
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateFechaUltConexion"));
+
+			ps.setDate(1, obj.getFechaUltConexion());
+			ps.setInt(2, obj.getIdUsuario());
+			LOG.info("UPDATE FechaUltConexion - Usuarios: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
 
 	private Usuario readPs_Usuario(ResultSet rs) throws SQLException {
 		Usuario o = new Usuario();
@@ -198,6 +219,7 @@ public class Usuarios implements Connectable<Usuario> {
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
 		o.setFechaAlta(rs.getDate(cCampo.fechaAlta));
 		o.setFechaUltConexion(rs.getDate(cCampo.fechaUltConexion));
+		o.setAnteriorFechaUltConexion(o.getFechaUltConexion());
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
 		return o;
 	}
@@ -228,14 +250,13 @@ public class Usuarios implements Connectable<Usuario> {
 	 * <li>Mail</li>
 	 * </ol>
 	 * 
-	 * @param obj
-	 *            Usuario
+	 * @param objUsuario
 	 * @throws ValidacionException
 	 */
 	public void validarCamposUnicos(Usuario obj) throws ValidacionException {
-		ArrayList<Usuario> lista = this.getAll();
+		ArrayList<Usuario> listaUsuariosDB = this.getAll();
 
-		for (Usuario dbObj : lista) {
+		for (Usuario dbObj : listaUsuariosDB) {
 			if (obj.getIdUsuario() == dbObj.getIdUsuario())
 				throw new ValidacionException("ERROR DB: Los ID's son iguales. ID: " + obj.getIdUsuario());
 

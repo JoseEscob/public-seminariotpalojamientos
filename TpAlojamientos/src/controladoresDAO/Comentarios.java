@@ -201,7 +201,7 @@ public class Comentarios implements Connectable<Comentario> {
 		return this.update(u);
 	}
 
-	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
 
 	private Comentario readPs_Comentario(ResultSet rs) throws SQLException {
 		Comentario o = new Comentario();
@@ -214,7 +214,7 @@ public class Comentarios implements Connectable<Comentario> {
 		return o;
 	}
 
-	/// ********************* MÉTODOS LAMBDA ********************** ///
+	/// ********************* FUNCIONES LAMBDA ********************** ///
 	private String getNombreApellido_Usuario(int idUsuario) {
 		Usuarios usuarioDAO = new Usuarios();
 		Usuario objUsuario = new Usuario();

@@ -7,7 +7,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Perfil del Usuario</title>
-<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>
@@ -37,10 +36,19 @@
                   </div>
                 -->
 					<div class="form-group">
+						<label for="nombre" class="control-label col-xs-4">Fecha
+							Ult.Conexión: </label>
+						<div class="col-xs-8">
+							<label for="nombre" class="control-label"> <c:out
+									value="${user.anteriorFechaUltConexion}"></c:out>
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="nombre" class="control-label col-xs-3">Nombre:
 						</label>
 						<div class="col-xs-9">
-							<input type="text" name="nombre"  class="form-control"
+							<input type="text" name="nombre" class="form-control"
 								value="${user.nombre}" onkeypress="return soloLetras(event)"
 								required="true">
 						</div>
@@ -118,6 +126,5 @@
 
 			<div class="row"></div>
 		</div>
-			
 </body>
 </html>

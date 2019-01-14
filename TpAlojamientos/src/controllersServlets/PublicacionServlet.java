@@ -25,13 +25,10 @@ import exceptions.CargaViewException;
 import extra.Constantes;
 import extra.LOG;
 import modelo.Comentario;
-import modelo.Favorito;
 import modelo.Localidad;
 import modelo.Partido;
 import modelo.Publicacion;
-import modelo.Imagen;
 import modelo.Usuario;
-import views.ComentarioView;
 import views.PublicacionView;
 import views.PaginacionView;
 
@@ -71,7 +68,7 @@ public class PublicacionServlet extends HttpServlet {
 			if (accionGET == null) {
 				throw new ServidorException("NULL Param: "+Constantes.accionGET+" en PublicacionServlet");
 			}
-			LOG.info("JSP - Acci�n GET: " + accionGET);
+			LOG.info(String.format("%s GET: %s", Constantes.logJSPAccion, accionGET));
 			switch (accionGET) {
 			case "VerPublicacion":
 				verPublicacion(request, response);
@@ -102,17 +99,14 @@ public class PublicacionServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// doGet(request, response);	
-		
+			throws ServletException, IOException {		
 		try {
-			//Cambio de actionPublicacion a Constantes.accionPOST
-			String actionPublicacion = request.getParameter(Constantes.accionPOST);
-			if (actionPublicacion == null) {
+			String accionPOST = request.getParameter(Constantes.accionPOST);
+			if (accionPOST == null) {
 				throw new ServidorException("NULL Param: "+Constantes.accionPOST+" en PublicacionServlet");
 			}
-
-			switch (actionPublicacion) {
+			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
+			switch (accionPOST) {
 			case "getLocalidades": 
 				//nombre provisorio
 				cargarLocalidadesAjax(request, response);
@@ -143,9 +137,9 @@ public class PublicacionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// 0- cargar los componentes con los valores de la DB
 		// 1- recuperar valores del formulario JSP
-		// 2- validar informaci�n obtenida JSP
+		// 2- validar informacion obtenida JSP
 		// 2.2 Validar con la DB
-		// 3- guardar informaci�n validada
+		// 3- guardar informacion validada
 		// 4- verificar correcto almacenamiento en DB
 		// 5- Informar estado en interfaz (jsp)
 		String message = null;
@@ -156,11 +150,11 @@ public class PublicacionServlet extends HttpServlet {
 
 			if (request.getParameter("cmbPartido") != null) {
 				int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
-				listaLocalidades = localidadDAO.getByIdPartido(idPartido);
+				listaLocalidades = localidadDAO.getAllByIdPartido(idPartido);
 			}
 			request.setAttribute("listaPartidos", listaPartidos);
 			request.setAttribute("listaLocalidades", listaLocalidades);
-			message = "Se carg� el cmb";
+			message = "El cmbPartido fue cargado";
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
@@ -176,9 +170,9 @@ public class PublicacionServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// 0- cargar los componentes con los valores de la DB
 		// 1- recuperar valores del formulario JSP
-		// 2- validar informaci�n obtenida JSP
+		// 2- validar informacion obtenida JSP
 		// 2.2 Validar con la DB
-		// 3- guardar informaci�n validada
+		// 3- guardar informacion validada
 		// 4- verificar correcto almacenamiento en DB
 		// 5- Informar estado en interfaz (jsp)
 		String message = null;
@@ -214,9 +208,9 @@ public class PublicacionServlet extends HttpServlet {
 			});
 
 			if (listaComentariosFiltrada != null)
-				message = listaComentariosFiltrada.isEmpty() ? "Est� vac�a" : "Se filtr� la lista";
+				message = listaComentariosFiltrada.isEmpty() ? "Lista vacía" : "Se filtró la lista";
 			else
-				message = "ERROR al filtrar la lista de Comentarios para la publicaci�n: " + idPublicacion;
+				message = "ERROR al filtrar la lista de Comentarios para la publicación: " + idPublicacion;
 			listaComentarios = listaComentariosFiltrada;
 			request.setAttribute("listaComentarios", listaComentarios);
 			request.setAttribute("publicacionPuntaje", publicacionPuntaje);
@@ -246,7 +240,7 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Localidad> localidades = new ArrayList<Localidad>();
 			
 			int idPartido = Integer.parseInt(request.getParameter("idPartido"));
-			localidades = localidadDAO.getByIdPartido(idPartido);
+			localidades = localidadDAO.getAllByIdPartido(idPartido);
 			
 			if(localidades != null) {
 				resultMap.put("localidades", localidades);				
@@ -265,8 +259,6 @@ public class PublicacionServlet extends HttpServlet {
 	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException{
 		
 		PublicacionView vistaPublicacion = new PublicacionView();
-		ArrayList<Imagen> temp = new ArrayList<Imagen>();
-		ArrayList<ComentarioView> comentariosPublicacion = new ArrayList<ComentarioView>();
 		cantidadComentarios = 0;
 		if(request.getParameter("idPublicacion") != null) {
 			//Primero buscamos la publicacion
@@ -317,7 +309,6 @@ public class PublicacionServlet extends HttpServlet {
 	
 			if(publicaciones != null) {
 				for(Publicacion p: publicaciones) {
-					ArrayList<Imagen> temp = new ArrayList<Imagen>();
 					PublicacionView vistaPublicacion = new PublicacionView(); 
 					
 					//Primero buscamos la publicacion

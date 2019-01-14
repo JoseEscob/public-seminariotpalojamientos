@@ -176,7 +176,7 @@ public class Imagenes implements Connectable<Imagen> {
 		return this.update(u);
 	}
 
-	/// ********************* DAO - MÉTODOS READ/ WRITE ********************** ///
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
 	private Imagen readPS_Imagen(ResultSet rs) throws SQLException {
 		Imagen o = new Imagen();
 		o.setIdImagen(rs.getInt(cCampo.idImagen));

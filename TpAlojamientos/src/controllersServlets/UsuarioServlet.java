@@ -41,7 +41,7 @@ public class UsuarioServlet extends HttpServlet {
 		// VerInfoUsuario(request, response);
 
 		String accionGET = request.getParameter(Constantes.accionGET);
-		LOG.info("JSP - Acción - GET Banner: " + accionGET);
+		LOG.info(String.format("%s GET Banner: %s", Constantes.logJSPAccion, accionGET));
 		if (accionGET != null) {
 			switch (accionGET) {
 			case "MiPerfil":
@@ -57,10 +57,10 @@ public class UsuarioServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// String action = request.getParameter("buscarAction");
-		String action = request.getParameter(Constantes.accionPOST);
-		LOG.info("JSP - Acción: " + action);
-		if (action != null) {
-			switch (action) {
+		String accionPOST = request.getParameter(Constantes.accionPOST);
+		LOG.info(String.format("%s POST Banner: %s", Constantes.logJSPAccion, accionPOST));
+		if (accionPOST != null) {
+			switch (accionPOST) {
 			case "login":
 				loginUsuario(request, response);
 				break;
@@ -94,7 +94,7 @@ public class UsuarioServlet extends HttpServlet {
 			String dni = request.getParameter("dni").toString();
 			// String telefono = request.getParameter("telefono").toString();
 
-			// 2- validar información obtenida JSP
+			// 2- validar informacion obtenida JSP
 			if (!claveUno.equals(claveDos)) {
 				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
 			}
@@ -103,7 +103,7 @@ public class UsuarioServlet extends HttpServlet {
 			}
 			// 2.2 Validar con la DB
 			usuarioDAO.validarCamposUnicos(obj);
-			// 3- guardar información validada
+			// 3- guardar informacion validada
 			obj.setMail(mail);
 			obj.setClave(claveUno);
 			obj.setNombre(nombre);
@@ -113,8 +113,8 @@ public class UsuarioServlet extends HttpServlet {
 			obj.setDni(dni);// obj.setTelefono(telefono);
 			// 4- verificar correcto almacenamiento en DB
 			if (!usuarioDAO.insert(obj))
-				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
-			// ÉXITO
+				throw new ValidacionException("SQL: OcurriÃ³ un error al guardar el usuario");
+			// EXITO
 			message = Constantes.REGISTROEXITOSO;
 
 		} catch (Exception e) {
@@ -143,7 +143,7 @@ public class UsuarioServlet extends HttpServlet {
 			// String idUsuario = null;// getParameter("txtHiddenIdUsuario")
 			user = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
 
-			// 2- Validar información obtenida JSP
+			// 2- Validar informaciÃ³n obtenida JSP
 			if (user == null) {
 				message = "ERROR: No se pudo recuperar la variable Session: " + Constantes.sessionUser;
 				LOG.info(message);
@@ -152,8 +152,8 @@ public class UsuarioServlet extends HttpServlet {
 			// 3- Recuperar info de la DB
 			if (usuarioDAO.get(user) == null)
 				throw new ValidacionException(
-						"SQL: Ocurrió un error al recuperar usuario con id" + user.getIdUsuario());
-			// 4- Devolver información recuperada a la jsp
+						"SQL: OcurriÃ³ un error al recuperar usuario con id" + user.getIdUsuario());
+			// 4- Devolver informaciÃ³n recuperada a la jsp
 			request.setAttribute("user", user);
 		} catch (Exception e) {
 			message = e.getMessage();
@@ -176,21 +176,20 @@ public class UsuarioServlet extends HttpServlet {
 		// 0- declaracion de variables locales
 		String message = null;
 
-		Usuario usr = new Usuario();
+		Usuario objUsuario = new Usuario();
 		ArrayList<Usuario> alles = new ArrayList<Usuario>();
 		boolean existe = false;
 		try {
 			// 1- recuperar valores del formulario JSP
 			String correoUsuario = request.getParameter("txtUser").toString();
 			String claveUsuario = request.getParameter("txtPass").toString();
-			// 2- validar información obtenida JSP
+			// 2- validar informacion obtenida JSP
 			if (correoUsuario.trim().length() != 0) {
 				if (claveUsuario.trim().length() != 0) {
-					alles = usuarioDAO.getAll();
-					for (Usuario usuario : alles) {
+					for (Usuario usuario : usuarioDAO.getAll()) {
 						if (usuario.getMail().compareTo(correoUsuario) == 0) {
 							if (usuario.getClave().compareTo(claveUsuario) == 0) {
-								usr = usuario;
+								objUsuario = usuario;
 								existe = true;
 								break;
 							}
@@ -200,10 +199,13 @@ public class UsuarioServlet extends HttpServlet {
 			}
 			// 3- verificar resultado
 
-			// SE ALMACENA LA VARIABLE SESSION
-			//request.getSession().setAttribute(Constantes.sessionUser, usr);
-			ORSesion.nuevaSesion(request, usr);
-			// 5- Informar estado
+			// 4- Se guarda una variable SESSION
+			ORSesion.nuevaSesion(request, objUsuario);
+			// 5- Se actualiza la FechaUltConexion con la actual.
+			// La anterior es objUsuario.getAnteriorFechaUltConexion
+			objUsuario.setFechaUltConexion(Utilitario.getCurrentDateAndHours());
+			usuarioDAO.updateFechaUltConexion(objUsuario);
+			// 6- Informar estado
 			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 
 		} catch (Exception e) {
@@ -213,7 +215,7 @@ public class UsuarioServlet extends HttpServlet {
 			if (!existe) {
 				message = "El usuario no esta registrado";
 				paginaJsp = "/IniciarSesion.jsp";
-			} else if (!usr.isAdmin()) {
+			} else if (!objUsuario.isAdmin()) {
 				paginaJsp = "/Inicio.jsp";
 			} else {
 				request.setAttribute("usuariosBajoPuntaje", usuariosBajoPuntaje());
@@ -232,17 +234,14 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String message = null;
 		try {
-			// 1- Recuperar valores del formulario JSP
-			// 2- Validar información obtenida JSP
-			//if (request.getSession().getAttribute(Constantes.sessionUser) != null) {
-			if(ORSesion.sesionActiva(request)) {
-				//--// request.getSession().setAttribute(Constantes.sessionUser, null);
-				//request.getSession().removeAttribute(Constantes.sessionUser);
-				//request.getSession().invalidate();
+			if (ORSesion.sesionActiva(request)) {
+				Usuario objUsuario = ORSesion.getUsuarioBySesion(request);
+				objUsuario.setFechaUltConexion(Utilitario.getCurrentDateAndHours());
+				usuarioDAO.updateFechaUltConexion(objUsuario);
 				ORSesion.cerrarSesion(request);
-				throw new ValidacionException("Se cerró su sesión exitosamente. Hasta luego");
+				throw new ValidacionException("Su sesiÃ³n fue cerrada exitosamente. Hasta luego");
 			} else {
-				throw new ValidacionException("La sesión no fue iniciada. No se pudo finalizar");
+				throw new ValidacionException("La sesiÃ³n no fue iniciada. No se pudo finalizar");
 			}
 
 		} catch (Exception e) {

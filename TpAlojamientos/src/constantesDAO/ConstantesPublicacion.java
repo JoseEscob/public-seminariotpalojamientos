@@ -28,6 +28,7 @@ public class ConstantesPublicacion {
 	public final String cantAmbientes = "cantAmbientes";
 	public final String cantBanios = "cantBanios";
 	public final String cantHabitaciones = "cantHabitaciones";
+	public final String aniosAntiguedad = "aniosAntiguedad";
 
 	public final String fechaAlta = "fechaAlta";
 	public final String puntaje = "puntaje";

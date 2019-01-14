@@ -20,6 +20,8 @@ public class Usuario {
 	private Date fechaUltConexion;
 	private boolean verificado;
 
+	private Date anteriorFechaUltConexion;
+	
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -146,6 +148,14 @@ public class Usuario {
 
 	public void setVerificado(boolean verificado) {
 		this.verificado = verificado;
+	}
+
+	public Date getAnteriorFechaUltConexion() {
+		return anteriorFechaUltConexion;
+	}
+
+	public void setAnteriorFechaUltConexion(Date anteriorFechaUltConexion) {
+		this.anteriorFechaUltConexion = anteriorFechaUltConexion;
 	}
 
 }

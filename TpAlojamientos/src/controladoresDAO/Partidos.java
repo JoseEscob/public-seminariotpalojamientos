@@ -10,7 +10,12 @@ import modelo.Partido;
 
 public class Partidos implements Connectable<Partido> {
 	
-	private static HashMap<String,String> queries = new HashMap<String, String>(){{
+	private static HashMap<String,String> queries = new HashMap<String, String>(){/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4029163913379237785L;
+
+	{
 		put("all", "select * from partidos");
 		put("insert", "insert into partidos values(null,?,default)");
 		put("count", "select count(*) as cantidad from partidos");

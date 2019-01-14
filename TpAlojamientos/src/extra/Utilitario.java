@@ -1,17 +1,16 @@
 package extra;
 
-//import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.joda.time.DateTime;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
+//import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-
 /**
- * Funciona como clase para implementar métodos reutilizables
+ * Funciona como clase para implementar funciones reutilizables
  */
 public class Utilitario {
 
@@ -49,5 +48,29 @@ public class Utilitario {
 			throw e;
 		}
 	}
+
+	public static String getCurrentDate() {
+		DateTimeFormatter formatter = DateTimeFormat.forPattern(Constantes.DDMMYYYY);
+		DateTime currentDate = new DateTime(new java.util.Date());
+		return formatter.print(currentDate);
+	}
+
+	public static String getCurrentDateAndHoursString() {
+		java.text.DateFormat dateFormat = new java.text.SimpleDateFormat(Constantes.yyyyMMddHHmmss);
+		java.util.Date date = new java.util.Date();
+		return dateFormat.format(date); // 2016/11/16 12:08:43
+	}
 	
+	public static java.sql.Date getCurrentDateAndHours() {
+		try {
+			java.text.DateFormat dateFormat = new java.text.SimpleDateFormat(Constantes.yyyyMMddHHmmss);
+			java.util.Date date = new java.util.Date();
+			String textoFecha = dateFormat.format(date);
+			DateTimeFormatter formatter = DateTimeFormat.forPattern(Constantes.yyyyMMddHHmmss);
+			long fechaSQL = ((formatter.parseDateTime(textoFecha)).toDateTime().getMillis());
+			return new java.sql.Date(fechaSQL);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
