@@ -7,8 +7,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Mis reservas</title>
-<%@ include file="Bootstrap.jsp"%>
-<link rel="stylesheet"	href="css/reservas_style_sheet.css" />
+<link rel="stylesheet"	href="web-design/solicitudReservas/css/reservas_style_sheet.css" />
 </head>
 <body>
 <%@ include file="Banner.jsp"%>

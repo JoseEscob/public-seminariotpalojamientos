@@ -7,7 +7,7 @@ public class PaginacionView {
 	private int totalElementos;
 	
 	public PaginacionView() {
-		this.cantidadElementos = 10;
+		this.cantidadElementos = 3;
 		this.paginaActual = 1;
 		this.totalElementos = 1;
 	}

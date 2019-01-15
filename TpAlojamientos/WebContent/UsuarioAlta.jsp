@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page import="extra.ConstantesJSP"%>
 <html>
 <head>
 <!-- Required meta tags-->
@@ -14,29 +14,24 @@
 <meta name="keywords" content="Colorlib Templates">
 
 <!-- Icons font CSS-->
-<link
-	href="login/vendor/mdi-font/css/material-design-iconic-font.min.css"
-	rel="stylesheet" media="all">
-<link href="login/vendor/font-awesome-4.7/css/font-awesome.min.css"
-	rel="stylesheet" media="all">
+<link href="<%=ConstantesJSP.jspLogin_designIconicFont_css%>" rel="stylesheet"
+	media="all">
+<link href="<%=ConstantesJSP.jspLogin_fontAwe_css%>" rel="stylesheet"
+	media="all">
 
 <!-- Font special for pages-->
-<link rel="stylesheet" href="login/fontGoogle.css">
-<!--
-<link
-	href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+<link href="<%=ConstantesJSP.jspLogin_fontAweGoogle_css%>"
 	rel="stylesheet">
--->
-
 
 <!-- Vendor CSS-->
-<link href="login/vendor/select2/select2.min.css" rel="stylesheet"
+<link href="<%=ConstantesJSP.jspLogin_select2_css%>" rel="stylesheet"
 	media="all">
-<link href="login/vendor/datepicker/daterangepicker.css"
+<link href="<%=ConstantesJSP.jspLogin_daterangepicker_css%>"
 	rel="stylesheet" media="all">
 
 <!-- Main CSS-->
-<link href="login/css/main.css" rel="stylesheet" media="all">
+<link href="<%=ConstantesJSP.jspLogin_main_css%>" rel="stylesheet"
+	media="all">
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Completar Formulario</title>
@@ -59,7 +54,7 @@
 						<div class="row row-space">
 							<div class="col-2">
 								<div class="input-group pass_show">
-									<label class="label" >Contraseña</label> <input
+									<label class="label">Contraseña</label> <input
 										class="input--style-4 " type="password" maxlength="20"
 										name="claveUno" value="asd123">
 								</div>
@@ -168,16 +163,15 @@
 		</div>
 	</div>
 
-
 	<!-- Jquery JS-->
-	<script src="login/vendor/jquery/jquery.min.js"></script>
+	<script src="<%=ConstantesJSP.jspLogin_jquery_js%>"></script>
 	<!-- Vendor JS-->
-	<script src="login/vendor/select2/select2.min.js"></script>
-	<script src="login/vendor/datepicker/moment.min.js"></script>
-	<script src="login/vendor/datepicker/daterangepicker.js"></script>
+	<script src="<%=ConstantesJSP.jspLogin_select2_js%>"></script>
+	<script src="<%=ConstantesJSP.jspLogin_moment_js%>"></script>
+	<script src="<%=ConstantesJSP.jspLogin_daterangepicker_js%>"></script>
 
 	<!-- Main JS-->
-	<script src="login/js/global.js"></script>
-	<script src="login/js/JSValidar.js"></script>
+	<script src="<%=ConstantesJSP.jspLogin_global_js%>"></script>
+	<script src="<%=ConstantesJSP.jspValidar_js%>"></script>
 </body>
 </html>

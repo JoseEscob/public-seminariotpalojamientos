@@ -2,6 +2,7 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,53 +10,47 @@ import extra.Conexion;
 import modelo.Partido;
 
 public class Partidos implements Connectable<Partido> {
-	
-	private static HashMap<String,String> queries = new HashMap<String, String>(){/**
-		 * 
-		 */
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
+	private static HashMap<String, String> queries = new HashMap<String, String>() {
+		/**
+		* 
+		*/
 		private static final long serialVersionUID = 4029163913379237785L;
 
-	{
-		put("all", "select * from partidos");
-		put("insert", "insert into partidos values(null,?,default)");
-		put("count", "select count(*) as cantidad from partidos");
-		put("update","update partidos set nombre=?, habilitado=? where idPartido=?");
-		put("get","select * from partidos where idTipoAlojamiento=?");
-		put("like", "");
-			
-	}};
-	
+		{
+			put("all", "select * from partidos");
+			put("insert", "insert into partidos values(null,?,default)");
+			put("count", "select count(*) as cantidad from partidos");
+			put("update", "update partidos set nombre=?, habilitado=? where idPartido=?");
+			put("get", "select * from partidos where idTipoAlojamiento=?");
+			put("like", "");
+
+		}
+	};
+
 	private Conexion cn;
 	private ArrayList<Partido> m;
-	
+
 	@Override
 	public ArrayList<Partido> getAll() {
 		cn = new Conexion();
 		m = new ArrayList<Partido>();
-		
-		 try
-		 {
-			 cn.Open();
-			 ResultSet rs= cn.query(queries.get("all"));
-			 while(rs.next())
-			 {					
-				 Partido o = new Partido();
-				 o.setIdPartido(rs.getInt(1));
-				 o.setNombre(rs.getString(2));
-				 o.setHabilitado(rs.getBoolean(3));
-				 m.add(o);
-			 }
-			 
-		 }
-		 catch(Exception e)
-		 {
-			 e.printStackTrace();
-		 }
-		 finally
-		 {
-			 cn.close();
-		 }
-		 return m;
+
+		try {
+			cn.Open();
+			ResultSet rs = cn.query(queries.get("all"));
+			while (rs.next()) {
+				Partido o = new Partido();
+				o = readPs_Partido(rs);
+				m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return m;
 	}
 
 	@Override
@@ -71,14 +66,14 @@ public class Partidos implements Connectable<Partido> {
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("count"));
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				cantidad = rs.getInt("cantidad");
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cn.close();
 		}
 		return cantidad;
@@ -92,17 +87,15 @@ public class Partidos implements Connectable<Partido> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
 			ps.setInt(1, obj.getIdPartido());
 			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				o = new Partido();
-				 o.setIdPartido(rs.getInt(1));
-				 o.setNombre(rs.getString(2));
-				 o.setHabilitado(rs.getBoolean(3));
+				o = readPs_Partido(rs);
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cn.close();
 		}
 		return o;
@@ -110,19 +103,20 @@ public class Partidos implements Connectable<Partido> {
 
 	@Override
 	public boolean insert(Partido obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
-		boolean correcto = false;;
+		boolean correcto = false;
+		;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps.setString(1, obj.getNombre());
 			ps.executeUpdate();
 			correcto = true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -130,7 +124,7 @@ public class Partidos implements Connectable<Partido> {
 
 	@Override
 	public boolean update(Partido obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
@@ -140,13 +134,12 @@ public class Partidos implements Connectable<Partido> {
 			ps.setString(1, obj.getNombre());
 			ps.setBoolean(2, obj.isHabilitado());
 			ps.setInt(3, obj.getIdPartido());
-			if(ps.executeUpdate() != 0)
+			if (ps.executeUpdate() != 0)
 				correcto = true;
-			
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -160,5 +153,16 @@ public class Partidos implements Connectable<Partido> {
 		u.setHabilitado(false);
 		return this.update(u);
 	}
+
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
+	private Partido readPs_Partido(ResultSet rs) throws SQLException {
+		Partido o = new Partido();
+		o.setIdPartido(rs.getInt(cCampo.idPartido));
+		o.setNombre(rs.getString(cCampo.nombre));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
+	}
+
+	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
 }

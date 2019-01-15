@@ -6,17 +6,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Publicación - Comentarios</title>
-<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<h4>${message}</h4>
 	</div>
-	<!--https://www.w3schools.com/howto/howto_css_login_form.asp-->
-	<!--https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_lists_avatar-->
-	<!--https://www.w3schools.com/howto/howto_css_profile_card.asp-->
-	<!--https://www.w3schools.com/howto/howto_css_rounded_images.asp-->
 	<div class="container">
 		<h2>Comentarios de la publicación</h2>
 		<h4>Puntuación Gral. ${publicacionPuntaje}&nbsp;/5</h4>

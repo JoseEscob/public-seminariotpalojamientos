@@ -2,6 +2,7 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,7 +11,7 @@ import modelo.Localidad;
 import modelo.Partido;
 
 public class Localidades implements Connectable<Localidad> {
-
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		* 
@@ -41,11 +42,7 @@ public class Localidades implements Connectable<Localidad> {
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
 				Localidad o = new Localidad();
-				o.setIdLocalidad(rs.getInt(1));
-				o.setIdPartido(rs.getInt(2));
-				o.setNombre(rs.getString(3));
-				o.setCodPostal(rs.getInt(4));
-				o.setHabilitado(rs.getBoolean(5));
+				o = readPs_Localidad(rs);
 				m.add(o);
 			}
 
@@ -94,11 +91,7 @@ public class Localidades implements Connectable<Localidad> {
 
 			if (rs.next()) {
 				o = new Localidad();
-				o.setIdLocalidad(rs.getInt(1));
-				o.setIdPartido(rs.getInt(2));
-				o.setNombre(rs.getString(3));
-				o.setCodPostal(rs.getInt(4));
-				o.setHabilitado(rs.getBoolean(5));
+				o = readPs_Localidad(rs);
 			}
 
 		} catch (Exception e) {
@@ -179,6 +172,17 @@ public class Localidades implements Connectable<Localidad> {
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
+	}
+
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
+	private Localidad readPs_Localidad(ResultSet rs) throws SQLException {
+		Localidad o = new Localidad();
+		o.setIdLocalidad(rs.getInt(cCampo.idLocalidad));
+		o.setIdPartido(rs.getInt(cCampo.idPartido));
+		o.setNombre(rs.getString(cCampo.nombre));
+		o.setCodPostal(rs.getInt(cCampo.codPostal));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
 	}
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///

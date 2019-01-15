@@ -3,41 +3,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="extra.ConstantesJSP"%>
+
 <html>
 <head>
 <meta charset="utf-8" />
 
-<script src="login/js/JSValidar.js"></script>
-<!-- BOOTSTRAP ONLINE
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	BOOTSTRAP ONLINE
--->
-<!-- BOOTSTRAP ONLINE Nuevo
-	<link
-		href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-		rel="stylesheet" id="bootstrap-css">
-	<script
-		src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-	<script
-		src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
-BOOTSTRAP ONLINE Nuevo 
--->
+<script src="<%=ConstantesJSP.jspValidar_js%>"></script>
+
 <!-- 1) css, 2)jquery, 3)bootstrap js -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="bootstrap3/jquery/jquery-3.3.1.js"></script>
-<script src="bootstrap3/js/bootstrap.min.js"></script>
-<link href="bootstrap3/css/bootstrap.min.css" rel="stylesheet">
-
+<script src="<%=ConstantesJSP.jspBs_jquery_js%>"></script>
+<script src="<%=ConstantesJSP.jspBs_bootstrapMin_js%>"></script>
+<link href="<%=ConstantesJSP.jspBs_bootstrapMin_css%>" rel="stylesheet">
 <!--ESTO ES PARA QUE ANDEN LOS COMBOBOX CON EL CUATRO DE BUSQUEDA QUE LLEVAN INTEGRADO-->
-<link rel="stylesheet"	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
-<script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<link rel="stylesheet" href="<%=ConstantesJSP.jspBs_selectCombo_css%>" />
+<script src="<%=ConstantesJSP.jspBs_selectCombo_js%>"></script>
 <title></title>
 </head>
 <body>
@@ -88,20 +69,22 @@ BOOTSTRAP ONLINE Nuevo
 							Favoritas</a></li>
 					<li><a href="#"></a></li>
 				</ul></li>
-				
+
 			<li class="dropdown"><a class="dropdown-toggle"
-			data-toggle="dropdown"><span
-				class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
-			<ul class="dropdown-menu">
+				data-toggle="dropdown"><span
+					class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
+				<ul class="dropdown-menu">
 
-				<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
+					<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
 
-				<li><a href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
-			</ul></li>
-			<li><a href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span class="glyphicon glyphicon-check" /></span>
-					Ver publicacion</a></li>
-			<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span class="glyphicon glyphicon-check" /></span>
-					Todas las publicaciones</a></li>
+					<li><a
+						href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
+				</ul></li>
+			<li><a
+				href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
+					class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
+			<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
+					class="glyphicon glyphicon-check" /></span> Todas las publicaciones</a></li>
 
 		</ul>
 		<form class="navbar-form navbar-left" action="/action_page.php">

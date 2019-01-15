@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import constantesDAO.ConstantesNombreCampos;
 import extra.Conexion;
+import extra.Constantes;
 import modelo.Imagen;
 import modelo.Publicacion;
 
 public class Imagenes implements Connectable<Imagen> {
-	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
@@ -183,6 +183,9 @@ public class Imagenes implements Connectable<Imagen> {
 		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
 		o.setRutaImgPublicacion(rs.getString(cCampo.rutaImgPublicacion));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		// --- Auto Set
+		if (o.getRutaImgPublicacion().isEmpty())
+			o.setRutaImgPublicacion(Constantes.RUTAhomeNoPhoto);
 		return o;
 	}
 

@@ -24,6 +24,7 @@ Publicacion - Alta
     https://www.jqueryscript.net/demo/Lightweight-Form-Validation-Plugin-For-jQuery-Bootstrap-jbootvalidator/
     https://www.youtube.com/watch?v=VPOlrSnA82I
     https://www.w3schools.com/tags/att_form_name.asp
+    https://www.w3schools.com/howto/howto_js_form_steps.asp
 
     
     
@@ -88,3 +89,60 @@ https://mdbootstrap.com/docs/jquery/navigation/footer/
 
 ************************PAGINACION*************************
 http://zetcode.com/articles/javaservletpagination/
+
+
+
+
+
+
+
+
+
+	<!--https://www.w3schools.com/howto/howto_css_login_form.asp-->
+	<!--https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_lists_avatar-->
+	<!--https://www.w3schools.com/howto/howto_css_profile_card.asp-->
+	<!--https://www.w3schools.com/howto/howto_css_rounded_images.asp-->
+
+************************	URL'S DE IMPORTACIONES JS Y CSS	*************************
+
+<!-- BOOTSTRAP ONLINE
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	BOOTSTRAP ONLINE
+-->
+<!-- BOOTSTRAP ONLINE Nuevo
+	<link
+		href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+		rel="stylesheet" id="bootstrap-css">
+	<script
+		src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+BOOTSTRAP ONLINE Nuevo 
+-->
+
+<!--ESTO ES PARA QUE ANDEN LOS COMBOBOX CON EL CUATRO DE BUSQUEDA QUE LLEVAN INTEGRADO-->
+<link rel="stylesheet"	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+
+
+<!-- LOGIN
+<link
+	href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+<!-- Font special for pages-- href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" -->
+<!--  <link rel="stylesheet" href="login/fontGoogle.css"> -->
+
+
+
+
+
+
+
+

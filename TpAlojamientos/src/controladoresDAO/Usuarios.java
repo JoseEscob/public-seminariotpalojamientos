@@ -6,14 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import constantesDAO.ConstantesNombreCampos;
 import exceptions.ValidacionException;
 import extra.Conexion;
 import extra.LOG;
 import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
-	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 

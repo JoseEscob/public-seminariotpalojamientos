@@ -7,7 +7,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Publicación - Alta</title>
-<%@ include file="Bootstrap.jsp"%>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>

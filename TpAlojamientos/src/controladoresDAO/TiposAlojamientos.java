@@ -2,6 +2,7 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,7 +10,7 @@ import extra.Conexion;
 import modelo.TipoAlojamiento;
 
 public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
-
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	/*
 	 * idTipoAlojamiento int not null auto_increment, descripcion varchar(50) not
 	 * null, habilitado tinyint(1) not null default 1,
@@ -45,9 +46,7 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
 				TipoAlojamiento o = new TipoAlojamiento();
-				o.setIdTipoAlojamiento(rs.getInt(1));
-				o.setDescripcion(rs.getString(2));
-				o.setHabilitado(rs.getBoolean(3));
+				o = readPs_TipoAlojamiento(rs);
 				m.add(o);
 			}
 
@@ -96,9 +95,7 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 
 			if (rs.next()) {
 				o = new TipoAlojamiento();
-				o.setIdTipoAlojamiento(rs.getInt(1));
-				o.setDescripcion(rs.getString(2));
-				o.setHabilitado(rs.getBoolean(3));
+				o = readPs_TipoAlojamiento(rs);
 			}
 
 		} catch (Exception e) {
@@ -162,6 +159,14 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 		return this.update(u);
 	}
 
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
+	private TipoAlojamiento readPs_TipoAlojamiento(ResultSet rs) throws SQLException {
+		TipoAlojamiento o = new TipoAlojamiento();
+		o.setIdTipoAlojamiento(rs.getInt(cCampo.idTipoAlojamiento));
+		o.setDescripcion(rs.getString(cCampo.descripcion));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
+	}
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
 	public TipoAlojamiento getTipoAlojamiento(int idTipoAlojamiento) {

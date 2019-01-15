@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import constantesDAO.ConstantesNombreCampos;
 import extra.Conexion;
 import extra.Constantes;
 import modelo.Comentario;
@@ -14,7 +13,7 @@ import modelo.Publicacion;
 import modelo.Usuario;
 
 public class Comentarios implements Connectable<Comentario> {
-	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 
@@ -37,9 +36,9 @@ public class Comentarios implements Connectable<Comentario> {
 	public ArrayList<Comentario> getAll() {
 		cn = new Conexion();
 		m = new ArrayList<Comentario>();
-
-		String nombreApellidoUsuario = null;
-		String rutaFotoPerfilUsuario = null;
+		//
+		// String nombreApellidoUsuario = null;
+		// String rutaFotoPerfilUsuario = null;
 
 		try {
 			cn.Open();
@@ -47,12 +46,12 @@ public class Comentarios implements Connectable<Comentario> {
 			while (rs.next()) {
 				Comentario o = new Comentario();
 				o = readPs_Comentario(rs);
-				rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
-				nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
-				if (rutaFotoPerfilUsuario.isEmpty())
-					rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
-				o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
-				o.setNombreApellidoUsuario(nombreApellidoUsuario);
+				// rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
+				// nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
+				// if (rutaFotoPerfilUsuario.isEmpty())
+				// rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
+				// o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
+				// o.setNombreApellidoUsuario(nombreApellidoUsuario);
 				m.add(o);
 			}
 
@@ -211,6 +210,15 @@ public class Comentarios implements Connectable<Comentario> {
 		o.setFechaComentario(rs.getDate(cCampo.fechaComentario));
 		o.setPuntaje(rs.getInt(cCampo.puntaje));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		/// -----
+		String nombreApellidoUsuario = null;
+		String rutaFotoPerfilUsuario = null;
+		rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
+		nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
+		if (rutaFotoPerfilUsuario.isEmpty())
+			rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
+		o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
+		o.setNombreApellidoUsuario(nombreApellidoUsuario);
 		return o;
 	}
 

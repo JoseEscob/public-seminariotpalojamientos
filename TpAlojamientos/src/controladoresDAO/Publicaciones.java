@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import constantesDAO.ConstantesNombreCampos;
-import constantesDAO.ConstantesPublicacion;
 import extra.Conexion;
 import extra.Constantes;
 import extra.LOG;
@@ -17,8 +15,8 @@ import modelo.TipoAlojamiento;
 import modelo.Usuario;
 
 public class Publicaciones implements Connectable<Publicacion> {
-	private static final ConstantesPublicacion cPubli = new ConstantesPublicacion();
-	private static final ConstantesNombreCampos cCampo = new ConstantesNombreCampos();
+	private static final _DAOConstantesPublicacion cPubli = new _DAOConstantesPublicacion();
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 

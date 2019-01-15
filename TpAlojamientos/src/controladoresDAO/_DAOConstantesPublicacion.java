@@ -1,10 +1,10 @@
-package constantesDAO;
+package controladoresDAO;
 
 /**
  * Clase para definir constantes
  *
  */
-public class ConstantesPublicacion {
+public class _DAOConstantesPublicacion {
 	public final String idPublicacion = "idPublicacion";
 	public final String idUsuario = "idUsuario";
 	public final String idTipoAlojamiento = "idTipoAlojamiento";
