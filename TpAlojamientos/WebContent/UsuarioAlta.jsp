@@ -103,10 +103,10 @@
 									<div class="p-t-10">
 										<!--class="radio-container m-r-45" -->
 										<label class="radio-container">Masculino <input
-											type="radio" checked="false" name="gender"> <span
+											type="radio" name="rdbSexo" value="1"> <span
 											class="checkmark"></span>
 										</label> <label class="radio-container">Femenino <input
-											type="radio" name="gender"> <span class="checkmark"></span>
+											type="radio" checked name="rdbSexo" value="0"> <span class="checkmark"></span>
 										</label>
 									</div>
 								</div>
@@ -136,21 +136,6 @@
 							</div>
 							 -->
 						</div>
-						<!-- 
-						<div class="input-group">
-							<label class="label">Subject</label>
-							<div class="rs-select2 js-select-simple select--no-search">
-								<select name="subject">
-									<option disabled="disabled" selected="selected">Choose
-										option</option>
-									<option>Subject 1</option>
-									<option>Subject 2</option>
-									<option>Subject 3</option>
-								</select>
-								<div class="select-dropdown"></div>
-							</div>
-						</div>
-						 -->
 						<div class="p-t-15">
 							<input type="hidden" id="buscarAction" name="accionPOST"
 								value="nuevo"></input> <input

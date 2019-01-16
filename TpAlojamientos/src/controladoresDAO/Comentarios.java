@@ -211,30 +211,16 @@ public class Comentarios implements Connectable<Comentario> {
 		o.setPuntaje(rs.getInt(cCampo.puntaje));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
 		/// -----
+		Usuarios usuariosDAO = new Usuarios();
 		String nombreApellidoUsuario = null;
 		String rutaFotoPerfilUsuario = null;
-		rutaFotoPerfilUsuario = this.getRutaFotoPerfil_Usuario(o.getIdUsuario());
-		nombreApellidoUsuario = this.getNombreApellido_Usuario(o.getIdUsuario());
+		rutaFotoPerfilUsuario = usuariosDAO.getRutaFotoPerfil_Usuario(o.getIdUsuario());
+		nombreApellidoUsuario = usuariosDAO.getNombreApellido_Usuario(o.getIdUsuario());
 		if (rutaFotoPerfilUsuario.isEmpty())
 			rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
 		o.setRutaFotoPerfilUsuario(rutaFotoPerfilUsuario);
 		o.setNombreApellidoUsuario(nombreApellidoUsuario);
 		return o;
-	}
-
-	/// ********************* FUNCIONES LAMBDA ********************** ///
-	private String getNombreApellido_Usuario(int idUsuario) {
-		Usuarios usuarioDAO = new Usuarios();
-		Usuario objUsuario = new Usuario();
-		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
-		return objUsuario.getNombre() + " " + objUsuario.getApellido();
-	}
-
-	private String getRutaFotoPerfil_Usuario(int idUsuario) {
-		Usuarios usuarioDAO = new Usuarios();
-		Usuario objUsuario = new Usuario();
-		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
-		return objUsuario.getRutaFotoPerfil();
 	}
 
 }

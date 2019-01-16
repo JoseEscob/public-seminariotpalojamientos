@@ -16,12 +16,14 @@ public class Usuario {
 	private boolean admin;
 	private float puntaje;
 	private boolean habilitado;
-	private Date fechaAlta;
-	private Date fechaUltConexion;
+	private String fechaAlta;
+	// private Date fechaUltConexion;
+	private String fechaUltConexion;
 	private boolean verificado;
 
-	private Date anteriorFechaUltConexion;
-	
+	// private Date anteriorFechaUltConexion;
+	private String anteriorFechaUltConexion;
+
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -126,19 +128,19 @@ public class Usuario {
 		this.habilitado = habilitado;
 	}
 
-	public Date getFechaAlta() {
+	public String getFechaAlta() {
 		return fechaAlta;
 	}
 
-	public void setFechaAlta(Date fechaAlta) {
+	public void setFechaAlta(String fechaAlta) {
 		this.fechaAlta = fechaAlta;
 	}
 
-	public Date getFechaUltConexion() {
+	public String getFechaUltConexion() {
 		return fechaUltConexion;
 	}
 
-	public void setFechaUltConexion(Date fechaUltConexion) {
+	public void setFechaUltConexion(String fechaUltConexion) {
 		this.fechaUltConexion = fechaUltConexion;
 	}
 
@@ -150,11 +152,11 @@ public class Usuario {
 		this.verificado = verificado;
 	}
 
-	public Date getAnteriorFechaUltConexion() {
+	public String getAnteriorFechaUltConexion() {
 		return anteriorFechaUltConexion;
 	}
 
-	public void setAnteriorFechaUltConexion(Date anteriorFechaUltConexion) {
+	public void setAnteriorFechaUltConexion(String anteriorFechaUltConexion) {
 		this.anteriorFechaUltConexion = anteriorFechaUltConexion;
 	}
 

@@ -51,6 +51,8 @@ public class _DAOConstantesNombreCampos {
 	public final String sexo = "sexo";
 	public final String rutaFotoPerfil = "rutaFotoPerfil";
 	public final String fechaUltConexion = "fechaUltConexion";
+	// MySQL
+	public final String sql_STR_TO_DATE_YmdHiS = "STR_TO_DATE(?,'%Y/%m/%d %H:%i:%s')";
 
 	// imagenes
 	public final String idImagen = "idImagen";

@@ -8,7 +8,7 @@ create table usuarios(
 	nombre varchar(50) not null,
 	apellido varchar(50) not null,
 	dni varchar(15) not null,
-	mail varchar(50) not null,
+	mail varchar(50) not null, -- unique
     fechaNac date not null,
 	usuario varchar(50) not null,
     clave varchar(20) not null,
@@ -17,8 +17,8 @@ create table usuarios(
     admin tinyint(1) not null default 0,
 	puntaje float not null, -- Es para obtener el promedio total
 	habilitado tinyint(1) not null default 1,
-	fechaAlta date not null,
-	fechaUltConexion date not null,
+	fechaAlta datetime not null default current_timestamp,
+	fechaUltConexion datetime not null,
 	verificado tinyint(1) not null default 1,
 	constraint pk_usuarios primary key(idUsuario)
 );
@@ -51,7 +51,7 @@ create table publicaciones(
 	idPublicacion int not null auto_increment,
 	idUsuario int not null, -- una publicacion por usuario... poque no usar el id_usuario como pk de publicaciones?
 	idTipoAlojamiento int not null,
-	descripcion varchar(50) not null,
+	descripcion varchar(300) not null,
 	idLocalidad int not null,
 	codPostal int not null,
 	coordenadas varchar(50) not null,
@@ -126,12 +126,13 @@ create table imagenes(
 
 create table telefonos(
 	idTelefono int not null auto_increment,
-	-- idUsuario int not null,
-	idPublicacion int not null,
+	idUsuario int not null,
+	-- idPublicacion int not null,
 	nroTelefono varchar(20) not null,
 	habilitado tinyint(1) not null default 1,
 	constraint pk_telefonos primary key(idTelefono),
-	constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+	constraint fk_telefonos_usuarios foreign key(idUsuario) references usuarios(idUsuario)
+	-- constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
 
 create table bajas(

@@ -106,12 +106,12 @@
 						<c:out value="${sessionScope.usuario.nombre}" /></a>
 					<ul class="dropdown-menu">
 
-						<li><a><span class="glyphicon glyphicon-user" /></span>
-								<form method="post" action="UsuarioServlet">
-									<input type="hidden" id="buscarAction" name="buscarAction"
-										value="verInfoUsuario"></input> <input type="submit"
-										name="btnNuevoUsuario" value="Mi Perfil"></input>
-								</form> </a></li>
+						<!-- 						<li><a><span class="glyphicon glyphicon-user" /></span> -->
+						<!-- 								<form method="post" action="UsuarioServlet"> -->
+						<!-- 									<input type="hidden" id="buscarAction" name="buscarAction" -->
+						<!-- 										value="verInfoUsuario"></input> <input type="submit" -->
+						<!-- 										name="btnNuevoUsuario" value="Mi Perfil"></input> -->
+						<!-- 								</form> </a></li> -->
 
 						<li><a href="UsuarioServlet?accionGET=MiPerfil"><span
 								class="glyphicon glyphicon-user" /></span> Ver mi Perfil</a></li>

@@ -25,32 +25,48 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h3>Datos Personales</h3>
-				<form class="form-horizontal" action="/action_page.php">
-					<!-- <div class="row" id="configuracion">
-                      <div class="form-group">
-                        <label class="col-sm-2 control-label">Identificador</label>
-                        <div class="col-sm-10">
-                          <p class="form-control-static">${user.idUsuario}</p>
-                        </div>
-                      </div>
-                  </div>
-                -->
-					<div class="form-group">
-						<label for="nombre" class="control-label col-xs-4">Fecha
-							Ult.Conexión: </label>
+				<form class="form-horizontal" action="">
+
+					<div class="form-group ">
 						<div class="col-xs-8">
-							<label for="nombre" class="control-label"> <c:out
-									value="${user.anteriorFechaUltConexion}"></c:out>
+							<label class="control-label col-xs-7">Fecha Última
+								Conexión: </label>
+							<div class="col-xs-5">
+								<label for="nombre" class="control-label"> <c:out
+										value="${objUsuario.anteriorFechaUltConexion}"></c:out>
+								</label>
+							</div>
+						</div>
+						<c:if test="${objUsuario.isVerificado() eq true}">
+							<div class="col-xs-4">
+								<label class="control-label pull-right "> <span
+									class="glyphicon glyphicon-ok-circle"></span> Usuario
+									Verificado
+								</label>
+							</div>
+						</c:if>
+
+					</div>
+
+
+					<div class="form-group">
+						<div class="pull-right col-xs-3">
+							<label class="control-label"> <span
+								class="glyphicon glyphicon-stats"></span> Puntaje:
+								${objUsuario.puntaje}
 							</label>
 						</div>
+
 					</div>
+
+
 					<div class="form-group">
 						<label for="nombre" class="control-label col-xs-3">Nombre:
 						</label>
 						<div class="col-xs-9">
 							<input type="text" name="nombre" class="form-control"
-								value="${user.nombre}" onkeypress="return soloLetras(event)"
-								required="true">
+								value="${objUsuario.nombre}"
+								onkeypress="return soloLetras(event)" required="true">
 						</div>
 					</div>
 					<div class="form-group">
@@ -59,7 +75,7 @@
 						<div class="col-xs-9">
 							<input type="text" name="apellido" id="apellido"
 								class="form-control" onkeypress="return soloLetras(event)"
-								value="${user.apellido}" required="true">
+								value="${objUsuario.apellido}" required="true">
 						</div>
 					</div>
 					<div class="form-group">
@@ -67,7 +83,7 @@
 							de Nacimiento: </label>
 						<div class="col-xs-9">
 							<input type="date" name="fechaNac" id="fechaNac"
-								class="form-control" value="${user.fechaNac}"
+								class="form-control" value="${objUsuario.fechaNac}"
 								pattern="^\d{2}-\d{2}-\d{4}$" maxlength="10"
 								placeholder="dd-MM-yyyy" required="true">
 						</div>
@@ -77,16 +93,38 @@
 						<div class="col-sm-9">
 							<input type="text" name="dni" id="dni" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="${user.dni}" required="true">
+								value="${objUsuario.dni}" required="true">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="mail" class="control-label col-sm-3">Mail: </label>
+						<label class="control-label col-sm-3">Mail: </label>
 						<div class="col-sm-9">
 							<input type="email" name="mail" id="mail" class="form-control"
-								onpaste="return false" value="${user.mail}" required="true">
+								onpaste="return false" value="${objUsuario.mail}"
+								required="true">
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="mail" class="control-label col-sm-3">Sexo: </label>
+						<div class="col-sm-9">
+							<c:choose>
+								<c:when test="${objUsuario.sexo}">
+									<label class="radio-inline"><input type="radio"
+										name="rdbSexo" checked>Masculino</label>
+									<label class="radio-inline"><input type="radio"
+										name="rdbSexo">Femenino</label>
+								</c:when>
+								<c:otherwise>
+									<label class="radio-inline"><input type="radio"
+										name="rdbSexo">Masculino</label>
+									<label class="radio-inline"><input type="radio"
+										name="rdbSexo" checked>Femenino</label>
+								</c:otherwise>
+							</c:choose>
+
+						</div>
+					</div>
+
 					<div class="form-group">
 						<div class="col-sm-10" align="right">
 							<button class="btn btn-info">Modificar Datos</button>
@@ -101,12 +139,12 @@
 
 
 				<div id="fotoPerfil" class="form-group" align="center">
-					<c:if test="${not empty user.rutaFotoPerfil}">
+					<c:if test="${not empty objUsuario.rutaFotoPerfil}">
 						<img class="img-rounded" alt=" " width="250" height="250"
-							src="${user.rutaFotoPerfil}" />
+							src="${objUsuario.rutaFotoPerfil}" />
 					</c:if>
 
-					<c:if test="${empty user.rutaFotoPerfil}">
+					<c:if test="${empty objUsuario.rutaFotoPerfil}">
 						<!-- <img class="img-rounded" alt=" " width="60" height="60"
 								src="<c:url value='${url.currentModule}/${rutaDefaultFoto}'/>" />
 							 -->
@@ -123,8 +161,9 @@
 					</div>
 				</form>
 			</div>
-
-			<div class="row"></div>
 		</div>
+
+		<div class="row"></div>
+	</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import exceptions.ValidacionException;
 import extra.Conexion;
+import extra.Constantes;
 import extra.LOG;
 import modelo.Usuario;
 
@@ -21,15 +22,26 @@ public class Usuarios implements Connectable<Usuario> {
 
 		{
 			put("all", "select * from usuarios");
-			put("insert", "insert into usuarios values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
+			// put("insert", "insert into usuarios
+			// values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
+			put("insert",
+					"insert into usuarios " + "set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?"
+							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta= "
+							+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
+							+ ", verificado=?, habilitado=?, idUsuario=?");
+
 			put("count", "select count(*) as cantidad from usuarios");
 			put("update",
 					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?"
-							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta=?" + ","
-							+ cCampo.fechaUltConexion + "=?,verificado=?,habilitado=? where idUsuario=?");
+							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta= "
+							+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
+							+ ", verificado=?, habilitado=? where idUsuario=?");
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
-			put("updateFechaUltConexion", "update usuarios set fechaUltConexion=? where idUsuario=?");
+			put("updateFechaUltConexion", String.format("update usuarios set fechaUltConexion= %s  where idUsuario=?",
+					cCampo.sql_STR_TO_DATE_YmdHiS));
+			// put("updateFechaUltConexion", "update usuarios set fechaUltConexion=
+			// STR_TO_DATE(?,'%Y/%m/%d %H:%i:%s') where idUsuario=?");
 		}
 	};
 
@@ -133,6 +145,8 @@ public class Usuarios implements Connectable<Usuario> {
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_Usuario(obj, ps);
+			ps.setBoolean(15, obj.isHabilitado());
+			ps.setInt(16, obj.getIdUsuario());
 			LOG.info("INSERT Usuarios: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
@@ -187,7 +201,8 @@ public class Usuarios implements Connectable<Usuario> {
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateFechaUltConexion"));
 
-			ps.setDate(1, obj.getFechaUltConexion());
+			// ps.setDate(1, obj.getFechaUltConexion());
+			ps.setString(1, obj.getFechaUltConexion());
 			ps.setInt(2, obj.getIdUsuario());
 			LOG.info("UPDATE FechaUltConexion - Usuarios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
@@ -216,10 +231,18 @@ public class Usuarios implements Connectable<Usuario> {
 		o.setAdmin(rs.getBoolean(cCampo.admin));
 		o.setPuntaje(rs.getFloat(cCampo.puntaje));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
-		o.setFechaAlta(rs.getDate(cCampo.fechaAlta));
-		o.setFechaUltConexion(rs.getDate(cCampo.fechaUltConexion));
+		o.setFechaAlta(rs.getString(cCampo.fechaAlta));
+		o.setFechaUltConexion(rs.getString(cCampo.fechaUltConexion));
 		o.setAnteriorFechaUltConexion(o.getFechaUltConexion());
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
+		// ------------
+		String rutaFotoPerfilUsuario = null;
+		rutaFotoPerfilUsuario = o.getRutaFotoPerfil();
+		// if(Utilitario.existeElArchivo(rutaFotoPerfilUsuario) == false)
+		// //GETCONTEXTPATH()
+		if (rutaFotoPerfilUsuario.isEmpty())
+			rutaFotoPerfilUsuario = Constantes.RUTAuserNoPhoto;
+		o.setRutaFotoPerfil(rutaFotoPerfilUsuario);
 		return o;
 	}
 
@@ -231,12 +254,12 @@ public class Usuarios implements Connectable<Usuario> {
 		ps.setDate(5, obj.getFechaNac());
 		ps.setString(6, obj.getUsuario());
 		ps.setString(7, obj.getClave());
-		ps.setBoolean(9, obj.isSexo());
-		ps.setString(8, obj.getRutaFotoPerfil());
+		ps.setBoolean(8, obj.isSexo());
+		ps.setString(9, obj.getRutaFotoPerfil());
 		ps.setBoolean(10, obj.isAdmin());
 		ps.setFloat(11, obj.getPuntaje());
-		ps.setDate(12, obj.getFechaAlta());
-		ps.setDate(13, obj.getFechaUltConexion());
+		ps.setString(12, obj.getFechaAlta());
+		ps.setString(13, obj.getFechaUltConexion());
 		ps.setBoolean(14, obj.isVerificado());
 		return ps;
 	}
@@ -266,6 +289,28 @@ public class Usuarios implements Connectable<Usuario> {
 				throw new ValidacionException("ERROR DB: El mail ingresado ya se encuentra registrado en el sistema");
 
 		}
+	}
 
+	/// ********************* FUNCIONES LAMBDA ********************** ///
+	public Usuario getUsuarioByLogin(String correoUsuario, String claveUsuario) {
+		Usuario objUsuario;
+		objUsuario = this.getAll().stream()
+				.filter(item -> item.getMail().equalsIgnoreCase(correoUsuario) && item.getClave().equals(claveUsuario))
+				.findFirst().orElse(null);
+		return objUsuario;
+	}
+
+	public String getNombreApellido_Usuario(int idUsuario) {
+		Usuarios usuarioDAO = new Usuarios();
+		Usuario objUsuario = new Usuario();
+		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario.getNombre() + " " + objUsuario.getApellido();
+	}
+
+	public String getRutaFotoPerfil_Usuario(int idUsuario) {
+		Usuarios usuarioDAO = new Usuarios();
+		Usuario objUsuario = new Usuario();
+		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario.getRutaFotoPerfil();
 	}
 }
