@@ -17,8 +17,6 @@ import extra.LOG;
 import extra.Utilitario;
 import extra.ORSesion;
 import modelo.Usuario;
-import controladoresDAO.Publicaciones;
-import modelo.Publicacion;
 
 /**
  * Servlet implementation class UsuarioServlet
@@ -26,9 +24,8 @@ import modelo.Publicacion;
 @WebServlet("/UsuarioServlet")
 public class UsuarioServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String paginaJsp = null;// "/UsuarioAlta.jsp";
+	private String paginaJsp = null;
 	private final Usuarios usuarioDAO = new Usuarios();
-	private Publicaciones publicacionDAO = new Publicaciones();
 
 	public UsuarioServlet() {
 		super();
@@ -36,10 +33,6 @@ public class UsuarioServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// response.getWriter().append("Served at: ").append(request.getContextPath());
-		// por <a> href pasa por GET. sino Usar submit para POST
-		// VerInfoUsuario(request, response);
-
 		String accionGET = request.getParameter(Constantes.accionGET);
 		LOG.info(String.format("%s GET Banner: %s", Constantes.logJSPAccion, accionGET));
 		if (accionGET != null) {
@@ -49,6 +42,9 @@ public class UsuarioServlet extends HttpServlet {
 				break;
 			case "Logout":
 				cerrarSesion(request, response);
+				break;
+			case "admListaUsuarios":
+				cargarAdmListaUsuarios(request, response);
 				break;
 			}
 		}
@@ -77,6 +73,7 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
+	// ********* Usuario: altaUsuario ************* //
 	private void altaUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Usuario objUsuario = new Usuario();
@@ -145,7 +142,7 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
-	// ********* VER DATOS
+	// ********* Usuario: verInfoUsuario ************* //
 	private void verInfoUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Usuario objUsuario = null;
@@ -181,8 +178,7 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
-	// ********* LOGIN ************* //
-
+	// ********* Usuario: loginUsuario ************* //
 	private void loginUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- declaracion de variables locales
@@ -228,14 +224,15 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
+	// ********* Usuario: cerrarSesion ************* //
 	private void cerrarSesion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
 		try {
 			if (ORSesion.sesionActiva(request)) {
-				Usuario objUsuario = ORSesion.getUsuarioBySesion(request);
-				objUsuario.setFechaUltConexion(Utilitario.getCurrentDateAndHoursString());
-				usuarioDAO.updateFechaUltConexion(objUsuario);
+				// Usuario objUsuario = ORSesion.getUsuarioBySesion(request);
+				// objUsuario.setFechaUltConexion(Utilitario.getCurrentDateAndHoursString());
+				// usuarioDAO.updateFechaUltConexion(objUsuario);
 				ORSesion.cerrarSesion(request);
 				throw new ValidacionException("Su sesión fue cerrada exitosamente. Hasta luego");
 			} else {
@@ -253,28 +250,37 @@ public class UsuarioServlet extends HttpServlet {
 		}
 	}
 
-	// Esto es para cargar los datos a mostrar en la vista de admin
-	public ArrayList<Usuario> usuariosBajoPuntaje() {
-		ArrayList<Usuario> todos = usuarioDAO.getAll();
-		ArrayList<Usuario> usuariosBajoPuntaje = new ArrayList<Usuario>();
-		for (Usuario u : todos) {
-			if (u.getPuntaje() < 2) {
-				usuariosBajoPuntaje.add(u);
-			}
-		}
-		return usuariosBajoPuntaje;
-	}
+	// ********* Usuario: cargarAdmListaUsuarios ************* //
+	private void cargarAdmListaUsuarios(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
 
-	public ArrayList<Publicacion> publicacionesBajoPuntaje() {
-		ArrayList<Publicacion> todos = publicacionDAO.getAll();
-		ArrayList<Publicacion> publicacionesBajoPuntaje = new ArrayList<Publicacion>();
-		for (Publicacion u : todos) {
-			if (u.getPuntaje() < 2) {
-				publicacionesBajoPuntaje.add(u);
-			}
-		}
+		try {
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySesion(request);
+			String fechaUltConexion = objUsuarioLogueado.getFechaUltConexion();
+			// ArrayList<Usuario> listaUsuarios = usuarioDAO
+			// .getListaNuevosUsuarios(objUsuarioLogueado.getFechaUltConexion());//
+			// usuarioDAO.getListaUsuarios_SortByFechaAlta();
 
-		return publicacionesBajoPuntaje;
+			ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+			ArrayList<Usuario> listaUsuariosNuevos = new ArrayList<Usuario>();
+			usuarioDAO.getAll().forEach(item -> {
+				if (item.getFechaAlta().compareTo(fechaUltConexion) > 0)
+					listaUsuariosNuevos.add(item);
+				else
+					listaUsuarios.add(item);
+			});
+
+			request.setAttribute("listaUsuarios", listaUsuarios);
+			request.setAttribute("listaUsuariosNuevos", listaUsuariosNuevos);
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			request.setAttribute("message", message);
+			paginaJsp = "/admListaUsuarios.jsp";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
+			dispatcher.forward(request, response);
+		}
 	}
 
 }

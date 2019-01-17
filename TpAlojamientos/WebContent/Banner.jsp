@@ -56,7 +56,8 @@
 				data-toggle="dropdown"><span
 					class="glyphicon glyphicon-chevron-down"></span> Publicaciones</a>
 				<ul class="dropdown-menu">
-
+					<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
+							class="glyphicon glyphicon-check" /></span> Todas las publicaciones</a></li>
 					<li><a href="#"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
 
@@ -68,6 +69,9 @@
 					<li><a href="#"><span class="glyphicon glyphicon-star" /></span>
 							Favoritas</a></li>
 					<li><a href="#"></a></li>
+					<li><a
+						href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
+							class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
 				</ul></li>
 
 			<li class="dropdown"><a class="dropdown-toggle"
@@ -79,13 +83,11 @@
 
 					<li><a
 						href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
-				</ul></li>
-			<li><a
-				href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
-					class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
-			<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
-					class="glyphicon glyphicon-check" /></span> Todas las publicaciones</a></li>
 
+
+				</ul></li>
+			<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
+					class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
 		</ul>
 		<form class="navbar-form navbar-left" action="/action_page.php">
 			<div class="input-group">
@@ -120,6 +122,7 @@
 						<li><a href="UsuarioServlet?accionGET=Logout"><span
 								class="glyphicon glyphicon-off" /></span> Salir</a></li>
 					</ul></li>
+			</ul>
 		</div>
 	</div>
 	</nav>

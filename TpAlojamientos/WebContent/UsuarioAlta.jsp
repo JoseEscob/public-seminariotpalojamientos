@@ -103,10 +103,10 @@
 									<div class="p-t-10">
 										<!--class="radio-container m-r-45" -->
 										<label class="radio-container">Masculino <input
-											type="radio" name="rdbSexo" value="1"> <span
+											type="radio" name="rdbSexo" value="true"> <span
 											class="checkmark"></span>
 										</label> <label class="radio-container">Femenino <input
-											type="radio" checked name="rdbSexo" value="0"> <span class="checkmark"></span>
+											type="radio" checked name="rdbSexo" value="false"> <span class="checkmark"></span>
 										</label>
 									</div>
 								</div>

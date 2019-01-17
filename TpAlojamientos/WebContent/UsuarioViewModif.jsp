@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%@ page import="modelo.Usuario, extra.Tag"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +31,7 @@
 							<label class="control-label col-xs-7">Fecha Última
 								Conexión: </label>
 							<div class="col-xs-5">
-								<label for="nombre" class="control-label"> <c:out
+								<label class="control-label"> <c:out
 										value="${objUsuario.anteriorFechaUltConexion}"></c:out>
 								</label>
 							</div>
@@ -61,47 +60,43 @@
 
 
 					<div class="form-group">
-						<label for="nombre" class="control-label col-xs-3">Nombre:
-						</label>
+						<label class="control-label col-xs-3">Nombre: </label>
 						<div class="col-xs-9">
 							<input type="text" name="nombre" class="form-control"
 								value="${objUsuario.nombre}"
-								onkeypress="return soloLetras(event)" required="true">
+								onkeypress="return soloLetras(event)" required>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="apellido" class="control-label col-xs-3">Apellido:
+						<label class="control-label col-xs-3">Apellido: </label>
+						<div class="col-xs-9">
+							<input type="text" name="apellido" class="form-control"
+								onkeypress="return soloLetras(event)"
+								value="${objUsuario.apellido}" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-xs-3">Fecha de Nacimiento:
 						</label>
 						<div class="col-xs-9">
-							<input type="text" name="apellido" id="apellido"
-								class="form-control" onkeypress="return soloLetras(event)"
-								value="${objUsuario.apellido}" required="true">
+							<input type="date" name="fechaNac" class="form-control"
+								value="${objUsuario.fechaNac}" pattern="^\d{2}-\d{2}-\d{4}$"
+								maxlength="10" placeholder="dd-MM-yyyy" required>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="fechaNac" class="control-label col-xs-3">Fecha
-							de Nacimiento: </label>
-						<div class="col-xs-9">
-							<input type="date" name="fechaNac" id="fechaNac"
-								class="form-control" value="${objUsuario.fechaNac}"
-								pattern="^\d{2}-\d{2}-\d{4}$" maxlength="10"
-								placeholder="dd-MM-yyyy" required="true">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="dni" class="control-label col-sm-3">DNI: </label>
+						<label class="control-label col-sm-3">DNI: </label>
 						<div class="col-sm-9">
-							<input type="text" name="dni" id="dni" class="form-control"
+							<input type="text" name="dni" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="${objUsuario.dni}" required="true">
+								value="${objUsuario.dni}" required>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-3">Mail: </label>
 						<div class="col-sm-9">
-							<input type="email" name="mail" id="mail" class="form-control"
-								onpaste="return false" value="${objUsuario.mail}"
-								required="true">
+							<input type="email" name="mail" class="form-control"
+								onpaste="return false" value="${objUsuario.mail}" required>
 						</div>
 					</div>
 					<div class="form-group">
@@ -110,15 +105,15 @@
 							<c:choose>
 								<c:when test="${objUsuario.sexo}">
 									<label class="radio-inline"><input type="radio"
-										name="rdbSexo" checked>Masculino</label>
+										name="rdbSexo" value="true" checked>Masculino</label>
 									<label class="radio-inline"><input type="radio"
-										name="rdbSexo">Femenino</label>
+										name="rdbSexo" value="false">Femenino</label>
 								</c:when>
 								<c:otherwise>
 									<label class="radio-inline"><input type="radio"
-										name="rdbSexo">Masculino</label>
+										name="rdbSexo" value="true">Masculino</label>
 									<label class="radio-inline"><input type="radio"
-										name="rdbSexo" checked>Femenino</label>
+										name="rdbSexo" value="false" checked>Femenino</label>
 								</c:otherwise>
 							</c:choose>
 
@@ -157,6 +152,12 @@
 					<div class="form-group">
 						<div class="col-sm-12" align="right">
 							<button class="btn btn-info">Cambiar foto</button>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3">Cambiar Foto: </label>
+						<div class="col-sm-9">
+							<input type="file" class="form-control" name="in_rutaFotoPerfil">
 						</div>
 					</div>
 				</form>

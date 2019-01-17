@@ -3,13 +3,17 @@ package controladoresDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import exceptions.ValidacionException;
 import extra.Conexion;
 import extra.Constantes;
 import extra.LOG;
+import extra.Utilitario;
 import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
@@ -312,5 +316,35 @@ public class Usuarios implements Connectable<Usuario> {
 		Usuario objUsuario = new Usuario();
 		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
 		return objUsuario.getRutaFotoPerfil();
+	}
+
+	public ArrayList<Usuario> getListaNuevosUsuarios(String fechaUltConexion) {
+		ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+
+//		getAll().forEach(item -> {
+//			try {
+//				if (Utilitario.compareDateString(item.getFechaAlta(), fechaUltConexion) == 1)
+//					listaUsuarios.add(item);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		});
+		
+		getAll().forEach(item -> {
+			if(item.getFechaAlta().compareTo(fechaUltConexion) > 0)
+				listaUsuarios.add(item);
+		});
+		return listaUsuarios;
+	}
+
+	public ArrayList<Usuario> getListaUsuarios_SortByFechaAlta() {
+		ArrayList<Usuario> listaUsuarios = getAll();
+		/*
+		 * listaUsuarios.sort(Comparator.comparing(obj ->obj.getFechaAlta(),
+		 * Comparator.nullsFirst(Comparator.naturalOrder())));
+		 */
+		listaUsuarios.sort((obj1, obj2) -> obj1.getFechaAlta().compareTo(obj2.getFechaAlta()));
+		return listaUsuarios;
 	}
 }

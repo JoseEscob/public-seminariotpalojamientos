@@ -1,0 +1,9 @@
+******** MODULOS ********
+Paginación
+	poder cambiar de pagina y ver los siguientes objetos
+	
+Dates
+	ADMIN- Corregir lista nuevos usuarios
+	
+Se puede modificar los DAO para que los inserts sean sets como los updates 
+
