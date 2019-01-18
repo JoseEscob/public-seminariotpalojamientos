@@ -44,20 +44,6 @@
 						</select>
 					</div>
 				</form>
-				<div class="form-group" style="">
-					<label>Localidad</label><select class="form-control">
-						<option value="value1">Text 1</option>
-						<option value="value2">Text 2</option>
-						<option value="value3">Text 3</option>
-					</select>
-				</div>
-				<div class="form-group" style="">
-					<label>Zona</label><select class="form-control">
-						<option value="value1">Text 1</option>
-						<option value="value2">Text 2</option>
-						<option value="value3">Text 3</option>
-					</select>
-				</div>
 			</div>
 
 			<div class="col-md-4">

@@ -295,7 +295,13 @@ public class Usuarios implements Connectable<Usuario> {
 		}
 	}
 
-	/// ********************* FUNCIONES LAMBDA ********************** ///
+	/// ********************* LAMBDA - Funciones de obtención de datos ******** ///
+	public Usuario getUsuarioById(int idUsuario) {
+		Usuario objUsuario;
+		objUsuario = this.getAll().stream().filter(item -> item.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario;
+	}
+
 	public Usuario getUsuarioByLogin(String correoUsuario, String claveUsuario) {
 		Usuario objUsuario;
 		objUsuario = this.getAll().stream()
@@ -321,18 +327,18 @@ public class Usuarios implements Connectable<Usuario> {
 	public ArrayList<Usuario> getListaNuevosUsuarios(String fechaUltConexion) {
 		ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
 
-//		getAll().forEach(item -> {
-//			try {
-//				if (Utilitario.compareDateString(item.getFechaAlta(), fechaUltConexion) == 1)
-//					listaUsuarios.add(item);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		});
-		
+		// getAll().forEach(item -> {
+		// try {
+		// if (Utilitario.compareDateString(item.getFechaAlta(), fechaUltConexion) == 1)
+		// listaUsuarios.add(item);
+		// } catch (ParseException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// });
+
 		getAll().forEach(item -> {
-			if(item.getFechaAlta().compareTo(fechaUltConexion) > 0)
+			if (item.getFechaAlta().compareTo(fechaUltConexion) > 0)
 				listaUsuarios.add(item);
 		});
 		return listaUsuarios;

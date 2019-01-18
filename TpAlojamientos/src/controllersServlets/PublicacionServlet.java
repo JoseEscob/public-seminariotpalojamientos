@@ -22,6 +22,7 @@ import controladoresDAO.Usuarios;
 import controladoresDAO.Imagenes;
 import exceptions.ServidorException;
 import exceptions.CargaViewException;
+import exceptions.LectorDatosException;
 import extra.Constantes;
 import extra.LOG;
 import modelo.Comentario;
@@ -44,8 +45,7 @@ public class PublicacionServlet extends HttpServlet {
 	private final Localidades localidadDAO = new Localidades();
 	private final Comentarios comentarioDAO = new Comentarios();
 	private final Usuarios usuarioDAO = new Usuarios();
-	private final Imagenes imagenDAO = new Imagenes();	
-	int cantidadComentarios = 0;
+	private final Imagenes imagenDAO = new Imagenes();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -66,7 +66,7 @@ public class PublicacionServlet extends HttpServlet {
 		try {
 			String accionGET = request.getParameter(Constantes.accionGET);
 			if (accionGET == null) {
-				throw new ServidorException("NULL Param: "+Constantes.accionGET+" en PublicacionServlet");
+				throw new ServidorException("NULL Param: " + Constantes.accionGET + " en PublicacionServlet");
 			}
 			LOG.info(String.format("%s GET: %s", Constantes.logJSPAccion, accionGET));
 			switch (accionGET) {
@@ -99,16 +99,16 @@ public class PublicacionServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {		
+			throws ServletException, IOException {
 		try {
 			String accionPOST = request.getParameter(Constantes.accionPOST);
 			if (accionPOST == null) {
-				throw new ServidorException("NULL Param: "+Constantes.accionPOST+" en PublicacionServlet");
+				throw new ServidorException("NULL Param: " + Constantes.accionPOST + " en PublicacionServlet");
 			}
 			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
 			switch (accionPOST) {
-			case "getLocalidades": 
-				//nombre provisorio
+			case "getLocalidades":
+				// nombre provisorio
 				cargarLocalidadesAjax(request, response);
 				break;
 			case "cmbPartidoSubmit":
@@ -189,172 +189,166 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
-	@SuppressWarnings({ "unused" })
 	private void comentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// 0- Declaración de variables
 		String message = null;
 		ArrayList<Comentario> listaComentarios = null;
-		ArrayList<Comentario> listaComentariosFiltrada = new ArrayList<Comentario>();
 		float publicacionPuntaje = 0;
 		try {
+			// 1- recuperar valores del request y los DAOs
 			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			
 			publicacionPuntaje = publicacionDAO.getObjectByID(idPublicacion).getPuntaje();
-			
-			listaComentarios = comentarioDAO.getAll();
-			listaComentarios.forEach(item -> {
-				if (item.getIdPublicacion() == idPublicacion)
-					listaComentariosFiltrada.add(item);
-			});
-
-			if (listaComentariosFiltrada != null)
-				message = listaComentariosFiltrada.isEmpty() ? "Lista vacía" : "Se filtró la lista";
-			else
-				message = "ERROR al filtrar la lista de Comentarios para la publicación: " + idPublicacion;
-			listaComentarios = listaComentariosFiltrada;
+			listaComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion);
+			// 2- validar información obtenida
+			if (listaComentarios == null) {
+				throw new LectorDatosException(
+						"ERROR: No se encontraron comentarios para el idPublicacion" + idPublicacion);
+			} else {
+				if (listaComentarios.isEmpty())
+					message = "La lista de comentarios está vacía";
+				else
+					message = "Se filtró la lista de comentarios con éxito";
+			}
+			// 3- guardar información en request para su posterior muestra/exposición en JSP
 			request.setAttribute("listaComentarios", listaComentarios);
 			request.setAttribute("publicacionPuntaje", publicacionPuntaje);
-
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
+			// 4- Informar estado/resultados en interfaz (JSP)
 			request.setAttribute("message", message);
 			paginaJsp = "/PublicacionComentarios.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
 	}
-	
-	
+
 	/**********************************************************************/
-	/*******************************AJAX***********************************/
+	/******************************* AJAX *********************************/
 	/**********************************************************************/
 
 	private void cargarLocalidadesAjax(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
+
 		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
-		
-		if(request.getParameter("idPartido") != null) {
-		
+
+		if (request.getParameter("idPartido") != null) {
+
 			Map<String, Object> resultMap = new HashMap<String, Object>();
 			ArrayList<Localidad> localidades = new ArrayList<Localidad>();
-			
+
 			int idPartido = Integer.parseInt(request.getParameter("idPartido"));
 			localidades = localidadDAO.getAllByIdPartido(idPartido);
-			
-			if(localidades != null) {
-				resultMap.put("localidades", localidades);				
+
+			if (localidades != null) {
+				resultMap.put("localidades", localidades);
+			} else {
+				resultMap.put("error", "no se pudo realizar la carga de localidaes");
 			}
-			else {
-				resultMap.put("error", "no se pudo realizar la carga de localidaes");				
-			}
-		
+
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().append(new Gson().toJson(resultMap)); //<----- AJAX RESPONDE SIN REDIRIGIR
+			response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
 		}
-		
+
 	}
-	
-	private void verPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException{
-		
+
+	private void verPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, CargaViewException {
+		// 0- Declaración de variables
+		String message = null;
+		int cantidadComentarios = 0;
+		int idPublicacion = 0;
 		PublicacionView vistaPublicacion = new PublicacionView();
-		cantidadComentarios = 0;
-		if(request.getParameter("idPublicacion") != null) {
-			//Primero buscamos la publicacion
-			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			Publicacion mostrar = publicacionDAO.getObjectByID(idPublicacion);
-			if(mostrar != null) {
-				request.setAttribute("publicacion", mostrar);
+		try {
+			// 1- recuperar valores del request y los DAOs
+			if (request.getParameter("idPublicacion") != null) {
+				idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			}
+			// 1.1 DAO recuperar publicacion
+			Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+			if (objPublicacion == null)
+				throw new LectorDatosException("ERROR: No se encontró la Publicación con ID" + idPublicacion);
+			// 1.2 DAO recuperar usuario de la publicacion
+			Usuario objUsuario = usuarioDAO.getUsuarioById(objPublicacion.getIdUsuario());
+			if (objUsuario == null)
+				throw new LectorDatosException(
+						"ERROR: No se encontró un usuario con ID" + objPublicacion.getIdUsuario());
+			// 1.3 DAO recuperar lista de imagenes de la publicacion
+			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
+			// 1.4 DAO recuperar cantidad de Comentarios de la publicacion
+			cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
 			
-				vistaPublicacion.setPublicacion(mostrar);
-				//Buscamos los datos del usuario de la publicacion
-				Usuario u = new Usuario();
-				u.setIdUsuario(mostrar.getIdUsuario());
-				Usuario usuario = usuarioDAO.get(u);
-				if(usuario != null) {
-					request.setAttribute("usuarioPublicacion", usuario);
-					vistaPublicacion.setUsuario(usuario);
-				}
 			
-				//Ahora buscamos las rutas de las imagenes de la publicacion
-				vistaPublicacion.cargarImagenes(imagenDAO.getAll());
-				
-				//Despues buscamos la cantidad de comentarios
-				ArrayList<Comentario> comentarios = comentarioDAO.getAll();
-				if(comentarios != null) {
-					comentarios.forEach(item -> {
-						if(item.getIdPublicacion() == idPublicacion) 
-							cantidadComentarios++;
-					});
-					vistaPublicacion.setComentarios(cantidadComentarios);
-				}
-				
-				request.setAttribute("vistaPublicacion", vistaPublicacion);
 			
-			} //Validaciones del else?	
+			vistaPublicacion.setPublicacion(objPublicacion);
+			vistaPublicacion.setUsuario(objUsuario);
+			vistaPublicacion.setCantComentarios(cantidadComentarios);
 			
-		} //Validaciones del else?
-		
-		paginaJsp = "/Publicacion.jsp";
-		request.getRequestDispatcher(paginaJsp).forward(request, response);
-		
+			request.setAttribute("publicacion", objPublicacion);
+			request.setAttribute("usuarioPublicacion", objUsuario);
+			request.setAttribute("vistaPublicacion", vistaPublicacion);
+
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 4- Informar estado/resultados en interfaz (JSP)
+			request.setAttribute("message", message);
+			paginaJsp = "/PublicacionView.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
 	}
-	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, CargaViewException{
-		
-			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), publicacionDAO.getCount());
-			
-			ArrayList<Publicacion> publicaciones = publicacionDAO.getLimit(pagination.getPaginaActual(), pagination.getCantidadElementos());
-			ArrayList<PublicacionView> vistas = new ArrayList<PublicacionView>();
-	
-			if(publicaciones != null) {
-				for(Publicacion p: publicaciones) {
-					PublicacionView vistaPublicacion = new PublicacionView(); 
-					
-					//Primero buscamos la publicacion
-					int idPublicacion = p.getIdPublicacion();
-					Publicacion mostrar = publicacionDAO.getObjectByID(idPublicacion);
-					if(mostrar != null) {
-						request.setAttribute("publicacion", mostrar);
-					
-						vistaPublicacion.setPublicacion(mostrar);
-						//Buscamos los datos del usuario de la publicacion
-						Usuario u = new Usuario();
-						u.setIdUsuario(mostrar.getIdUsuario());
-						Usuario usuario = usuarioDAO.get(u);
-						if(usuario != null) {
-							request.setAttribute("usuarioPublicacion", usuario);
-							vistaPublicacion.setUsuario(usuario);
-						}//Validaciones del else?	
-					
-						//Ahora buscamos las rutas de las imagenes de la publicacion
-						vistaPublicacion.cargarImagenes(imagenDAO.getAll());
-					
-					
-						//Despues buscamos la cantidad de comentarios
-						ArrayList<Comentario> comentarios = comentarioDAO.getAll();
-						cantidadComentarios = 0;
-						if(comentarios != null) {
-							comentarios.forEach(item -> {
-								if(item.getIdPublicacion() == idPublicacion) 
-									cantidadComentarios++;
-							});
-							vistaPublicacion.setComentarios(cantidadComentarios);
-						}//Validaciones del else?	
-						vistas.add(vistaPublicacion);					
-					} //Validaciones del else?		
-				}
-			} //Validaciones del else?		
-		request.setAttribute("publicaciones", vistas);
+
+	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException, CargaViewException {
+		int cantidadComentarios = 0;
+		PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"),
+				publicacionDAO.getCount());
+
+		ArrayList<Publicacion> listaPublicacion = publicacionDAO.getLimit(pagination.getPaginaActual(),
+				pagination.getCantidadElementos());
+		ArrayList<PublicacionView> listaPublicacionView = new ArrayList<PublicacionView>();
+
+		if (listaPublicacion != null) {
+			for (Publicacion p : listaPublicacion) {
+				PublicacionView vistaPublicacion = new PublicacionView();
+
+				// Primero buscamos la publicacion
+				int idPublicacion = p.getIdPublicacion();
+				Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+				if (objPublicacion != null) {
+					request.setAttribute("publicacion", objPublicacion);
+
+					vistaPublicacion.setPublicacion(objPublicacion);
+					// Buscamos los datos del usuario de la publicacion
+					Usuario objUsuario = usuarioDAO.getUsuarioById(objPublicacion.getIdUsuario());
+					if (objUsuario != null) {
+						request.setAttribute("usuarioPublicacion", objUsuario);
+						vistaPublicacion.setUsuario(objUsuario);
+					} // Validaciones del else?
+
+					// Ahora buscamos las rutas de las imagenes de la publicacion
+					// vistaPublicacion.cargarImagenes(imagenDAO.getAll());
+					// vistaPublicacion.cargarImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
+
+					// Despues buscamos la cantidad de comentarios
+					cantidadComentarios = 0;
+					cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
+					vistaPublicacion.setCantComentarios(cantidadComentarios);
+					listaPublicacionView.add(vistaPublicacion);
+				} // Validaciones del else?
+			}
+		} // Validaciones del else?
+		request.setAttribute("publicaciones", listaPublicacionView);
 		request.setAttribute("paginacion", pagination);
-		
-		
+
 		paginaJsp = "/Publicaciones.jsp";
-		request.getRequestDispatcher(paginaJsp).forward(request, response);		
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
-	
-	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		//Modulo de busqueda
+
+	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// Modulo de busqueda
 	}
 
 }

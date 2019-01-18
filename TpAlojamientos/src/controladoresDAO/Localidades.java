@@ -197,4 +197,10 @@ public class Localidades implements Connectable<Localidad> {
 		return listaLocalidadesFiltrada;
 	}
 
+	public Localidad getLocalidadById(int idLocalidad) {
+		Localidad objLocalidad = new Localidad();
+		objLocalidad = getAll().stream().filter(item -> item.getIdLocalidad() == idLocalidad).findFirst().orElse(null);
+		return objLocalidad;
+	}
+
 }

@@ -189,4 +189,14 @@ public class Imagenes implements Connectable<Imagen> {
 		return o;
 	}
 
+	/// ********************* LAMBDA - Funciones de obtención de datos ******** ///
+	public ArrayList<Imagen> getAllByIdPublicacion(int idPublicacion) {
+		ArrayList<Imagen> listaImagenes = new ArrayList<Imagen>();
+		getAll().forEach(item -> {
+			if (item.getIdPublicacion() == idPublicacion)
+				listaImagenes.add(item);
+		});
+		return listaImagenes;
+	}
+
 }

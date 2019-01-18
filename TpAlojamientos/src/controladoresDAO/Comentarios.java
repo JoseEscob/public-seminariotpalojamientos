@@ -222,5 +222,14 @@ public class Comentarios implements Connectable<Comentario> {
 		o.setNombreApellidoUsuario(nombreApellidoUsuario);
 		return o;
 	}
-
+	
+	/// ********************* LAMBDA - Funciones de obtención de datos ******** ///
+	public ArrayList<Comentario> getAllByIdPublicacion(int idPublicacion) {
+		ArrayList<Comentario> listaComentarios = new ArrayList<Comentario>();
+		getAll().forEach(item -> {
+			if (item.getIdPublicacion() == idPublicacion)
+				listaComentarios.add(item);
+		});
+		return listaComentarios;
+	}
 }
