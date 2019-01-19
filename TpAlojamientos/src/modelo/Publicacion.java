@@ -19,7 +19,7 @@ public class Publicacion {
 
 	private int supCubierta;
 	private int supDescubierta;
-	private int chkExpensas;
+	private boolean chkExpensas;
 	private int precioExpensas;
 	private int precioNoche;
 
@@ -28,7 +28,7 @@ public class Publicacion {
 	private int cantBanios;
 	private int cantHabitaciones;
 	private int aniosAntiguedad;
-	
+
 	private Date fechaAlta;
 	private float puntaje;
 	private boolean habilitado;
@@ -146,11 +146,11 @@ public class Publicacion {
 		this.supDescubierta = supDescubierta;
 	}
 
-	public int getChkExpensas() {
+	public boolean getChkExpensas() {
 		return chkExpensas;
 	}
 
-	public void setChkExpensas(int chkExpensas) {
+	public void setChkExpensas(boolean chkExpensas) {
 		this.chkExpensas = chkExpensas;
 	}
 

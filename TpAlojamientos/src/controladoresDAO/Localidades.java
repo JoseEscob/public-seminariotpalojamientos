@@ -182,6 +182,7 @@ public class Localidades implements Connectable<Localidad> {
 		o.setNombre(rs.getString(cCampo.nombre));
 		o.setCodPostal(rs.getInt(cCampo.codPostal));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+	
 		return o;
 	}
 
@@ -203,4 +204,12 @@ public class Localidades implements Connectable<Localidad> {
 		return objLocalidad;
 	}
 
+	public String getNombrePartido(int idPartido) {
+		Partidos partidosDAO = new Partidos();
+		String nombrePartido = partidosDAO.getPartidoById(idPartido).getNombre();
+		return nombrePartido;
+//		if(nombrePartido.isEmpty()) {
+//			nombrePartido = "";
+//		}
+	}
 }

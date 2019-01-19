@@ -255,6 +255,12 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setPuntaje(rs.getFloat(cPubli.puntaje));
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
 		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
+
+		if (o.getPrecioExpensas() > 0)
+			o.setChkExpensas(true);
+		else
+			o.setChkExpensas(false);
+
 		return o;
 	}
 

@@ -164,5 +164,9 @@ public class Partidos implements Connectable<Partido> {
 	}
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
-
+	public Partido getPartidoById(int idPartido) {
+		Partido objPartido = new Partido();
+		objPartido = getAll().stream().filter(item -> item.getIdPartido() == idPartido).findFirst().orElse(null);
+		return objPartido;
+	}
 }

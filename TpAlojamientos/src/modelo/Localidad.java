@@ -7,6 +7,8 @@ public class Localidad {
 	private int codPostal;
 	private boolean habilitado;
 
+	private String nombrePartido;
+	
 	public int getIdLocalidad() {
 		return idLocalidad;
 	}
@@ -45,6 +47,14 @@ public class Localidad {
 
 	public void setCodPostal(int codPostal) {
 		this.codPostal = codPostal;
+	}
+
+	public String getNombrePartido() {
+		return nombrePartido;
+	}
+
+	public void setNombrePartido(String nombrePartido) {
+		this.nombrePartido = nombrePartido;
 	}
 
 }

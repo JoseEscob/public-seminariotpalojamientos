@@ -81,7 +81,7 @@ public class PublicacionServlet extends HttpServlet {
 				// altaPublicacion(request, response);
 				break;
 			case "VerComentarios":
-				comentariosPublicacion(request, response);
+				verComentariosPublicacion(request, response);
 				break;
 			case "Buscar":
 				buscarPublicaciones(request, response);
@@ -119,7 +119,7 @@ public class PublicacionServlet extends HttpServlet {
 				// altaPublicacion(request, response);
 				break;
 			case "VerComentarios":
-				comentariosPublicacion(request, response);
+				verComentariosPublicacion(request, response);
 				break;
 			case "read":
 				break;
@@ -189,7 +189,7 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
-	private void comentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
+	private void verComentariosPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- Declaración de variables
 		String message = null;
@@ -278,6 +278,9 @@ public class PublicacionServlet extends HttpServlet {
 			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
 			// 1.4 DAO recuperar cantidad de Comentarios de la publicacion
 			cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
+			// 1.5 DAO recuperar ubicación TODO: revisar
+			Localidad objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
+			objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
 
 			vistaPublicacion.setPublicacion(objPublicacion);
 			vistaPublicacion.setUsuario(objUsuario);
@@ -287,6 +290,7 @@ public class PublicacionServlet extends HttpServlet {
 			// request.setAttribute("publicacion", objPublicacion);
 			// request.setAttribute("usuarioPublicacion", objUsuario);
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
+			request.setAttribute("objLocalidad", objLocalidad);
 
 		} catch (Exception e) {
 			message = e.getMessage();

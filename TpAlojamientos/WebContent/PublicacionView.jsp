@@ -12,11 +12,10 @@
 
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
-		<h2>${vistaPublicacion.publicacion.nombre}</h2>
-		<h4>Puntuación Gral.
-			${vistaPublicacion.publicacion.puntaje}&nbsp;/5</h4>
-		<hr />
-		<div class="row col-md-12">
+
+		<div class="row">
+			<h2>${vistaPublicacion.publicacion.nombre}</h2>
+			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
 			<div class="col-md-8">
 				<div id="myCarousel" class="carousel slide col-md-6"
@@ -47,40 +46,77 @@
 					</a>
 				</div>
 			</div>
+
 			<!--Seccion del propietario a la izquierda-->
-
-
-			<div class="col-md-2 well">
+			<div class="col-md-4 well">
 				<div class="row col-md-12">
-					<c:choose>
-						<c:when test="${vistaPublicacion.cantComentarios gt 0}">
-							<h4>Comentarios de la publicación:
-								${vistaPublicacion.cantComentarios}</h4>
-							<form
-								action="PublicacionServlet?accionPOST=VerComentarios&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}"
-								method="post">
-								<button class="btn btn-info">Ver los comentarios de
-									esta publicación</button>
-							</form>
-
-							<a class="btn btn-primary"
-								href="PublicacionServlet?accionPOST=VerComentarios&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}">Ver
-								${vistaPublicacion.cantComentarios} Comentarios</a>
-						</c:when>
-						<c:otherwise>
-							<h4>No hay comentarios para esta publicación.</h4>
-						</c:otherwise>
-					</c:choose>
+					<h3>Precio por Noche: <b>$&nbsp;${vistaPublicacion.publicacion.precioNoche}</b></h3>
 				</div>
-
-
 				<div class="row col-md-12">
-					<button class="btn btn-success">Solicitar reserva</button>
+					<h4>
+						<span class="glyphicon glyphicon-stats"/></span>
+						Puntuación Gral. ${vistaPublicacion.publicacion.puntaje}&nbsp;/5
+					</h4>
+				</div>
+				<div class="form-group">
+						<label class="control-label col-xs-4">Ubicado en: </label>
+						<label class="control-label col-xs-8">${vistaPublicacion.publicacion.calle} al ${vistaPublicacion.publicacion.altura}</label>
+						
+						<label class="control-label col-xs-4">Partido de: </label>
+						<label class="control-label col-xs-8">${objLocalidad.nombrePartido}</label>
+						
+						<label class="control-label col-xs-4">Localidad: </label>
+						<label class="control-label col-xs-8">${objLocalidad.nombre}</label>
+						
+						<label class="control-label col-xs-4">Cód. Postal: </label>
+						<label class="control-label col-xs-8">${objLocalidad.codPostal}</label>
+				</div>
+				<div class="row col-md-12">
+					<br>
+				</div>
+				<div class="row col-md-12">
+					<div class="row col-md-6 pull-left">
+						<c:choose>
+							<c:when test="${vistaPublicacion.cantComentarios gt 0}">
+								<c:url value="PublicacionServlet?" var="urlPublicacionComentarios">
+					                <c:param name="accionPOST" value="VerComentarios"/>
+					                <c:param name="idPublicacion" value="${vistaPublicacion.publicacion.idPublicacion}"/>
+					            </c:url>
+								<form method="post" action="${urlPublicacionComentarios}">
+									<button class="btn btn-default">Ver ${vistaPublicacion.cantComentarios} Comentarios</button>
+								</form>
+							</c:when>
+							<c:otherwise>
+								<button class="btn btn-default" title="Esta publicación aún no tiene comentarios. Dejá el tuyo">Dejar un Comentario</button>
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<div class="row col-md-6 pull-right">
+						<button class="btn btn-primary" title="Guardar esta publicación para verla más tarde"><span class="glyphicon glyphicon-heart"/></span>&nbsp;Agregar a favoritos</button>
+					</div>
+				</div>
+				<div class="row col-md-12">
+					<br>
+				</div>
+				<div class="row col-md-12" align="center">
+					<button class="btn btn-success btn-lg">Solicitar una reserva</button>
 				</div>
 			</div>
+		</div>
 
-			<div class="col-md-2 well" align="center">
-				<h4>Propietario</h4>
+
+
+		<div class="row">
+			<h3>Descripción</h3>
+			<hr />
+			<div class="col-md-8">
+				<div class="form-group">
+					<p>${vistaPublicacion.publicacion.descripcion}</p>
+				</div>
+			</div>
+			
+			<div class="col-md-4 well" align="center">
+				<h4>Datos del Propietario</h4>
 				<div class="row col-md-12">
 					<img src="${vistaPublicacion.usuario.rutaFotoPerfil}"
 						class="media-object img-circle" style="height: 50px; width: 50px;">
@@ -97,21 +133,6 @@
 
 			</div>
 		</div>
-		<hr />
-		<!--Seccion de los comentarios abajo-->
-		<!--Hay que verificar existencia de comentarios -->
-
-
-
-		<div class="row">
-			<h3>Descripción</h3>
-			<hr />
-			<div class="col-md-12">
-				<div class="col-md-8 form-group">
-					<p>${vistaPublicacion.publicacion.descripcion}</p>
-				</div>
-			</div>
-		</div>
 
 		<div class="row">
 			<h3>Características</h3>
@@ -119,25 +140,24 @@
 			<div class="col-md-12">
 				<div class="form-group col-md-8">
 					<div class="col-md-6">
-						<p>cant Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b></p>
-						<p>cant Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b></p>
-						<p>cant Banios:  <b>${vistaPublicacion.publicacion.cantBanios}</b></p>
-						<p>cant Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b></p>
-						<p>años Antiguedad:  <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b></p>
+						<p>Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b></p>
+						<p>Cant. Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b></p>
+						<p>Cant. Banios:  <b>${vistaPublicacion.publicacion.cantBanios}</b></p>
+						<p>Cant. Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b></p>
+						<p>Años de Antiguedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b></p>
 					</div>
 					<div class="col-md-6">
 						<p>Superficie Cubierta(m²): <b>${vistaPublicacion.publicacion.supCubierta}</b></p>
 						<p>Superficie Descubierta(m²): <b>${vistaPublicacion.publicacion.supDescubierta}</b></p>
 						<c:choose>
 							<c:when test="${vistaPublicacion.publicacion.chkExpensas}">
-								<p>Tiene expensas: <b>Si</b></p>
-								<p>Precio expensas:  <b>${vistaPublicacion.publicacion.precioExpensas}</b></p>
+								<p>Tiene expensas : <b>Si</b></p>
+								<p>Precio expensas: <b>$&nbsp;${vistaPublicacion.publicacion.precioExpensas}</b></p>
 							</c:when>
 							<c:otherwise>
 								<p>Tiene expensas: <b>No</b></p>
 							</c:otherwise>
 						</c:choose>
-						<p>Precio Noche:  <b>${vistaPublicacion.publicacion.precioNoche}</b></p>
 					</div>
 				</div>
 			</div>
