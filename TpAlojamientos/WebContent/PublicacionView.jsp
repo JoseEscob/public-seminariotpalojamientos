@@ -117,8 +117,28 @@
 			<h3>Características</h3>
 			<hr />
 			<div class="col-md-12">
-				<div class="col-md-8 form-group">
-					<p>${vistaPublicacion.publicacion.puntaje}</p>
+				<div class="form-group col-md-8">
+					<div class="col-md-6">
+						<p>cant Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b></p>
+						<p>cant Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b></p>
+						<p>cant Banios:  <b>${vistaPublicacion.publicacion.cantBanios}</b></p>
+						<p>cant Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b></p>
+						<p>años Antiguedad:  <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b></p>
+					</div>
+					<div class="col-md-6">
+						<p>Superficie Cubierta(m²): <b>${vistaPublicacion.publicacion.supCubierta}</b></p>
+						<p>Superficie Descubierta(m²): <b>${vistaPublicacion.publicacion.supDescubierta}</b></p>
+						<c:choose>
+							<c:when test="${vistaPublicacion.publicacion.chkExpensas}">
+								<p>Tiene expensas: <b>Si</b></p>
+								<p>Precio expensas:  <b>${vistaPublicacion.publicacion.precioExpensas}</b></p>
+							</c:when>
+							<c:otherwise>
+								<p>Tiene expensas: <b>No</b></p>
+							</c:otherwise>
+						</c:choose>
+						<p>Precio Noche:  <b>${vistaPublicacion.publicacion.precioNoche}</b></p>
+					</div>
 				</div>
 			</div>
 		</div>

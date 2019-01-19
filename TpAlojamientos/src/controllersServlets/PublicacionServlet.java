@@ -278,15 +278,14 @@ public class PublicacionServlet extends HttpServlet {
 			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
 			// 1.4 DAO recuperar cantidad de Comentarios de la publicacion
 			cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
-			
-			
-			
+
 			vistaPublicacion.setPublicacion(objPublicacion);
 			vistaPublicacion.setUsuario(objUsuario);
 			vistaPublicacion.setCantComentarios(cantidadComentarios);
-			
-			request.setAttribute("publicacion", objPublicacion);
-			request.setAttribute("usuarioPublicacion", objUsuario);
+			// TODO: Revisar. Ya no sería necesario si se usa la clase view que ya contiene
+			// a otras clases
+			// request.setAttribute("publicacion", objPublicacion);
+			// request.setAttribute("usuarioPublicacion", objUsuario);
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
 
 		} catch (Exception e) {
