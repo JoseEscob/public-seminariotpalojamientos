@@ -78,10 +78,10 @@
 						<c:forEach var="item" begin="1" end="${paginacion.paginas}">
 							<c:choose>
 								<c:when test="${item eq paginacion.paginaActual}">
-									<li class="active"><a href="#"><c:out value="${item}"/></a></li>
+									<li class="active"><a href=""><c:out value="${item}"/></a></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="#"><c:out value="${item}"/></a></li>
+									<li><a href="PublicacionServlet?accionGET=VerPublicaciones&Pagina=${item}"><c:out value="${item}"/></a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
