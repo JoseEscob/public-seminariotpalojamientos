@@ -1,9 +1,20 @@
-******** MODULOS ********
-Paginación
-	poder cambiar de pagina y ver los siguientes objetos
-	
+******* ELEMENTOS A CORREGIR *******
+Solicitudes
+	Terminar la pagina de vista .jsp
+
 Dates
 	ADMIN- Corregir lista nuevos usuarios
 	
-Se puede modificar los DAO para que los inserts sean sets como los updates 
+	
+******* ELEMENTOS DE BAJA PRIORIDAD *******
+Codigo paquete DAO
+	Se puede modificar los DAO para que los inserts sean sets como los updates
+	Crear una clase con la que se pueda implementar las fuciones readPs y writePs para todas las clases del paquete.
 
+Publicaciones
+	Corregir imagenes
+
+	
+******* ELEMENTOS FINALIZADOS *******
+Paginación
+	poder cambiar de pagina y ver los siguientes objetos 

@@ -1,11 +1,13 @@
 package controladoresDAO;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.LOG;
 import modelo.Publicacion;
 import modelo.Solicitud;
 import modelo.TipoEstadoSolicitud;
@@ -22,7 +24,8 @@ public class Solicitudes implements Connectable<Solicitud> {
 				+ "fechaBaja=?, cantDias=?, esDeReserva=?, idEstadoSolicitud=?, habilitado=? where idSolicitud=?");
 		put("get","select * from solicitudes where idSolicitud=?");
 		put("getByidUsuario", "select * from solicitudes where idUsuario=?");
-		put("like", "");
+		put("limitByIdUsuario", "select * from solicitudes where idUSuario=? limit ?, ?");
+		
 			
 	}};
 
@@ -232,8 +235,9 @@ public class Solicitudes implements Connectable<Solicitud> {
 	
 	public ArrayList<Solicitud> getByidUsuario(int idUsuario){
 		cn = new Conexion();
-		m = new ArrayList<Solicitud>();
+		m = null;
 		try {
+			m = new ArrayList<Solicitud>();
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByidUsuario"));
 			ps.setInt(1, idUsuario);
 			ResultSet rs = ps.executeQuery();
@@ -262,6 +266,208 @@ public class Solicitudes implements Connectable<Solicitud> {
 			 cn.close();
 		 }
 		 return m;
+	}
+	public ArrayList<Solicitud> getByidUsuarioReserva(int idUsuario){
+		cn = new Conexion();
+		m = null;
+		try {
+			m = new ArrayList<Solicitud>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByidUsuario"));
+			ps.setInt(1, idUsuario);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){					
+				Solicitud o = new Solicitud();
+				o.setIdSolicitud(rs.getInt(1));
+				o.setIdUsuario(rs.getInt(2));
+				o.setIdPublicacion(rs.getInt(3));
+				o.setFechaAlta(rs.getDate(4));
+				o.setFechaConfirmacion(rs.getDate(5));
+				o.setFechaBaja(rs.getDate(6));
+				o.setCantDias(rs.getInt(7));
+				o.setEsDeReserva(rs.getBoolean(8));
+				o.setIdEstadoSolicitud(rs.getInt(9));
+				o.setHabilitado(rs.getBoolean(10));
+				if(o.isEsDeReserva())
+					m.add(o);
+			 }
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 finally
+		 {
+			 cn.close();
+		 }
+		 return m;
+	}
+	public ArrayList<Solicitud> getByidUsuarioAlojamiento(int idUsuario){
+		cn = new Conexion();
+		m  = null;
+		try {
+			m = new ArrayList<Solicitud>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("getByidUsuario"));
+			ps.setInt(1, idUsuario);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){					
+				Solicitud o = new Solicitud();
+				o.setIdSolicitud(rs.getInt(1));
+				o.setIdUsuario(rs.getInt(2));
+				o.setIdPublicacion(rs.getInt(3));
+				o.setFechaAlta(rs.getDate(4));
+				o.setFechaConfirmacion(rs.getDate(5));
+				o.setFechaBaja(rs.getDate(6));
+				o.setCantDias(rs.getInt(7));
+				o.setEsDeReserva(rs.getBoolean(8));
+				o.setIdEstadoSolicitud(rs.getInt(9));
+				o.setHabilitado(rs.getBoolean(10));
+				if(!o.isEsDeReserva())
+					m.add(o);
+			 }
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 finally
+		 {
+			 cn.close();
+		 }
+		 return m;
+	}
+	
+	public ArrayList<Solicitud> limitByIdUsuario(int idUsuario, int paginaActual, int cantidadRegistros){
+		cn = new Conexion();
+		m = null;
+
+		int inicio = paginaActual * cantidadRegistros - cantidadRegistros;
+
+		try {
+			cn.Open();
+			m = new ArrayList<Solicitud>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("limitByIdUSuario"));
+			ps.setInt(1, idUsuario);
+			ps.setInt(2, inicio);
+			ps.setInt(3, cantidadRegistros);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Solicitud o = new Solicitud();
+		
+				
+				o.setIdSolicitud(rs.getInt("idSolicitud"));
+				o.setIdUsuario(rs.getInt("idUsuario"));
+				o.setIdPublicacion(rs.getInt("idPublicacion"));
+				o.setFechaAlta(rs.getDate("fechaAlta"));
+				o.setFechaConfirmacion(rs.getDate("fechaConfirmacion"));
+				o.setFechaBaja(rs.getDate("fechaBaja"));
+				o.setCantDias(rs.getInt("cantDias"));
+				o.setEsDeReserva(rs.getBoolean("esDeReserva"));
+				o.setIdEstadoSolicitud(rs.getInt("idEstadoSolicitud"));
+				o.setHabilitado(rs.getBoolean("habilitado"));
+				
+				LOG.info(rs.getStatement().toString());
+				m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		
+		return m;
+	}
+	public ArrayList<Solicitud> limitByIdUsuarioReserva(int idUsuario, int paginaActual, int cantidadRegistros){
+		cn = new Conexion();
+		m = null;
+
+		int inicio = paginaActual * cantidadRegistros - cantidadRegistros;
+
+		try {
+			cn.Open();
+			m = new ArrayList<Solicitud>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("limitByIdUSuario"));
+			ps.setInt(1, idUsuario);
+			ps.setInt(2, inicio);
+			ps.setInt(3, cantidadRegistros);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Solicitud o = new Solicitud();
+		
+				
+				o.setIdSolicitud(rs.getInt("idSolicitud"));
+				o.setIdUsuario(rs.getInt("idUsuario"));
+				o.setIdPublicacion(rs.getInt("idPublicacion"));
+				o.setFechaAlta(rs.getDate("fechaAlta"));
+				o.setFechaConfirmacion(rs.getDate("fechaConfirmacion"));
+				o.setFechaBaja(rs.getDate("fechaBaja"));
+				o.setCantDias(rs.getInt("cantDias"));
+				o.setEsDeReserva(rs.getBoolean("esDeReserva"));
+				o.setIdEstadoSolicitud(rs.getInt("idEstadoSolicitud"));
+				o.setHabilitado(rs.getBoolean("habilitado"));
+				
+				LOG.info(rs.getStatement().toString());
+				if(o.isEsDeReserva())
+					m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		
+		return m;
+	}
+	public ArrayList<Solicitud> limitByIdUsuarioAlojamiento(int idUsuario, int paginaActual, int cantidadRegistros){
+		cn = new Conexion();
+		m = null;
+
+		int inicio = paginaActual * cantidadRegistros - cantidadRegistros;
+
+		try {
+			cn.Open();
+			m = new ArrayList<Solicitud>();
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("limitByIdUSuario"));
+			ps.setInt(1, idUsuario);
+			ps.setInt(2, inicio);
+			ps.setInt(3, cantidadRegistros);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Solicitud o = new Solicitud();
+		
+				
+				o.setIdSolicitud(rs.getInt("idSolicitud"));
+				o.setIdUsuario(rs.getInt("idUsuario"));
+				o.setIdPublicacion(rs.getInt("idPublicacion"));
+				o.setFechaAlta(rs.getDate("fechaAlta"));
+				o.setFechaConfirmacion(rs.getDate("fechaConfirmacion"));
+				o.setFechaBaja(rs.getDate("fechaBaja"));
+				o.setCantDias(rs.getInt("cantDias"));
+				o.setEsDeReserva(rs.getBoolean("esDeReserva"));
+				o.setIdEstadoSolicitud(rs.getInt("idEstadoSolicitud"));
+				o.setHabilitado(rs.getBoolean("habilitado"));
+				
+				LOG.info(rs.getStatement().toString());
+				if(!o.isEsDeReserva())
+					m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		
+		return m;
 	}
 
 }

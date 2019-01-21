@@ -21,7 +21,7 @@ public class PublicacionView {
 	private Favorito objFavorito;
 	
 	public PublicacionView() {
-
+		this.setCantComentarios(0);
 	}
 
 	public Publicacion getPublicacion() {

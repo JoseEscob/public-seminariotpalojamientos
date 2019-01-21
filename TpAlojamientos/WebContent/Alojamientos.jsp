@@ -14,8 +14,8 @@
 	<div class="container">
 		<h2>En construccion!</h2>
 		<h2>Las solicitudes son las reservas de otros para mi alojamiento</h2>
-		<c:if test="${fn:length(publicaciones) gt 1 }">
-			<h5>Se encontraron <c:out value="${fn:length(publicaciones)}"/> publicaciones.</h5>
+		<c:if test="${fn:length(solicitudesAlojamientos) gt 1 }">
+			<h5>Se encontraron <c:out value="${fn:length(solicitudesAlojamientos)}"/> solicitudes de alojamiento.</h5>
 		</c:if>
 		<hr/>
 		<div class="col-md-3">
@@ -80,18 +80,16 @@
 						<c:forEach var="item" begin="1" end="${paginacion.paginas}">
 							<c:choose>
 								<c:when test="${item eq paginacion.paginaActual}">
-									<li class="active"><a href="#"><c:out value="${item}"/></a></li>
+									<li class="active"><a href=""><c:out value="${item}"/></a></li>
 								</c:when>
 								<c:otherwise>
-									<li><a href="#"><c:out value="${item}"/></a></li>
+									<li><a href="SolicitudServlet?accionGET=SolicitudesAlojamiento&Pagina=${item}"><c:out value="${item}"/></a></li>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 					</ul>
 				</c:when>
-				<c:otherwise>
-					NO.
-				</c:otherwise>
+			
 			</c:choose>
 
 		</div>

@@ -12,7 +12,7 @@ public class SolicitudView {
 	private Solicitud solicitud;
 	private TipoEstadoSolicitud estadoSolicitud;
 	private Usuario usuario;
-	private Publicacion publicacion;
+	private PublicacionView publicacion;
 	
 	public SolicitudView() {
 		
@@ -40,10 +40,10 @@ public class SolicitudView {
 			throw new CargaViewException("El parametro de la funcion setUsuario de SolicitudView es nulo");
 		this.usuario = usuario;
 	}
-	public Publicacion getPublicacion() {
+	public PublicacionView getPublicacion() {
 		return publicacion;
 	}
-	public void setPublicacion(Publicacion publicacion)throws CargaViewException {
+	public void setPublicacion(PublicacionView publicacion)throws CargaViewException {
 		if(publicacion == null)
 			throw new CargaViewException("El parametro de la funcion setPublicacion de SolicitudView es nulo");
 		this.publicacion = publicacion;

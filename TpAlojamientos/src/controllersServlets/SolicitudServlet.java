@@ -12,10 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import controladoresDAO.Publicaciones;
 import controladoresDAO.Solicitudes;
 import controladoresDAO.TiposEstadosSolicitudes;
+import controladoresDAO.Usuarios;
 import exceptions.ServidorException;
 import exceptions.CargaViewException;
 import extra.Constantes;
 import extra.ORSesion;
+import modelo.Publicacion;
 import modelo.Solicitud;
 import modelo.Usuario;
 import modelo.TipoEstadoSolicitud;
@@ -32,6 +34,7 @@ public class SolicitudServlet extends HttpServlet {
 	private Solicitudes solicitudDao = new Solicitudes();
 	private Publicaciones publicacionDAO = new Publicaciones();
 	private TiposEstadosSolicitudes tesDAO = new TiposEstadosSolicitudes();
+	private Usuarios usuarioDAO = new Usuarios();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -102,22 +105,33 @@ public class SolicitudServlet extends HttpServlet {
 		
 		if(ORSesion.sesionActiva(request)) {
 			Usuario usuario = ORSesion.getUsuarioBySesion(request);
+			ArrayList<Solicitud> solicitudes = solicitudDao.getByidUsuarioReserva(usuario.getIdUsuario());
+
+			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudes.size());
+			
 			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
-			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
-			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
+			solicitudes = solicitudDao.limitByIdUsuario(usuario.getIdUsuario(), pagination.getPaginaActual(), pagination.getCantidadElementos());
+
 			for(Solicitud solicitud : solicitudes) {
 				if(solicitud.isEsDeReserva()) {
 					SolicitudView solicitudVista = new SolicitudView();
 					solicitudVista.setSolicitud(solicitud);
 					solicitudVista.setUsuario(usuario);
-					solicitudVista.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					PublicacionView vistaPublicacion = new PublicacionView();
+					vistaPublicacion.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					//vistaPublicacion.setImagenes(imagenes);
+					Usuario objUsuario = usuarioDAO.getUsuarioById(vistaPublicacion.getPublicacion().getIdUsuario());
+					if(objUsuario != null) {
+						vistaPublicacion.setUsuario(objUsuario);
+					}
+					
+					solicitudVista.setPublicacion(vistaPublicacion);
 					TipoEstadoSolicitud tes = new TipoEstadoSolicitud();
 					tes.setIdEstadoSolicitud(solicitud.getIdEstadoSolicitud());
 					solicitudVista.setEstadoSolicitud(tesDAO.get(tes));
 					solicitudesVistas.add(solicitudVista);
 				}
 			}
-			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudesVistas.size());
 			request.setAttribute("paginacion", pagination);
 			request.setAttribute("solicitudesReservas", solicitudesVistas);
 
@@ -129,26 +143,36 @@ public class SolicitudServlet extends HttpServlet {
 	}
 	
 	private void buscarAlijamientosUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, CargaViewException {
-		//ADEMAS DE ESTO HAY QUE CARGAR UN PUBLICACIONVIEW POR CADA SOLICITUD.
-		
+
 		if(ORSesion.sesionActiva(request)) {
 			Usuario usuario = ORSesion.getUsuarioBySesion(request);
+			ArrayList<Solicitud> solicitudes = solicitudDao.getByidUsuarioAlojamiento(usuario.getIdUsuario());
+
+			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudes.size());
+			
 			ArrayList<SolicitudView> solicitudesVistas = new ArrayList<SolicitudView>();
-			ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
-			solicitudes = solicitudDao.getByidUsuario(usuario.getIdUsuario());
+			solicitudes = solicitudDao.limitByIdUsuario(usuario.getIdUsuario(), pagination.getPaginaActual(), pagination.getCantidadElementos());
 			for(Solicitud solicitud : solicitudes) {
 				if(!solicitud.isEsDeReserva()) {
 					SolicitudView solicitudVista = new SolicitudView();
 					solicitudVista.setSolicitud(solicitud);
 					solicitudVista.setUsuario(usuario);
-					solicitudVista.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					
+					PublicacionView vistaPublicacion = new PublicacionView();
+					vistaPublicacion.setPublicacion(publicacionDAO.getObjectByID(solicitud.getIdPublicacion()));
+					//vistaPublicacion.setImagenes(imagenes);
+					Usuario objUsuario = usuarioDAO.getUsuarioById(vistaPublicacion.getPublicacion().getIdUsuario());
+					if(objUsuario != null) {
+						vistaPublicacion.setUsuario(objUsuario);
+					}
+					
+					solicitudVista.setPublicacion(vistaPublicacion);
 					TipoEstadoSolicitud tes = new TipoEstadoSolicitud();
 					tes.setIdEstadoSolicitud(solicitud.getIdEstadoSolicitud());
 					solicitudVista.setEstadoSolicitud(tesDAO.get(tes));
 					solicitudesVistas.add(solicitudVista);
 				}
 			}
-			PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"), solicitudesVistas.size());
 			request.setAttribute("paginacion", pagination);
 			request.setAttribute("solicitudesAlojamientos", solicitudesVistas);
 
