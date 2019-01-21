@@ -97,7 +97,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		Publicacion o = null;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
-			ps.setInt(1, obj.getIdTipoAlojamiento());
+			ps.setInt(1, obj.getIdPublicacion());
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
@@ -144,9 +144,10 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_Publicacion(obj, ps);
-			ps.executeUpdate();
-			// LOG.info(ps.getS);
-			correcto = true;
+			LOG.info("INSERT Publicaciones: " + ps.toString());
+			
+			if (ps.executeUpdate() != 0)
+				correcto = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

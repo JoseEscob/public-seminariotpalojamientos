@@ -2,7 +2,9 @@ package views;
 
 import java.util.ArrayList;
 import modelo.Usuario;
+import modelo.Favorito;
 import modelo.Imagen;
+import modelo.Localidad;
 import modelo.Publicacion;
 import exceptions.CargaViewException;
 
@@ -14,7 +16,10 @@ public class PublicacionView {
 	private Usuario usuario;
 	private ArrayList<Imagen> imagenes;
 	private int cantComentarios;
-
+	private ArrayList<String> listaRutaImg;
+	private Localidad objLocalidad;
+	private Favorito objFavorito;
+	
 	public PublicacionView() {
 
 	}
@@ -64,6 +69,30 @@ public class PublicacionView {
 		});
 		this.setImagenes(temp);
 
+	}
+
+	public ArrayList<String> getListaRutaImg() {
+		return listaRutaImg;
+	}
+
+	public void setListaRutaImg(ArrayList<String> listaRutaImg) {
+		this.listaRutaImg = listaRutaImg;
+	}
+
+	public Favorito getObjFavorito() {
+		return objFavorito;
+	}
+
+	public void setObjFavorito(Favorito objFavorito) {
+		this.objFavorito = objFavorito;
+	}
+
+	public Localidad getObjLocalidad() {
+		return objLocalidad;
+	}
+
+	public void setObjLocalidad(Localidad objLocalidad) {
+		this.objLocalidad = objLocalidad;
 	}
 
 }

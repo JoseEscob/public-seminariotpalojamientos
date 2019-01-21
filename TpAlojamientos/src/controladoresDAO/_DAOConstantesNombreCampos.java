@@ -55,6 +55,7 @@ public class _DAOConstantesNombreCampos {
 	public final String sql_STR_TO_DATE_YmdHiS = "STR_TO_DATE(?,'%Y/%m/%d %H:%i:%s')";
 
 	// imagenes
+	public final String idFavorita = "idFavorita";
 	public final String idImagen = "idImagen";
 	public final String rutaImgPublicacion = "rutaImgPublicacion";
 

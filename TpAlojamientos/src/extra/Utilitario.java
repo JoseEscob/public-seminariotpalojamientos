@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.Date;
-
 import org.joda.time.DateTime;
 //import java.text.SimpleDateFormat;
 //import java.util.Date;
@@ -19,7 +18,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
 
 import java.io.File;
 
@@ -42,6 +40,33 @@ public class Utilitario {
 			return true;
 		else
 			return false;
+	}
+
+	public static ArrayList<String> getFilenamesFromFolder(String path) {
+		LOG.info("Comienza proceso getFilenamesFromFolder");
+		
+		String newPath = Utilitario.class.getResource(path).toString();
+		LOG.info("Parámetro: FilePATH: " + new File("").getAbsolutePath());
+		LOG.info("Parámetro: FilePATH2: " + Utilitario.class.getClassLoader().getResource("").getPath());
+		LOG.info("Parámetro: FilePATH3: " + newPath);
+		LOG.info("Parámetro: PATH: " + path);
+		LOG.info("Parámetro: PATH2: " + path);
+		File folder = new File(path);
+		File[] listaArchivos = folder.listFiles();
+		ArrayList<String> listaRutaArchivos = new ArrayList<String>();
+
+		for (File archivoLeido : listaArchivos) {
+			if (archivoLeido.isFile()) {
+				LOG.info("File: " + archivoLeido.getName());
+				String rutaFormada = path + File.separator + archivoLeido.getName();
+				listaRutaArchivos.add(rutaFormada);
+			} else {
+				if (archivoLeido.isDirectory())
+					LOG.info("Dire: " + archivoLeido.getName());
+			}
+		}
+		LOG.info("Finaliza proceso getFilenamesFromFolder");
+		return listaRutaArchivos;
 	}
 
 	/// *********************** FECHAS ******************************///

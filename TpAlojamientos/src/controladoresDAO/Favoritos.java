@@ -2,59 +2,59 @@ package controladoresDAO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exceptions.ServidorException;
 import extra.Conexion;
+import extra.LOG;
 import modelo.Favorito;
-import modelo.Publicacion;
 import modelo.Usuario;
 
 public class Favoritos implements Connectable<Favorito> {
 
-	
-	private static HashMap<String,String> queries = new HashMap<String, String>(){{
-		put("all", "select * from favoritos");
-		put("insert", "insert into favoritos values(?,?,?,default)");
-		put("count", "select count(*) as cantidad from favoritos");
-		put("update","update favoritos set idFavorita=?, habilitado=? where idUsuario=? and idPublicacion=?");
-		put("get","select * from favoritos where idUsuario=? and idPublicacion=?");
-		put("like", "");
-			
-	}};
-		
+	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
+	private static HashMap<String, String> queries = new HashMap<String, String>() {
+		/**
+		* 
+		*/
+		private static final long serialVersionUID = -6388528118191925167L;
+
+		{
+			put("all", "select * from favoritos");
+			put("insert", "insert into favoritos set idFavorita=?, habilitado=?, idUsuario=?, idPublicacion=?");
+			put("count", "select count(*) as cantidad from favoritos");
+			put("update", "update favoritos set idFavorita=?, habilitado=? where idUsuario=? and idPublicacion=?");
+			put("get", "select * from favoritos where idUsuario=? and idPublicacion=?");
+			put("like", "");
+
+		}
+	};
+
 	private Conexion cn;
 	private ArrayList<Favorito> m;
-	
+
 	@Override
 	public ArrayList<Favorito> getAll() {
 		cn = new Conexion();
 		m = new ArrayList<Favorito>();
-		
-		 try
-		 {
-			 cn.Open();
-			 ResultSet rs= cn.query(queries.get("all"));
-			 while(rs.next())
-			 {					
-				 Favorito o = new Favorito();
-				 o.setIdFavorita(rs.getInt(1));
-				 o.setIdUsuario(rs.getInt(2));
-				 o.setIdPublicacion(rs.getInt(3));
-				 o.setHabilitado(rs.getBoolean(4));
-				 m.add(o);
-			 }
-			 
-		 }
-		 catch(Exception e)
-		 {
-			 e.printStackTrace();
-		 }
-		 finally
-		 {
-			 cn.close();
-		 }
-		 return m;
+
+		try {
+			cn.Open();
+			ResultSet rs = cn.query(queries.get("all"));
+			while (rs.next()) {
+				Favorito o = new Favorito();
+				o = readPs_Favorito(rs);
+				m.add(o);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return m;
 	}
 
 	@Override
@@ -70,14 +70,14 @@ public class Favoritos implements Connectable<Favorito> {
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("count"));
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				cantidad = rs.getInt("cantidad");
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			cn.close();
 		}
 		return cantidad;
@@ -92,18 +92,37 @@ public class Favoritos implements Connectable<Favorito> {
 			ps.setInt(1, obj.getIdUsuario());
 			ps.setInt(2, obj.getIdPublicacion());
 			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				o = new Favorito();
-				o.setIdFavorita(rs.getInt(1));
-				o.setIdUsuario(rs.getInt(2));
-				o.setIdPublicacion(rs.getInt(3));
-				o.setHabilitado(rs.getBoolean(4));
+				o = readPs_Favorito(rs);
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
+			cn.close();
+		}
+		return o;
+	}
+	
+	public Favorito get(int idUsuario, int idPublicacion){
+		cn = new Conexion();
+		Favorito o = null;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
+			ps.setInt(1, idUsuario);
+			ps.setInt(2, idPublicacion);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				o = new Favorito();
+				o = readPs_Favorito(rs);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			cn.close();
 		}
 		return o;
@@ -111,34 +130,32 @@ public class Favoritos implements Connectable<Favorito> {
 
 	@Override
 	public boolean insert(Favorito obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
-		boolean correcto = false;;
+		boolean correcto = false;
+		;
 		try {
-						
+
 			Usuarios usuarios = new Usuarios();
 			Usuario usuario = new Usuario();
 			usuario.setIdUsuario(obj.getIdUsuario());
-			if(usuarios.get(usuario) == null)
+			if (usuarios.get(usuario) == null)
 				return false;
-			
-			Publicaciones publicaciones = new Publicaciones();
-			Publicacion publicacion = new Publicacion();
-			publicacion.setIdPublicacion(obj.getIdPublicacion());
-			if(publicaciones.get(publicacion) == null)
+
+			Publicaciones publicacionesDAO = new Publicaciones();
+			if (publicacionesDAO.getObjectByID(obj.getIdPublicacion()) == null)
 				return false;
-			
+
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setInt(1, obj.getIdFavorita());
-			ps.setInt(2, obj.getIdUsuario());
-			ps.setInt(3, obj.getIdPublicacion());
+			ps = writePs_Favorito(obj, ps);
+			LOG.info("INSERT Favoritos: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -146,38 +163,32 @@ public class Favoritos implements Connectable<Favorito> {
 
 	@Override
 	public boolean update(Favorito obj) {
-		if(obj == null) {
+		if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
-			
-		
+
 			Usuarios usuarios = new Usuarios();
 			Usuario usuario = new Usuario();
 			usuario.setIdUsuario(obj.getIdUsuario());
-			if(usuarios.get(usuario) == null)
+			if (usuarios.get(usuario) == null)
 				return false;
-			
-			Publicaciones publicaciones = new Publicaciones();
-			Publicacion publicacion = new Publicacion();
-			publicacion.setIdPublicacion(obj.getIdPublicacion());
-			if(publicaciones.get(publicacion) == null)
+
+			Publicaciones publicacionesDAO = new Publicaciones();
+			if (publicacionesDAO.getObjectByID(obj.getIdPublicacion()) == null)
 				return false;
-			
+
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(1, obj.getIdFavorita());
-			ps.setBoolean(2, obj.isHabilitado());
-			ps.setInt(3, obj.getIdUsuario());
-			ps.setInt(4, obj.getIdPublicacion());
-			if(ps.executeUpdate() != 0)
+			ps = writePs_Favorito(obj, ps);
+			LOG.info("UPDATE Favoritos: " + ps.toString());
+			if (ps.executeUpdate() != 0)
 				correcto = true;
-			
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			cn.close();
 		}
 		return correcto;
@@ -191,6 +202,107 @@ public class Favoritos implements Connectable<Favorito> {
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
+	}
+
+	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
+
+	private Favorito readPs_Favorito(ResultSet rs) throws SQLException {
+		Favorito o = new Favorito();
+		o.setIdFavorita(rs.getInt(cCampo.idFavorita));
+		o.setIdUsuario(rs.getInt(cCampo.idUsuario));
+		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
+		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		return o;
+	}
+
+	private PreparedStatement writePs_Favorito(Favorito obj, PreparedStatement ps) throws SQLException {
+		ps.setInt(1, obj.getIdFavorita());
+		ps.setBoolean(2, obj.isHabilitado());
+		ps.setInt(3, obj.getIdUsuario());
+		ps.setInt(4, obj.getIdPublicacion());
+		return ps;
+	}
+
+	/// ********************* LAMBDA - Funciones de obtención de datos ******** ///
+	public ArrayList<Favorito> getAllByIdUsuario(int idUsuario) {
+		ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
+		getAll().forEach(item -> {
+			if (item.getIdUsuario() == idUsuario)
+				listaFavoritos.add(item);
+		});
+		return listaFavoritos;
+	}
+
+	/**
+	 * Verifica si existe la combinación de idUsuario y idPublicacion en los
+	 * registros de la tabla Favoritos de la DB
+	 * 
+	 * @param idUsuario
+	 * @param idPublicacion
+	 * @return
+	 */
+	public boolean existeEnRegistrosFavoritos(int idUsuario, int idPublicacion) {
+		boolean existeEnLaDB = false;
+		existeEnLaDB = getAll().stream()
+				.anyMatch(item -> item.getIdUsuario() == idUsuario && item.getIdPublicacion() == idPublicacion);
+
+		return existeEnLaDB;
+	}
+
+	public Favorito getObjFavoritoByParams(int idUsuario, int idPublicacion) {
+		Favorito objFavorito = new Favorito();
+		// objFavorito = getAll().stream()
+		// .filter(item -> item.getIdUsuario() == idUsuario && item.getIdPublicacion()
+		// == idPublicacion)
+		// .findFirst().orElse(null);
+		getAllByIdUsuario(idUsuario).stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst()
+				.orElse(null);
+
+		return objFavorito;
+	}
+
+	/// ********************* DAO - FUNCIONES GESTION FAVORITOS
+	/// ********************** ///
+	public boolean guardarNuevoFavorito(int idUsuario, int idPublicacion) throws ServidorException {
+		boolean estadoTransaccion = false;
+		// 1- Genera nuevo objeto para ser almacenado en DB
+		Favorito objFavorito = new Favorito();
+		objFavorito.setIdPublicacion(idPublicacion);
+		objFavorito.setIdUsuario(idUsuario);
+		objFavorito.setHabilitado(true);
+		objFavorito.setIdFavorita(this.getCount() + 1);
+		// 2- Verifica el estado de la Transaccion con la DB
+		estadoTransaccion = this.insert(objFavorito);
+
+		if (!estadoTransaccion) {
+			throw new ServidorException("ERROR SQL: Ocurrió un error al guardar en favoritos");
+		}
+
+		return estadoTransaccion;
+	}
+
+	public boolean habilitarFavoritoExistente(Favorito objFavorito) throws ServidorException {
+		boolean estadoTransaccion = false;
+		// 1- Setea el valor del objeto para ser almacenado en DB
+		objFavorito.setHabilitado(true);
+		// 2- Verifica el estado de la Transaccion con la DB
+		estadoTransaccion = this.update(objFavorito);
+		if (!estadoTransaccion) {
+			throw new ServidorException("ERROR SQL: Ocurrió un error al habilitar el estado de favoritos");
+		}
+		return estadoTransaccion;
+	}
+
+	public boolean deshabilitarFavoritoExistente(Favorito objFavorito) throws ServidorException {
+		boolean estadoTransaccion = false;
+		// 1- Setea el valor del objeto para ser almacenado en DB
+		objFavorito.setHabilitado(false);
+		// 2- Verifica el estado de la Transaccion con la DB
+		estadoTransaccion = this.update(objFavorito);
+		if (!estadoTransaccion) {
+			throw new ServidorException("ERROR SQL: Ocurrió un error al deshabilitar el estado de favoritos");
+		}
+		return estadoTransaccion;
 	}
 
 }

@@ -15,10 +15,14 @@ public class Constantes {
 	public final static String accionGET = "accionGET";
 	public final static String accionPOST = "accionPOST";
 	public final static String logJSPAccion = "JSP - Acción: ";
-	
+
 	public final static String nombreTipoAlojamiento = "Alojamiento";
 
 	public final static String RUTAuserNoPhoto = "imagenes/no-profile-picture.png";
 	public final static String RUTAhomeNoPhoto = "imagenes/home-not-found.png";
-	public final static String RUTACarpetaFotosPublicacion = "imagenes/publicaciones/Publicacion_";
+	public final static String RUTACarpetaFotosPublicacion = "imagenes\\publicaciones\\Publicacion_";
+	public final static String RUTAFolderFotosPublicacion = "/imagenes/publicaciones/Publicacion_";
+	public final static String RUTAsrcResourcesFotos= "src/resources/imagenes/publicaciones/Publicacion_";
+	public final static String WebContent = ".\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\";
+
 }
