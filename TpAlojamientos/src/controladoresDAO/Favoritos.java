@@ -105,8 +105,8 @@ public class Favoritos implements Connectable<Favorito> {
 		}
 		return o;
 	}
-	
-	public Favorito get(int idUsuario, int idPublicacion){
+
+	public Favorito get(int idUsuario, int idPublicacion) {
 		cn = new Conexion();
 		Favorito o = null;
 		try {
@@ -250,25 +250,37 @@ public class Favoritos implements Connectable<Favorito> {
 	}
 
 	public Favorito getObjFavoritoByParams(int idUsuario, int idPublicacion) {
+		LOG.info("DAO-Favoritos: Comienza proceso: getObjFavoritoByParams");
 		Favorito objFavorito = new Favorito();
-		// objFavorito = getAll().stream()
-		// .filter(item -> item.getIdUsuario() == idUsuario && item.getIdPublicacion()
-		// == idPublicacion)
-		// .findFirst().orElse(null);
-		getAllByIdUsuario(idUsuario).stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst()
-				.orElse(null);
+		objFavorito = getAll().stream()
+				.filter(item -> item.getIdUsuario() == idUsuario && item.getIdPublicacion() == idPublicacion)
+				.findFirst().orElse(null);
+		// Log de info recuperada
+		if (objFavorito == null) {
+			LOG.info(String.format("FAV: No se encontró la combinación de idUsuario: %d y idPublicacion: %d", idUsuario,
+					idPublicacion));
+		} else {
+			if (objFavorito.isHabilitado())
+				LOG.info(String.format("FAV: está habilitado - idUsuario: %d y idPublicacion: %d", idUsuario,
+						idPublicacion));
+			else
+				LOG.info(String.format("FAV: está deshabilitado - idUsuario: %d y idPublicacion: %d", idUsuario,
+						idPublicacion));
+		}
 
+		LOG.info("DAO-Favoritos: Se finaliza proceso: getObjFavoritoByParams");
 		return objFavorito;
 	}
 
-	/// ********************* DAO - FUNCIONES GESTION FAVORITOS
-	/// ********************** ///
-	public boolean guardarNuevoFavorito(int idUsuario, int idPublicacion) throws ServidorException {
+	/// **************** DAO - FUNCIONES GESTION FAVORITOS ****************///
+	public boolean guardarNuevoFavorito(int idUsuarioLogueado, int idPublicacion) throws ServidorException {
+		LOG.info(String.format("FAV DAO: Nuevo registro idUsuario: %d y idPublicacion: %d", idUsuarioLogueado,
+				idPublicacion));
 		boolean estadoTransaccion = false;
 		// 1- Genera nuevo objeto para ser almacenado en DB
 		Favorito objFavorito = new Favorito();
 		objFavorito.setIdPublicacion(idPublicacion);
-		objFavorito.setIdUsuario(idUsuario);
+		objFavorito.setIdUsuario(idUsuarioLogueado);
 		objFavorito.setHabilitado(true);
 		objFavorito.setIdFavorita(this.getCount() + 1);
 		// 2- Verifica el estado de la Transaccion con la DB
@@ -277,11 +289,13 @@ public class Favoritos implements Connectable<Favorito> {
 		if (!estadoTransaccion) {
 			throw new ServidorException("ERROR SQL: Ocurrió un error al guardar en favoritos");
 		}
-
+		LOG.info("DAO-Favoritos: Se finaliza proceso: guardarNuevoFavorito");
 		return estadoTransaccion;
 	}
 
 	public boolean habilitarFavoritoExistente(Favorito objFavorito) throws ServidorException {
+		LOG.info(String.format("FAV DAO: Modif. registro idUsuario: %d y idPublicacion: %d", objFavorito.getIdUsuario(),
+				objFavorito.getIdPublicacion()));
 		boolean estadoTransaccion = false;
 		// 1- Setea el valor del objeto para ser almacenado en DB
 		objFavorito.setHabilitado(true);
@@ -290,10 +304,13 @@ public class Favoritos implements Connectable<Favorito> {
 		if (!estadoTransaccion) {
 			throw new ServidorException("ERROR SQL: Ocurrió un error al habilitar el estado de favoritos");
 		}
+		LOG.info("DAO-Favoritos: Se finaliza proceso: habilitarFavoritoExistente");
 		return estadoTransaccion;
 	}
 
 	public boolean deshabilitarFavoritoExistente(Favorito objFavorito) throws ServidorException {
+		LOG.info(String.format("FAV DAO: Modif. registro idUsuario: %d y idPublicacion: %d", objFavorito.getIdUsuario(),
+				objFavorito.getIdPublicacion()));
 		boolean estadoTransaccion = false;
 		// 1- Setea el valor del objeto para ser almacenado en DB
 		objFavorito.setHabilitado(false);
@@ -302,6 +319,7 @@ public class Favoritos implements Connectable<Favorito> {
 		if (!estadoTransaccion) {
 			throw new ServidorException("ERROR SQL: Ocurrió un error al deshabilitar el estado de favoritos");
 		}
+		LOG.info("DAO-Favoritos: Se finaliza proceso: deshabilitarFavoritoExistente");
 		return estadoTransaccion;
 	}
 

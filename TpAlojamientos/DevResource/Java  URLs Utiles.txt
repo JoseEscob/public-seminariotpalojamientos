@@ -29,7 +29,11 @@ Publicacion - Alta
     
     
 ******** FUENTE/ REFERENCIA DE DATOS ********
-
+Servlets (Session, Application, Attribute vs Parameter)
+	https://stackoverflow.com/questions/5243754/difference-between-getattribute-and-getparameter#answer-5243833
+	https://www.quora.com/When-do-we-use-attributes-in-servlets
+	http://javabycode.com/java-frameworks/servlet-jsp/servlet-request-session-application-scope-attributes.html
+	
 Tips JSTL/ Spring
 	https://www.javatips.net/blog/spring-tutorial
 	http://www.java2s.com/Tutorial/Java/0380__JSTL/UseJSTLtoCreateURLFromFormInput.htm

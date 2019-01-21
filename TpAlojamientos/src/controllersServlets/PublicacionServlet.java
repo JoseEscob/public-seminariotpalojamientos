@@ -126,13 +126,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerComentarios":
 				verComentariosPublicacion(request, response);
 				break;
-			case "FavoritosGuardarPublicacion":
-				favoritosGuardarPublicacion(request, response);
-				break;
 			case "GestionarFavoritos":
 				gestionarFavoritos(request, response);
 				break;
-
 			case "read":
 				break;
 			case "update":
@@ -237,38 +233,67 @@ public class PublicacionServlet extends HttpServlet {
 	}
 
 	/**
-	 * Guarda una publicacion en favoritos
+	 * Guarda o modifica el estado de una publicacion en favoritos
 	 * 
 	 * @param request
 	 * @param response
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	@Deprecated
-	private void favoritosGuardarPublicacion(HttpServletRequest request, HttpServletResponse response)
+	private void gestionarFavoritos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		String message = null;
 
 		try {
-			int idPublicacion, idUsuario;
+			int idPublicacion;
+			boolean agregaAFavoritos = true;
 			// 1- recuperar valores del request y los DAOs
+			// 1.1 request: idPublicacion
 			if (request.getParameter("idPublicacion") == null) {
 				throw new ServidorException("ERROR NULL Parameters: idPublicacion");
 			}
 			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			idUsuario = ORSesion.getUsuarioBySesion(request).getIdUsuario();
-			// 2- Guardar en objeto de la clase
-			Favorito objFavorito = new Favorito();
-			objFavorito.setIdPublicacion(idPublicacion);
-			objFavorito.setIdUsuario(idUsuario);
-			objFavorito.setHabilitado(true);
-			objFavorito.setIdFavorita(favoritosDAO.getCount() + 1);
-			// 3- Guardar en DB y verificar respuesta
-			if (!favoritosDAO.insert(objFavorito)) {
-				throw new ServidorException("ERROR SQL: Ocurrió un error al guardar en favoritos");
+			// 1.2 request: agregaAFavoritos - accion elegida por el usuario
+			if (request.getParameter("agregaAFavoritos") == null) {
+				throw new ServidorException("ERROR NULL Parameters: agregaAFavoritos");
 			}
-			message = String.format("Se agregó la publicación %d a su lista de favoritos", idPublicacion);
+			agregaAFavoritos = Boolean.parseBoolean(request.getParameter("agregaAFavoritos"));
+
+			// 1.3 variable sesión
+			int idUsuarioLogueado = ORSesion.getUsuarioBySesion(request).getIdUsuario();
+			// 1.4 request: vistaPublicacion
+			// TODO: Acá se puede laburar con applicationScope en vez de usar
+			// obtenerPublicacionView
+			/*
+			 * PublicacionView vistaPublicacion = (PublicacionView)
+			 * request.getServletContext().getAttribute("vistaPublicacion");
+			 */
+			if (request.getParameter("vistaPublicacion") == null) {
+				throw new ServidorException("ERROR NULL Parameters: vistaPublicacion");
+			}
+			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
+
+			// 2- Gestión de favoritos
+			Favorito objFavorito = vistaPublicacion.getObjFavorito();
+			if (objFavorito == null) {
+				// 2.1 Crea nuevo registro en la DB
+				favoritosDAO.guardarNuevoFavorito(idUsuarioLogueado, idPublicacion);
+			} else {
+				// 2.1 Modifica el estado del registro en la DB
+				if (agregaAFavoritos)
+					favoritosDAO.habilitarFavoritoExistente(objFavorito);
+				else
+					favoritosDAO.deshabilitarFavoritoExistente(objFavorito);
+			}
+			// 2.2 Actualiza el objFavorito de la vista con una consulta a la DB
+			objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
+			// 3- Guardar en objeto de la clase
+			vistaPublicacion.setObjFavorito(objFavorito);
+			if (agregaAFavoritos)
+				message = String.format("Se agregó la publicación %d a su lista de favoritos", idPublicacion);
+			else
+				message = String.format("Se eliminó la publicación %d de su lista de favoritos", idPublicacion);
+			request.setAttribute("vistaPublicacion", vistaPublicacion);
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
@@ -277,7 +302,6 @@ public class PublicacionServlet extends HttpServlet {
 			paginaJsp = "/PublicacionView.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
-
 	}
 
 	/**********************************************************************/
@@ -307,59 +331,6 @@ public class PublicacionServlet extends HttpServlet {
 			response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
 		}
 
-	}
-
-	private void gestionarFavoritos(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String message = null;
-
-		try {
-			int idPublicacion;
-			boolean agregaAFavoritos = true;
-			// 1- recuperar valores del request y los DAOs
-			// 1.1 request: idPublicacion
-			if (request.getParameter("idPublicacion") == null) {
-				throw new ServidorException("ERROR NULL Parameters: idPublicacion");
-			}
-			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			// 1.2 request: agregaAFavoritos - accion elegida por el usuario
-			if (request.getParameter("agregaAFavoritos") == null) {
-				throw new ServidorException("ERROR NULL Parameters: agregaAFavoritos");
-			}
-			agregaAFavoritos = Boolean.parseBoolean(request.getParameter("agregaAFavoritos"));
-
-			// 1.3 variable sesión
-			int idUsuarioLogueado = ORSesion.getUsuarioBySesion(request).getIdUsuario();
-			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
-			// 2- Gestión de favoritos
-			Favorito objFavorito = vistaPublicacion.getObjFavorito();
-			if (objFavorito == null) {
-				// 2.1 Crea nuevo registro en la DB
-				favoritosDAO.guardarNuevoFavorito(idUsuarioLogueado, idPublicacion);
-			} else {
-				// 2.1 Modifica el estado del registro en la DB
-				if (agregaAFavoritos)
-					favoritosDAO.habilitarFavoritoExistente(objFavorito);
-				else
-					favoritosDAO.deshabilitarFavoritoExistente(objFavorito);
-			}
-			// 2.2 Actualiza el objFavorito de la vista con una consulta a la DB
-			objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
-			// 3- Guardar en objeto de la clase
-			vistaPublicacion.setObjFavorito(objFavorito);
-			if (agregaAFavoritos)
-				message = String.format("Se agregó la publicación %d a su lista de favoritos", idPublicacion);
-			else
-				message = String.format("Se eliminó la publicación %d de su lista de favoritos", idPublicacion);
-			request.setAttribute("vistaPublicacion", vistaPublicacion);
-		} catch (Exception e) {
-			message = e.getMessage();
-		} finally {
-			// 5- Informar estado
-			request.setAttribute("message", message);
-			paginaJsp = "/PublicacionView.jsp";
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
-		}
 	}
 
 	private void verPublicacion(HttpServletRequest request, HttpServletResponse response)
@@ -411,18 +382,8 @@ public class PublicacionServlet extends HttpServlet {
 		objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
 		// 1.6 DAO recuperar datos de clase Favoritos
 
-		Favorito objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
-		if (objFavorito == null) {
-			LOG.info(String.format("FAV: No se encontró la combinación de idUsuario: %d y idPublicacion: %d",
-					idUsuarioLogueado, idPublicacion));
-		} else {
-			if (objFavorito.isHabilitado())
-				LOG.info(String.format("FAV: está habilitado - idUsuario: %d y idPublicacion: %d", idUsuarioLogueado,
-						idPublicacion));
-			else
-				LOG.info(String.format("FAV: está deshabilitado - idUsuario: %d y idPublicacion: %d", idUsuarioLogueado,
-						idPublicacion));
-		}
+		// Favorito objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
+		Favorito objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
 
 		// String carpetaImgPublicacion =
 		// imagenDAO.getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
