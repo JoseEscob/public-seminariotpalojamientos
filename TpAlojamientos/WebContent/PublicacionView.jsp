@@ -145,7 +145,12 @@
 					<br>
 				</div>
 				<div class="row col-md-12" align="center">
-					<button class="btn btn-success btn-lg">Solicitar una reserva</button>
+					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button>  -->
+					
+					<a class="btn btn-success btn-lg" href="#formSolReserva"> 
+						<span class="glyphicon glyphicon-flag"></span>
+						Solicitar una reserva
+					</a>
 				</div>
 			</div>
 		</div>
@@ -214,6 +219,9 @@
 			<c:forEach items="${vistaPublicacion.listaRutaImg}" var="objRutaImg">
 			<label class="control-label col-xs-12">${objRutaImg}</label>
 			</c:forEach>
+		</div>
+		<div class="row" id="formSolReserva">
+			<%@ include file="solReservaAlta.jsp"%>
 		</div>
 	</div>
 	<%@ include file="Footer.jsp"%>

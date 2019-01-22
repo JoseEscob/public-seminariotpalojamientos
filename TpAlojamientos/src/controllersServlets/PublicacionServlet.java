@@ -265,12 +265,12 @@ public class PublicacionServlet extends HttpServlet {
 			// TODO: Acá se puede laburar con applicationScope en vez de usar
 			// obtenerPublicacionView
 			/*
+			 * if (request.getParameter("vistaPublicacion") == null) { throw new
+			 * ServidorException("ERROR NULL Parameters: vistaPublicacion"); }
 			 * PublicacionView vistaPublicacion = (PublicacionView)
 			 * request.getServletContext().getAttribute("vistaPublicacion");
 			 */
-			if (request.getParameter("vistaPublicacion") == null) {
-				throw new ServidorException("ERROR NULL Parameters: vistaPublicacion");
-			}
+
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
 
 			// 2- Gestión de favoritos
