@@ -76,4 +76,9 @@ public class _DAOConstantesNombreCampos {
 	public final String cantDias = "cantDias";
 	public final String esDeReserva = "esDeReserva";
 	public final String idEstadoSolicitud = "idEstadoSolicitud";
+	
+	// Servicios
+	public final String idServicio = "idServicio";
+	public final String idTipoServicio = "idTipoServicio";
+
 }

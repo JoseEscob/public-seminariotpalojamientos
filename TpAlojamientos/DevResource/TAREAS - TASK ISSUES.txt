@@ -4,15 +4,25 @@ Solicitudes
 
 Dates
 	ADMIN- Corregir lista nuevos usuarios
-	
+
+
+
+MANEJO DE ARCHIVOS
+Publicaciones
+	Corregir imagenes - Leer por carpeta
+
+Usuario y Publicaciones
+	Subida y copia de imagenes en el proyecto
+
 	
 ******* ELEMENTOS DE BAJA PRIORIDAD *******
 Codigo paquete DAO
 	Se puede modificar los DAO para que los inserts sean sets como los updates
 	Crear una clase con la que se pueda implementar las fuciones readPs y writePs para todas las clases del paquete.
 
-Publicaciones
-	Corregir imagenes
+Favoritos
+	Se debe utilizar POST en vez de GET parameter() usar getAttibute()
+
 
 	
 ******* ELEMENTOS FINALIZADOS *******

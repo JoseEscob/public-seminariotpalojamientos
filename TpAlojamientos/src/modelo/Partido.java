@@ -11,6 +11,7 @@ public class Partido {
 		this.idPartido = idPartido;
 	}
 	public String getNombre() {
+		obtenerNombreSinUltCaracter();
 		return nombre;
 	}
 	public void setNombre(String nombre) {
@@ -21,6 +22,13 @@ public class Partido {
 	}
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+	
+	private void obtenerNombreSinUltCaracter() {
+		int ultPosicion = this.nombre.length() - 1;
+		if(this.nombre.charAt(ultPosicion) == '?') {
+			this.nombre.substring(0, ultPosicion);
+		}
 	}
 
 }

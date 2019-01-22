@@ -15,7 +15,7 @@
 		<div class="row">
 		<h4>${message}</h4>
 		</div>
-		<div class="row">
+		<div class="row" title="Ubicación - Publicación">
 			<h2>${vistaPublicacion.publicacion.nombre}</h2>
 			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
@@ -145,9 +145,9 @@
 					<br>
 				</div>
 				<div class="row col-md-12" align="center">
-					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button>  -->
+					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button> href="#formSolReserva" -->
 					
-					<a class="btn btn-success btn-lg" href="#formSolReserva"> 
+					<a class="btn btn-success btn-lg"  data-toggle="modal" data-target="#formSolReserva"> 
 						<span class="glyphicon glyphicon-flag"></span>
 						Solicitar una reserva
 					</a>
@@ -155,9 +155,7 @@
 			</div>
 		</div>
 
-
-
-		<div class="row">
+		<div class="row" title="Descripción de la publicación">
 			<h3>Descripción</h3>
 			<hr />
 			<div class="col-md-8">
@@ -185,7 +183,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" title="Características de la publicación">
 			<h3>Características</h3>
 			<hr />
 			<div class="col-md-12">
@@ -214,18 +212,34 @@
 			</div>
 		</div>
 	
-		<div class="row">
+		<div class="row" title="Test - listado Imagenes extension">
 			Imagenes leidas
 			<c:forEach items="${vistaPublicacion.listaRutaImg}" var="objRutaImg">
 			<label class="control-label col-xs-12">${objRutaImg}</label>
 			</c:forEach>
 		</div>
-		<div class="row" id="formSolReserva">
-			<%@ include file="solReservaAlta.jsp"%>
+		
+		<div class="row" title="Solicitud de Reserva(Modal)">
+			<div class="modal fade" id="formSolReserva" role="dialog">
+			     <!-- <div class="modal-dialog"></div> -->
+			    	 <!-- Modal content-->
+				     <div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal">&times;</button>
+				        </div>
+				        <div class="modal-body">
+							<div class="row" >
+								<%@ include file="solReservaAlta.jsp"%>
+							</div>
+						</div>
+						<div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar/ Volver</button>
+					    </div>
+					</div>
+			</div>
 		</div>
-	</div>
+	</div><!-- div End container -->
 	<%@ include file="Footer.jsp"%>
-
 
 </body>
 </html>
