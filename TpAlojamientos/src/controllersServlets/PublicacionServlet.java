@@ -21,6 +21,7 @@ import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
 import controladoresDAO.Usuarios;
 import controladoresDAO.Imagenes;
+import controladoresDAO.TiposAlojamientos;
 import exceptions.ServidorException;
 import exceptions.CargaViewException;
 import exceptions.LectorDatosException;
@@ -34,6 +35,7 @@ import modelo.Localidad;
 import modelo.Partido;
 import modelo.Publicacion;
 import modelo.Usuario;
+import modelo.TipoAlojamiento;
 import views.PublicacionView;
 import views.PaginacionView;
 
@@ -51,6 +53,7 @@ public class PublicacionServlet extends HttpServlet {
 	private final Usuarios usuarioDAO = new Usuarios();
 	private final Imagenes imagenDAO = new Imagenes();
 	private final Favoritos favoritosDAO = new Favoritos();
+	private final TiposAlojamientos tipoAlojamientoDAO = new TiposAlojamientos();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -155,11 +158,15 @@ public class PublicacionServlet extends HttpServlet {
 		try {
 			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
 			ArrayList<Localidad> listaLocalidades = null;
+			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
+			
+			
 
 			if (request.getParameter("cmbPartido") != null) {
 				int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
 				listaLocalidades = localidadDAO.getAllByIdPartido(idPartido);
 			}
+			request.setAttribute("listaTiposAlojamientos", listaTiposAlojamientos);
 			request.setAttribute("listaPartidos", listaPartidos);
 			request.setAttribute("listaLocalidades", listaLocalidades);
 			message = "El cmbPartido fue cargado";

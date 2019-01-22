@@ -7,7 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Publicación - Alta</title>
+
 </head>
+
 <body>
 	<%@ include file="Banner.jsp"%>
 
@@ -22,7 +24,7 @@
 		<div class="row">
 			<div class="col-md-4">
 				<!-- Combos de Zona  -->
-				<form method="POST" action="PublicacionServlet">					
+		<form method="POST" action="PublicacionServlet">					
 					<div class="form-group">
 						<label for="partidos">Partido</label> 
 						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido">
@@ -43,11 +45,55 @@
 							<option selected value="null" disabled>Se debe seleccionar un partido antes</option>
 						</select>
 					</div>
-				</form>
+			</div>
+			<div class="col-md-4">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="calle" class="control-label">Dirección Calle</label>
+						<input type="text" name="calle"  class="form-control"
+								value="" onkeypress="return soloLetras(event)"
+								required="true"  maxlength="50">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="altura" class="control-label">Altura </label>
+							<input type="text" name="altura" id="altura" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="" required="true" maxlength="8">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="codPostal" class="control-label">Código Postal </label>
+							<input type="text" name="codPostal" id="codPostal" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="" required="true" maxlength="6">
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="piso" class="control-label">Piso </label>
+							<input type="text" name="piso" id="piso" class="form-control"
+									onkeypress="return soloNros(event)" onpaste="return false"
+									value="" required="true" maxlength="2" placeholder="">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+							<label for="dpto" class="control-label">Departamento </label>
+							<input type="text" name="dpto" id="dpto" class="form-control"
+									onkeypress="return soloLetras(event)" onpaste="return false"
+									value="" required="true" maxlength="1" placeholder="">
+					</div>
+				</div>
+
 			</div>
 
+			
+			<!-- Ubicación en Mapa 
 			<div class="col-md-4">
-				<!-- Ubicación en Mapa  -->
 				<div class="form-group" align="center">
 					<form class="form-horizontal" action="/action_page.php">
 						<div class="form-group">
@@ -62,8 +108,145 @@
 					</form>
 				</div>
 			</div>
+			-->
+		</div>
+			<div class="container" id="a_caracteristicasPrincipales">
+		<h3>Características principales</h3>
+		<hr />
+		<div class="row">
+			<div class="col-md-4"> <!-- Características - Superficie Espacio  -->
+					<div class="form-group" style="">
+						<label>Tipo de Alojamiento</label>
+						<select class="form-control selectpicker">
+							<option selected value="null" disabled>Seleccionar un tipo de alojamiento</option>
+							<c:forEach items="${listaTiposAlojamientos}" var="tipoAlojamiento">
+								<c:choose>
+									<c:when test="${tipoAlojamiento.habilitado == true}">
+										<option value="${tipoAlojamiento.idTipoAlojamiento}">${tipoAlojamiento.descripcion}</option>
+									</c:when>
+								</c:choose>
+							</c:forEach>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="calle" class="control-label">Superficie Cubierta (m²)</label>
+						<input type="text" name="calle"  class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="${obj.supCubierta}" required="true" maxlength="2">
+					</div>
+
+					<div class="form-group">
+						<label for="calle" class="control-label">Superficie Descubierta (m²)</label>
+						<input type="text" name="calle"  class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="" required="true" maxlength="2">
+					</div>
+			</div>
+
+			<div class="col-md-4"> <!-- Características - Combos de cantidades  -->
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Personas</label>
+						<div class="input-group number-spinner">
+							<span class="input-group-btn data-dwn">
+								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
+							</span>
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="30">
+							<span class="input-group-btn data-up">
+								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Ambientes</label>
+						<div class="input-group number-spinner">
+							<span class="input-group-btn data-dwn">
+								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
+							</span>
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10">
+							<span class="input-group-btn data-up">
+								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Dormitorios</label>
+						<div class="input-group number-spinner">
+							<span class="input-group-btn data-dwn">
+								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
+							</span>
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="20">
+							<span class="input-group-btn data-up">
+								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group" style="">
+						<label>Cant. Baños</label>
+						<div class="input-group number-spinner">
+							<span class="input-group-btn data-dwn">
+								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
+							</span>
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10">
+							<span class="input-group-btn data-up">
+								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
+							</span>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+
+			<div class="col-md-4"> <!-- Características - Precio  -->
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="radio"><input type="radio" name="chkExpensas" value="0">No tiene expensas</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="radio"><input type="radio" name="chkExpensas" value="1">Tiene expensas</label>
+						</div>
+					</div>
+				</div>
+				</br>
+				<div class="col-md-12 form-group">
+					<label for="precioExpensas" class="control-label">Precio Expensas</label>
+					<div class="input-group">
+					  <span class="input-group-addon">$</span>
+					  <input type="text" class="form-control" onkeypress="return soloNros(event)" onpaste="return false"
+									name="precioExpensas" value="${obj.precioExpensas}" required="true" 
+									maxlength="6" aria-label="Pesos">
+					  <span class="input-group-addon">.00</span>
+					</div>
+				</div>
+
+				<div class="col-md-12 form-group">
+					<label for="precioNoche" class="control-label">Precio por noche</label>
+					<div class="input-group">
+					  <span class="input-group-addon">$</span>
+					  <input type="text" class="form-control" onkeypress="return soloNros(event)" onpaste="return false"
+									name="precioNoche" value="${obj.precioNoche}" required="true" 
+									maxlength="6" aria-label="Pesos">
+					  <span class="input-group-addon">.00</span>
+					</div>
+				</div>
+
+			</div>
+
 		</div>
 	</div>
+	<input type="submit" name="subir" value="Cargar datos" class="btn btn-success">
+	</form>
 
 	<div class="container" id="a_servicios">
 		<h3>Servicios - Facilidades</h3>
@@ -119,7 +302,39 @@
 
 	<div class="container" id="footer"></div>
 
+
+
+
 <script type="text/javascript">
+
+$(function() {
+    var action;
+    $(".number-spinner div").mousedown(function () {
+        btn = $(this);
+        input = btn.closest('.number-spinner').find('input');
+
+    	if (btn.attr('data-dir') == 'up') {
+            action = setInterval(function(){
+                if ( input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max')) ) {
+                    input.val(parseInt(input.val())+1);
+                }else{
+                    clearInterval(action);
+                }
+            }, 50);
+    	} else {
+            action = setInterval(function(){
+                if ( input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min')) ) {
+                    input.val(parseInt(input.val())-1);
+                }else{
+                    btn.prop("disabled", true);
+                    clearInterval(action);
+                }
+            }, 50);
+    	}
+    }).mouseup(function(){
+        clearInterval(action);
+    });
+});
 
 $(document).ready(function(){
 	$("[name='cmbPartido']").change(function(){
