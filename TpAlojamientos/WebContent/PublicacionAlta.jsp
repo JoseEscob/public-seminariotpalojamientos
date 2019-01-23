@@ -50,8 +50,8 @@
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="partidos">Partido</label> 
-							<select id="partidos"class="form-control selectpicker" data-live-search="true" name="partido">
-								<option selected value="null" disabled>Seleccionar un partido</option>
+							<select id="partidos"class="form-control selectpicker" data-live-search="true" name="partido" required>
+								<option selected value="" disabled>Seleccionar un partido</option>
 								<c:forEach items="${listaPartidos}" var="item">
 									<option value="${item.idPartido}">${item.nombre}</option>
 								</c:forEach>
@@ -64,7 +64,7 @@
 			
 						<div class="form-group">
 							<label for="localidades">Localidad</label> 
-							<select id="localidades" class="form-control selectpicker" data-live-search="true" name="localidad" disabled>
+							<select id="localidades" class="form-control selectpicker" data-live-search="true" name="localidad" disabled required>
 								<option selected value="null" disabled>Se debe seleccionar un partido antes</option>
 							</select>
 						</div>
@@ -144,8 +144,8 @@
 					<div class="col-md-4"> <!-- Características - Superficie Espacio  -->
 							<div class="form-group">
 								<label for="tiposAlojamientos">Tipo de Alojamiento</label>
-								<select class="form-control selectpicker" name="tipoAlojamiento" id="tiposAlojamientos">
-									<option selected value="null" disabled>Seleccionar un tipo de alojamiento</option>
+								<select class="form-control selectpicker" name="tipoAlojamiento" id="tiposAlojamientos" required>
+									<option selected value="" disabled>Seleccionar un tipo de alojamiento</option>
 									<c:forEach items="${listaTiposAlojamientos}" var="item">
 										<option value="${item.idTipoAlojamiento}">${item.descripcion}</option>
 									</c:forEach>
@@ -175,7 +175,7 @@
 									<span class="input-group-btn data-dwn">
 										<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
 									</span>
-									<input type="text" class="form-control text-center" readonly value="1" min="1" max="30" name="cantidadPersonas">
+									<input type="text" class="form-control text-center" readonly value="1" min="1" max="30" name="cantidadPersonas" >
 									<span class="input-group-btn data-up">
 										<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
 									</span>
@@ -366,7 +366,7 @@ $(document).ready(function(){
 		//MAGIA
 		$.post("PublicacionServlet",{"idPartido":$("[name='partido'] option:selected").val(),"accionPOST":"getLocalidades"}, function(result){
 			$("#localidades").empty();
-			$("#localidades").append($('<option selected disabled />').text("Seleccionar una localidad"));
+			$("#localidades").append($('<option selected disabled value="" />').text("Seleccionar una localidad"));
 			$("#localidades").prop("disabled",false);
 			$.each(result.localidades, function(index, value){
 				$("#localidades").append($('<option />').val(value.idLocalidad).text(value.nombre));
