@@ -26,7 +26,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 		{
 			put("all", "select * from publicaciones");
-			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
+			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default,?,default,default)");
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update",
 					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, descripcion=?, "
@@ -121,7 +121,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		}
 		cn = new Conexion();
 		boolean correcto = false;
-		;
+		
 		try {
 			// FALSE: Si no existe el id en los registros de Usuarios, TiposAlojamientos,
 			// Localidades
@@ -144,7 +144,26 @@ public class Publicaciones implements Connectable<Publicacion> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps = writePs_Publicacion(obj, ps);
+			ps.setInt(1, obj.getIdUsuario());
+			ps.setInt(2, obj.getIdTipoAlojamiento());
+			ps.setString(3, obj.getDescripcion());
+			ps.setInt(4, obj.getIdLocalidad());
+			ps.setInt(5, obj.getCodPostal());
+			ps.setString(6, obj.getCoordenadas());
+			ps.setString(7, obj.getCalle());
+			ps.setInt(8, obj.getAltura());
+			ps.setInt(9, obj.getPiso());
+			ps.setString(10, obj.getDpto());
+			ps.setInt(11, obj.getSupCubierta());
+			ps.setInt(12, obj.getSupDescubierta());
+			ps.setInt(13, obj.getPrecioExpensas());
+			ps.setInt(14, obj.getPrecioNoche());
+			ps.setInt(15, obj.getCantPersonas());
+			ps.setInt(16, obj.getCantAmbientes());
+			ps.setInt(17, obj.getCantBanios());
+			ps.setInt(18, obj.getCantHabitaciones());
+			ps.setInt(19, obj.getAniosAntiguedad());
+			ps.setFloat(20, obj.getPuntaje());
 			LOG.info("INSERT Publicaciones: " + ps.toString());
 
 			if (ps.executeUpdate() != 0)

@@ -465,7 +465,7 @@ public class PublicacionServlet extends HttpServlet {
 			throws IOException, ServletException {
 		// Modulo de busqueda
 	}
-	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response) {
+	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		if(ORSesion.sesionActiva(request)) {
 			Publicacion publicacion = new Publicacion();
@@ -486,8 +486,11 @@ public class PublicacionServlet extends HttpServlet {
 			boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
 			int precioExpensas = Integer.parseInt(request.getParameter("precioExpensas"));
 			int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
+			String nombre = request.getParameter("nombre");
+			String descripcion = request.getParameter("descripcion");
 			
-			System.out.println("partido "+request.getParameter("partido"));
+			
+			/*System.out.println("partido "+request.getParameter("partido"));
 			System.out.println("localidad "+request.getParameter("localidad"));
 			System.out.println("calle "+request.getParameter("calle"));
 			System.out.println("altura "+request.getParameter("altura"));
@@ -504,7 +507,7 @@ public class PublicacionServlet extends HttpServlet {
 			System.out.println("cantidadBaños "+request.getParameter("cantidadBaños"));
 			System.out.println("chkExpensas "+request.getParameter("chkExpensas"));
 			System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
-			System.out.println("precioNoche "+request.getParameter("precioNoche"));
+			System.out.println("precioNoche "+request.getParameter("precioNoche"));*/
 
 			
 			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
@@ -524,22 +527,29 @@ public class PublicacionServlet extends HttpServlet {
 			publicacion.setPrecioExpensas(precioExpensas);
 			publicacion.setPrecioNoche(precioNoche);
 			
+			publicacion.setNombre(nombre);
+			publicacion.setDescripcion(descripcion);
+			publicacion.setFechaAlta(null);
 			
 			
 			/***DATOS*QUE*FALTAN**/
 			String nulo = "null";
-			publicacion.setNombre(nulo);
-			publicacion.setDescripcion(nulo);
 			publicacion.setCoordenadas(nulo);
-			publicacion.setFechaAlta(null);
 			publicacion.setIdTipoAlojamiento(1);
 			
 			System.out.println(publicacion.toString());
-			/*
-			publicacion.setIdTipoAlojamiento(idTipoAlojamiento);
-			publicacion.setIdLocalidad(idLocalidad);
-			publicacion.set
-			*/
+			
+			 
+			if(publicacionDAO.insert(publicacion)){
+				String mensaje = "Publicacion cargada con exito.";
+				request.setAttribute("objMensaje", mensaje);
+				paginaJsp = "/Publicaciones.jsp";
+			
+			} 
+			  
+		
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			
 		}
 	}
 
