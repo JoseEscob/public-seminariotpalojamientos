@@ -5,7 +5,7 @@ import modelo.Usuario;
 
 public class ORSesion {
 
-	public static Usuario getUsuarioBySesion(HttpServletRequest request) {
+	public static Usuario getUsuarioBySession(HttpServletRequest request) {
 		return (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
 	}
 	

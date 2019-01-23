@@ -132,6 +132,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "GestionarFavoritos":
 				gestionarFavoritos(request, response);
 				break;
+			case "nuevaPublicacion":
+				nuevaPublicacion(request, response);
+				break;
 			case "read":
 				break;
 			case "update":
@@ -267,7 +270,7 @@ public class PublicacionServlet extends HttpServlet {
 			agregaAFavoritos = Boolean.parseBoolean(request.getParameter("agregaAFavoritos"));
 
 			// 1.3 variable sesión
-			int idUsuarioLogueado = ORSesion.getUsuarioBySesion(request).getIdUsuario();
+			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			// 1.4 request: vistaPublicacion
 			// TODO: Acá se puede laburar con applicationScope en vez de usar
 			// obtenerPublicacionView
@@ -352,7 +355,7 @@ public class PublicacionServlet extends HttpServlet {
 			if (request.getParameter("idPublicacion") != null) {
 				idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
 			}
-			int idUsuarioLogueado = ORSesion.getUsuarioBySesion(request).getIdUsuario();
+			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
@@ -461,6 +464,36 @@ public class PublicacionServlet extends HttpServlet {
 	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		// Modulo de busqueda
+	}
+	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		if(ORSesion.sesionActiva(request)) {
+			Publicacion publicacion = new Publicacion();
+			System.out.println("partido "+request.getParameter("partido"));
+			System.out.println("localidad "+request.getParameter("localidad"));
+			System.out.println("calle "+request.getParameter("calle"));
+			System.out.println("altura "+request.getParameter("altura"));
+			System.out.println("codPostal "+request.getParameter("codPostal"));
+			System.out.println("piso "+request.getParameter("piso"));
+			System.out.println("departamento "+request.getParameter("departamento"));
+			System.out.println("tAlojamiento "+request.getParameter("tAlojamiento"));	
+			System.out.println("superficieCubierta "+request.getParameter("superficieCubierta"));
+			System.out.println("superficieDescubierta "+request.getParameter("superficieDescubierta"));
+			System.out.println("cantidadPersonas "+request.getParameter("cantidadPersonas"));
+			System.out.println("cantidadAmbientes "+request.getParameter("cantidadAmbientes"));
+			System.out.println("cantidadDormitorios "+request.getParameter("cantidadDormitorios"));
+			System.out.println("cantidadBaños "+request.getParameter("cantidadBaños"));
+			System.out.println("chkExpensas "+request.getParameter("chkExpensas"));
+			System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
+			System.out.println("precioNoche "+request.getParameter("precioNoche"));
+
+			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
+			/*
+			publicacion.setIdTipoAlojamiento(idTipoAlojamiento);
+			publicacion.setIdLocalidad(idLocalidad);
+			publicacion.set
+			*/
+		}
 	}
 
 }

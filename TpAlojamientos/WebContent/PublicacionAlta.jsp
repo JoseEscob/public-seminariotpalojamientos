@@ -24,10 +24,10 @@
 		<div class="row">
 			<div class="col-md-4">
 				<!-- Combos de Zona  -->
-		<form method="POST" action="PublicacionServlet">					
+		<form method="POST" action="PublicacionServlet">				
 					<div class="form-group">
 						<label for="partidos">Partido</label> 
-						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="cmbPartido">
+						<select id="partidos"class="form-control selectpicker" data-live-search="true" name="partido">
 							<option selected value="null" disabled>Seleccionar un partido</option>
 							<c:forEach items="${listaPartidos}" var="item">
 								<option value="${item.idPartido}">${item.nombre}</option>
@@ -37,11 +37,11 @@
 					<noscript>
 						<input type="submit">
 					</noscript>
-					<input type="hidden" name="accionPOST" value="cmbPartidoSubmit">
+					<input type="hidden" name="accionPOST" value="nuevaPublicacion">
 
 					<div class="form-group">
 						<label for="localidades">Localidad</label> 
-						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="cmbLocalidad" disabled>
+						<select id="localidades" class="form-control selectpicker" data-live-search="true" name="localidad" disabled>
 							<option selected value="null" disabled>Se debe seleccionar un partido antes</option>
 						</select>
 					</div>
@@ -51,7 +51,7 @@
 					<div class="form-group">
 						<label for="calle" class="control-label">Dirección Calle</label>
 						<input type="text" name="calle"  class="form-control"
-								value="" onkeypress="return soloLetras(event)"
+								onkeypress="return soloLetras(event)"
 								required="true"  maxlength="50">
 					</div>
 				</div>
@@ -60,7 +60,7 @@
 							<label for="altura" class="control-label">Altura </label>
 							<input type="text" name="altura" id="altura" class="form-control"
 									onkeypress="return soloNros(event)" onpaste="return false"
-									value="" required="true" maxlength="8">
+									required="true" maxlength="8">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -68,7 +68,7 @@
 							<label for="codPostal" class="control-label">Código Postal </label>
 							<input type="text" name="codPostal" id="codPostal" class="form-control"
 									onkeypress="return soloNros(event)" onpaste="return false"
-									value="" required="true" maxlength="6">
+									required="true" maxlength="6">
 					</div>
 				</div>
 
@@ -77,15 +77,15 @@
 							<label for="piso" class="control-label">Piso </label>
 							<input type="text" name="piso" id="piso" class="form-control"
 									onkeypress="return soloNros(event)" onpaste="return false"
-									value="" required="true" maxlength="2" placeholder="">
+									required="true" maxlength="2" placeholder="">
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 							<label for="dpto" class="control-label">Departamento </label>
-							<input type="text" name="dpto" id="dpto" class="form-control"
+							<input type="text" name="departamento" id="dpto" class="form-control"
 									onkeypress="return soloLetras(event)" onpaste="return false"
-									value="" required="true" maxlength="1" placeholder="">
+									required="true" maxlength="1" placeholder="">
 					</div>
 				</div>
 
@@ -115,44 +115,40 @@
 		<hr />
 		<div class="row">
 			<div class="col-md-4"> <!-- Características - Superficie Espacio  -->
-					<div class="form-group" style="">
+						<div class="form-group" style="">
 						<label>Tipo de Alojamiento</label>
-						<select class="form-control selectpicker">
+						<select class="form-control selectpicker" name="tAlojamiento" id="tAlojamiento">
 							<option selected value="null" disabled>Seleccionar un tipo de alojamiento</option>
-							<c:forEach items="${listaTiposAlojamientos}" var="tipoAlojamiento">
-								<c:choose>
-									<c:when test="${tipoAlojamiento.habilitado == true}">
-										<option value="${tipoAlojamiento.idTipoAlojamiento}">${tipoAlojamiento.descripcion}</option>
-									</c:when>
-								</c:choose>
+							<c:forEach items="${listaTiposAlojamientos}" var="item">
+								<option value="${item.idTipoAlojamiento}">${item.descripcion}</option>
 							</c:forEach>
 						</select>
-					</div>
+					</div>	
 
 					<div class="form-group">
 						<label for="calle" class="control-label">Superficie Cubierta (m²)</label>
-						<input type="text" name="calle"  class="form-control"
+						<input type="text" name="superficieCubierta"  class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="${obj.supCubierta}" required="true" maxlength="2">
+								required="true" maxlength="2">
 					</div>
 
 					<div class="form-group">
 						<label for="calle" class="control-label">Superficie Descubierta (m²)</label>
-						<input type="text" name="calle"  class="form-control"
+						<input type="text" name="superficieDescubierta"  class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="" required="true" maxlength="2">
+								required="true" maxlength="2">
 					</div>
 			</div>
 
 			<div class="col-md-4"> <!-- Características - Combos de cantidades  -->
 				<div class="col-md-6">
-					<div class="form-group" style="">
+					<div class="form-group">
 						<label>Cant. Personas</label>
 						<div class="input-group number-spinner">
 							<span class="input-group-btn data-dwn">
 								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
 							</span>
-							<input type="text" class="form-control text-center" readonly value="1" min="1" max="30">
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="30" name="cantidadPersonas">
 							<span class="input-group-btn data-up">
 								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
 							</span>
@@ -166,7 +162,7 @@
 							<span class="input-group-btn data-dwn">
 								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
 							</span>
-							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10">
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10" name="cantidadAmbientes">
 							<span class="input-group-btn data-up">
 								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
 							</span>
@@ -180,7 +176,7 @@
 							<span class="input-group-btn data-dwn">
 								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
 							</span>
-							<input type="text" class="form-control text-center" readonly value="1" min="1" max="20">
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="20" name="cantidadDormitorios">
 							<span class="input-group-btn data-up">
 								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
 							</span>
@@ -195,7 +191,7 @@
 							<span class="input-group-btn data-dwn">
 								<div class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></div>
 							</span>
-							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10">
+							<input type="text" class="form-control text-center" readonly value="1" min="1" max="10" name="cantidadBaños">
 							<span class="input-group-btn data-up">
 								<div class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></div>
 							</span>
@@ -337,9 +333,9 @@ $(function() {
 });
 
 $(document).ready(function(){
-	$("[name='cmbPartido']").change(function(){
+	$("[name='partido']").change(function(){
 		//MAGIA
-		$.post("PublicacionServlet",{"idPartido":$("[name='cmbPartido'] option:selected").val(),"accionPOST":"getLocalidades"}, function(result){
+		$.post("PublicacionServlet",{"idPartido":$("[name='partido'] option:selected").val(),"accionPOST":"getLocalidades"}, function(result){
 			$("#localidades").empty();
 			$("#localidades").append($('<option selected disabled />').text("Seleccionar una localidad"));
 			$("#localidades").prop("disabled",false);
