@@ -506,9 +506,9 @@ public class PublicacionServlet extends HttpServlet {
 			System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
 			System.out.println("precioNoche "+request.getParameter("precioNoche"));
 
+			
 			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
 			publicacion.setIdLocalidad(idLocalidad);
-			publicacion.setIdTipoAlojamiento(1);
 			publicacion.setVerificado(false);
 			publicacion.setCalle(calle);
 			publicacion.setAltura(altura);
@@ -523,6 +523,16 @@ public class PublicacionServlet extends HttpServlet {
 			publicacion.setCantBanios(cantidadBanios);
 			publicacion.setPrecioExpensas(precioExpensas);
 			publicacion.setPrecioNoche(precioNoche);
+			
+			
+			
+			/***DATOS*QUE*FALTAN**/
+			String nulo = "null";
+			publicacion.setNombre(nulo);
+			publicacion.setDescripcion(nulo);
+			publicacion.setCoordenadas(nulo);
+			publicacion.setFechaAlta(null);
+			publicacion.setIdTipoAlojamiento(1);
 			
 			System.out.println(publicacion.toString());
 			/*
