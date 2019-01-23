@@ -65,7 +65,7 @@
 					</div>
 					<div class="col-md-6 col-md-12">
 						<c:if test="${vistaPublicacion.publicacion.isVerificado() eq true}">
-							<label class="control-label pull-right"> <span
+							<label class="control-label pull-right" style="color: royalblue;"> <span
 								class="glyphicon glyphicon-ok-circle"></span> Publicación Verificada
 							</label>
 						</c:if>
