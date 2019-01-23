@@ -151,7 +151,7 @@ public class UsuarioServlet extends HttpServlet {
 		try {
 			// 1- Recuperar valores del formulario JSP
 			// user = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
-			objUsuario = ORSesion.getUsuarioBySesion(request);
+			objUsuario = ORSesion.getUsuarioBySession(request);
 			// 2- Validar información obtenida JSP
 			if (objUsuario == null) {
 				message = "ERROR: No se pudo recuperar la variable Session: " + Constantes.sessionUser;
@@ -256,7 +256,7 @@ public class UsuarioServlet extends HttpServlet {
 		String message = null;
 
 		try {
-			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySesion(request);
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
 			String fechaUltConexion = objUsuarioLogueado.getFechaUltConexion();
 			// ArrayList<Usuario> listaUsuarios = usuarioDAO
 			// .getListaNuevosUsuarios(objUsuarioLogueado.getFechaUltConexion());//
