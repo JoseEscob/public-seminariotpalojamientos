@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import extra.Conexion;
@@ -145,7 +146,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_Publicacion(obj, ps);
 			LOG.info("INSERT Publicaciones: " + ps.toString());
-			
+
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 		} catch (Exception e) {
@@ -299,6 +300,95 @@ public class Publicaciones implements Connectable<Publicacion> {
 		return obj;
 	}
 
+	/// ********************* LAMBDA - Filtros de datos ******** ///
+	// Lambda - Publicaciones - Filtros
+	public ArrayList<Publicacion> filtroGetAllByTipoAlojamiento(int idTipoAlojamiento) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		getAll().forEach(item -> {
+			if (item.getIdTipoAlojamiento() == idTipoAlojamiento)
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
+	public ArrayList<Publicacion> filtroGetAllByIsVerificado() {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		getAll().forEach(item -> {
+			if (item.isVerificado())
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
+	public ArrayList<Publicacion> filtroGetAllByIdLocalidad(int idLocalidad) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		getAll().forEach(item -> {
+			if (item.getIdLocalidad() == idLocalidad)
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
+	// Lambda - Publicaciones - Filtros Combinados
+	public ArrayList<Publicacion> filtroGetAllByTipoAlojamiento(int idTipoAlojamiento,
+			ArrayList<Publicacion> listaPublicacionYaFiltrada) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		listaPublicacionYaFiltrada.forEach(item -> {
+			if (item.getIdTipoAlojamiento() == idTipoAlojamiento)
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
+	public ArrayList<Publicacion> filtroGetAllByIsVerificado(ArrayList<Publicacion> listaPublicacionYaFiltrada) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		listaPublicacionYaFiltrada.forEach(item -> {
+			if (item.isVerificado())
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
+	public ArrayList<Publicacion> filtroGetAllByIdLocalidad(int idLocalidad,
+			ArrayList<Publicacion> listaPublicacionYaFiltrada) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		listaPublicacionYaFiltrada.forEach(item -> {
+			if (item.getIdLocalidad() == idLocalidad)
+				listaFiltrada.add(item);
+
+		});
+		return listaFiltrada;
+	}
+
+	// Lambda - Publicaciones - Orden
+	public ArrayList<Publicacion> getSortListByPrecio(ArrayList<Publicacion> listaPublicacionYaFiltrada) {
+		listaPublicacionYaFiltrada.sort(
+				Comparator.comparing(item -> item.getPrecioNoche(), Comparator.nullsLast(Comparator.naturalOrder())));
+		return listaPublicacionYaFiltrada;
+	}
+
+	public ArrayList<Publicacion> getSortListByFechaAlta(ArrayList<Publicacion> listaPublicacionYaFiltrada) {
+		listaPublicacionYaFiltrada.sort((obj1, obj2) -> obj1.getFechaAlta().compareTo(obj2.getFechaAlta()));
+		return listaPublicacionYaFiltrada;
+	}
+
+	/**
+	 * No tiene prioridad
+	 * 
+	 * @param idPartido
+	 * @param idLocalidad
+	 * @return
+	 */
+	@Deprecated
+	public ArrayList<Publicacion> filtroGetAllByIdPartido(int idPartido, int idLocalidad) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		Localidades localidadesDAO = new Localidades();
+		// localidadesDAO.getAllByIdPartido(idPartido).forEach(item -> {
+		// if(item.getIdLocalidad() == idLocalidad)
+		// //listaFiltrada.add(item);
+		// });
+		return listaFiltrada;
+	}
 	/// ********************* Demás Funcionalidades ************************ ///
 
 	// Esto es para que funcione la paginacion, se recupera con una consulta una

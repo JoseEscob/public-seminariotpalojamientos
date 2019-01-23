@@ -127,6 +127,20 @@ create table imagenes(
 	constraint fk_imagenes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
 
+create table verificacionesAdmin(
+	idVerificacionAdmin int not null auto_increment,
+	idUsuarioAdmin int not null,
+	idPublicacionVerificado int null,
+	idUsuarioVerificado int not null,
+	observacion varchar(300) not null,
+	fechaAlta datetime not null default current_timestamp,
+	estadoVerificacion tinyint(1) not null default 1,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_verificacionesAdmin primary key(idVerificacionAdmin),
+	constraint fk_verificaciones_UsuarioAdmin foreign key(idUsuarioAdmin) references usuarios(idUsuario)
+	-- constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
 create table tiposEstadosSolicitudes(
 	idEstadoSolicitud int not null auto_increment,
 	descripcion varchar(50) not null,
@@ -134,6 +148,42 @@ create table tiposEstadosSolicitudes(
 	constraint pk_tipos_estados_solicitudes primary key(idEstadoSolicitud)
 );
 
+-- comprobantes: registra las "solicitudesDeReservas" ya aprobadas
+create table comprobantes(
+	idComprobante int not null auto_increment,
+	idSolicitud int not null,
+	idUsuarioHuesped int not null,
+	idPublicacion int not null,
+	fechaReservaInicio date not null,
+	fechaReservaFin date not null,
+	cantPersonas int not null,
+	precioFinal int not null,
+	idUsuarioPropietario int not null,
+	fechaAlta datetime not null default current_timestamp,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_comprobantes primary key(idComprobante, idSolicitud),
+	constraint fk_comprobantes_solicitudAprobada foreign key(idSolicitud) references solicitudes(idSolicitud)
+);
+
+-- Ult. version 2019 01 22
+create table solicitudesDeReservas(
+	idSolicitud int not null auto_increment,
+	idUsuarioHuesped int not null,
+	idPublicacion int not null,
+	fechaReservaInicio date not null,
+	fechaReservaFin date not null,
+	cantPersonas int not null, -- si el propietario acepta en la carga de la publicación que el máximo de personas puede variar, entonces se podrá cargar más del limite establecido
+	precioFinal int not null,
+	fechaAltaSolicitud datetime not null default current_timestamp,
+	idUsuarioPropietario int not null,
+	fechaDecisionPropietario datetime, -- solo por UPDATE: 
+	motivoDecisionPropietario varchar(300), -- solo por UPDATE: aprobado, rechazado, otros (por el propietario)
+	idEstadoSolicitud int not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_solicitudesDeReservas primary key(idSolicitud),
+);
+
+-- 1er version @Deprecated
 create table solicitudes(
 	idSolicitud int not null auto_increment,
 	idUsuario int not null,
@@ -151,36 +201,6 @@ create table solicitudes(
 	constraint fk_solicitudes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion),
 	constraint fk_solicitudes_tipos_estados_solicitudes foreign key(idEstadoSolicitud) references tiposEstadosSolicitudes(idEstadoSolicitud)
 );
-
-create table comprobantes(
-	idComprobante int not null auto_increment,
-	idSolicitud int not null,
-	nombreAnfitrion varchar(50) not null,
-	apellidoAnfitrion varchar(50) not null,
-	nombreHuesped varchar(50) not null,
-	apellidoHuesped varchar(50) not null,
-	descripcionPublicacion varchar(300) not null, -- todos los campos que se pueden mostrar de publicaciones pasadas a un string(tipo_alojamiento,jardin,cochera,mascotas,fumadores,amoblada,desayuno,domicilio,precio_noche,codigo_postal,metros_cuadrados,personas,ambientes,banios,habitaciones)
-	precioFinal float not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_comprobantes primary key(idComprobante),
-	constraint fk_comprobantes_solicitures foreign key(idSolicitud) references solicitudes(idSolicitud)
-);
-
-
-create table verificacionesAdmin(
-	idVerificacionAdmin int not null auto_increment,
-	idUsuarioAdmin int not null,
-	idPublicacionVerificado int null,
-	idUsuarioVerificado int not null,
-	observacion varchar(300) not null,
-	fechaAlta datetime not null default current_timestamp,
-	estadoVerificacion tinyint(1) not null default 1,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_verificacionesAdmin primary key(idVerificacionAdmin),
-	constraint fk_verificaciones_UsuarioAdmin foreign key(idUsuarioAdmin) references usuarios(idUsuario)
-	-- constraint fk_telefonos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
 
 /* 
 

@@ -3,17 +3,13 @@ package controladoresDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 import exceptions.ValidacionException;
 import extra.Conexion;
 import extra.Constantes;
 import extra.LOG;
-import extra.Utilitario;
 import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
