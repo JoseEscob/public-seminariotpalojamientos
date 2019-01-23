@@ -469,6 +469,24 @@ public class PublicacionServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		if(ORSesion.sesionActiva(request)) {
 			Publicacion publicacion = new Publicacion();
+			int idPartido = Integer.parseInt(request.getParameter("partido"));
+			int idLocalidad = Integer.parseInt(request.getParameter("localidad"));
+			String calle = request.getParameter("calle");
+			int altura = Integer.parseInt(request.getParameter("altura"));
+			int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+			int piso = Integer.parseInt(request.getParameter("piso"));
+			String departamento = request.getParameter("departamento");
+			//int tipoAlojamiento = Integer.parseInt(request.getParameter("tipoAlojamiento"));
+			int superficieCubierta = Integer.parseInt(request.getParameter("superficieCubierta"));
+			int superficieDescubierta = Integer.parseInt(request.getParameter("superficieDescubierta"));
+			int cantidadPersonas = Integer.parseInt(request.getParameter("cantidadPersonas"));
+			int cantidadAmbientes = Integer.parseInt(request.getParameter("cantidadAmbientes"));
+			int cantidadDormitorios = Integer.parseInt(request.getParameter("cantidadDormitorios"));
+			int cantidadBanios = Integer.parseInt(request.getParameter("cantidadBaños"));
+			boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
+			int precioExpensas = Integer.parseInt(request.getParameter("precioExpensas"));
+			int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
+			
 			System.out.println("partido "+request.getParameter("partido"));
 			System.out.println("localidad "+request.getParameter("localidad"));
 			System.out.println("calle "+request.getParameter("calle"));
@@ -476,7 +494,8 @@ public class PublicacionServlet extends HttpServlet {
 			System.out.println("codPostal "+request.getParameter("codPostal"));
 			System.out.println("piso "+request.getParameter("piso"));
 			System.out.println("departamento "+request.getParameter("departamento"));
-			System.out.println("tAlojamiento "+request.getParameter("tAlojamiento"));	
+			System.out.println("tipoAlojamiento "+request.getParameter("tipoAlojamiento"));	
+			
 			System.out.println("superficieCubierta "+request.getParameter("superficieCubierta"));
 			System.out.println("superficieDescubierta "+request.getParameter("superficieDescubierta"));
 			System.out.println("cantidadPersonas "+request.getParameter("cantidadPersonas"));
@@ -488,6 +507,24 @@ public class PublicacionServlet extends HttpServlet {
 			System.out.println("precioNoche "+request.getParameter("precioNoche"));
 
 			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
+			publicacion.setIdLocalidad(idLocalidad);
+			publicacion.setIdTipoAlojamiento(1);
+			publicacion.setVerificado(false);
+			publicacion.setCalle(calle);
+			publicacion.setAltura(altura);
+			publicacion.setCodPostal(codPostal);
+			publicacion.setPiso(piso);
+			publicacion.setDpto(departamento);
+			publicacion.setSupCubierta(superficieCubierta);
+			publicacion.setSupDescubierta(superficieDescubierta);
+			publicacion.setCantPersonas(cantidadPersonas);
+			publicacion.setCantAmbientes(cantidadAmbientes);
+			publicacion.setCantHabitaciones(cantidadDormitorios);
+			publicacion.setCantBanios(cantidadBanios);
+			publicacion.setPrecioExpensas(precioExpensas);
+			publicacion.setPrecioNoche(precioNoche);
+			
+			System.out.println(publicacion.toString());
 			/*
 			publicacion.setIdTipoAlojamiento(idTipoAlojamiento);
 			publicacion.setIdLocalidad(idLocalidad);
