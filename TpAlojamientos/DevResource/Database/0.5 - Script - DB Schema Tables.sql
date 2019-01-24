@@ -55,22 +55,24 @@ create table publicaciones(
 	idTipoAlojamiento int not null,
 	descripcion varchar(300) not null,
 	idLocalidad int not null,
-	codPostal int not null,
+	codPostal int,
 	coordenadas varchar(50) not null,
 	calle varchar(50) not null,
 	altura int(6) not null,
-	piso varchar(2) not null,
-	dpto varchar(2) not null,
+	piso varchar(2),
+	dpto varchar(2),
 	supCubierta int not null,
 	supDescubierta int not null,
 	precioExpensas int not null,
 	precioNoche int not null,
+	chkPuedeVariarCantPersonas tinyint(1) not null default 1,
 	cantPersonas int not null,
 	cantAmbientes int not null,
 	cantBanios int not null,
 	cantHabitaciones int not null,
 	aniosAntiguedad int not null,
 	fechaAlta datetime not null default current_timestamp,
+	fechaUltModificado datetime,
 	puntaje float not null,
 	verificado tinyint(1) not null default 1,
 	habilitado tinyint(1) not null default 1,
@@ -95,6 +97,16 @@ create table serviciosPublicaciones(
 	constraint fk_serv_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion),
 	constraint fk_serv_tiposServicios foreign key(idServicio) references tiposServicios(idServicio)
 );
+
+create table imagenes(
+	idImagen int not null,
+	idPublicacion int not null,
+	rutaImgPublicacion varchar(50) not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_imagenes primary key(idImagen, idPublicacion),
+	constraint fk_imagenes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
+);
+
 -- (+)fechaComentario
 create table comentarios(
 	idUsuario int not null,
@@ -118,15 +130,6 @@ create table favoritos(
 	constraint fk_favoritos_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
 );
 
-create table imagenes(
-	idImagen int not null,
-	idPublicacion int not null,
-	rutaImgPublicacion varchar(50) not null,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_imagenes primary key(idImagen, idPublicacion),
-	constraint fk_imagenes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion)
-);
-
 create table verificacionesAdmin(
 	idVerificacionAdmin int not null auto_increment,
 	idUsuarioAdmin int not null,
@@ -134,7 +137,7 @@ create table verificacionesAdmin(
 	idUsuarioVerificado int not null,
 	observacion varchar(300) not null,
 	fechaAlta datetime not null default current_timestamp,
-	estadoVerificacion tinyint(1) not null default 1,
+	estadoVerificacion tinyint(1) not null default 1, -- 1 o 0
 	habilitado tinyint(1) not null default 1,
 	constraint pk_verificacionesAdmin primary key(idVerificacionAdmin),
 	constraint fk_verificaciones_UsuarioAdmin foreign key(idUsuarioAdmin) references usuarios(idUsuario)
@@ -146,23 +149,6 @@ create table tiposEstadosSolicitudes(
 	descripcion varchar(50) not null,
 	habilitado tinyint(1) not null default 1, 
 	constraint pk_tipos_estados_solicitudes primary key(idEstadoSolicitud)
-);
-
--- comprobantes: registra las "solicitudesDeReservas" ya aprobadas
-create table comprobantes(
-	idComprobante int not null auto_increment,
-	idSolicitud int not null,
-	idUsuarioHuesped int not null,
-	idPublicacion int not null,
-	fechaReservaInicio date not null,
-	fechaReservaFin date not null,
-	cantPersonas int not null,
-	precioFinal int not null,
-	idUsuarioPropietario int not null,
-	fechaAlta datetime not null default current_timestamp,
-	habilitado tinyint(1) not null default 1,
-	constraint pk_comprobantes primary key(idComprobante, idSolicitud),
-	constraint fk_comprobantes_solicitudAprobada foreign key(idSolicitud) references solicitudes(idSolicitud)
 );
 
 -- Ult. version 2019 01 22
@@ -180,10 +166,28 @@ create table solicitudesDeReservas(
 	motivoDecisionPropietario varchar(300), -- solo por UPDATE: aprobado, rechazado, otros (por el propietario)
 	idEstadoSolicitud int not null,
 	habilitado tinyint(1) not null default 1,
-	constraint pk_solicitudesDeReservas primary key(idSolicitud),
+	constraint pk_solicitudesDeReservas primary key(idSolicitud)
+);
+
+-- comprobantes: registra las "solicitudesDeReservas" ya aprobadas
+create table comprobantes(
+	idComprobante int not null auto_increment,
+	idSolicitud int not null,
+	idUsuarioHuesped int not null,
+	idPublicacion int not null,
+	fechaReservaInicio date not null,
+	fechaReservaFin date not null,
+	cantPersonas int not null,
+	precioFinal int not null,
+	fechaAlta datetime not null default current_timestamp,
+	idUsuarioPropietario int not null,
+	habilitado tinyint(1) not null default 1,
+	constraint pk_comprobantes primary key(idComprobante, idSolicitud),
+	constraint fk_comprobantes_solicitudAprobada foreign key(idSolicitud) references solicitudesDeReservas(idSolicitud)
 );
 
 -- 1er version @Deprecated
+/*
 create table solicitudes(
 	idSolicitud int not null auto_increment,
 	idUsuario int not null,
@@ -201,7 +205,7 @@ create table solicitudes(
 	constraint fk_solicitudes_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion),
 	constraint fk_solicitudes_tipos_estados_solicitudes foreign key(idEstadoSolicitud) references tiposEstadosSolicitudes(idEstadoSolicitud)
 );
-
+*/
 /* 
 
 create table bajas(

@@ -7,42 +7,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
-import modelo.TipoAlojamiento;
+import modelo.Servicio;
 
-public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
+public class Servicios implements Connectable<Servicio> {
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 4203725714708500524L;
-
+		private static final long serialVersionUID = 4203725714758500524L;
 		{
-			put("all", "select * from tiposalojamientos");
-			put("insert", "insert into tiposalojamientos values(null,?,default)");
-			put("count", "select count(*) as cantidad from tiposalojamientos");
-			put("update", "update tiposalojamientos set descripcion=?, habilitado=? where idTipoAlojamiento=?");
-			put("get", "select * from tiposalojamientos where idTipoAlojamiento=?");
+			put("all", "select * from serviciosPublicaciones");
+			put("insert", "insert into serviciosPublicaciones set idServicio=?, idPublicacion=?");
+			put("count", "select count(*) as cantidad from tiposServicios");
+			put("update", "update serviciosPublicaciones set idServicio=? where idPublicacion=? and idServicio=?");
+			put("get", "select * from serviciosPublicaciones where idPublicacion=?");
 			put("like", "");
 
 		}
 	};
 
 	private Conexion cn;
-	private ArrayList<TipoAlojamiento> m;
+	private ArrayList<Servicio> m;
 
 	@Override
-	public ArrayList<TipoAlojamiento> getAll() {
+	public ArrayList<Servicio> getAll() {
 		cn = new Conexion();
-		m = new ArrayList<TipoAlojamiento>();
+		m = new ArrayList<Servicio>();
 
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
-				TipoAlojamiento o = new TipoAlojamiento();
-				o = readPs_TipoAlojamiento(rs);
+				Servicio o = new Servicio();
+				o = readPs_Servicio(rs);
 				m.add(o);
 			}
 
@@ -55,7 +54,7 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 	}
 
 	@Override
-	public ArrayList<TipoAlojamiento> getLike(String like) {
+	public ArrayList<Servicio> getLike(String like) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -81,17 +80,17 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 	}
 
 	@Override
-	public TipoAlojamiento get(TipoAlojamiento obj) {
+	public Servicio get(Servicio obj) {
 		cn = new Conexion();
-		TipoAlojamiento o = null;
+		Servicio o = null;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
-			ps.setInt(1, obj.getIdTipoAlojamiento());
+			ps.setInt(1, obj.getIdServicio());
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				o = new TipoAlojamiento();
-				o = readPs_TipoAlojamiento(rs);
+				o = new Servicio();
+				o = readPs_Servicio(rs);
 			}
 
 		} catch (Exception e) {
@@ -103,7 +102,7 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 	}
 
 	@Override
-	public boolean insert(TipoAlojamiento obj) {
+	public boolean insert(Servicio obj) {
 		if (obj == null) {
 			return false;
 		}
@@ -112,7 +111,9 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 		;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setString(1, obj.getDescripcion());
+			ps.setInt(1, obj.getIdPublicacion());
+			ps.setInt(2, obj.getIdServicio());
+
 			ps.executeUpdate();
 			correcto = true;
 		} catch (Exception e) {
@@ -124,7 +125,7 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 	}
 
 	@Override
-	public boolean update(TipoAlojamiento obj) {
+	public boolean update(Servicio obj) {
 		if (obj == null) {
 			return false;
 		}
@@ -132,9 +133,8 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 		boolean correcto = false;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setString(1, obj.getDescripcion());
-			ps.setBoolean(2, obj.isHabilitado());
-			ps.setInt(3, obj.getIdTipoAlojamiento());
+			ps.setInt(1, obj.getIdPublicacion());
+			ps.setInt(2, obj.getIdServicio());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -147,30 +147,28 @@ public class TiposAlojamientos implements Connectable<TipoAlojamiento> {
 	}
 
 	@Override
-	public boolean remove(TipoAlojamiento obj) {
-		TipoAlojamiento u = new TipoAlojamiento();
-		u.setIdTipoAlojamiento(obj.getIdTipoAlojamiento());
-		u = this.get(u);
-		u.setHabilitado(false);
-		return this.update(u);
+	public boolean remove(Servicio obj) {
+		// No elimina
+		return false;
 	}
 
 	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
-	private TipoAlojamiento readPs_TipoAlojamiento(ResultSet rs) throws SQLException {
-		TipoAlojamiento o = new TipoAlojamiento();
-		o.setIdTipoAlojamiento(rs.getInt(cCampo.idTipoAlojamiento));
-		o.setDescripcion(rs.getString(cCampo.descripcion));
-		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+	private Servicio readPs_Servicio(ResultSet rs) throws SQLException {
+		Servicio o = new Servicio();
+		o.setIdServicio(rs.getInt(cCampo.idServicio));
+		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
 		return o;
 	}
+
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
-	public TipoAlojamiento getTipoAlojamiento(int idTipoAlojamiento) {
-		TipoAlojamiento objTipoAlojamiento = new TipoAlojamiento();
-
-		objTipoAlojamiento = getAll().stream().filter(x -> x.getIdTipoAlojamiento() == idTipoAlojamiento).findFirst()
-				.orElse(null);
-
-		return objTipoAlojamiento;
-	}
+	/*
+	 * public Servicio getServicio(int idServicio) { Servicio objServicio = new
+	 * Servicio();
+	 * 
+	 * objServicio = getAll().stream().filter(x -> x.getIdServicio() ==
+	 * idServicio).findFirst() .orElse(null);
+	 * 
+	 * return objServicio; }
+	 */
 }
