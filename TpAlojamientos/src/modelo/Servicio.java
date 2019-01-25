@@ -4,7 +4,7 @@ public class Servicio {
 
 	private int idPublicacion;
 	private int idServicio;
-	//private TipoServicio objTipoServicio;
+	private TipoServicio objTipoServicio;
 
 	public int getIdPublicacion() {
 		return idPublicacion;
@@ -20,5 +20,13 @@ public class Servicio {
 
 	public void setIdServicio(int idServicio) {
 		this.idServicio = idServicio;
+	}
+
+	public TipoServicio getObjTipoServicio() {
+		return objTipoServicio;
+	}
+
+	public void setObjTipoServicio(TipoServicio objTipoServicio) {
+		this.objTipoServicio = objTipoServicio;
 	}
 }

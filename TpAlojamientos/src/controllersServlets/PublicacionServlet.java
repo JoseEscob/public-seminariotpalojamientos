@@ -19,16 +19,17 @@ import controladoresDAO.Comentarios;
 import controladoresDAO.Favoritos;
 import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
+import controladoresDAO.Servicios;
 import controladoresDAO.Usuarios;
 import controladoresDAO.Imagenes;
 import controladoresDAO.TiposAlojamientos;
+import controladoresDAO.TiposServicios;
 import exceptions.ServidorException;
 import exceptions.CargaViewException;
 import exceptions.LectorDatosException;
 import extra.Constantes;
 import extra.LOG;
 import extra.ORSesion;
-import extra.Utilitario;
 import modelo.Comentario;
 import modelo.Favorito;
 import modelo.Localidad;
@@ -162,8 +163,6 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
 			ArrayList<Localidad> listaLocalidades = null;
 			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
-			
-			
 
 			if (request.getParameter("cmbPartido") != null) {
 				int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
@@ -343,6 +342,56 @@ public class PublicacionServlet extends HttpServlet {
 
 	}
 
+	/**********************************************************************/
+
+	/*********************** ABML Publicaciones ***************************/
+	private PublicacionView obtenerPublicacionView(int idUsuarioLogueado, int idPublicacion)
+			throws LectorDatosException {
+		final Servicios serviciosDAO = new Servicios();
+		PublicacionView vistaPublicacion = new PublicacionView();
+		int cantidadComentarios = 0;
+		// 1.1 DAO recuperar publicacion
+		Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+		if (objPublicacion == null)
+			throw new LectorDatosException("ERROR: No se encontró la Publicación con ID" + idPublicacion);
+		// 1.2 DAO recuperar usuario de la publicacion
+		int idUsuarioPublicador = objPublicacion.getIdUsuario();
+		Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuarioPublicador);
+		if (objUsuario == null)
+			throw new LectorDatosException("ERROR: No se encontró un usuario con ID" + idUsuarioPublicador);
+		// 1.3 DAO recuperar lista de imagenes de la publicacion
+		vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
+		// 1.4 DAO recuperar cantidad de Comentarios de la publicacion
+		cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
+		// 1.5 DAO recuperar ubicación TODO: revisar
+		Localidad objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
+		objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
+		// 1.6 DAO recuperar datos de clase Favoritos
+
+		// Favorito objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
+		Favorito objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
+		// 1.7 DAO Recuperar servicios de publicación
+		vistaPublicacion.setListaServicios(serviciosDAO.getAllByIdPublicacion(idPublicacion));
+
+		// String carpetaImgPublicacion =
+		// imagenDAO.getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
+
+		String carpetaImgPublicacion = Constantes.RUTAFolderFotosPublicacion + objPublicacion.getIdPublicacion() + "/";
+		// carpetaImgPublicacion =
+		// "C:\\Users\\..\\git\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\imagenes\\publicaciones\\Publicacion_1";
+		// ArrayList<String> listaRutaImg =
+		// Utilitario.getFilenamesFromFolder(carpetaImgPublicacion);
+		ArrayList<String> listaRutaImg = null;
+
+		vistaPublicacion.setListaRutaImg(listaRutaImg);
+		vistaPublicacion.setPublicacion(objPublicacion);
+		vistaPublicacion.setUsuario(objUsuario);
+		vistaPublicacion.setCantComentarios(cantidadComentarios);
+		vistaPublicacion.setObjLocalidad(objLocalidad);
+		vistaPublicacion.setObjFavorito(objFavorito);
+		return vistaPublicacion;
+	}
+
 	private void verPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- Declaración de variables
@@ -368,50 +417,6 @@ public class PublicacionServlet extends HttpServlet {
 			paginaJsp = "/PublicacionView.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
-	}
-
-	private PublicacionView obtenerPublicacionView(int idUsuarioLogueado, int idPublicacion)
-			throws LectorDatosException {
-		PublicacionView vistaPublicacion = new PublicacionView();
-		int cantidadComentarios = 0;
-		// 1.1 DAO recuperar publicacion
-		Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
-		if (objPublicacion == null)
-			throw new LectorDatosException("ERROR: No se encontró la Publicación con ID" + idPublicacion);
-		// 1.2 DAO recuperar usuario de la publicacion
-		int idUsuarioPublicador = objPublicacion.getIdUsuario();
-		Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuarioPublicador);
-		if (objUsuario == null)
-			throw new LectorDatosException("ERROR: No se encontró un usuario con ID" + idUsuarioPublicador);
-		// 1.3 DAO recuperar lista de imagenes de la publicacion
-		vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
-		// 1.4 DAO recuperar cantidad de Comentarios de la publicacion
-		cantidadComentarios = comentarioDAO.getAllByIdPublicacion(idPublicacion).size();
-		// 1.5 DAO recuperar ubicación TODO: revisar
-		Localidad objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
-		objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
-		// 1.6 DAO recuperar datos de clase Favoritos
-
-		// Favorito objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
-		Favorito objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
-
-		// String carpetaImgPublicacion =
-		// imagenDAO.getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
-
-		String carpetaImgPublicacion = Constantes.RUTAFolderFotosPublicacion + objPublicacion.getIdPublicacion() + "/";
-		// carpetaImgPublicacion =
-		// "C:\\Users\\..\\git\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\imagenes\\publicaciones\\Publicacion_1";
-		// ArrayList<String> listaRutaImg =
-		// Utilitario.getFilenamesFromFolder(carpetaImgPublicacion);
-		ArrayList<String> listaRutaImg = null;
-
-		vistaPublicacion.setListaRutaImg(listaRutaImg);
-		vistaPublicacion.setPublicacion(objPublicacion);
-		vistaPublicacion.setUsuario(objUsuario);
-		vistaPublicacion.setCantComentarios(cantidadComentarios);
-		vistaPublicacion.setObjLocalidad(objLocalidad);
-		vistaPublicacion.setObjFavorito(objFavorito);
-		return vistaPublicacion;
 	}
 
 	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response)
@@ -465,9 +470,11 @@ public class PublicacionServlet extends HttpServlet {
 			throws IOException, ServletException {
 		// Modulo de busqueda
 	}
-	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(ORSesion.sesionActiva(request)) {
+		if (ORSesion.sesionActiva(request)) {
 			Publicacion publicacion = new Publicacion();
 			int idPartido = Integer.parseInt(request.getParameter("partido"));
 			int idLocalidad = Integer.parseInt(request.getParameter("localidad"));
@@ -476,7 +483,8 @@ public class PublicacionServlet extends HttpServlet {
 			int codPostal = Integer.parseInt(request.getParameter("codPostal"));
 			int piso = Integer.parseInt(request.getParameter("piso"));
 			String departamento = request.getParameter("departamento");
-			//int tipoAlojamiento = Integer.parseInt(request.getParameter("tipoAlojamiento"));
+			// int tipoAlojamiento =
+			// Integer.parseInt(request.getParameter("tipoAlojamiento"));
 			int superficieCubierta = Integer.parseInt(request.getParameter("superficieCubierta"));
 			int superficieDescubierta = Integer.parseInt(request.getParameter("superficieDescubierta"));
 			int cantidadPersonas = Integer.parseInt(request.getParameter("cantidadPersonas"));
@@ -488,28 +496,34 @@ public class PublicacionServlet extends HttpServlet {
 			int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
 			String nombre = request.getParameter("nombre");
 			String descripcion = request.getParameter("descripcion");
-			
-			
-			/*System.out.println("partido "+request.getParameter("partido"));
-			System.out.println("localidad "+request.getParameter("localidad"));
-			System.out.println("calle "+request.getParameter("calle"));
-			System.out.println("altura "+request.getParameter("altura"));
-			System.out.println("codPostal "+request.getParameter("codPostal"));
-			System.out.println("piso "+request.getParameter("piso"));
-			System.out.println("departamento "+request.getParameter("departamento"));
-			System.out.println("tipoAlojamiento "+request.getParameter("tipoAlojamiento"));	
-			
-			System.out.println("superficieCubierta "+request.getParameter("superficieCubierta"));
-			System.out.println("superficieDescubierta "+request.getParameter("superficieDescubierta"));
-			System.out.println("cantidadPersonas "+request.getParameter("cantidadPersonas"));
-			System.out.println("cantidadAmbientes "+request.getParameter("cantidadAmbientes"));
-			System.out.println("cantidadDormitorios "+request.getParameter("cantidadDormitorios"));
-			System.out.println("cantidadBaños "+request.getParameter("cantidadBaños"));
-			System.out.println("chkExpensas "+request.getParameter("chkExpensas"));
-			System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
-			System.out.println("precioNoche "+request.getParameter("precioNoche"));*/
 
-			
+			/*
+			 * System.out.println("partido "+request.getParameter("partido"));
+			 * System.out.println("localidad "+request.getParameter("localidad"));
+			 * System.out.println("calle "+request.getParameter("calle"));
+			 * System.out.println("altura "+request.getParameter("altura"));
+			 * System.out.println("codPostal "+request.getParameter("codPostal"));
+			 * System.out.println("piso "+request.getParameter("piso"));
+			 * System.out.println("departamento "+request.getParameter("departamento"));
+			 * System.out.println("tipoAlojamiento "+request.getParameter("tipoAlojamiento")
+			 * );
+			 * 
+			 * System.out.println("superficieCubierta "+request.getParameter(
+			 * "superficieCubierta"));
+			 * System.out.println("superficieDescubierta "+request.getParameter(
+			 * "superficieDescubierta"));
+			 * System.out.println("cantidadPersonas "+request.getParameter(
+			 * "cantidadPersonas"));
+			 * System.out.println("cantidadAmbientes "+request.getParameter(
+			 * "cantidadAmbientes"));
+			 * System.out.println("cantidadDormitorios "+request.getParameter(
+			 * "cantidadDormitorios"));
+			 * System.out.println("cantidadBaños "+request.getParameter("cantidadBaños"));
+			 * System.out.println("chkExpensas "+request.getParameter("chkExpensas"));
+			 * System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
+			 * System.out.println("precioNoche "+request.getParameter("precioNoche"));
+			 */
+
 			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
 			publicacion.setIdLocalidad(idLocalidad);
 			publicacion.setVerificado(false);
@@ -526,30 +540,27 @@ public class PublicacionServlet extends HttpServlet {
 			publicacion.setCantBanios(cantidadBanios);
 			publicacion.setPrecioExpensas(precioExpensas);
 			publicacion.setPrecioNoche(precioNoche);
-			
+
 			publicacion.setNombre(nombre);
 			publicacion.setDescripcion(descripcion);
 			publicacion.setFechaAlta(null);
-			
-			
-			/***DATOS*QUE*FALTAN**/
+
+			/*** DATOS*QUE*FALTAN **/
 			String nulo = "null";
 			publicacion.setCoordenadas(nulo);
 			publicacion.setIdTipoAlojamiento(1);
-			
+
 			System.out.println(publicacion.toString());
-			
-			 
-			if(publicacionDAO.insert(publicacion)){
+
+			if (publicacionDAO.insert(publicacion)) {
 				String mensaje = "Publicacion cargada con exito.";
 				request.setAttribute("objMensaje", mensaje);
 				paginaJsp = "/Publicaciones.jsp";
-			
-			} 
-			  
-		
+
+			}
+
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
-			
+
 		}
 	}
 

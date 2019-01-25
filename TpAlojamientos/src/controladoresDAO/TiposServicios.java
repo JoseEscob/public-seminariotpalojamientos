@@ -168,13 +168,31 @@ public class TiposServicios implements Connectable<TipoServicio> {
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
-	/*
-	 * public TipoServicio getTipoServicio(int idTipoServicio) { TipoServicio
-	 * objTipoServicio = new TipoServicio();
-	 * 
-	 * objTipoServicio = getAll().stream().filter(x -> x.getIdTipoServicio() ==
-	 * idTipoServicio).findFirst() .orElse(null);
-	 * 
-	 * return objTipoServicio; }
-	 */
+	public TipoServicio getTipoServicio(int idTipoServicio) {
+		TipoServicio objTipoServicio = new TipoServicio();
+
+		objTipoServicio = getAll().stream().filter(x -> x.getIdTipoServicio() == idTipoServicio).findFirst()
+				.orElse(null);
+
+		return objTipoServicio;
+	}
+
+	public TipoServicio getObjectByIdServicio(int idServicio) {
+		TipoServicio objTipoServicio = new TipoServicio();
+
+		objTipoServicio = getAll().stream().filter(x -> x.getIdServicio() == idServicio).findFirst().orElse(null);
+
+		return objTipoServicio;
+	}
+
+	public ArrayList<TipoServicio> getAllByIdServicio(int idServicio) {
+		ArrayList<TipoServicio> listaTipoServicio = new ArrayList<TipoServicio>();
+
+		getAll().forEach(item -> {
+			if (item.getIdServicio() == idServicio)
+				listaTipoServicio.add(item);
+		});
+		return listaTipoServicio;
+	}
+
 }

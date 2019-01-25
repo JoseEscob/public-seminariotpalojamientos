@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import extra.Conexion;
 import modelo.Servicio;
+import modelo.TipoServicio;
 
 public class Servicios implements Connectable<Servicio> {
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
@@ -162,13 +163,26 @@ public class Servicios implements Connectable<Servicio> {
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
-	/*
-	 * public Servicio getServicio(int idServicio) { Servicio objServicio = new
-	 * Servicio();
-	 * 
-	 * objServicio = getAll().stream().filter(x -> x.getIdServicio() ==
-	 * idServicio).findFirst() .orElse(null);
-	 * 
-	 * return objServicio; }
-	 */
+	public Servicio getServicio(int idServicio) {
+		Servicio objServicio = new Servicio();
+
+		objServicio = getAll().stream().filter(x -> x.getIdServicio() == idServicio).findFirst().orElse(null);
+
+		return objServicio;
+	}
+
+	public ArrayList<Servicio> getAllByIdPublicacion(int idPublicacion) {
+		ArrayList<Servicio> listaServicios = new ArrayList<Servicio>();
+		final TiposServicios tiposServiciosDAO = new TiposServicios();
+
+		getAll().forEach(item -> {
+			if (item.getIdPublicacion() == idPublicacion) {
+				item.setObjTipoServicio(tiposServiciosDAO.getObjectByIdServicio(item.getIdServicio()));
+				listaServicios.add(item);
+			}
+		});
+
+		return listaServicios;
+	}
+
 }

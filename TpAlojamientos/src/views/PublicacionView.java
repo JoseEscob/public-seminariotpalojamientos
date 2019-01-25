@@ -6,6 +6,7 @@ import modelo.Favorito;
 import modelo.Imagen;
 import modelo.Localidad;
 import modelo.Publicacion;
+import modelo.Servicio;
 import exceptions.CargaViewException;
 
 /**
@@ -19,6 +20,7 @@ public class PublicacionView {
 	private ArrayList<String> listaRutaImg;
 	private Localidad objLocalidad;
 	private Favorito objFavorito;
+	private ArrayList<Servicio> listaServicios;
 	
 	public PublicacionView() {
 		this.setCantComentarios(0);
@@ -93,6 +95,14 @@ public class PublicacionView {
 
 	public void setObjLocalidad(Localidad objLocalidad) {
 		this.objLocalidad = objLocalidad;
+	}
+
+	public ArrayList<Servicio> getListaServicios() {
+		return listaServicios;
+	}
+
+	public void setListaServicios(ArrayList<Servicio> listaServicios) {
+		this.listaServicios = listaServicios;
 	}
 
 }

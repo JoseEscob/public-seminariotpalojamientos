@@ -65,8 +65,8 @@
 					</div>
 					<div class="col-md-6 col-md-12">
 						<c:if test="${vistaPublicacion.publicacion.isVerificado() eq true}">
-							<label class="control-label pull-right" style="color: royalblue;"> <span
-								class="glyphicon glyphicon-ok-circle"></span> Publicación Verificada
+							<label class="control-label pull-right" style="color: ROYALBLUE;"> <span
+								class="glyphicon glyphicon-ok-sign"></span> Publicación Verificada
 							</label>
 						</c:if>
 					</div>
@@ -217,6 +217,34 @@
 			<c:forEach items="${vistaPublicacion.listaRutaImg}" var="objRutaImg">
 			<label class="control-label col-xs-12">${objRutaImg}</label>
 			</c:forEach>
+		</div>
+		
+		 
+		<div class="row" title="Servicios de la publicación">
+			<h3>Servicios</h3>
+			<hr />
+			<div class="row col-md-12">
+
+				<c:forEach items="${vistaPublicacion.listaServicios}" var="objServicio">
+					<c:choose>
+						<c:when test="${objServicio.objTipoServicio.idTipoServicio eq 1}">
+							<div class="col-md-4">
+								<label><span class="glyphicon glyphicon-ok" style="color: LIMEGREEN;"></span>&nbsp;${objServicio.objTipoServicio.descripcion} </label>
+							</div>
+						</c:when>
+						<c:when test="${objServicio.objTipoServicio.idTipoServicio eq 2}">
+							<div class="col-md-4">
+								<label><span class="glyphicon glyphicon-ok" style="color: LIMEGREEN;"></span>&nbsp;${objServicio.objTipoServicio.descripcion} </label>
+							</div>
+						</c:when>
+						<c:when test="${objServicio.objTipoServicio.idTipoServicio eq 3}">
+							<div class="col-md-4">
+								<label><span class="glyphicon glyphicon-ok" style="color: LIMEGREEN;"></span>&nbsp;${objServicio.objTipoServicio.descripcion} </label>
+							</div>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</div>
 		</div>
 		
 		<div class="row" title="Solicitud de Reserva(Modal)">
