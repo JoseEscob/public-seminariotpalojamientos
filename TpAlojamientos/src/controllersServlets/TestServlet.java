@@ -1,35 +1,33 @@
 package controllersServlets;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 
-import modelo.Favorito;
-import modelo.Localidad;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import com.google.gson.JsonParser;
-
-import controladoresDAO.Localidades;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 		
 /**
  * Servlet implementation class TestServlet
  */
 @WebServlet("/TestServlet")
+@MultipartConfig
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String UploadDirectory = "ruta";
+	private static final int MemoryThreshold = 1024 * 1024 * 3;
+	private static final int MaxFileSize = 1024 * 1024 * 10;
+	private static final int MaxRequestSize = 1024 * 1024 * 20;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,8 +41,7 @@ public class TestServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		System.out.println("doGet - TestServlet");
 	}
 
 	/**
@@ -52,51 +49,71 @@ public class TestServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost - TestServlet");
-		// TODO Auto-generated method stub
 		
-		/*Localidades localidadDao = new Localidades();
-			
-		// DEBE REALIZARSE EN ALGUNA FUNCION QUE NO HAGA REDIRIGIR LA PAGINA A OTRA.
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+				
+		if(isMultipart) {
+			System.out.println("1");
 
-		String r = (String)request.getParameter("id");
-		
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-		ArrayList<Favorito> datos = new ArrayList<Favorito>();
-		
-		
-		String coso = request.getParameter("accionPublicacion");
-		
-		switch(coso) {
-		case "getLocalidades":
+			DiskFileItemFactory factory = new DiskFileItemFactory();
+			factory.setSizeThreshold(MemoryThreshold);
+			factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 			
-			ArrayList<Localidad> localidades = new ArrayList<Localidad>();
-			int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
-			localidades = localidadDao.getByIdPartido(idPartido);
+			ServletFileUpload upload  = new ServletFileUpload(factory);
+			upload.setFileSizeMax(MaxFileSize);
+			upload.setSizeMax(MaxRequestSize);
 			
-			if(localidades == null) {
-				System.out.println("localidades : NULL");
+			String projectName = this.getServletContext().getContextPath();
+			String uploadPath = new File(System.getProperty("user.home")).getPath()+File.separator+"git"+File.separator+"seminariotpalojamientos" + projectName + File.separator + UploadDirectory;
+			
+			File uploadDir = new File(uploadPath);
+			if(!uploadDir.exists()) {
+				uploadDir.mkdir();
 			}
 			
-			resultMap.put("localidades", localidades);
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().append(new Gson().toJson(resultMap));
-			break;
-		default:break;*/
-			String toPage = "";
-			switch(request.getParameter("accion")) {
-			case "toReservas":
-				toPage = "Reservas.jsp";
-				break;
-				default:break;
-			
+			try {
+				List<FileItem> formItems = upload.parseRequest(request);
+				int index = -1;
+				String newName = "";
+				System.out.println("2");
+				
+				
+				
+				if(formItems != null && formItems.size() > 0) {
+					System.out.println("3");
+
+					for(FileItem item : formItems) {
+						System.out.println("4");
+						if(item.isFormField()) {
+							String fieldname = item.getFieldName();
+							String value = item.getString();
+							
+							newName = value;
+						}else{
+						
+							index = formItems.indexOf(item);
+						}
+					}
+				}
+				String fileName = new File(formItems.get(index).getName()).getName();
+				
+				newName += "." + FilenameUtils.getExtension(fileName);
+				String filePath = uploadPath + File.separator + newName;
+				
+				File storeFile = new File(filePath);
+				System.out.println(filePath);
+				formItems.get(index).write(storeFile);
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
-			request.getRequestDispatcher(toPage).forward(request, response);
-		
 		}
-
-	
+		
+		request.getRequestDispatcher("/Test.jsp").forward(request, response);
+	}
 		
 }
 
