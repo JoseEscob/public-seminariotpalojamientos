@@ -18,6 +18,11 @@ import modelo.Usuario;
 public class Publicaciones implements Connectable<Publicacion> {
 	private static final _DAOConstantesPublicacion cPubli = new _DAOConstantesPublicacion();
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
+	private final static String camposInsertIntoDB = "idUsuario=?, idTipoAlojamiento=?, descripcion=?, "
+			+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
+			+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?, chkPuedeVariarCantPersonas=?"
+			+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?, aniosAntiguedad=?,"
+			+ "fechaAlta=?, fechaUltModificado=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?";
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 
@@ -26,14 +31,9 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 		{
 			put("all", "select * from publicaciones");
-			put("insert", "insert into publicaciones values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,default,?,default,default)");
+			put("insert", "insert into publicaciones values " + camposInsertIntoDB);
 			put("count", "select count(*) as cantidad from publicaciones");
-			put("update",
-					"update publicaciones set idUsuario=?, idTipoAlojamiento=?, descripcion=?, "
-							+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
-							+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?,"
-							+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?, aniosAntiguedad=?,"
-							+ "fechaAlta=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?");
+			put("update", "update publicaciones set " + camposInsertIntoDB);
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("limit", "select * from publicaciones limit ?, ?");
 
@@ -121,7 +121,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		}
 		cn = new Conexion();
 		boolean correcto = false;
-		
+
 		try {
 			// FALSE: Si no existe el id en los registros de Usuarios, TiposAlojamientos,
 			// Localidades
@@ -144,26 +144,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setInt(1, obj.getIdUsuario());
-			ps.setInt(2, obj.getIdTipoAlojamiento());
-			ps.setString(3, obj.getDescripcion());
-			ps.setInt(4, obj.getIdLocalidad());
-			ps.setInt(5, obj.getCodPostal());
-			ps.setString(6, obj.getCoordenadas());
-			ps.setString(7, obj.getCalle());
-			ps.setInt(8, obj.getAltura());
-			ps.setInt(9, obj.getPiso());
-			ps.setString(10, obj.getDpto());
-			ps.setInt(11, obj.getSupCubierta());
-			ps.setInt(12, obj.getSupDescubierta());
-			ps.setInt(13, obj.getPrecioExpensas());
-			ps.setInt(14, obj.getPrecioNoche());
-			ps.setInt(15, obj.getCantPersonas());
-			ps.setInt(16, obj.getCantAmbientes());
-			ps.setInt(17, obj.getCantBanios());
-			ps.setInt(18, obj.getCantHabitaciones());
-			ps.setInt(19, obj.getAniosAntiguedad());
-			ps.setFloat(20, obj.getPuntaje());
+			ps = writePs_Publicacion(obj, ps);
 			LOG.info("INSERT Publicaciones: " + ps.toString());
 
 			if (ps.executeUpdate() != 0)
@@ -205,8 +186,6 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps = writePs_Publicacion(obj, ps);
-			ps.setBoolean(23, obj.isHabilitado());
-			ps.setInt(24, obj.getIdPublicacion());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -265,6 +244,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setSupDescubierta(rs.getInt(cPubli.supDescubierta));
 		o.setPrecioExpensas(rs.getInt(cPubli.precioExpensas));
 		o.setPrecioNoche(rs.getInt(cPubli.precioNoche));
+		o.setHabilitado(rs.getBoolean(cPubli.chkPuedeVariarCantPersonas));
 
 		o.setCantPersonas(rs.getInt(cPubli.cantPersonas));
 		o.setCantAmbientes(rs.getInt(cPubli.cantAmbientes));
@@ -273,6 +253,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setAniosAntiguedad(rs.getInt(cPubli.aniosAntiguedad));
 
 		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
+		o.setFechaAlta(rs.getDate(cPubli.fechaUltModificado));
 		o.setPuntaje(rs.getFloat(cPubli.puntaje));
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
 		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
@@ -300,14 +281,18 @@ public class Publicaciones implements Connectable<Publicacion> {
 		ps.setInt(12, obj.getSupDescubierta());
 		ps.setInt(13, obj.getPrecioExpensas());
 		ps.setInt(14, obj.getPrecioNoche());
-		ps.setInt(15, obj.getCantPersonas());
-		ps.setInt(16, obj.getCantAmbientes());
-		ps.setInt(17, obj.getCantBanios());
-		ps.setInt(18, obj.getCantHabitaciones());
-		ps.setInt(19, obj.getAniosAntiguedad());
-		ps.setDate(20, obj.getFechaAlta());
-		ps.setFloat(21, obj.getPuntaje());
-		ps.setBoolean(22, obj.isVerificado());
+		ps.setBoolean(15, obj.isChkPuedeVariarCantPersonas());
+		ps.setInt(16, obj.getCantPersonas());
+		ps.setInt(17, obj.getCantAmbientes());
+		ps.setInt(18, obj.getCantBanios());
+		ps.setInt(19, obj.getCantHabitaciones());
+		ps.setInt(20, obj.getAniosAntiguedad());
+		ps.setDate(21, obj.getFechaAlta());
+		ps.setDate(22, obj.getFechaUltModificado());
+		ps.setFloat(23, obj.getPuntaje());
+		ps.setBoolean(24, obj.isVerificado());
+		ps.setBoolean(25, obj.isHabilitado());
+		ps.setInt(26, obj.getIdPublicacion());
 		return ps;
 	}
 
@@ -401,7 +386,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 	@Deprecated
 	public ArrayList<Publicacion> filtroGetAllByIdPartido(int idPartido, int idLocalidad) {
 		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
-		Localidades localidadesDAO = new Localidades();
+		//Localidades localidadesDAO = new Localidades();
 		// localidadesDAO.getAllByIdPartido(idPartido).forEach(item -> {
 		// if(item.getIdLocalidad() == idLocalidad)
 		// //listaFiltrada.add(item);

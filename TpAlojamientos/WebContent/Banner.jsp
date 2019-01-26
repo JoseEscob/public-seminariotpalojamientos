@@ -61,7 +61,7 @@
 					<li><a href="#"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
 
-					<li><a href="PublicacionServlet?accionGET=Nuevo"> Nueva
+					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span class="glyphicon glyphicon-plus"></span>Nueva
 							Publicación</a></li>
 					<li><a
 						href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">

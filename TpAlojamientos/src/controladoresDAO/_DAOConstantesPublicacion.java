@@ -23,6 +23,7 @@ public class _DAOConstantesPublicacion {
 	public final String supDescubierta = "supDescubierta";
 	public final String precioExpensas = "precioExpensas";
 	public final String precioNoche = "precioNoche";
+	public final String chkPuedeVariarCantPersonas = "chkPuedeVariarCantPersonas";
 
 	public final String cantPersonas = "cantPersonas";
 	public final String cantAmbientes = "cantAmbientes";
@@ -31,6 +32,7 @@ public class _DAOConstantesPublicacion {
 	public final String aniosAntiguedad = "aniosAntiguedad";
 
 	public final String fechaAlta = "fechaAlta";
+	public final String fechaUltModificado = "fechaUltModificado";
 	public final String puntaje = "puntaje";
 	public final String habilitado = "habilitado";
 }

@@ -22,7 +22,8 @@ public class Publicacion {
 	private boolean chkExpensas;
 	private int precioExpensas;
 	private int precioNoche;
-
+	private boolean chkPuedeVariarCantPersonas;
+	
 	private int cantPersonas;
 	private int cantAmbientes;
 	private int cantBanios;
@@ -30,6 +31,7 @@ public class Publicacion {
 	private int aniosAntiguedad;
 
 	private Date fechaAlta;
+	private Date fechaUltModificado;
 	private float puntaje;
 	private boolean habilitado;
 	private boolean verificado;
@@ -271,6 +273,22 @@ public class Publicacion {
 				"]\n puntaje["+this.puntaje+
 				"]\n habilitado["+ this.habilitado+
 				"]\n verificado["+this.verificado+"]\n";
+	}
+
+	public boolean isChkPuedeVariarCantPersonas() {
+		return chkPuedeVariarCantPersonas;
+	}
+
+	public void setChkPuedeVariarCantPersonas(boolean chkPuedeVariarCantPersonas) {
+		this.chkPuedeVariarCantPersonas = chkPuedeVariarCantPersonas;
+	}
+
+	public Date getFechaUltModificado() {
+		return fechaUltModificado;
+	}
+
+	public void setFechaUltModificado(Date fechaUltModificado) {
+		this.fechaUltModificado = fechaUltModificado;
 	}
 
 }

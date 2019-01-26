@@ -1,6 +1,7 @@
 package controllersServlets;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +31,16 @@ import exceptions.LectorDatosException;
 import extra.Constantes;
 import extra.LOG;
 import extra.ORSesion;
+import extra.Utilitario;
 import modelo.Comentario;
 import modelo.Favorito;
 import modelo.Localidad;
 import modelo.Partido;
 import modelo.Publicacion;
+import modelo.Servicio;
 import modelo.Usuario;
 import modelo.TipoAlojamiento;
+import modelo.TipoServicio;
 import views.PublicacionView;
 import views.PaginacionView;
 
@@ -55,6 +59,7 @@ public class PublicacionServlet extends HttpServlet {
 	private final Imagenes imagenDAO = new Imagenes();
 	private final Favoritos favoritosDAO = new Favoritos();
 	private final TiposAlojamientos tipoAlojamientoDAO = new TiposAlojamientos();
+	private final Servicios serviciosDAO = new Servicios();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -143,7 +148,7 @@ public class PublicacionServlet extends HttpServlet {
 			case "delete":
 				break;
 			}
-		} catch (ServidorException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -163,6 +168,7 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
 			ArrayList<Localidad> listaLocalidades = null;
 			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
+			ArrayList<TipoServicio> listaTipoServicios = new TiposServicios().getAll();
 
 			if (request.getParameter("cmbPartido") != null) {
 				int idPartido = Integer.parseInt(request.getParameter("cmbPartido"));
@@ -171,6 +177,7 @@ public class PublicacionServlet extends HttpServlet {
 			request.setAttribute("listaTiposAlojamientos", listaTiposAlojamientos);
 			request.setAttribute("listaPartidos", listaPartidos);
 			request.setAttribute("listaLocalidades", listaLocalidades);
+			request.setAttribute("listaTipoServicios", listaTipoServicios);
 			message = "El cmbPartido fue cargado";
 		} catch (Exception e) {
 			message = e.getMessage();
@@ -347,7 +354,6 @@ public class PublicacionServlet extends HttpServlet {
 	/*********************** ABML Publicaciones ***************************/
 	private PublicacionView obtenerPublicacionView(int idUsuarioLogueado, int idPublicacion)
 			throws LectorDatosException {
-		final Servicios serviciosDAO = new Servicios();
 		PublicacionView vistaPublicacion = new PublicacionView();
 		int cantidadComentarios = 0;
 		// 1.1 DAO recuperar publicacion
@@ -472,96 +478,123 @@ public class PublicacionServlet extends HttpServlet {
 	}
 
 	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		if (ORSesion.sesionActiva(request)) {
-			Publicacion publicacion = new Publicacion();
-			int idPartido = Integer.parseInt(request.getParameter("partido"));
-			int idLocalidad = Integer.parseInt(request.getParameter("localidad"));
-			String calle = request.getParameter("calle");
-			int altura = Integer.parseInt(request.getParameter("altura"));
-			int codPostal = Integer.parseInt(request.getParameter("codPostal"));
-			int piso = Integer.parseInt(request.getParameter("piso"));
-			String departamento = request.getParameter("departamento");
-			// int tipoAlojamiento =
-			// Integer.parseInt(request.getParameter("tipoAlojamiento"));
-			int superficieCubierta = Integer.parseInt(request.getParameter("superficieCubierta"));
-			int superficieDescubierta = Integer.parseInt(request.getParameter("superficieDescubierta"));
-			int cantidadPersonas = Integer.parseInt(request.getParameter("cantidadPersonas"));
-			int cantidadAmbientes = Integer.parseInt(request.getParameter("cantidadAmbientes"));
-			int cantidadDormitorios = Integer.parseInt(request.getParameter("cantidadDormitorios"));
-			int cantidadBanios = Integer.parseInt(request.getParameter("cantidadBaños"));
-			boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
-			int precioExpensas = Integer.parseInt(request.getParameter("precioExpensas"));
-			int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
-			String nombre = request.getParameter("nombre");
-			String descripcion = request.getParameter("descripcion");
-
-			/*
-			 * System.out.println("partido "+request.getParameter("partido"));
-			 * System.out.println("localidad "+request.getParameter("localidad"));
-			 * System.out.println("calle "+request.getParameter("calle"));
-			 * System.out.println("altura "+request.getParameter("altura"));
-			 * System.out.println("codPostal "+request.getParameter("codPostal"));
-			 * System.out.println("piso "+request.getParameter("piso"));
-			 * System.out.println("departamento "+request.getParameter("departamento"));
-			 * System.out.println("tipoAlojamiento "+request.getParameter("tipoAlojamiento")
-			 * );
-			 * 
-			 * System.out.println("superficieCubierta "+request.getParameter(
-			 * "superficieCubierta"));
-			 * System.out.println("superficieDescubierta "+request.getParameter(
-			 * "superficieDescubierta"));
-			 * System.out.println("cantidadPersonas "+request.getParameter(
-			 * "cantidadPersonas"));
-			 * System.out.println("cantidadAmbientes "+request.getParameter(
-			 * "cantidadAmbientes"));
-			 * System.out.println("cantidadDormitorios "+request.getParameter(
-			 * "cantidadDormitorios"));
-			 * System.out.println("cantidadBaños "+request.getParameter("cantidadBaños"));
-			 * System.out.println("chkExpensas "+request.getParameter("chkExpensas"));
-			 * System.out.println("precioExpensas "+request.getParameter("precioExpensas"));
-			 * System.out.println("precioNoche "+request.getParameter("precioNoche"));
-			 */
-
-			publicacion.setIdUsuario(ORSesion.getUsuarioBySession(request).getIdUsuario());
-			publicacion.setIdLocalidad(idLocalidad);
-			publicacion.setVerificado(false);
-			publicacion.setCalle(calle);
-			publicacion.setAltura(altura);
-			publicacion.setCodPostal(codPostal);
-			publicacion.setPiso(piso);
-			publicacion.setDpto(departamento);
-			publicacion.setSupCubierta(superficieCubierta);
-			publicacion.setSupDescubierta(superficieDescubierta);
-			publicacion.setCantPersonas(cantidadPersonas);
-			publicacion.setCantAmbientes(cantidadAmbientes);
-			publicacion.setCantHabitaciones(cantidadDormitorios);
-			publicacion.setCantBanios(cantidadBanios);
-			publicacion.setPrecioExpensas(precioExpensas);
-			publicacion.setPrecioNoche(precioNoche);
-
-			publicacion.setNombre(nombre);
-			publicacion.setDescripcion(descripcion);
-			publicacion.setFechaAlta(null);
-
-			/*** DATOS*QUE*FALTAN **/
-			String nulo = "null";
-			publicacion.setCoordenadas(nulo);
-			publicacion.setIdTipoAlojamiento(1);
-
-			System.out.println(publicacion.toString());
-
-			if (publicacionDAO.insert(publicacion)) {
+			throws ServletException, IOException, ParseException {
+		String message = null;
+		try {
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			// 1- recuperar valores de DAO
+			int idPublicacion = publicacionDAO.getCount() + 1;
+			// 2- recuperar valores del formulario JSP y validar información obtenida
+			Publicacion objPublicacion = new Publicacion();
+			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
+			// 2.2 Validar con la DB
+			// 3.1- DB: guardar información validada - publicacionDAO
+			if (publicacionDAO.insert(objPublicacion)) {
 				String mensaje = "Publicacion cargada con exito.";
 				request.setAttribute("objMensaje", mensaje);
-				paginaJsp = "/Publicaciones.jsp";
 
 			}
+			// 3.2- DB: guardar información - serviciosDAO
+			String[] chklistServicios = request.getParameterValues("chklistServicios");
+			ArrayList<Servicio> listaServicios = new ArrayList<Servicio>();
+			Servicio objServicio = new Servicio();
+			int idServicio = 0;
+			for (String chkServicio : chklistServicios) {
+				// Servicio objServicio = new Servicio();
+				idServicio = Integer.parseInt(chkServicio);
+				objServicio.setIdPublicacion(idPublicacion);
+				objServicio.setIdServicio(idServicio);
+				listaServicios.add(objServicio);
+			}
+			// 3.2.2- verificar correcto almacenamiento en DB
+			int cantArchivosInsertado = 0;
+			for (Servicio objServ : listaServicios) {
+				if (serviciosDAO.insert(objServ))
+					cantArchivosInsertado++;
+			}
+			LOG.info(String.format("Se guardaron %d de %d servicios ingresados", cantArchivosInsertado,
+					listaServicios.size()));
+			// 3.3- DB: guardar información - imagenesDAO
 
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("message", message);
+			paginaJsp = "/PublicacionAlta.jsp";
+
+			paginaJsp = "/Publicaciones.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
-
 		}
+	}
+
+	private Publicacion getObjectPublicacionByJSPData(HttpServletRequest request, int idPublicacion) {
+		Publicacion objPublicacion = new Publicacion();
+		// int idPartido = Integer.parseInt(request.getParameter("partido"));
+		int idLocalidad = Integer.parseInt(request.getParameter("localidad"));
+		String calle = request.getParameter("calle");
+		int altura = Integer.parseInt(request.getParameter("altura"));
+		int codPostal = Integer.parseInt(request.getParameter("codPostal"));
+		int idTipoAlojamiento = Integer.parseInt(request.getParameter("cmbTipoAlojamiento"));
+		// Si no es depto
+		int piso = 0;
+		String departamento = "";
+		if (idTipoAlojamiento == 3) {
+			piso = Integer.parseInt(request.getParameter("piso"));
+			departamento = request.getParameter("departamento");
+		}
+
+		// int tipoAlojamiento =
+		// Integer.parseInt(request.getParameter("tipoAlojamiento"));
+		int superficieCubierta = Integer.parseInt(request.getParameter("superficieCubierta"));
+		int superficieDescubierta = Integer.parseInt(request.getParameter("superficieDescubierta"));
+		int cantidadPersonas = Integer.parseInt(request.getParameter("cantidadPersonas"));
+		int cantidadAmbientes = Integer.parseInt(request.getParameter("cantidadAmbientes"));
+		int cantidadDormitorios = Integer.parseInt(request.getParameter("cantidadDormitorios"));
+		int cantidadBanios = Integer.parseInt(request.getParameter("cantidadBaños"));
+		boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
+		int precioExpensas = 0;
+		if (expensas == true)
+			precioExpensas = Integer.parseInt(request.getParameter("precioExpensas"));
+		int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
+		int aniosAntiguedad = Integer.parseInt(request.getParameter("aniosAntiguedad"));
+		String descripcion = request.getParameter("descripcion");
+
+		boolean chkPuedeVariarCantPersonas = Boolean.parseBoolean(request.getParameter("chkPuedeVariarCantPersonas"));
+
+		int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+		objPublicacion.setIdPublicacion(idPublicacion);
+		objPublicacion.setIdUsuario(idUsuarioLogueado);
+		objPublicacion.setIdTipoAlojamiento(1);
+		objPublicacion.setDescripcion(descripcion);
+		objPublicacion.setIdLocalidad(idLocalidad);
+		objPublicacion.setCodPostal(codPostal);
+		objPublicacion.setCoordenadas("null");
+
+		objPublicacion.setCalle(calle);
+		objPublicacion.setAltura(altura);
+		objPublicacion.setPiso(piso);
+		objPublicacion.setDpto(departamento);
+		objPublicacion.setSupCubierta(superficieCubierta);
+		objPublicacion.setSupDescubierta(superficieDescubierta);
+		objPublicacion.setPrecioExpensas(precioExpensas);
+		objPublicacion.setPrecioNoche(precioNoche);
+		objPublicacion.setChkPuedeVariarCantPersonas(chkPuedeVariarCantPersonas);
+		objPublicacion.setCantPersonas(cantidadPersonas);
+		objPublicacion.setCantAmbientes(cantidadAmbientes);
+		objPublicacion.setCantBanios(cantidadBanios);
+		objPublicacion.setCantHabitaciones(cantidadDormitorios);
+		objPublicacion.setAniosAntiguedad(aniosAntiguedad);
+		java.sql.Date currentDateSQL = Utilitario.getCurrentDateAndHoursSQL();
+		objPublicacion.setFechaAlta(currentDateSQL);
+		objPublicacion.setFechaUltModificado(currentDateSQL);
+		objPublicacion.setPuntaje(0);
+		objPublicacion.setVerificado(false);
+		objPublicacion.setHabilitado(true);
+		return objPublicacion;
 	}
 
 }
