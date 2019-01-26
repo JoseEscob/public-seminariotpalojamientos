@@ -81,6 +81,12 @@ https://stackoverflow.com/questions/15558202/how-to-resize-image-in-java
 https://www.dyclassroom.com/image-processing-project/how-to-read-and-write-image-file-in-java
 https://medium.com/@adigunhammedolalekan/how-to-resize-images-for-better-upload-download-performance-android-development-fb7297f9ec24
 
+*************FILES************
+https://docs.oracle.com/javaee/6/tutorial/doc/gmhal.html
+https://underc0de.org/foro/java/subir-archivos-con-servlet/
+https://www.programcreek.com/java-api-examples/?class=javax.servlet.http.Part&method=write
+https://commons.apache.org/proper/commons-fileupload/using.html
+
 
 ******************JSTL*******************************
 https://www.tutorialspoint.com/jsp/jsp_standard_tag_library.htm
