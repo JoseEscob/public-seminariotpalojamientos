@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.Date;
 import org.joda.time.DateTime;
 //import java.text.SimpleDateFormat;
@@ -19,12 +22,32 @@ import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import exceptions.ValidacionException;
+
 import java.io.File;
 
 /**
  * Funciona como clase para implementar funciones reutilizables
  */
 public class Utilitario {
+	// new Object(){}.getClass().getEnclosingMethod().getName();
+	/// *********************** SERVLET *****************************///
+	public static void validarParametrosObligatoriosDeUnJSP(HttpServletRequest request, String[] listaNombreParametros,
+			String[] listaNombreCampos) throws ValidacionException {
+		LOG.info("Comienza proceso: validarParametrosObligatoriosDeUnJSP");
+		if (listaNombreParametros.length != listaNombreCampos.length)
+			throw new ValidacionException(
+					"Programming ERROR: Las listas de validaciones de parametros no tienen la misma cantidad de ELEMENTOS");
+
+		int i = 0;
+		for (String nombreParam : listaNombreParametros) {
+			if (request.getParameter(nombreParam) == null || request.getParameter(nombreParam).isEmpty())
+				throw new ValidacionException("Por favor complete el campo obligatorio: " + listaNombreCampos[i]);
+			i++;
+		}
+		LOG.info("Finaliza proceso: validarParametrosObligatoriosDeUnJSP");
+	}
+
 	/// *********************** OTROS ******************************///
 	/**
 	 * Verifica que la ruta del parametro sea un archivo y no un directorio
@@ -44,7 +67,7 @@ public class Utilitario {
 
 	public static ArrayList<String> getFilenamesFromFolder(String path) {
 		LOG.info("Comienza proceso getFilenamesFromFolder");
-		
+
 		String newPath = Utilitario.class.getResource(path).toString();
 		LOG.info("Parámetro: FilePATH: " + new File("").getAbsolutePath());
 		LOG.info("Parámetro: FilePATH2: " + Utilitario.class.getClassLoader().getResource("").getPath());

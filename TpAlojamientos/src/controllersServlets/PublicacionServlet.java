@@ -26,6 +26,7 @@ import controladoresDAO.Imagenes;
 import controladoresDAO.TiposAlojamientos;
 import controladoresDAO.TiposServicios;
 import exceptions.ServidorException;
+import exceptions.ValidacionException;
 import exceptions.CargaViewException;
 import exceptions.LectorDatosException;
 import extra.Constantes;
@@ -531,7 +532,21 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
-	private Publicacion getObjectPublicacionByJSPData(HttpServletRequest request, int idPublicacion) {
+	private Publicacion getObjectPublicacionByJSPData(HttpServletRequest request, int idPublicacion)
+			throws ValidacionException {
+
+		// 0- Validar parámetros del JSP
+		String[] listaNombreParametros = { "localidad", "calle", "altura", "codPostal", "cmbTipoAlojamiento",
+				"superficieCubierta", "superficieDescubierta", "cantidadPersonas", "cantidadAmbientes",
+				"cantidadDormitorios", "cantidadBaños", "chkExpensas", "precioNoche", "aniosAntiguedad", "descripcion",
+				"chkPuedeVariarCantPersonas" };
+		String[] listaNombreCampos = { "localidad", "calle", "altura", "codPostal", "Tipo Alojamiento",
+				"superficieCubierta", "superficieDescubierta", "cantidadPersonas", "cantidadAmbientes",
+				"cantidadDormitorios", "cantidadBaños", "chkExpensas", "precioNoche", "aniosAntiguedad", "descripcion",
+				"chkPuedeVariarCantPersonas" };
+
+		Utilitario.validarParametrosObligatoriosDeUnJSP(request, listaNombreParametros, listaNombreCampos);
+
 		Publicacion objPublicacion = new Publicacion();
 		// int idPartido = Integer.parseInt(request.getParameter("partido"));
 		int idLocalidad = Integer.parseInt(request.getParameter("localidad"));

@@ -14,6 +14,11 @@ import modelo.Usuario;
 
 public class Usuarios implements Connectable<Usuario> {
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
+	private final static String camposInsertIntoDB = " nombre=?, apellido=?, dni=?, mail=?, fechaNac=?"
+			+ ", usuario=?, clave=?, sexo=?, rutaFotoPerfil=?, admin=?, puntaje=?, fechaAlta= "
+			+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
+			+ "fechaUltModificado= " + cCampo.sql_STR_TO_DATE_YmdHiS + ", verificado=?, habilitado=?, nroTelefono=?";
+
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 
@@ -22,26 +27,14 @@ public class Usuarios implements Connectable<Usuario> {
 
 		{
 			put("all", "select * from usuarios");
-			// put("insert", "insert into usuarios
-			// values(null,?,?,?,?,?,?,?,?,?,?,?,?,?,default)");
-			put("insert",
-					"insert into usuarios " + "set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?"
-							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta= "
-							+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
-							+ ", verificado=?, habilitado=?, idUsuario=?");
-
+			put("insert", String.format("INSERT into usuarios SET  %s , idUsuario=?", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from usuarios");
-			put("update",
-					"update usuarios set nombre=?, apellido=?, dni=?, mail=?, fechaNac=?, usuario=?, clave=?"
-							+ ", sexo=?, " + cCampo.rutaFotoPerfil + "=?, admin=?, puntaje=?, fechaAlta= "
-							+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
-							+ ", verificado=?, habilitado=? where idUsuario=?");
+			put("update", String.format("update usuarios SET  %s where idUsuario=?", camposInsertIntoDB));
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
 			put("updateFechaUltConexion", String.format("update usuarios set fechaUltConexion= %s  where idUsuario=?",
 					cCampo.sql_STR_TO_DATE_YmdHiS));
-			// put("updateFechaUltConexion", "update usuarios set fechaUltConexion=
-			// STR_TO_DATE(?,'%Y/%m/%d %H:%i:%s') where idUsuario=?");
+			put("updateRutaFotoPerfil", "update usuarios set rutaFotoPerfil= ?  where idUsuario=?");
 		}
 	};
 
@@ -145,8 +138,6 @@ public class Usuarios implements Connectable<Usuario> {
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_Usuario(obj, ps);
-			ps.setBoolean(15, obj.isHabilitado());
-			ps.setInt(16, obj.getIdUsuario());
 			LOG.info("INSERT Usuarios: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
@@ -169,8 +160,7 @@ public class Usuarios implements Connectable<Usuario> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 
 			ps = writePs_Usuario(obj, ps);
-			ps.setBoolean(15, obj.isHabilitado());
-			ps.setInt(16, obj.getIdUsuario());
+
 			LOG.info("UPDATE Usuarios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
@@ -260,7 +250,11 @@ public class Usuarios implements Connectable<Usuario> {
 		ps.setFloat(11, obj.getPuntaje());
 		ps.setString(12, obj.getFechaAlta());
 		ps.setString(13, obj.getFechaUltConexion());
-		ps.setBoolean(14, obj.isVerificado());
+		ps.setString(14, obj.getFechaUltModificado());
+		ps.setBoolean(15, obj.isVerificado());
+		ps.setBoolean(16, obj.isHabilitado());
+		ps.setString(17, obj.getNroTelefono());
+		ps.setInt(18, obj.getIdUsuario());
 		return ps;
 	}
 

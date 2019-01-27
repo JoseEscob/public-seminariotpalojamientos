@@ -19,9 +19,10 @@ public class Usuario {
 	private String fechaAlta;
 	// private Date fechaUltConexion;
 	private String fechaUltConexion;
+	private String fechaUltModificado;
 	private boolean verificado;
+	private String nroTelefono;
 
-	// private Date anteriorFechaUltConexion;
 	private String anteriorFechaUltConexion;
 
 	public int getIdUsuario() {
@@ -158,6 +159,22 @@ public class Usuario {
 
 	public void setAnteriorFechaUltConexion(String anteriorFechaUltConexion) {
 		this.anteriorFechaUltConexion = anteriorFechaUltConexion;
+	}
+
+	public String getFechaUltModificado() {
+		return fechaUltModificado;
+	}
+
+	public void setFechaUltModificado(String fechaUltModificado) {
+		this.fechaUltModificado = fechaUltModificado;
+	}
+
+	public String getNroTelefono() {
+		return nroTelefono;
+	}
+
+	public void setNroTelefono(String nroTelefono) {
+		this.nroTelefono = nroTelefono;
 	}
 
 }

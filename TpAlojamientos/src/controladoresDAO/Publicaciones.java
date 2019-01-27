@@ -18,11 +18,11 @@ import modelo.Usuario;
 public class Publicaciones implements Connectable<Publicacion> {
 	private static final _DAOConstantesPublicacion cPubli = new _DAOConstantesPublicacion();
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
-	private final static String camposInsertIntoDB = "idUsuario=?, idTipoAlojamiento=?, descripcion=?, "
-			+ "idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?, "
-			+ "supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?, chkPuedeVariarCantPersonas=?"
-			+ "cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?, aniosAntiguedad=?,"
-			+ "fechaAlta=?, fechaUltModificado=?, puntaje=?, verificado=?, habilitado=? where idPublicacion=?";
+	private final static String camposInsertIntoDB = "idUsuario=?, idTipoAlojamiento=?, descripcion=?"
+			+ ", idLocalidad=?, codPostal=?, coordenadas=?, calle=?, altura=?, piso=?, dpto=?"
+			+ ", supCubierta=?, supDescubierta=?, precioExpensas=?, precioNoche=?, chkPuedeVariarCantPersonas=?"
+			+ ", cantPersonas=?, cantAmbientes=?, cantBanios=?, cantHabitaciones=?, aniosAntiguedad=?"
+			+ ", fechaAlta=?, fechaUltModificado=?, puntaje=?, verificado=?, habilitado=? ";
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 
@@ -31,9 +31,9 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 		{
 			put("all", "select * from publicaciones");
-			put("insert", "insert into publicaciones values " + camposInsertIntoDB);
+			put("insert", String.format("INSERT into publicaciones SET  %s , idPublicacion=?", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from publicaciones");
-			put("update", "update publicaciones set " + camposInsertIntoDB);
+			put("update", String.format("update publicaciones set %s where idPublicacion=?", camposInsertIntoDB));
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("limit", "select * from publicaciones limit ?, ?");
 
@@ -147,8 +147,12 @@ public class Publicaciones implements Connectable<Publicacion> {
 			ps = writePs_Publicacion(obj, ps);
 			LOG.info("INSERT Publicaciones: " + ps.toString());
 
-			if (ps.executeUpdate() != 0)
+			if (ps.executeUpdate() != 0) {
+				LOG.info("INSERT Publicaciones se ejecutó con éxito");
 				correcto = true;
+			} else
+				LOG.info("ERROR INSERT Publicaciones");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -186,8 +190,11 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps = writePs_Publicacion(obj, ps);
-			if (ps.executeUpdate() != 0)
+			LOG.info("UPDATE Publicaciones: " + ps.toString());
+			if (ps.executeUpdate() != 0) {
+				LOG.info("UPDATE Publicaciones se ejecutó con éxito");
 				correcto = true;
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -386,7 +393,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 	@Deprecated
 	public ArrayList<Publicacion> filtroGetAllByIdPartido(int idPartido, int idLocalidad) {
 		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
-		//Localidades localidadesDAO = new Localidades();
+		// Localidades localidadesDAO = new Localidades();
 		// localidadesDAO.getAllByIdPartido(idPartido).forEach(item -> {
 		// if(item.getIdLocalidad() == idLocalidad)
 		// //listaFiltrada.add(item);

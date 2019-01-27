@@ -14,8 +14,8 @@
 <meta name="keywords" content="Colorlib Templates">
 
 <!-- Icons font CSS-->
-<link href="<%=ConstantesJSP.jspLogin_designIconicFont_css%>" rel="stylesheet"
-	media="all">
+<link href="<%=ConstantesJSP.jspLogin_designIconicFont_css%>"
+	rel="stylesheet" media="all">
 <link href="<%=ConstantesJSP.jspLogin_fontAwe_css%>" rel="stylesheet"
 	media="all">
 
@@ -34,7 +34,7 @@
 	media="all">
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Completar Formulario</title>
+<title>Alta Usuario - Completar Formulario</title>
 </head>
 <body>
 	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->
@@ -106,7 +106,8 @@
 											type="radio" name="rdbSexo" value="true"> <span
 											class="checkmark"></span>
 										</label> <label class="radio-container">Femenino <input
-											type="radio" checked name="rdbSexo" value="false"> <span class="checkmark"></span>
+											type="radio" checked name="rdbSexo" value="false"> <span
+											class="checkmark"></span>
 										</label>
 									</div>
 								</div>
@@ -121,20 +122,22 @@
 										maxlength="10">
 								</div>
 							</div>
-							<div class="col-2">
-								<div class="input-group">
-									<label class="label">${message}</label>
-								</div>
-							</div>
-							<!-- 
+
+
 							<div class="col-2">
 								<div class="input-group">
 									<label class="label">Nro de Teléfono</label> <input
 										class="input--style-4" onkeypress="return soloNros(event)"
-										type="text" name="telefono">
+										type="text" name="nroTelefono">
 								</div>
 							</div>
-							 -->
+						</div>
+						<div class="row row-space">
+							<div class="col-4">
+								<div class="input-group">
+									<label class="label">${message}</label>
+								</div>
+							</div>
 						</div>
 						<div class="p-t-15">
 							<input type="hidden" id="buscarAction" name="accionPOST"

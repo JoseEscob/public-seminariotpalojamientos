@@ -51,6 +51,8 @@ public class _DAOConstantesNombreCampos {
 	public final String sexo = "sexo";
 	public final String rutaFotoPerfil = "rutaFotoPerfil";
 	public final String fechaUltConexion = "fechaUltConexion";
+	public final String fechaUltModificado = "fechaUltModificado";
+	public final String nroTelefono = "nroTelefono";
 	// MySQL
 	public final String sql_STR_TO_DATE_YmdHiS = "STR_TO_DATE(?,'%Y/%m/%d %H:%i:%s')";
 
@@ -58,10 +60,6 @@ public class _DAOConstantesNombreCampos {
 	public final String idFavorita = "idFavorita";
 	public final String idImagen = "idImagen";
 	public final String rutaImgPublicacion = "rutaImgPublicacion";
-
-	// Telefonos
-	public final String idTelefono = "idTelefono";
-	public final String nroTelefono = "nroTelefono";
 
 	// Bajas
 	public final String idBaja = "idBaja";
@@ -76,7 +74,7 @@ public class _DAOConstantesNombreCampos {
 	public final String cantDias = "cantDias";
 	public final String esDeReserva = "esDeReserva";
 	public final String idEstadoSolicitud = "idEstadoSolicitud";
-	
+
 	// Servicios
 	public final String idServicio = "idServicio";
 	public final String idTipoServicio = "idTipoServicio";

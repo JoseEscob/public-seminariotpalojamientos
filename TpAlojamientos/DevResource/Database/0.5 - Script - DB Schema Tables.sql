@@ -94,7 +94,7 @@ create table serviciosPublicaciones(
 	idPublicacion int not null,
 	idServicio int not null,	
 	constraint pk_serv_publicaciones primary key(idPublicacion, idServicio),
-	constraint fk_serv_publicaciones foreign key(idPublicacion) references publicaciones(idPublicacion),
+	constraint fk_serv_publicacion foreign key(idPublicacion) references publicaciones(idPublicacion),
 	constraint fk_serv_tiposServicios foreign key(idServicio) references tiposServicios(idServicio)
 );
 

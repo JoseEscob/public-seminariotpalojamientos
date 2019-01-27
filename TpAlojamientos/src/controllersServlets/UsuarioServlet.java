@@ -54,7 +54,7 @@ public class UsuarioServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// String action = request.getParameter("buscarAction");
 		String accionPOST = request.getParameter(Constantes.accionPOST);
-		LOG.info(String.format("%s POST Banner: %s", Constantes.logJSPAccion, accionPOST));
+		LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
 		if (accionPOST != null) {
 			switch (accionPOST) {
 			case "login":
@@ -80,55 +80,20 @@ public class UsuarioServlet extends HttpServlet {
 		String message = null;
 		boolean registroUsuarioEsExitoso = false;
 		try {
-			// 1- recuperar valores del formulario JSP
-			String mail = request.getParameter("mail").toString();
-			String claveUno = request.getParameter("claveUno").toString();
-			String claveDos = request.getParameter("claveDos").toString();
-			String nombre = request.getParameter("nombre").toString();
-			String apellido = request.getParameter("apellido").toString();
-			String fechaNac = request.getParameter("fechaNac");
-			boolean sexo = Boolean.valueOf(request.getParameter("rdbSexo"));
-			String dni = request.getParameter("dni").toString();
-			// String telefono = request.getParameter("telefono").toString();
-
-			// 2- validar informacion obtenida JSP
-			if (!claveUno.equals(claveDos)) {
-				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
-			}
-			if (!Utilitario.esMayorDeEdad(fechaNac)) {
-				throw new ValidacionException("El usuario debe ser mayor de edad");
-			}
-
-			// 3- guardar informacion validada
-			objUsuario.setIdUsuario(usuarioDAO.getCount() + 1);
-			objUsuario.setNombre(nombre);
-			objUsuario.setApellido(apellido);
-			objUsuario.setDni(dni);
-			objUsuario.setMail(mail);
-			objUsuario.setFechaNac(Utilitario.textoAFechaSQL(fechaNac));
-			objUsuario.setUsuario("newUser");
-			objUsuario.setClave(claveUno);
-			objUsuario.setSexo(sexo);// obj.setTelefono(telefono);
-			// ByDefault
-			objUsuario.setRutaFotoPerfil(Constantes.RUTAuserNoPhoto);
-			objUsuario.setAdmin(false);
-			objUsuario.setPuntaje(0);
-			objUsuario.setHabilitado(true);
-			objUsuario.setFechaAlta(Utilitario.getCurrentDateAndHoursString());
-			objUsuario.setFechaUltConexion(Utilitario.getCurrentDateAndHoursString());
-			objUsuario.setVerificado(false);
-			// 2.2 Validar con la DB
+			// 1- Obtiene valores del JSP ya validados
+			objUsuario = getUsuarioFromJSPInputs(request, objUsuario);
+			// 2- Validar con la DB
 			usuarioDAO.validarCamposUnicos(objUsuario);
-			// 4- verificar correcto almacenamiento en DB
+			// 3- verificar correcto almacenamiento en DB
 			if (!usuarioDAO.insert(objUsuario))
 				throw new ValidacionException("SQL: Ocurrió un error al guardar el usuario");
-			// EXITO
+			// 4- EXITO
 			registroUsuarioEsExitoso = true;
 			message = Constantes.REGISTROEXITOSO;
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
-			// 5- Informar estado
+			// 5- Informar estado / Redirigir
 			request.setAttribute("message", message);
 
 			// response.getWriter().append("<script>alert(" + message + ")</script>");
@@ -140,6 +105,58 @@ public class UsuarioServlet extends HttpServlet {
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
 		}
+	}
+
+	private Usuario getUsuarioFromJSPInputs(HttpServletRequest request, Usuario objUsuario) throws ValidacionException {
+		// 0- Validar parámetros del JSP
+		String[] listaNombreParametrosUsuario = { "mail", "claveUno", "claveDos", "nombre", "apellido", "fechaNac",
+				"rdbSexo", "dni" };
+		String[] listaNombreCampos = { "mail", "claveUno", "claveDos", "nombre", "apellido", "fecha Nacimiento", "Sexo",
+				"dni" };
+
+		Utilitario.validarParametrosObligatoriosDeUnJSP(request, listaNombreParametrosUsuario, listaNombreCampos);
+		// 1- recuperar valores del formulario JSP
+		String mail = request.getParameter("mail").toString();
+		String claveUno = request.getParameter("claveUno").toString();
+		String claveDos = request.getParameter("claveDos").toString();
+		String nombre = request.getParameter("nombre").toString();
+		String apellido = request.getParameter("apellido").toString();
+		String fechaNac = request.getParameter("fechaNac");
+		boolean sexo = Boolean.valueOf(request.getParameter("rdbSexo"));
+		String dni = request.getParameter("dni").toString();
+		String nroTelefono = null;
+		if (request.getParameter("nroTelefono") != null)
+			nroTelefono = request.getParameter("nroTelefono").toString();
+		// 2- validar informacion obtenida JSP
+		if (!claveUno.equals(claveDos)) {
+			throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
+		}
+		if (!Utilitario.esMayorDeEdad(fechaNac)) {
+			throw new ValidacionException("El usuario debe ser mayor de edad");
+		}
+
+		// 3- guardar informacion validada
+		objUsuario.setIdUsuario(usuarioDAO.getCount() + 1);
+		objUsuario.setNombre(nombre);
+		objUsuario.setApellido(apellido);
+		objUsuario.setDni(dni);
+		objUsuario.setMail(mail);
+		objUsuario.setFechaNac(Utilitario.textoAFechaSQL(fechaNac));
+		objUsuario.setUsuario("newUser");
+		objUsuario.setClave(claveUno);
+		objUsuario.setSexo(sexo);
+		objUsuario.setNroTelefono(nroTelefono);
+		// ByDefault
+		objUsuario.setRutaFotoPerfil(Constantes.RUTAuserNoPhoto);
+		objUsuario.setAdmin(false);
+		objUsuario.setPuntaje(0);
+		objUsuario.setHabilitado(true);
+		String currentDateString = Utilitario.getCurrentDateAndHoursString();
+		objUsuario.setFechaAlta(currentDateString);
+		objUsuario.setFechaUltConexion(currentDateString);
+		objUsuario.setFechaUltModificado(currentDateString);
+		objUsuario.setVerificado(false);
+		return objUsuario;
 	}
 
 	// ********* Usuario: verInfoUsuario ************* //

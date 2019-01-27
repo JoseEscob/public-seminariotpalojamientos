@@ -102,17 +102,6 @@
 				<div class="row col-md-12">
 					<div class="col-md-4">
 						<!-- Características - Superficie Espacio  -->
-						<div class="form-group">
-							<label>Tipo de Alojamiento</label> <select
-								class="form-control selectpicker" name="tipoAlojamiento"
-								required>
-								<option selected value="" disabled>Seleccionar un tipo
-									de alojamiento</option>
-								<c:forEach items="${listaTiposAlojamientos}" var="item">
-									<option value="${item.idTipoAlojamiento}">${item.descripcion}</option>
-								</c:forEach>
-							</select>
-						</div>
 
 						<div class="form-group">
 							<label>Tipo de Alojamiento</label> <select class="form-control"

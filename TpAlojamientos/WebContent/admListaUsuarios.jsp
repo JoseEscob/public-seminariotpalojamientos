@@ -33,7 +33,7 @@
 					<td>${objUsuario.idUsuario}</td>
 					<td><c:choose>
 							<c:when
-								test="${sessionUser.fechaUltConexion lt objUsuario.fechaAlta}">
+								test="${sessionUser.fechaUltConexion gt objUsuario.fechaAlta}">
 								<h4>Mayor</h4>
 							</c:when>
 							<c:otherwise>
@@ -56,6 +56,7 @@
 					<th>dni</th>
 					<th>mail</th>
 					<th>Fecha Nacimiento</th>
+					<th>Nro Telefono</th>
 					<th>usuario</th>
 					<!--<th>clave</th>-->
 					<th>sexo</th>
@@ -65,6 +66,7 @@
 					<th>habilitado</th>
 					<th>Fecha Alta</th>
 					<th>fechaUltConexion</th>
+					<th>fechaUltModificado</th>
 					<th>verificado</th>
 					<!--Masculino, Femenino-->
 					<th scope="col">ACCIONES</th>
@@ -79,6 +81,7 @@
 						<td>${objUsuario.dni}</td>
 						<td>${objUsuario.mail}</td>
 						<td>${objUsuario.fechaNac}</td>
+						<td>${objUsuario.nroTelefono}</td>
 						<td>${objUsuario.usuario}</td>
 						<%--<td>${objUsuario.clave}</td> --%>
 						<td><c:choose>
@@ -96,6 +99,7 @@
 							</c:choose></td>
 						<td>${objUsuario.fechaAlta}</td>
 						<td>${objUsuario.fechaUltConexion}</td>
+						<td>${objUsuario.fechaUltModificado}</td>
 						<td><c:choose>
 								<c:when test="${objUsuario.verificado}">SI</c:when>
 								<c:otherwise>NO</c:otherwise>
@@ -115,6 +119,7 @@
 						<td>${objUsuario.dni}</td>
 						<td>${objUsuario.mail}</td>
 						<td>${objUsuario.fechaNac}</td>
+						<td>${objUsuario.nroTelefono}</td>
 						<td>${objUsuario.usuario}</td>
 						<%--<td>${objUsuario.clave}</td> --%>
 						<td><c:choose>
@@ -132,6 +137,7 @@
 							</c:choose></td>
 						<td>${objUsuario.fechaAlta}</td>
 						<td>${objUsuario.fechaUltConexion}</td>
+						<td>${objUsuario.fechaUltModificado}</td>
 						<td><c:choose>
 								<c:when test="${objUsuario.verificado}">SI</c:when>
 								<c:otherwise>NO</c:otherwise>
