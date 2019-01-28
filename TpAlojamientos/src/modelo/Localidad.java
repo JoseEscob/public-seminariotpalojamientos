@@ -8,7 +8,7 @@ public class Localidad {
 	private boolean habilitado;
 
 	private String nombrePartido;
-	
+
 	public int getIdLocalidad() {
 		return idLocalidad;
 	}
