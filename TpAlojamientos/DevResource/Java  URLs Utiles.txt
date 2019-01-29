@@ -86,8 +86,9 @@ https://docs.oracle.com/javaee/6/tutorial/doc/gmhal.html
 https://underc0de.org/foro/java/subir-archivos-con-servlet/
 https://www.programcreek.com/java-api-examples/?class=javax.servlet.http.Part&method=write
 https://commons.apache.org/proper/commons-fileupload/using.html
-
-
+-----------
+https://www.baeldung.com/java-path
+https://stackoverflow.com/questions/1099300/whats-the-difference-between-getpath-getabsolutepath-and-getcanonicalpath
 ******************JSTL*******************************
 https://www.tutorialspoint.com/jsp/jsp_standard_tag_library.htm
 

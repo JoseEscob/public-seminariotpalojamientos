@@ -204,6 +204,27 @@ public class Usuarios implements Connectable<Usuario> {
 		}
 		return correcto;
 	}
+
+	public boolean updateRutaFotoPerfil(int idUsuario, String rutaFotoPerfil) {
+
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateRutaFotoPerfil"));
+
+			// ps.setDate(1, obj.getFechaUltModificacion());
+			ps.setString(1, rutaFotoPerfil);
+			ps.setInt(2, idUsuario);
+			LOG.info("UPDATE RutaFotoPerfil - Usuarios: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
 	/// ********************* DAO - FUNCIONES READ/ WRITE ********************** ///
 
 	private Usuario readPs_Usuario(ResultSet rs) throws SQLException {

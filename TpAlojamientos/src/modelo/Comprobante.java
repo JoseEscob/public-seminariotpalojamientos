@@ -1,68 +1,104 @@
 package modelo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Comprobante {
 	private int idComprobante;
 	private int idSolicitud;
-	private String nombreAnfitrion;
-	private String apellidoAnfitrion;
-	private String nombreHuesped;
-	private String apellidoHuesped;
-	private String descripcionPublicacion;
+	private int idUsuarioHuesped;
+	private int idPublicacion;
+	private Date fechaReservaInicio;
+	private Date fechaReservaFin;
+	private int cantPersonas;
 	private int precioFinal;
+	private Date fechaAlta;
+	private int idUsuarioPropietario;
 	private boolean habilitado;
+
 	public int getIdComprobante() {
 		return idComprobante;
 	}
+
 	public void setIdComprobante(int idComprobante) {
 		this.idComprobante = idComprobante;
 	}
+
 	public int getIdSolicitud() {
 		return idSolicitud;
 	}
+
 	public void setIdSolicitud(int idSolicitud) {
 		this.idSolicitud = idSolicitud;
 	}
-	public String getNombreAnfitrion() {
-		return nombreAnfitrion;
+
+	public int getIdUsuarioHuesped() {
+		return idUsuarioHuesped;
 	}
-	public void setNombreAnfitrion(String nombreAnfitrion) {
-		this.nombreAnfitrion = nombreAnfitrion;
+
+	public void setIdUsuarioHuesped(int idUsuarioHuesped) {
+		this.idUsuarioHuesped = idUsuarioHuesped;
 	}
-	public String getApellidoAnfitrion() {
-		return apellidoAnfitrion;
+
+	public int getIdPublicacion() {
+		return idPublicacion;
 	}
-	public void setApellidoAnfitrion(String apellidoAnfitrion) {
-		this.apellidoAnfitrion = apellidoAnfitrion;
+
+	public void setIdPublicacion(int idPublicacion) {
+		this.idPublicacion = idPublicacion;
 	}
-	public String getNombreHuesped() {
-		return nombreHuesped;
+
+	public Date getFechaReservaInicio() {
+		return fechaReservaInicio;
 	}
-	public void setNombreHuesped(String nombreHuesped) {
-		this.nombreHuesped = nombreHuesped;
+
+	public void setFechaReservaInicio(Date fechaReservaInicio) {
+		this.fechaReservaInicio = fechaReservaInicio;
 	}
-	public String getApellidoHuesped() {
-		return apellidoHuesped;
+
+	public Date getFechaReservaFin() {
+		return fechaReservaFin;
 	}
-	public void setApellidoHuesped(String apellidoHuesped) {
-		this.apellidoHuesped = apellidoHuesped;
+
+	public void setFechaReservaFin(Date fechaReservaFin) {
+		this.fechaReservaFin = fechaReservaFin;
 	}
-	public String getDescripcionPublicacion() {
-		return descripcionPublicacion;
+
+	public int getCantPersonas() {
+		return cantPersonas;
 	}
-	public void setDescripcionPublicacion(String descripcionPublicacion) {
-		this.descripcionPublicacion = descripcionPublicacion;
+
+	public void setCantPersonas(int cantPersonas) {
+		this.cantPersonas = cantPersonas;
 	}
+
 	public int getPrecioFinal() {
 		return precioFinal;
 	}
+
 	public void setPrecioFinal(int precioFinal) {
 		this.precioFinal = precioFinal;
 	}
+
+	public Date getFechaAlta() {
+		return fechaAlta;
+	}
+
+	public void setFechaAlta(Date fechaAlta) {
+		this.fechaAlta = fechaAlta;
+	}
+
+	public int getIdUsuarioPropietario() {
+		return idUsuarioPropietario;
+	}
+
+	public void setIdUsuarioPropietario(int idUsuarioPropietario) {
+		this.idUsuarioPropietario = idUsuarioPropietario;
+	}
+
 	public boolean isHabilitado() {
 		return habilitado;
 	}
+
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
 	}

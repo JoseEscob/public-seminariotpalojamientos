@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
-import modelo.Comprobante;
 import modelo.Solicitud;
+import modelo.SolicitudDeReserva;
 
-public class Comprobantes implements Connectable<Comprobante> {
+public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
-	private final static String camposInsertIntoDB = "idSolicitud=?, idUsuarioHuesped=?, idPublicacion=?"
-			+ ", fechaReservaInicio=?, fechaReservaFin=?, cantPersonas=?, precioFinal=?, fechaAlta=?"
-			+ ", idUsuarioPropietario=?, habilitado=?";
+	private final static String camposInsertIntoDB = "idUsuarioHuesped=?, idPublicacion=?"
+			+ ", fechaReservaInicio=?, fechaReservaFin=?, cantPersonas=?, precioFinal=?, fechaAltaSolicitud="
+			+ cCampo.sql_STR_TO_DATE_YmdHiS
+			+ ", idUsuarioPropietario=?, fechaDecisionPropietario=?, motivoDecisionPropietario=?, idEstadoSolicitud=?"
+			+ ", habilitado=?, idSolicitud=?";
 
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
@@ -34,19 +36,19 @@ public class Comprobantes implements Connectable<Comprobante> {
 	};
 
 	private Conexion cn;
-	private ArrayList<Comprobante> m;
+	private ArrayList<SolicitudDeReserva> m;
 
 	@Override
-	public ArrayList<Comprobante> getAll() {
+	public ArrayList<SolicitudDeReserva> getAll() {
 		cn = new Conexion();
-		m = new ArrayList<Comprobante>();
+		m = new ArrayList<SolicitudDeReserva>();
 
 		try {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("all"));
 			while (rs.next()) {
-				Comprobante o = new Comprobante();
-				o = readPs_Comprobante(rs);
+				SolicitudDeReserva o = new SolicitudDeReserva();
+				o = readPs_SolicitudDeReserva(rs);
 				m.add(o);
 			}
 
@@ -59,7 +61,7 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	@Override
-	public ArrayList<Comprobante> getLike(String like) {
+	public ArrayList<SolicitudDeReserva> getLike(String like) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -85,17 +87,17 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	@Override
-	public Comprobante get(Comprobante obj) {
+	public SolicitudDeReserva get(SolicitudDeReserva obj) {
 		cn = new Conexion();
-		Comprobante o = null;
+		SolicitudDeReserva o = null;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("get"));
 			ps.setInt(1, obj.getIdSolicitud());
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				o = new Comprobante();
-				o = readPs_Comprobante(rs);
+				o = new SolicitudDeReserva();
+				o = readPs_SolicitudDeReserva(rs);
 			}
 
 		} catch (Exception e) {
@@ -107,7 +109,7 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	@Override
-	public boolean insert(Comprobante obj) {
+	public boolean insert(SolicitudDeReserva obj) {
 		if (obj == null) {
 			return false;
 		}
@@ -123,7 +125,7 @@ public class Comprobantes implements Connectable<Comprobante> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps = writePs_Comprobante(obj, ps);
+			ps = writePs_SolDeReserva(obj, ps);
 			ps.executeUpdate();
 			correcto = true;
 		} catch (Exception e) {
@@ -135,7 +137,7 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	@Override
-	public boolean update(Comprobante obj) {
+	public boolean update(SolicitudDeReserva obj) {
 		if (obj == null) {
 			return false;
 		}
@@ -150,7 +152,7 @@ public class Comprobantes implements Connectable<Comprobante> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps = writePs_Comprobante(obj, ps);
+			ps = writePs_SolDeReserva(obj, ps);
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -163,18 +165,17 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	@Override
-	public boolean remove(Comprobante obj) {
-		Comprobante u = new Comprobante();
-		u.setIdComprobante(obj.getIdComprobante());
+	public boolean remove(SolicitudDeReserva obj) {
+		SolicitudDeReserva u = new SolicitudDeReserva();
+		u.setIdSolicitud(obj.getIdSolicitud());
 		u = this.get(u);
 		u.setHabilitado(false);
 		return this.update(u);
 	}
 
 	/// ********************* DAO - Métodos READ/ WRITE ********************** ///
-	private Comprobante readPs_Comprobante(ResultSet rs) throws SQLException {
-		Comprobante o = new Comprobante();
-		o.setIdComprobante(rs.getInt(cCampo.idComprobante));
+	private SolicitudDeReserva readPs_SolicitudDeReserva(ResultSet rs) throws SQLException {
+		SolicitudDeReserva o = new SolicitudDeReserva();
 		o.setIdSolicitud(rs.getInt(cCampo.idSolicitud));
 		o.setIdUsuarioHuesped(rs.getInt(cCampo.idUsuarioHuesped));
 		o.setIdPublicacion(rs.getInt(cCampo.idPublicacion));
@@ -182,30 +183,35 @@ public class Comprobantes implements Connectable<Comprobante> {
 		o.setFechaReservaFin(rs.getDate(cCampo.fechaReservaFin));
 		o.setCantPersonas(rs.getInt(cCampo.cantPersonas));
 		o.setPrecioFinal(rs.getInt(cCampo.precioFinal));
-		o.setFechaAlta(rs.getDate(cCampo.fechaAlta));
+		o.setFechaAltaSolicitud(rs.getString(cCampo.fechaAltaSolicitud));
 		o.setIdUsuarioPropietario(rs.getInt(cCampo.idUsuarioPropietario));
+		o.setFechaDecisionPropietario(rs.getString(cCampo.fechaDecisionPropietario));
+		o.setMotivoDecisionPropietario(rs.getString(cCampo.motivoDecisionPropietario));
+		o.setIdEstadoSolicitud(rs.getInt(cCampo.idEstadoSolicitud));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
 		return o;
 	}
 
-	private PreparedStatement writePs_Comprobante(Comprobante obj, PreparedStatement ps) throws SQLException {
-		ps.setInt(1, obj.getIdSolicitud());
-		ps.setInt(2, obj.getIdUsuarioHuesped());
-		ps.setInt(3, obj.getIdPublicacion());
-		ps.setDate(4, obj.getFechaReservaInicio());
-		ps.setDate(5, obj.getFechaReservaFin());
-		ps.setInt(6, obj.getCantPersonas());
-		ps.setInt(7, obj.getPrecioFinal());
-		ps.setDate(8, obj.getFechaAlta());
-		ps.setInt(9, obj.getIdUsuarioPropietario());
-		ps.setBoolean(10, obj.isHabilitado());
-		ps.setInt(11, obj.getIdComprobante());
+	private PreparedStatement writePs_SolDeReserva(SolicitudDeReserva obj, PreparedStatement ps) throws SQLException {
+		ps.setInt(1, obj.getIdUsuarioHuesped());
+		ps.setInt(2, obj.getIdPublicacion());
+		ps.setDate(3, obj.getFechaReservaInicio());
+		ps.setDate(4, obj.getFechaReservaFin());
+		ps.setInt(5, obj.getCantPersonas());
+		ps.setInt(6, obj.getPrecioFinal());
+		ps.setString(7, obj.getFechaAltaSolicitud());
+		ps.setInt(8, obj.getIdUsuarioPropietario());
+		ps.setString(9, obj.getFechaDecisionPropietario());
+		ps.setString(10, obj.getMotivoDecisionPropietario());
+		ps.setInt(11, obj.getIdEstadoSolicitud());
+		ps.setBoolean(12, obj.isHabilitado());
+		ps.setInt(13, obj.getIdSolicitud());
 		return ps;
 	}
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
-	public ArrayList<Comprobante> getAllByIdUsuarioHuesped(int idUsuarioHuesped) {
-		ArrayList<Comprobante> listaFiltrada = new ArrayList<Comprobante>();
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioHuesped(int idUsuarioHuesped) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
 
 		getAll().forEach(item -> {
 			if (item.getIdUsuarioHuesped() == idUsuarioHuesped)
@@ -215,8 +221,8 @@ public class Comprobantes implements Connectable<Comprobante> {
 		return listaFiltrada;
 	}
 
-	public ArrayList<Comprobante> getAllByIdUsuarioPropietario(int idUsuarioPropietario) {
-		ArrayList<Comprobante> listaFiltrada = new ArrayList<Comprobante>();
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietario(int idUsuarioPropietario) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
 
 		getAll().forEach(item -> {
 			if (item.getIdUsuarioPropietario() == idUsuarioPropietario)

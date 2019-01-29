@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import extra.Conexion;
 import modelo.Servicio;
-import modelo.TipoServicio;
 
 public class Servicios implements Connectable<Servicio> {
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();

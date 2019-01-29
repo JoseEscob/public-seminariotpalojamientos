@@ -79,4 +79,15 @@ public class _DAOConstantesNombreCampos {
 	public final String idServicio = "idServicio";
 	public final String idTipoServicio = "idTipoServicio";
 
+	// Comprobantes
+	public final String idComprobante = "idComprobante";
+	public final String idUsuarioHuesped = "idUsuarioHuesped";
+	public final String fechaReservaInicio = "fechaReservaInicio";
+	public final String fechaReservaFin = "fechaReservaFin";
+	public final String precioFinal = "precioFinal";
+	public final String fechaAltaSolicitud = "fechaAltaSolicitud";
+	public final String idUsuarioPropietario = "idUsuarioPropietario";
+	public final String fechaDecisionPropietario = "fechaDecisionPropietario";
+	public final String motivoDecisionPropietario = "motivoDecisionPropietario";
+
 }
