@@ -176,10 +176,12 @@ public class UsuarioServlet extends HttpServlet {
 				throw new ValidacionException(message);
 			}
 			// 3- Recuperar info de la DB
-			if (usuarioDAO.get(objUsuario) == null)
+			objUsuario = usuarioDAO.get(objUsuario);
+			if (objUsuario == null)
 				throw new ValidacionException(
 						"SQL: Ocurrió un error al recuperar usuario con id" + objUsuario.getIdUsuario());
 			// 4- Devolver información recuperada a la jsp
+			ORSesion.nuevaSesion(request, objUsuario);
 			request.setAttribute("objUsuario", objUsuario);
 		} catch (Exception e) {
 			message = e.getMessage();

@@ -22,6 +22,7 @@ public class Constantes {
 	public final static String RUTAhomeNoPhoto = "imagenes/home-not-found.png";
 	public final static String RUTACarpetaFotosPublicacion = "imagenes\\publicaciones\\Publicacion_";
 	public final static String RUTAFolderFotosPublicacion = "/imagenes/publicaciones/Publicacion_";
+	public final static String RUTAFolderFotoUser = "imagenes/usuarios/Usuario_";
 	public final static String RUTAsrcResourcesFotos= "src/resources/imagenes/publicaciones/Publicacion_";
 	public final static String WebContent = ".\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\";
 

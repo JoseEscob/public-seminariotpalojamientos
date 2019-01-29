@@ -38,8 +38,21 @@
 				</c:forEach>
 			</form>
 		</c:if>
-		
-		
+		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">
+			<input type="file" name="archivo" accept="image/jpeg,image/gif,image/png"/>
+			<input type="hidden" name="accionPOST" value="cargarImagen"/>			
+			<input type="submit"/>
+		</form> 
+		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">		
+				
+			<img alt="" src="${imagen}"  width="200" height="200">
+			<label for="cambio" class="btn btn-info">Cambiar imagen</label>
+			<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
+			<input type="hidden" name="accionPOST" value="cambiarImagen"/>			
+			<input type="hidden" name="sessionUSer" value="3"/>
+			<input type="submit" value="actualizar"/>
+			
+		</form>
 		<div class="row" hidden name="alertms">
 			<div class="col-md-4">			
 				<div class="alert alert-danger">

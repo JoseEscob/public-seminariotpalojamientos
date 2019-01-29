@@ -148,19 +148,18 @@
 
 					</c:if>
 				</div>
-				<form class="form-horizontal" action="/action_page.php">
-					<div class="form-group">
-						<div class="col-sm-12" align="right">
-							<button class="btn btn-info">Cambiar foto</button>
-						</div>
+				<div class="form-group">
+					<div class="col-sm-12" align="right">
+						<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">		
+							<img alt="" src="${objUsuario.rutaFotoPerfil}"  width="200" height="200">
+							<label for="cambio" class="btn btn-info">Cambiar imagen</label>
+							<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
+							<input type="hidden" name="accionPOST" value="cambiarImagen"/>			
+							<input type="submit" value="actualizar"/>
+						</form>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-3">Cambiar Foto: </label>
-						<div class="col-sm-9">
-							<input type="file" class="form-control" name="in_rutaFotoPerfil">
-						</div>
-					</div>
-				</form>
+				</div>
+			
 			</div>
 		</div>
 

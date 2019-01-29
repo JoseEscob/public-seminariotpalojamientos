@@ -2,7 +2,9 @@ package controllersServlets;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -10,10 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FilenameUtils;
+
 import extra.Constantes;
 import extra.FileHandler;
 import extra.LOG;
+import extra.ORSesion;
 import modelo.Publicacion;
+import modelo.Usuario;
 import modelo.Imagen;
 import controladoresDAO.Publicaciones;
 import exceptions.ServidorException;
@@ -57,64 +65,117 @@ public class TestServlet extends HttpServlet {
 		System.out.println("doPost - TestServlet");
 		
 		try {
-			String accionPOST = request.getParameter(Constantes.accionPOST);
-			if (accionPOST == null) {
-				throw new ServidorException("NULL Param: " + Constantes.accionPOST + " en TestServlet");
-			}
-			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
-			switch (accionPOST) {
-				case "cargarNuevasImagenes":
-					cargarNuevasImagenes(request, response);
-					break;
-				case "cambiarImagen":
-					cambiarImagen(request, response);
-					break;
-				case "verImagenes":
-					
-					break;
+			FileHandler fileHandler = new FileHandler(request, Constantes.RUTAFolderFotoUser);
 			
+			for(FileItem item : fileHandler.getFormItems()) {
+				if(item.isFormField()) {
+					if(item.getFieldName().trim().compareTo(Constantes.accionPOST) == 0) {
+						switch(item.getString()) {
+							case "cargarNuevasImagenes":
+								cargarNuevasImagenes(request, response);
+								break;
+							case "cambiarImagen":
+								cambiarImagen(request, response);
+								break;
+							case "verImagenes":
+								
+								break;
+							case "cargarImagen":
+								cargarImagen(request, response);
+								break;
+						}
+					}
+				}
 			}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-	}
-	
-	private void cargarNuevasImagenes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		
-		try {
-			
-			String p = request.getParameter("cargarNuevasImagenes");
-			int idp = Integer.parseInt(p);
-			Publicacion publicacion = publicacionDao.getObjectByID(idp);
-			if(publicacion != null) {
-				String ruta = Constantes.RUTACarpetaFotosPublicacion+publicacion.getIdPublicacion();
-				
-				String uploadPath = getServletContext().getRealPath("") + File.separator + ruta;
-				
-				FileHandler fh = new FileHandler(request, uploadPath);
-				
-				int cantImagenes = fh.uploadFiles();
-				request.setAttribute("message", "Cantidad de imagenes guardadas: "+cantImagenes);
-				
-			}
-			
-			
-		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		/*ArrayList<String> imagenes = new ArrayList<String>();
-		for(File file : FileHandler.getFiles(FileHandler.getUploadPath(getServletContext(), ruta))) {
+//	
+//		try {		
+//			
+//			FileHandler fileHandler = new FileHandler(request, Constantes.RUTAFolderFotoUser);
+//			
+//			
+//			for(FileItem item : fileHandler.getFormItems()) {
+//				if(item.isFormField()) {
+//					System.out.println(item.getContentType());
+//					System.out.println(item.getString());
+//					System.out.println(item.getFieldName());
+//				}else {
+//					System.out.println(item.getName());
+//					System.out.println(new File(item.getName()).getName());
+//				}
+//			}
+//			String accionPOST = request.getParameter(Constantes.accionPOST);
+//			if (accionPOST == null) {
+//				throw new ServidorException("NULL Param: " + Constantes.accionPOST + " en TestServlet");
+//			}
+//			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
+//			switch (accionPOST) {
+//				case "cargarNuevasImagenes":
+//					cargarNuevasImagenes(request, response);
+//					break;
+//				case "cambiarImagen":
+//					cambiarImagen(request, response);
+//					break;
+//				case "verImagenes":
+//					
+//					break;
+//				case "cargarImagen":
+//					cargarImagen(request, response);
+//					break;
+//			
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
 		
-			imagenes.add(Constantes.RUTACarpetaFotosPublicacion+"3"+File.separator+file.getName());
+	}
+	
+	private void cargarNuevasImagenes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+			
+		String p = request.getParameter("cargarNuevasImagenes");
+		int idp = Integer.parseInt(p);
+		Publicacion publicacion = publicacionDao.getObjectByID(idp);
+		if(publicacion != null) {
+			String ruta = Constantes.RUTACarpetaFotosPublicacion+publicacion.getIdPublicacion();
+			
+			String uploadPath = getServletContext().getRealPath("") + File.separator + ruta;
+			
+			FileHandler fh = new FileHandler(request, uploadPath);
+
+			
+			//Se guardan los archivos
+			int count = 0;
+			
+			for(FileItem item : fh.getFormItems()) {
+				if(item.isFormField()) {
+					//form fields 
+				}
+				else {
+					count ++;
+					String fileName = new File(item.getName()).getName();
+					
+					String newName = count + "." + FilenameUtils.getExtension(fileName);
+					String filePath = fh.getUploadPath() + File.separator + newName;
+					
+					File storeFile = new File(filePath);
+					System.out.println(storeFile.getPath());
+					item.write(storeFile);
+				}
+			}
+			
+			
+			request.setAttribute("message", "Cantidad de imagenes guardadas: "+count);
 			
 		}
-		request.setAttribute("imagenes", imagenes);*/
+
 
 		paginaJsp ="/Test.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
@@ -122,6 +183,33 @@ public class TestServlet extends HttpServlet {
 	
 	private void cambiarImagen(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
+		
+		paginaJsp ="/Test.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+	
+	private void cargarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		//if(ORSesion.sesionActiva(request)) {
+			//Usuario usuario = ORSesion.getUsuarioBySession(request);
+			
+			FileHandler fileHandler = new FileHandler(request, Constantes.RUTAFolderFotoUser);
+			
+			
+			for(FileItem item : fileHandler.getFormItems()) {
+				if(item.isFormField()) {
+					System.out.println(item.getContentType());
+					System.out.println(item.getName());
+					System.out.println(item.getFieldName());
+				}else {
+					System.out.println(item.getName());
+					System.out.println(new File(item.getName()).getName());
+				}
+			}
+			
+			
+		//}
 		
 		
 		paginaJsp ="/Test.jsp";
