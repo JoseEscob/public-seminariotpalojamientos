@@ -2,7 +2,7 @@ package controllersServlets;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -10,11 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
+import extra.Constantes;
+import extra.FileHandler;
+import extra.LOG;
+import modelo.Publicacion;
+import modelo.Imagen;
+import controladoresDAO.Publicaciones;
+import exceptions.ServidorException;
+import controladoresDAO.Imagenes;
 
 		
 /**
@@ -28,6 +31,9 @@ public class TestServlet extends HttpServlet {
 	private static final int MemoryThreshold = 1024 * 1024 * 3;
 	private static final int MaxFileSize = 1024 * 1024 * 10;
 	private static final int MaxRequestSize = 1024 * 1024 * 20;
+	private Imagenes imagenDao = new Imagenes();
+	private Publicaciones publicacionDao = new Publicaciones();
+	private String paginaJsp = "";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -50,10 +56,87 @@ public class TestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost - TestServlet");
 		
-		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		try {
+			String accionPOST = request.getParameter(Constantes.accionPOST);
+			if (accionPOST == null) {
+				throw new ServidorException("NULL Param: " + Constantes.accionPOST + " en TestServlet");
+			}
+			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
+			switch (accionPOST) {
+				case "cargarNuevasImagenes":
+					cargarNuevasImagenes(request, response);
+					break;
+				case "cambiarImagen":
+					cambiarImagen(request, response);
+					break;
+				case "verImagenes":
+					
+					break;
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	private void cargarNuevasImagenes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		
+		try {
+			
+			String p = request.getParameter("cargarNuevasImagenes");
+			int idp = Integer.parseInt(p);
+			Publicacion publicacion = publicacionDao.getObjectByID(idp);
+			if(publicacion != null) {
+				String ruta = Constantes.RUTACarpetaFotosPublicacion+publicacion.getIdPublicacion();
+				
+				String uploadPath = getServletContext().getRealPath("") + File.separator + ruta;
+				
+				FileHandler fh = new FileHandler(request, uploadPath);
+				
+				int cantImagenes = fh.uploadFiles();
+				request.setAttribute("message", "Cantidad de imagenes guardadas: "+cantImagenes);
+				
+			}
+			
+			
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		/*ArrayList<String> imagenes = new ArrayList<String>();
+		for(File file : FileHandler.getFiles(FileHandler.getUploadPath(getServletContext(), ruta))) {
+		
+			imagenes.add(Constantes.RUTACarpetaFotosPublicacion+"3"+File.separator+file.getName());
+			
+		}
+		request.setAttribute("imagenes", imagenes);*/
+
+		paginaJsp ="/Test.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+	
+	private void cambiarImagen(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		
+		paginaJsp ="/Test.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+		
+}
+
+
+
+
+/*
+ * 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 				
 		if(isMultipart) {
-			System.out.println("1");
 
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setSizeThreshold(MemoryThreshold);
@@ -61,48 +144,58 @@ public class TestServlet extends HttpServlet {
 			
 			ServletFileUpload upload  = new ServletFileUpload(factory);
 			upload.setFileSizeMax(MaxFileSize);
-			upload.setSizeMax(MaxRequestSize);
+			upload.setSizeMax(MaxRequestSize);	
 			
-			String projectName = this.getServletContext().getContextPath();
-			String uploadPath = new File(System.getProperty("user.home")).getPath()+File.separator+"git"+File.separator+"seminariotpalojamientos" + projectName + File.separator + UploadDirectory;
-			
+			String uploadPath = getServletContext().getRealPath("")+ File.separator + UploadDirectory;
 			File uploadDir = new File(uploadPath);
 			if(!uploadDir.exists()) {
 				uploadDir.mkdir();
 			}
 			
+			for(File i : uploadDir.listFiles()) {
+				i.delete();
+			}
+			
 			try {
 				List<FileItem> formItems = upload.parseRequest(request);
-				int index = -1;
-				String newName = "";
-				System.out.println("2");
+				int index = 0;
 				
 				
 				
 				if(formItems != null && formItems.size() > 0) {
-					System.out.println("3");
 
 					for(FileItem item : formItems) {
-						System.out.println("4");
 						if(item.isFormField()) {
-							String fieldname = item.getFieldName();
-							String value = item.getString();
+						
 							
-							newName = value;
 						}else{
 						
-							index = formItems.indexOf(item);
+							
+							index++;
+							String fileName = new File(item.getName()).getName();
+							
+							String newName = index + "." + FilenameUtils.getExtension(fileName);
+							String filePath = uploadPath + File.separator + newName;
+							
+							File storeFile = new File(filePath);
+							System.out.println(storeFile.getParentFile().getName()+File.separator+storeFile.getName());
+							File sFile = new File(storeFile.getParentFile().getName()+File.separator+storeFile.getName());
+							item.write(sFile);
 						}
 					}
 				}
-				String fileName = new File(formItems.get(index).getName()).getName();
+	
+				request.setAttribute("message", "Cantidad de imagenes guardadas: "+index);
 				
-				newName += "." + FilenameUtils.getExtension(fileName);
-				String filePath = uploadPath + File.separator + newName;
+				File folder = new File(uploadPath);
+				File[] images = folder.listFiles();
+				ArrayList<String> rutas = new ArrayList<String>();
+				for(File file : images) {
+					rutas.add(file.getParentFile().getName()+File.separator+file.getName());
+					
+				}
+				request.setAttribute("imagenes", rutas);
 				
-				File storeFile = new File(filePath);
-				System.out.println(filePath);
-				formItems.get(index).write(storeFile);
 				
 				
 			} catch (Exception e) {
@@ -111,10 +204,5 @@ public class TestServlet extends HttpServlet {
 			}
 			
 		}
-		
-		request.getRequestDispatcher("/Test.jsp").forward(request, response);
-	}
-		
-}
-
-
+		*/
+ 
