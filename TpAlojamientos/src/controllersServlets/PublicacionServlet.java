@@ -42,6 +42,7 @@ import modelo.Servicio;
 import modelo.Usuario;
 import modelo.TipoAlojamiento;
 import modelo.TipoServicio;
+import modelo.Imagen;
 import views.PublicacionView;
 import views.PaginacionView;
 
@@ -413,7 +414,11 @@ public class PublicacionServlet extends HttpServlet {
 			}
 			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
+			
+			
+			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
+			
 			// request.setAttribute("objLocalidad", objLocalidad);
 
 		} catch (Exception e) {
@@ -456,7 +461,7 @@ public class PublicacionServlet extends HttpServlet {
 
 					// Ahora buscamos las rutas de las imagenes de la publicacion
 					// vistaPublicacion.cargarImagenes(imagenDAO.getAll());
-					// vistaPublicacion.cargarImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
+					vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
 
 					// Despues buscamos la cantidad de comentarios
 					cantidadComentarios = 0;

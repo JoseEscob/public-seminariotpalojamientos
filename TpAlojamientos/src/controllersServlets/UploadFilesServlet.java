@@ -19,8 +19,9 @@ import extra.Constantes;
 import extra.FileHandler;
 import extra.ORSesion;
 import controladoresDAO.Usuarios;
-import exceptions.ValidacionException;
+import controladoresDAO.Imagenes;
 import modelo.Usuario;
+import modelo.Imagen;
 
 /**
  * Servlet implementation class UploadFilesServlet
@@ -31,6 +32,10 @@ public class UploadFilesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String paginaJsp = "";
 	private Usuarios usuarioDao = new Usuarios();
+	private Imagenes imagenDao = new Imagenes();
+	private List<FileItem> params = null;
+	private List<FileItem> files = null;
+	private FileHandler fileHandler;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -54,40 +59,30 @@ public class UploadFilesServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost - UploadFilesServlet");
 		try {
-
-			FileHandler fileHandler = new FileHandler(request,  getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser);
-			List<FileItem> parametros = new ArrayList<FileItem>();
-			List<FileItem> archivos = new ArrayList<FileItem>();
 			
-			for(FileItem item : fileHandler.getFormItems()) {
+			//Se inicializan los componentes primarios
+			Initialize(request);
+			System.out.println("1");
 
-				if(item.isFormField())
-					parametros.add(item);
-				else
-					archivos.add(item);
-			}
-			
-			for(FileItem item : parametros) {
-				if(item.getFieldName().compareTo(Constantes.accionPOST)==0) {
-					System.out.println(item.getFieldName());
+			switch(getParameter(Constantes.accionPOST)) {
 
-					switch(item.getString()) {
-					case "cargarNuevasImagenes":
-						break;
-					case "cambiarImagen":
-						cambiarImagen(request, response, parametros, archivos);
-						break;
-					case "verImagenes":
-						
-						break;
-					case "cargarImagen":
-						System.out.println("cargarImagen");
-						cargarImagen(request, response, parametros, archivos);
-						break;
-					}
+				case "cargarImagenesPublicacion":
+					cargarImagenesPublicacion(request, response);
 					break;
-				}
+				case "cambiarImagenUsuario":
+					cambiarImagenUsuario(request, response);
+					break;
+				case "verImagenes":
+					
+					break;
+				case "cargarImagen":
+					System.out.println("cargarImagen");
+					cargarImagen(request, response);
+					break;
+				default: break;
 			}
+			System.out.println("2");
+
 			
 			
 		} catch (Exception e) {
@@ -96,80 +91,129 @@ public class UploadFilesServlet extends HttpServlet {
 		}
 
 	}
+
+	private String getPathFotoUsuario(FileItem item, int idUsuario) {
+		return getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario + File.separator + "fotoUsuario_"+idUsuario + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
+
+	}
+	private String getPathFotosPublicaciones(FileItem item, int idPublicacion, int count) {
+		return getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion + File.separator + count + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
+	}
 	
-	private void cargarImagen(HttpServletRequest request, HttpServletResponse response, List<FileItem> parametros, List<FileItem> archivos) throws Exception {
-		
+	private String getParameter(String paramName) {
+		System.out.println("1.1");
 
-		int idUsuario = 3;
-		String ruta =  getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario;
-		for(FileItem item : archivos) {
-			
-			String fileName = new File(item.getName()).getName();
-			
-			String newName = "fotoUsuario_"+idUsuario + "." + FilenameUtils.getExtension(fileName);
+		String ret = null;
+		for(FileItem item : this.params) {
+			System.out.println("1.2");
 
-			String filePath = ruta + File.separator + newName;
-			
-			File storeFile = new File(filePath);
-			File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
-			usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
-			request.setAttribute("imagen", sFile.getPath());
-			item.write(storeFile);
+			if(item.getFieldName().compareTo(paramName) == 0) {
+				System.out.println("1.3");
+
+				ret = item.getString();
+				break;
+			}
 		}
+		System.out.println("1.4");
+		System.out.println("1.5 : "+ret);
+
+
+		return ret;
+	}
+	
+	private void Initialize(HttpServletRequest request) throws Exception {
+
+		this.fileHandler = new FileHandler(request,  getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser);
+		this.params = new ArrayList<FileItem>();
+		this.files = new ArrayList<FileItem>();
+		
+		for(FileItem item : this.fileHandler.getFormItems()) {
+
+			if(item.isFormField())
+				this.params.add(item);
+			else
+				this.files.add(item);
+		}
+	}
+
+	
+	private void cargarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		int idUsuario = 3;
+		FileItem item = this.files.get(0);
+		String filePath = getPathFotoUsuario(item, idUsuario);
+		
+		File storeFile = new File(filePath);
+		File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
+		usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
+		request.setAttribute("imagen", sFile.getPath());
+		item.write(storeFile);
+		
 		paginaJsp ="/Test.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 	
-	private void cambiarImagen(HttpServletRequest request, HttpServletResponse response, List<FileItem> parametros, List<FileItem> archivos) throws Exception {
+	private void cambiarImagenUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		String idUsuarioString = null;
-		/*for(FileItem item : parametros) {
-			if(item.getFieldName().compareTo("sessionUSer") == 0) {
-				idUsuarioString = item.getString();
-				break;
-			}
-		}*/
+	
 		if(ORSesion.sesionActiva(request)) {
-			idUsuarioString = Integer.toString(ORSesion.getUsuarioBySession(request).getIdUsuario());
-		}
 		
-		Usuario objUsuario = ORSesion.getUsuarioBySession(request);
-		
-		
-		int idUsuario = Integer.parseInt(idUsuarioString);
-		String rutaActual = usuarioDao.getRutaFotoPerfil_Usuario(idUsuario);
-		
-		String ruta =  getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario;
-		
-		File imagen = new File( getServletContext().getRealPath("") + rutaActual);
-		if(imagen.exists()) {
+			Usuario objUsuario = ORSesion.getUsuarioBySession(request);
+			int idUsuario = objUsuario.getIdUsuario();
+			String rutaActual = usuarioDao.getRutaFotoPerfil_Usuario(idUsuario);
 			
-			for(FileItem item : archivos) {
-				
-				String fileName = new File(item.getName()).getName();
-				
-				String newName = "fotoUsuario_"+idUsuario + "." + FilenameUtils.getExtension(fileName);
-
-				String filePath = ruta + File.separator + newName;
-				
-				File storeFile = new File(filePath);
+			//Se comprueba si hay una foto existente y si ese archivo aun está.
+			File imagen = new File( getServletContext().getRealPath("") + rutaActual);
+			if(imagen.exists()) {
+				System.out.println(imagen.delete());
+				FileItem item = this.files.get(0);
+				System.out.println(item);
+				System.out.println("H");
+				File storeFile = new File( getPathFotoUsuario(item, idUsuario));
 				File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
 				usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
 				request.setAttribute("imagen", sFile.getPath());
 				item.write(storeFile);
+				objUsuario = usuarioDao.get(objUsuario);
+				ORSesion.nuevaSesion(request, objUsuario);
 				
 			}
 			
+			request.setAttribute("objUsuario", ORSesion.getUsuarioBySession(request));
+			paginaJsp = "/UsuarioViewModif.jsp";
 		}
-		
-		objUsuario = usuarioDao.get(objUsuario);
-		
-		ORSesion.nuevaSesion(request, objUsuario);
-		
-		request.setAttribute("objUsuario", ORSesion.getUsuarioBySession(request));
-		paginaJsp = "/UsuarioViewModif.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 	
+	private void cargarImagenesPublicacion(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//if(ORSesion.sesionActiva(request)) {
+			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+			String idPublicacionString = getParameter("idPublicacion");
+			if(idPublicacionString != null) {
+				int idPublicacion = Integer.parseInt(idPublicacionString);
+				int contador = 0;
+				for(FileItem item : this.files) {
+					contador ++;
+					//Guardamos el archivo en el servidor
+					File storeFile = new File(getPathFotosPublicaciones(item, idPublicacion, contador));
+					item.write(storeFile);
+					
+					//Ahora damos el alta en la base de datos
+					Imagen imagen = new Imagen();
+					imagen.setIdPublicacion(idPublicacion);
+					imagen.setIdImagen(contador);
+					imagen.setHabilitado(true);
+					imagen.setRutaImgPublicacion(Constantes.RUTACarpetaFotosPublicacion + idPublicacion + File.separator + storeFile.getName());
+					imagenDao.insert(imagen);
+					listImagenes.add(imagen);
+				}
+				request.setAttribute("imagenes", listImagenes);
+			}
+		//}
+		request.getRequestDispatcher("/Test.jsp").forward(request, response);
+	}
+	
+	
 
+	
 }

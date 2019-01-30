@@ -39,11 +39,21 @@
 									<!-- Agregar algun comentario dentro de cada imagen? -->
 									<!-- Wrapper for slides -->
 									<div class="carousel-inner">
-										<c:forEach items="${vistaPublicacion.imagenes}" var="imagen">
-											<div class="item">
-												<img src="${imagen.rutaImgPublicacion}"
-													class="img-responsive">
-											</div>
+										<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
+											<c:choose>
+												<c:when test="${objImagen.idImagen eq 1 }">
+													<div class="item active">
+														<img src="${objImagen.rutaImgPublicacion}">
+														<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="item">
+														<img src="${objImagen.rutaImgPublicacion}">
+														<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+													</div>
+												</c:otherwise>
+											</c:choose>
 										</c:forEach>
 									</div>
 

@@ -16,24 +16,35 @@
 		<h4>${message}</h4>
 		</div>
 		<div class="row" title="Ubicación - Publicación">
+		
 			<h2>${vistaPublicacion.publicacion.nombre}</h2>
 			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
 			<div class="col-md-8">
 				<div id="myCarousel" class="carousel slide col-md-6" data-ride="carousel">
-					<ol class="carousel-indicators">
+					<!-- <ol class="carousel-indicators">
 							  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 							  <li data-target="#myCarousel" data-slide-to="1"></li>
 							  <li data-target="#myCarousel" data-slide-to="2"></li>
-							</ol>
+					</ol>->
 					<!-- Agregar algun comentario dentro de cada imagen? -->
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner">
-						<c:forEach items="${vistaPublicacion.listaRutaImg}" var="objRutaImg">
-							<div class="item">
-								<!--<img src="${objRutaImg}" class="img-responsive"> -->
-								<img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> 
-							</div>
+						<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
+							<c:choose>
+								<c:when test="${objImagen.idImagen eq 1 }">
+									<div class="item active">
+										<img src="${objImagen.rutaImgPublicacion}">
+										<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div class="item">
+										<img src="${objImagen.rutaImgPublicacion}">
+										<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+									</div>
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
 					</div>
 
