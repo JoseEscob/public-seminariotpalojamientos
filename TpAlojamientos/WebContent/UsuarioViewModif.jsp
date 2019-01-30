@@ -15,8 +15,6 @@
 		<h2>Perfil del Usuario</h2>
 		<hr />
 		<!--Horizantal line divider  <div class="page-header"/> -->
-
-
 	</div>
 
 
@@ -154,7 +152,7 @@
 							<img alt="" src="${objUsuario.rutaFotoPerfil}"  width="200" height="200">
 							<label for="cambio" class="btn btn-info">Cambiar imagen</label>
 							<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
-							<input type="hidden" name="accionPOST" value="cambiarImagenUsuario"/>			
+							<input type="hidden" name="accionPOST" value="cambiarImagen"/>			
 							<input type="submit" value="actualizar"/>
 						</form>
 					</div>

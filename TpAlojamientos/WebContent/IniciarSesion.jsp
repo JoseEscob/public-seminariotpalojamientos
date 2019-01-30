@@ -69,8 +69,7 @@
 							</div>
 							<div class="col-2">
 								<div class="input-group">
-									<label class="label">${message}</label>
-									<p class="text-danger">${message}</p>
+									<label class="label" style="color:red;">${message}</label>
 								</div>
 							</div>
 						</div>

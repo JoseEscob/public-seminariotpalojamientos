@@ -266,7 +266,7 @@ public class Publicacion {
 				"]\n precioNoche["+this.precioNoche+
 				"]\n cantPersonas["+this.cantPersonas+
 				"]\n cantAmbientes["+this.cantAmbientes+
-				"]\n cantBanios"+this.cantBanios+
+				"]\n cantBanios["+this.cantBanios+
 				"]\n cantHabitaciones["+this.cantHabitaciones+
 				"]\n aniosAntiguedad["+this.aniosAntiguedad+
 				"]\n fechaAlta["+this.fechaAlta+

@@ -64,7 +64,7 @@
 					<th>admin</th>
 					<th>puntaje</th>
 					<th>habilitado</th>
-					<th>Fecha Alta</th>
+					<th>FechaAltaUsuario</th>
 					<th>fechaUltConexion</th>
 					<th>fechaUltModificado</th>
 					<th>verificado</th>

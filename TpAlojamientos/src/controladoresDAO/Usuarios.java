@@ -17,7 +17,7 @@ public class Usuarios implements Connectable<Usuario> {
 	private final static String camposInsertIntoDB = " nombre=?, apellido=?, dni=?, mail=?, fechaNac=?"
 			+ ", usuario=?, clave=?, sexo=?, rutaFotoPerfil=?, admin=?, puntaje=?, fechaAlta= "
 			+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
-			+ "fechaUltModificado= " + cCampo.sql_STR_TO_DATE_YmdHiS + ", verificado=?, habilitado=?, nroTelefono=?";
+			+ ", fechaUltModificado= " + cCampo.sql_STR_TO_DATE_YmdHiS + ", verificado=?, habilitado=?, nroTelefono=?";
 
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
@@ -246,6 +246,8 @@ public class Usuarios implements Connectable<Usuario> {
 		o.setFechaUltConexion(rs.getString(cCampo.fechaUltConexion));
 		o.setAnteriorFechaUltConexion(o.getFechaUltConexion());
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
+		o.setNroTelefono(rs.getString(cCampo.nroTelefono));
+		o.setFechaUltModificado(rs.getString(cCampo.fechaUltModificado));
 		// ------------
 		String rutaFotoPerfilUsuario = null;
 		rutaFotoPerfilUsuario = o.getRutaFotoPerfil();

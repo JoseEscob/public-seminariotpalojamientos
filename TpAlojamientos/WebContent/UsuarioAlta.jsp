@@ -48,7 +48,7 @@
 						<div class="col-2">
 							<div class="input-group">
 								<label class="label">Email</label> <input class="input--style-4"
-									type="email" name="mail" value="asd@gmail.com">
+									name="mail" value="asd@gmail.com">
 							</div>
 						</div>
 						<div class="row row-space">
@@ -135,7 +135,7 @@
 						<div class="row row-space">
 							<div class="col-4">
 								<div class="input-group">
-									<label class="label">${message}</label>
+									<label class="label" style="color: red;">${message}</label>
 								</div>
 							</div>
 						</div>

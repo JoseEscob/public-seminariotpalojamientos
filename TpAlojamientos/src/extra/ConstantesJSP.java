@@ -30,4 +30,7 @@ public class ConstantesJSP {
 	public final static String jspBs_selectCombo_js = "web-design/bootstrap3/bootstrap-select-combo/1.12.1/bootstrap-select.js";
 	// public final static String jsp = "aaa";
 	// public final static String jsp = "aaa";
+	public final static String jspPub_combosAjax = "web-design/publicaciones/combosAjax.js";
+	public final static String jspPub_PublicacionesListadocss = "web-design/publicaciones/_PublicacionesListado.css";
+
 }

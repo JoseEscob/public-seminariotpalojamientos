@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page import="extra.ConstantesJSP"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="<%=ConstantesJSP.jspPub_combosAjax%>"></script>
 <title>Publicación - Alta</title>
-
 </head>
 
 <body>
@@ -345,102 +345,6 @@
 	<div class="container" id="footer"></div>
 
 
-	<script type="text/javascript">
-		$(function() {
-			var action;
-			$(".number-spinner div")
-					.mousedown(
-							function() {
-								btn = $(this);
-								input = btn.closest('.number-spinner').find(
-										'input');
-
-								if (btn.attr('data-dir') == 'up') {
-									action = setInterval(
-											function() {
-												if (input.attr('max') == undefined
-														|| parseInt(input.val()) < parseInt(input
-																.attr('max'))) {
-													input.val(parseInt(input
-															.val()) + 1);
-												} else {
-													clearInterval(action);
-												}
-											}, 50);
-								} else {
-									action = setInterval(
-											function() {
-												if (input.attr('min') == undefined
-														|| parseInt(input.val()) > parseInt(input
-																.attr('min'))) {
-													input.val(parseInt(input
-															.val()) - 1);
-												} else {
-													btn.prop("disabled", true);
-													clearInterval(action);
-												}
-											}, 50);
-								}
-							}).mouseup(function() {
-						clearInterval(action);
-					});
-		});
-
-		$(document)
-				.ready(
-						function() {
-							$("[name='partido']")
-									.change(
-											function() {
-												//MAGIA
-												$
-														.post(
-																"PublicacionServlet",
-																{
-																	"idPartido" : $(
-																			"[name='partido'] option:selected")
-																			.val(),
-																	"accionPOST" : "getLocalidades"
-																},
-																function(result) {
-																	$(
-																			"#localidades")
-																			.empty();
-																	$(
-																			"#localidades")
-																			.append(
-																					$(
-																							'<option selected disabled value="" />')
-																							.text(
-																									"Seleccionar una localidad"));
-																	$(
-																			"#localidades")
-																			.prop(
-																					"disabled",
-																					false);
-																	$
-																			.each(
-																					result.localidades,
-																					function(
-																							index,
-																							value) {
-																						$(
-																								"#localidades")
-																								.append(
-																										$(
-																												'<option />')
-																												.val(
-																														value.idLocalidad)
-																												.text(
-																														value.nombre));
-																					});
-																	$(
-																			"#localidades")
-																			.selectpicker(
-																					"refresh");
-																});
-											});
-						});
-	</script>
+	<script src="<%=ConstantesJSP.jspPub_combosAjax%>"></script>
 </body>
 </html>
