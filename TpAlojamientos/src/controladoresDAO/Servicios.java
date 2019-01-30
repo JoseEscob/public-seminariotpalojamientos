@@ -19,7 +19,7 @@ public class Servicios implements Connectable<Servicio> {
 		private static final long serialVersionUID = 4203725714758500524L;
 		{
 			put("all", "select * from serviciosPublicaciones");
-			put("insert", "insert into serviciosPublicaciones set idServicio=?, idPublicacion=?");
+			put("insert", "insert into serviciosPublicaciones set idPublicacion=?, idServicio=?");
 			put("count", "select count(*) as cantidad from tiposServicios");
 			put("update", "update serviciosPublicaciones set idServicio=? where idPublicacion=? and idServicio=?");
 			put("get", "select * from serviciosPublicaciones where idPublicacion=?");
@@ -113,7 +113,7 @@ public class Servicios implements Connectable<Servicio> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps.setInt(1, obj.getIdPublicacion());
 			ps.setInt(2, obj.getIdServicio());
-
+			LOG.info("INSERT Servicios: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
 		} catch (Exception e) {
@@ -124,6 +124,7 @@ public class Servicios implements Connectable<Servicio> {
 		return correcto;
 	}
 
+	@Deprecated
 	@Override
 	public boolean update(Servicio obj) {
 		if (obj == null) {
@@ -135,6 +136,30 @@ public class Servicios implements Connectable<Servicio> {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps.setInt(1, obj.getIdPublicacion());
 			ps.setInt(2, obj.getIdServicio());
+
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+
+	public boolean updateServicios(Servicio objNuevo, int idServicioViejo){
+		if (obj == null) {
+			return false;
+		}
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
+			ps.setInt(1, obj.getIdPublicacion());
+			ps.setInt(2, obj.getIdServicio());
+			ps.setInt(3, idServicioViejo);
+			LOG.info("UPDATE Servicios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 

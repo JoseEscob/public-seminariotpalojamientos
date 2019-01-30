@@ -26,8 +26,8 @@
 
 					<div class="form-group ">
 						<div class="col-xs-8">
-							<label class="control-label col-xs-7">Fecha Última
-								Conexión: </label>
+							<label class="control-label col-xs-7">Fecha ï¿½ltima
+								Conexiï¿½n: </label>
 							<div class="col-xs-5">
 								<label class="control-label"> <c:out
 										value="${objUsuario.anteriorFechaUltConexion}"></c:out>
@@ -152,7 +152,7 @@
 							<img alt="" src="${objUsuario.rutaFotoPerfil}"  width="200" height="200">
 							<label for="cambio" class="btn btn-info">Cambiar imagen</label>
 							<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
-							<input type="hidden" name="accionPOST" value="cambiarImagen"/>			
+							<input type="hidden" name="accionPOST" value="cambiarImagenUsuario"/>			
 							<input type="submit" value="actualizar"/>
 						</form>
 					</div>
