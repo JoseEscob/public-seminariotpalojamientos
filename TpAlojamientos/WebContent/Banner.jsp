@@ -61,13 +61,15 @@
 					<li><a href="#"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
 
-					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span class="glyphicon glyphicon-plus"></span>Nueva
-							Publicación</a></li>
+					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
+							class="glyphicon glyphicon-plus"></span>Nueva Publicación
+					</a></li>
 					<li><a
 						href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
 							Test Comentario</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-star" /></span>
-							Favoritas</a></li>
+					<li><a
+						href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
+							class="glyphicon glyphicon-star" /></span> Favoritas</a></li>
 					<li><a href="#"></a></li>
 					<li><a
 						href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.LOG;
 import modelo.Servicio;
 
 public class Servicios implements Connectable<Servicio> {
@@ -148,16 +149,16 @@ public class Servicios implements Connectable<Servicio> {
 		return correcto;
 	}
 
-	public boolean updateServicios(Servicio objNuevo, int idServicioViejo){
-		if (obj == null) {
+	public boolean updateServicios(Servicio objNuevo, int idServicioViejo) {
+		if (objNuevo == null) {
 			return false;
 		}
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(1, obj.getIdPublicacion());
-			ps.setInt(2, obj.getIdServicio());
+			ps.setInt(1, objNuevo.getIdPublicacion());
+			ps.setInt(2, objNuevo.getIdServicio());
 			ps.setInt(3, idServicioViejo);
 			LOG.info("UPDATE Servicios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
