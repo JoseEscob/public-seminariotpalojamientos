@@ -42,7 +42,6 @@ import modelo.Servicio;
 import modelo.Usuario;
 import modelo.TipoAlojamiento;
 import modelo.TipoServicio;
-import modelo.Imagen;
 import views.PublicacionView;
 import views.PaginacionView;
 
@@ -98,6 +97,9 @@ public class PublicacionServlet extends HttpServlet {
 				break;
 			case "VerComentarios":
 				verComentariosPublicacion(request, response);
+				break;
+			case "verMisFavoritosPublicaciones":
+				verMisFavoritosPublicaciones(request, response);
 				break;
 			case "Buscar":
 				buscarPublicaciones(request, response);
@@ -192,7 +194,7 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
-	private void altaPublicacion(HttpServletRequest request, HttpServletResponse response)
+	private void verMisFavoritosPublicaciones(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- cargar los componentes con los valores de la DB
 		// 1- recuperar valores del formulario JSP
@@ -204,14 +206,31 @@ public class PublicacionServlet extends HttpServlet {
 		String message = null;
 
 		try {
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+			ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
+			listaFavoritos = favoritosDAO.getAllByIdUsuarioOnlyEnable(objUsuarioLogueado.getIdUsuario());
+			// obtener listado de publicaciones
+			ArrayList<Publicacion> listaPublicaciones = new ArrayList<Publicacion>();
 
+			listaFavoritos.forEach(item -> {
+				Publicacion objPublicacion = publicacionDAO.getObjectByID(item.getIdPublicacion());
+				if (objPublicacion != null)
+					listaPublicaciones.add(objPublicacion);
+			});
+
+			request.setAttribute("listaPublicaciones", listaPublicaciones);
+			message = String.format("Se cargó la lista de favoritos del usuario %s, %s con éxito",
+					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
-			// 5- Informar estado
-			paginaJsp = "/PublicacionAlta.jsp";
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
-			dispatcher.forward(request, response);
+			// 4- Informar estado/resultados en interfaz (JSP)
+			request.setAttribute("message", message);
+			paginaJsp = "/PublicacionesFavoritos.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 
@@ -414,11 +433,10 @@ public class PublicacionServlet extends HttpServlet {
 			}
 			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
-			
-			
+
 			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
-			
+
 			// request.setAttribute("objLocalidad", objLocalidad);
 
 		} catch (Exception e) {

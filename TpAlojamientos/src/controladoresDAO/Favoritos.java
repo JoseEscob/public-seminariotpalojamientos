@@ -233,6 +233,16 @@ public class Favoritos implements Connectable<Favorito> {
 		return listaFavoritos;
 	}
 
+	public ArrayList<Favorito> getAllByIdUsuarioOnlyEnable(int idUsuario) {
+		ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
+		getAll().forEach(item -> {
+			if (item.getIdUsuario() == idUsuario)
+				if (item.isHabilitado())
+					listaFavoritos.add(item);
+		});
+		return listaFavoritos;
+	}
+
 	/**
 	 * Verifica si existe la combinación de idUsuario y idPublicacion en los
 	 * registros de la tabla Favoritos de la DB

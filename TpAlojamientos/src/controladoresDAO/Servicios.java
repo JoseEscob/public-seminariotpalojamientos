@@ -150,15 +150,15 @@ public class Servicios implements Connectable<Servicio> {
 	}
 
 	public boolean updateServicios(Servicio objNuevo, int idServicioViejo){
-		/*if (obj == null) {
+		if (objNuevo == null) {
 			return false;
 		}
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps.setInt(1, obj.getIdPublicacion());
-			ps.setInt(2, obj.getIdServicio());
+			ps.setInt(1, objNuevo.getIdPublicacion());
+			ps.setInt(2, objNuevo.getIdServicio());
 			ps.setInt(3, idServicioViejo);
 			LOG.info("UPDATE Servicios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
@@ -169,8 +169,7 @@ public class Servicios implements Connectable<Servicio> {
 		} finally {
 			cn.close();
 		}
-		return correcto;*/
-		return false;
+		return correcto;
 	}
 
 	@Override
