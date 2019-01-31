@@ -62,7 +62,6 @@ public class UploadFilesServlet extends HttpServlet {
 			
 			//Se inicializan los componentes primarios
 			Initialize(request);
-			System.out.println("1");
 
 			switch(getParameter(Constantes.accionPOST)) {
 
@@ -76,12 +75,10 @@ public class UploadFilesServlet extends HttpServlet {
 					
 					break;
 				case "cargarImagen":
-					System.out.println("cargarImagen");
 					cargarImagen(request, response);
 					break;
 				default: break;
 			}
-			System.out.println("2");
 
 			
 			
@@ -93,37 +90,42 @@ public class UploadFilesServlet extends HttpServlet {
 	}
 
 	private String getPathFotoUsuario(FileItem item, int idUsuario) {
+		this.makeDir(getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario);
 		return getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario + File.separator + "fotoUsuario_"+idUsuario + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
 
 	}
 	private String getPathFotosPublicaciones(FileItem item, int idPublicacion, int count) {
+		this.makeDir(getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion);
 		return getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion + File.separator + count + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
 	}
 	
+	
 	private String getParameter(String paramName) {
-		System.out.println("1.1");
 
 		String ret = null;
 		for(FileItem item : this.params) {
-			System.out.println("1.2");
 
 			if(item.getFieldName().compareTo(paramName) == 0) {
-				System.out.println("1.3");
-
 				ret = item.getString();
 				break;
 			}
 		}
-		System.out.println("1.4");
-		System.out.println("1.5 : "+ret);
 
 
 		return ret;
 	}
+	private void makeDir(String pathNameDir) {
+		
+		File uploadDir = new File(pathNameDir);
+		if(!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+		
+	}
 	
 	private void Initialize(HttpServletRequest request) throws Exception {
 
-		this.fileHandler = new FileHandler(request,  getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser);
+		this.fileHandler = new FileHandler(request);
 		this.params = new ArrayList<FileItem>();
 		this.files = new ArrayList<FileItem>();
 		
@@ -138,7 +140,8 @@ public class UploadFilesServlet extends HttpServlet {
 
 	
 	private void cargarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+		//	getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser
+
 		int idUsuario = 3;
 		FileItem item = this.files.get(0);
 		String filePath = getPathFotoUsuario(item, idUsuario);
@@ -165,10 +168,8 @@ public class UploadFilesServlet extends HttpServlet {
 			//Se comprueba si hay una foto existente y si ese archivo aun está.
 			File imagen = new File( getServletContext().getRealPath("") + rutaActual);
 			if(imagen.exists()) {
-				System.out.println(imagen.delete());
+				imagen.delete();
 				FileItem item = this.files.get(0);
-				System.out.println(item);
-				System.out.println("H");
 				File storeFile = new File( getPathFotoUsuario(item, idUsuario));
 				File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
 				usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
@@ -210,7 +211,7 @@ public class UploadFilesServlet extends HttpServlet {
 				request.setAttribute("imagenes", listImagenes);
 			}
 		//}
-		request.getRequestDispatcher("/Test.jsp").forward(request, response);
+		request.getRequestDispatcher("/InicioAdmin.jsp").forward(request, response);
 	}
 	
 	

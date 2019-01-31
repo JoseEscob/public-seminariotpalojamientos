@@ -324,17 +324,25 @@
 			</div>
 
 
-			<div class="row" id="ImagenesDeLaPublicacion">
+			<!--<div class="row" id="ImagenesDeLaPublicacion">
 				<div class="row col-md-12">
 					<h3>Imágenes del alojamiento</h3>
 					<hr />
 				</div>
-				<div class="row col-md-12">
-					<input type="file" class="filestyle" data-buttonText="Find file">
+				<div class="row col-md-12">				
+					<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">
+						<label for="imagenes" class="btn btn-info">Seleccionar imagenes</label>
+					
+						<input type="file" id="imagenes" name="archivo" accept="image/jpeg,image/gif,image/png" multiple style="visibility: hidden;"/>
+						<input type="hidden" name="accionPOST" value="cargarImagenesPublicacion"/>
+						<input type="hidden" name="idPublicacion" value="1"/>
+							
+						<input type="submit"/>
+					</form> 
 				</div>
 
 
-			</div>
+			</div>-->
 
 			<div class="row">
 				<input type="submit" class="btn btn-success" name="subir"

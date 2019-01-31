@@ -18,12 +18,10 @@ public class FileHandler {
 	private DiskFileItemFactory factory;
 	private ServletFileUpload upload;
 	private List<FileItem> formItems;
-	private String uploadPath;
 	private HttpServletRequest request;
 	
-	public FileHandler(HttpServletRequest request, String uploadPath) throws Exception {
+	public FileHandler(HttpServletRequest request) throws Exception {
 		this.request = request;
-		this.uploadPath = uploadPath;
 		this.factory = new DiskFileItemFactory();
 		this.factory.setSizeThreshold(MemoryThreshold);
 		this.factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
@@ -32,12 +30,7 @@ public class FileHandler {
 		this.upload.setFileSizeMax(MaxFileSize);
 		this.upload.setSizeMax(MaxRequestSize);
 		
-		
-		File uploadDir = new File(this.uploadPath);
-		if(!uploadDir.exists()) {
-			uploadDir.mkdir();
-		}
-		
+	
 		if(!this.upload.isMultipartContent(this.request)) {
 			throw new FileHandlerException("El componente Servlet o formulario de datos no es MULTIPART.");
 		}
@@ -58,10 +51,7 @@ public class FileHandler {
 	public List<FileItem> getFormItems(){
 		return this.formItems;
 	}
-	public String getUploadPath() {
-		return this.uploadPath;
-	}
-	
+
 }
 
 

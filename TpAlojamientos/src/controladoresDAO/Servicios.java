@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.LOG;
 import modelo.Servicio;
 
 public class Servicios implements Connectable<Servicio> {
@@ -149,7 +150,7 @@ public class Servicios implements Connectable<Servicio> {
 	}
 
 	public boolean updateServicios(Servicio objNuevo, int idServicioViejo){
-		if (obj == null) {
+		/*if (obj == null) {
 			return false;
 		}
 		cn = new Conexion();
@@ -168,7 +169,8 @@ public class Servicios implements Connectable<Servicio> {
 		} finally {
 			cn.close();
 		}
-		return correcto;
+		return correcto;*/
+		return false;
 	}
 
 	@Override

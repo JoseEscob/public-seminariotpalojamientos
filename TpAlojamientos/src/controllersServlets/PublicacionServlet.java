@@ -523,16 +523,16 @@ public class PublicacionServlet extends HttpServlet {
 			}
 			LOG.info(String.format("Se guardaron %d de %d servicios ingresados", cantArchivosInsertado,
 					listaServicios.size()));
-			// 3.3- DB: guardar información - imagenesDAO
+			// 3.3- Se redirige a la pagina de subida de imagenes
+			request.setAttribute("idPublicacion", idPublicacion);
 
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
 			request.setAttribute("message", message);
-			paginaJsp = "/PublicacionAlta.jsp";
 
-			paginaJsp = "/Publicaciones.jsp";
+			paginaJsp = "/ImagenesPublicacionAlta.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
