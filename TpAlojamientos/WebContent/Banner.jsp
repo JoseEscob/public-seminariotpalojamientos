@@ -58,7 +58,7 @@
 				<ul class="dropdown-menu">
 					<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
 							class="glyphicon glyphicon-check" /></span> Todas las publicaciones</a></li>
-					<li><a href="#"><span
+					<li><a href="PublicacionesUsuario.jsp"><span
 							class="glyphicon glyphicon glyphicon-th" /></span> Mis publicaciones</a></li>
 
 					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span

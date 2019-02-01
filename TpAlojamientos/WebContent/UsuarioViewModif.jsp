@@ -129,7 +129,7 @@
 
 			<div class="col-md-6">
 				<h3>Foto del Usuario</h3>
-
+				<hr/>
 
 				<div id="fotoPerfil" class="form-group" align="center">
 					<c:if test="${not empty objUsuario.rutaFotoPerfil}">
@@ -146,14 +146,15 @@
 
 					</c:if>
 				</div>
+				<div class="row" align="center">
+					<label for="cambio" class="btn btn-info">Cambiar imagen</label>
+				</div>
+				
 				<div class="form-group">
 					<div class="col-sm-12" align="right">
-						<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">		
-							<img alt="" src="${objUsuario.rutaFotoPerfil}"  width="200" height="200">
-							<label for="cambio" class="btn btn-info">Cambiar imagen</label>
+						<form action="UploadFilesServlet" id="formPhotoUpdate"method="post" enctype="multipart/form-data">		
 							<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
 							<input type="hidden" name="accionPOST" value="cambiarImagenUsuario"/>			
-							<input type="submit" value="actualizar"/>
 						</form>
 					</div>
 				</div>
@@ -163,5 +164,13 @@
 
 		<div class="row"></div>
 	</div>
+	<script type="text/javascript">
+		$(function(){
+			$("#cambio").change(function(){
+				$("#formPhotoUpdate").submit();
+			});
+		});
+	
+	</script>
 </body>
 </html>

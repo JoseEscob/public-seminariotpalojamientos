@@ -188,7 +188,7 @@
 
 				</div>
 				<div class="row col-md-12">
-					<button class="btn btn-info">Ver perfil</button>
+					<a class="btn btn-info" href="PublicacionServlet?accionGET=VerPerfilUsuario&idUsuario=${vistaPublicacion.usuario.idUsuario }">Ver perfil</a>
 				</div>
 
 			</div>

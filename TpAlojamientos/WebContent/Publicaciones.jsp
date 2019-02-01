@@ -28,7 +28,7 @@
 					<c:forEach items="${publicaciones}" var="vistaPublicacion">
 						<div class="row">
 							<div class="col-md-6">
-								<div id="myCarousel" class="carousel slide col-md-6"
+								<div id="carousel_${vistaPublicacion.publicacion.idPublicacion }" class="carousel slide col-md-6"
 									data-ride="carousel">
 
 									<!-- <ol class="carousel-indicators">
@@ -58,10 +58,10 @@
 									</div>
 
 									<!-- Left and right controls -->
-									<a class="left carousel-control" href="#myCarousel"
+									<a class="left carousel-control" href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
 										data-slide="prev"> <span
 										class="glyphicon glyphicon-chevron-left"></span>
-									</a> <a class="right carousel-control" href="#myCarousel"
+									</a> <a class="right carousel-control" href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
 										data-slide="next"> <span
 										class="glyphicon glyphicon-chevron-right"></span>
 									</a>

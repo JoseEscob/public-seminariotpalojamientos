@@ -61,8 +61,6 @@ public class FileHandler {
 	}
 
 
-}
-
 	/***********************************/
 	public void runTestResize() {
 		String rutaOriginal = "Desktop\\originalFile.jpg";

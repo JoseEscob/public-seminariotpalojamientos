@@ -1,3 +1,12 @@
+///////
+elementos para agregar ajax:
+-Boton de favoritos.
+-Cambio de imagen de perfil del usuario.
+///////
+
+
+
+
 ******* ELEMENTOS A CORREGIR *******
 Solicitudes
 	Terminar la pagina de vista .jsp

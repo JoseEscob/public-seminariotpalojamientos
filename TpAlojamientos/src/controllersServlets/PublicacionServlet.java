@@ -35,6 +35,7 @@ import extra.ORSesion;
 import extra.Utilitario;
 import modelo.Comentario;
 import modelo.Favorito;
+import modelo.Imagen;
 import modelo.Localidad;
 import modelo.Partido;
 import modelo.Publicacion;
@@ -91,6 +92,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerPublicaciones":
 				verPublicaciones(request, response);
 				break;
+			case "VerPerfilUsuario":
+				verPerfilUsuario(request, response);
+				break;
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
 				// altaPublicacion(request, response);
@@ -108,6 +112,9 @@ public class PublicacionServlet extends HttpServlet {
 		} catch (ServidorException e) {
 			e.printStackTrace();
 		} catch (CargaViewException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -433,8 +440,9 @@ public class PublicacionServlet extends HttpServlet {
 			}
 			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
-
-			vistaPublicacion.setImagenes(imagenDAO.getAllByIdPublicacion(idPublicacion));
+			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+			listImagenes = imagenDAO.getAllByIdPublicacion(idPublicacion);
+			vistaPublicacion.setImagenes(listImagenes);
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
 
 			// request.setAttribute("objLocalidad", objLocalidad);
@@ -633,6 +641,33 @@ public class PublicacionServlet extends HttpServlet {
 		objPublicacion.setVerificado(false);
 		objPublicacion.setHabilitado(true);
 		return objPublicacion;
+	}
+	
+	private void verPerfilUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		
+		//En construccion
+		String idUSuarioString = request.getParameter("idUsuario");
+		if(idUSuarioString != null) {
+			int idUsuario = Integer.parseInt(idUSuarioString);
+			request.setAttribute("idUsuario", idUsuario);
+			Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuario);
+			if(objUsuario!= null) {
+				ArrayList<Publicacion> listPublicaciones = publicacionDAO.getAll();
+				ArrayList<Comentario> listComentarios = new ArrayList<Comentario>();
+				for(Publicacion publicacion : listPublicaciones) {
+					if(publicacion.getIdUsuario() == objUsuario.getIdUsuario()) {
+						comentarioDAO.getAllByIdPublicacion(publicacion.getIdPublicacion()).forEach(item ->{
+							if(item.getPuntaje() >= 4) 
+								listComentarios.add(item);
+						
+						});
+					}
+				}
+			}
+			
+		}
+		paginaJsp = "/PerfilView.jsp";
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 
 }
