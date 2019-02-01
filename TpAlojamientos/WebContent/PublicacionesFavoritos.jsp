@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ page import="extra.ConstantesJSP"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +63,7 @@
 								</div>
 
 								<c:url value="PublicacionServlet?" var="urlPublicacionGuardada">
-									<c:param name="accionPOST" value="VerPublicacion" />
+									<c:param name="accionGET" value="VerPublicacion" />
 									<c:param name="idPublicacion"
 										value="${objPublicacion.idPublicacion}" />
 								</c:url>

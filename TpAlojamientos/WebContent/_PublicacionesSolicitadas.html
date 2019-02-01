@@ -1,0 +1,156 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@ page import="modelo.Usuario, extra.Tag"%>
+<!-- https://bootsnipp.com/snippets/featured/list-grid-view -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+
+	<link href="web-design/publicaciones/_PublicacionesListado.css" rel="stylesheet">
+
+	<script src="web-design/bootstrap3/jquery/jquery-3.3.1.js"></script>
+	<script src="web-design/bootstrap3/js/bootstrap.min.js"></script>
+	<link href="web-design/bootstrap3/css/bootstrap.min.css" rel="stylesheet">
+	
+
+	<script src="login/js/JSValidar.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#list').click(function(event) {
+			event.preventDefault();
+			$('#products .item').addClass('list-group-item');
+		});
+		$('#grid').click(function(event) {
+			event.preventDefault();
+			$('#products .item').removeClass('list-group-item');
+			$('#products .item').addClass('grid-group-item');
+		});
+	});
+</script>
+	<title>Publicación - Listado de publicaciones</title>
+</head>
+<body>
+	<%@ include file="Banner.jsp"%>
+
+	<div class="container">
+		<h2>Publicación</h2>
+		<hr />
+		<!--Horizantal line divider  <div class="page-header"/> -->
+	</div>
+
+	
+
+
+
+	<div class="container">
+	    <div class="well well-sm">
+	        <strong>Category Title</strong>
+	        <div class="btn-group">
+	            <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
+	            </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm" data-toggle="tooltip" title="hola"><span
+	                class="glyphicon glyphicon-th"></span>Grid</a>
+	        </div>
+	    </div>
+	    <div id="products" class="row list-group">
+	    	<c:forEach>
+		        <div class="item  col-xs-4 col-lg-4">
+		            <div class="thumbnail">
+		            	<img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+		                <img class="group list-group-image" src="${objPublicacion.imagenes[0].rutaImgPublicacion}" alt="" />
+		                <div class="caption">
+		                    <h4 class="group inner list-group-item-heading">
+		                    	${objPublicacion.nombre}
+		                    </h4>
+		                    <p class="group inner list-group-item-text">${objPublicacion.descripcion}</p>
+		                    <div class="row">
+		                        <div class="col-xs-12 col-md-6">
+		                            <p class="lead">
+		                                ${objPublicacion.precioNoche}
+		                            </p>
+		                        </div>
+		                        
+		                        <c:url value="PublicacionServlet?" var="urlPublicacionGuardada">
+		                        	<c:param name="accionPOST" value="VerPublicacion"/>
+		                        	<c:param name="idPublicacion" value="${objPublicacion.idPublicacion}"/>
+		                    	</c:url>
+
+		                    	<div class="col-xs-12 col-md-6">
+		                            <a class="btn btn-primary" href="${urlPublicacionGuardada}">Ingresar</a>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+	        </c:forEach>
+	        <div class="item  col-xs-4 col-lg-4">
+	            <div class="thumbnail">
+	                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+	                <div class="caption">
+	                    <h4 class="group inner list-group-item-heading">
+	                        Product title</h4>
+	                    <p class="group inner list-group-item-text">
+	                        Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+	                        sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+	                    <div class="row">
+	                        <div class="col-xs-12 col-md-6">
+	                            <p class="lead">
+	                                $21.000</p>
+	                        </div>
+	                        <div class="col-xs-12 col-md-6">
+	                            <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="item  col-xs-4 col-lg-4">
+	            <div class="thumbnail">
+	                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+	                <div class="caption">
+	                    <h4 class="group inner list-group-item-heading">
+	                        Product title</h4>
+	                    <p class="group inner list-group-item-text">
+	                        Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+	                        sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+	                    <div class="row">
+	                        <div class="col-xs-12 col-md-6">
+	                            <p class="lead">
+	                                $21.000</p>
+	                        </div>
+	                        <div class="col-xs-12 col-md-6">
+	                            <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="item  col-xs-4 col-lg-4">
+	            <div class="thumbnail">
+	                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+	                <div class="caption">
+	                    <h4 class="group inner list-group-item-heading">
+	                        Product title</h4>
+	                    <p class="group inner list-group-item-text">
+	                        Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+	                        sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+	                    <div class="row">
+	                        <div class="col-xs-12 col-md-6">
+	                            <p class="lead">
+	                                $21.000</p>
+	                        </div>
+	                        <div class="col-xs-12 col-md-6">
+	                            <a class="btn btn-success" href="http://www.jquery2dotnet.com">Add to cart</a>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+
+	    </div>
+	</div>
+	
+</body>
+</html>

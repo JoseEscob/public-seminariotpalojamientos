@@ -224,6 +224,15 @@ public class Favoritos implements Connectable<Favorito> {
 	}
 
 	/// ********************* LAMBDA - Funciones de obtención de datos ******** ///
+	public ArrayList<Favorito> getAllByIdPublicacion(int idPublicacion) {
+		ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
+		getAll().forEach(item -> {
+			if (item.getIdPublicacion() == idPublicacion)
+				listaFavoritos.add(item);
+		});
+		return listaFavoritos;
+	}
+
 	public ArrayList<Favorito> getAllByIdUsuario(int idUsuario) {
 		ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
 		getAll().forEach(item -> {

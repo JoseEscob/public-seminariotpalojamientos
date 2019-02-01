@@ -32,5 +32,6 @@ public class ConstantesJSP {
 	// public final static String jsp = "aaa";
 	public final static String jspPub_combosAjax = "web-design/publicaciones/combosAjax.js";
 	public final static String jspPub_PublicacionesListadocss = "web-design/publicaciones/_PublicacionesListado.css";
+	public final static String jspSol_solEnviadasRecibidascss = "web-design/publicaciones/solEnviadasRecibidas.css";
 
 }
