@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.Utilitario;
 import modelo.Solicitud;
 import modelo.SolicitudDeReserva;
 
@@ -189,6 +190,10 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		o.setMotivoDecisionPropietario(rs.getString(cCampo.motivoDecisionPropietario));
 		o.setIdEstadoSolicitud(rs.getInt(cCampo.idEstadoSolicitud));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+		//
+		// int cantDias = Utilitario.getCantOfDays(o.getFechaReservaInicio(),
+		// o.getFechaReservaFin());
+		// o.setCantDiasReserva(cantDias);
 		return o;
 	}
 

@@ -17,6 +17,8 @@ public class SolicitudDeReserva {
 	private int idEstadoSolicitud;
 	private boolean habilitado;
 
+	private int cantDiasReserva;
+
 	public int getIdSolicitud() {
 		return idSolicitud;
 	}
@@ -119,6 +121,14 @@ public class SolicitudDeReserva {
 
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
+	}
+
+	public int getCantDiasReserva() {
+		return cantDiasReserva;
+	}
+
+	public void setCantDiasReserva(int cantDiasReserva) {
+		this.cantDiasReserva = cantDiasReserva;
 	}
 
 }

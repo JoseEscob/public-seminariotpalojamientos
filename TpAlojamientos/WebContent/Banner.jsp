@@ -81,6 +81,12 @@
 					class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
 				<ul class="dropdown-menu">
 
+					<li><c:url value="SolDeReservaServlet?" var="urlSolDeReserva">
+							<c:param name="accionGET" value="verSolEnviadasRecibidas" />
+						</c:url> <a href="${urlSolDeReserva}"> <span
+							class="glyphicon glyphicon-send"></span>Solicitudes de Reserva
+					</a></li>
+
 					<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
 
 					<li><a

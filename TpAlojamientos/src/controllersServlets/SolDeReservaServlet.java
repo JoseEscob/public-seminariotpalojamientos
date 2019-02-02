@@ -40,8 +40,23 @@ public class SolDeReservaServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		// response.getWriter().append("Served at: ").append(request.getContextPath());
+
+		try {
+			String accionGET = request.getParameter(Constantes.accionGET);
+			if (accionGET == null) {
+				throw new ServidorException(
+						String.format("NULL Param: %s en SolDeReservaServlet", Constantes.accionGET));
+			}
+			LOG.info(String.format("%s GET: %s", Constantes.logJSPAccion, accionGET));
+			switch (accionGET) {
+			case "verSolEnviadasRecibidas":
+				verSolEnviadasRecibidas(request, response);
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -100,7 +115,7 @@ public class SolDeReservaServlet extends HttpServlet {
 		} finally {
 			// 4- Informar estado/resultados en interfaz (JSP)
 			request.setAttribute("message", message);
-			paginaJsp = "/PublicacionesFavoritos.jsp";
+			paginaJsp = "/solEnviadasRecibidas.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
