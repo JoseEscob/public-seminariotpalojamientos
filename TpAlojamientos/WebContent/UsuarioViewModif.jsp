@@ -133,7 +133,7 @@
 
 				<div id="fotoPerfil" class="form-group" align="center">
 					<c:if test="${not empty objUsuario.rutaFotoPerfil}">
-						<img class="img-rounded" alt=" " width="250" height="250"
+						<img class="img-rounded" id="fotoUsuario"alt=" " width="250" height="250"
 							src="${objUsuario.rutaFotoPerfil}" />
 					</c:if>
 
@@ -167,10 +167,11 @@
 	<script type="text/javascript">
 		$(function(){
 			$("#cambio").change(function(){
-				$("#formPhotoUpdate").submit();
+				$.post("UploadFilesServlet", {},function(result){});
+				//$("#formPhotoUpdate").submit();
 			});
 		});
-	
+		
 	</script>
 </body>
 </html>
