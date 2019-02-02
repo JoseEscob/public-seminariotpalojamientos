@@ -93,6 +93,18 @@ public class Utilitario {
 	}
 
 	/// *********************** FECHAS ******************************///
+	public static int getCantOfDays(Date fechaInicio, Date fechaFin) {
+		try {
+			long diff = fechaFin.getTime() - fechaInicio.getTime();
+			return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+			// long diffDays = diff / (24 * 60 * 60 * 1000) + 1;
+			// (int) diffDays......float days = (diff / (1000*60*60*24));
+
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+
 	public static java.sql.Date textoAFechaSQL(String textoFecha) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormat.forPattern(Constantes.DDMMYYYY);

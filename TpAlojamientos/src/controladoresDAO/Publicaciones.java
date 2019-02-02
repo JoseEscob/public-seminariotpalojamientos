@@ -311,6 +311,15 @@ public class Publicaciones implements Connectable<Publicacion> {
 		return obj;
 	}
 
+	public ArrayList<Publicacion> getAllByIdUsuario(int idUsuario) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		getAll().forEach(item -> {
+			if (item.getIdUsuario() == idUsuario)
+				listaFiltrada.add(item);
+		});
+		return listaFiltrada;
+	}
+
 	/// ********************* LAMBDA - Filtros de datos ******** ///
 	// Lambda - Publicaciones - Filtros
 	public ArrayList<Publicacion> filtroGetAllByTipoAlojamiento(int idTipoAlojamiento) {

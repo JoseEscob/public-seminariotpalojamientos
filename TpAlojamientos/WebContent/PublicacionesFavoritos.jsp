@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Mis Favoritos</title>
-<link href="<%=ConstantesJSP.jspPub_PublicacionesListadocss%>"
+<link href="<%=ConstantesJSP.jspPub_PublicacionesListaGrillacss%>"
 	rel="stylesheet">
 
 <script type="text/javascript">

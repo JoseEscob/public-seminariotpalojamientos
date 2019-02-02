@@ -102,6 +102,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerComentarios":
 				verComentariosPublicacion(request, response);
 				break;
+			case "verMisPublicaciones":
+				verMisPublicaciones(request, response);
+				break;
 			case "verMisFavoritosPublicaciones":
 				verMisFavoritosPublicaciones(request, response);
 				break;
@@ -198,6 +201,33 @@ public class PublicacionServlet extends HttpServlet {
 			paginaJsp = "/PublicacionAlta.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
+		}
+	}
+
+	private void verMisPublicaciones(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+
+		try {
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se inició la sesión del usuario");
+			}
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+
+			// obtener listado de publicaciones
+			ArrayList<Publicacion> listaPublicaciones = new ArrayList<Publicacion>();
+			listaPublicaciones = publicacionDAO.getAllByIdUsuario(objUsuarioLogueado.getIdUsuario());
+
+			request.setAttribute("listaPublicaciones", listaPublicaciones);
+			message = String.format("Se cargó la lista de Publicaciones del usuario %s, %s con éxito",
+					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 4- Informar estado/resultados en interfaz (JSP)
+			request.setAttribute("message", message);
+			paginaJsp = "/PublicacionesDelUsuario.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 
@@ -642,29 +672,29 @@ public class PublicacionServlet extends HttpServlet {
 		objPublicacion.setHabilitado(true);
 		return objPublicacion;
 	}
-	
-	private void verPerfilUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		
-		//En construccion
+
+	private void verPerfilUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		// En construccion
 		String idUSuarioString = request.getParameter("idUsuario");
-		if(idUSuarioString != null) {
+		if (idUSuarioString != null) {
 			int idUsuario = Integer.parseInt(idUSuarioString);
 			request.setAttribute("idUsuario", idUsuario);
 			Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuario);
-			if(objUsuario!= null) {
+			if (objUsuario != null) {
 				ArrayList<Publicacion> listPublicaciones = publicacionDAO.getAll();
 				ArrayList<Comentario> listComentarios = new ArrayList<Comentario>();
-				for(Publicacion publicacion : listPublicaciones) {
-					if(publicacion.getIdUsuario() == objUsuario.getIdUsuario()) {
-						comentarioDAO.getAllByIdPublicacion(publicacion.getIdPublicacion()).forEach(item ->{
-							if(item.getPuntaje() >= 4) 
+				for (Publicacion publicacion : listPublicaciones) {
+					if (publicacion.getIdUsuario() == objUsuario.getIdUsuario()) {
+						comentarioDAO.getAllByIdPublicacion(publicacion.getIdPublicacion()).forEach(item -> {
+							if (item.getPuntaje() >= 4)
 								listComentarios.add(item);
-						
+
 						});
 					}
 				}
 			}
-			
+
 		}
 		paginaJsp = "/PerfilView.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
