@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Perfil del Usuario</title>
+<title>Perfil público del Usuario</title>
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>
@@ -49,16 +49,6 @@
 
 
 					<div class="form-group">
-						<div class="pull-left col-xs-9">
-							<label class="control-label col-xs-5">Usuario desde: </label>
-							<div class="col-xs-7">
-								<label class="control-label"> <c:out
-										value="${objUsuario.fechaAlta}"></c:out>
-								</label>
-							</div>
-						</div>
-
-
 						<div class="pull-right col-xs-3">
 							<label class="control-label"> <span
 								class="glyphicon glyphicon-stats"></span> Puntaje:

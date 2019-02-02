@@ -32,6 +32,15 @@
 <!-- Main CSS-->
 <link href="<%=ConstantesJSP.jspLogin_main_css%>" rel="stylesheet"
 	media="all">
+
+<script type="text/javascript">
+	document.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode === 13) {
+			document.getElementById("btnIniciarSesion").click();
+		}
+	});
+</script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Iniciar Sesión</title>
 </head>
@@ -69,7 +78,7 @@
 							</div>
 							<div class="col-2">
 								<div class="input-group">
-									<label class="label" style="color:red;">${message}</label>
+									<label class="label" style="color: red;">${message}</label>
 								</div>
 							</div>
 						</div>
@@ -78,7 +87,8 @@
 							value="login"></input>
 						<div class="p-t-15">
 							<input class="btn btn--radius-2 btn--blue" type="submit"
-								name="btnLogin" value="Iniciar Sesión" onKeyPress="return checkSubmit(event)"></input>
+								id="btnIniciarSesion" name="btnLogin" value="Iniciar Sesión"
+								onKeyPress="return checkSubmit(event)"></input>
 						</div>
 					</form>
 				</div>

@@ -200,10 +200,21 @@
 						class="media-object img-circle" style="height: 50px; width: 50px;">
 				</div>
 				<div class="row">
-					<div class="col-md-12">${vistaPublicacion.usuario.nombre}&nbsp;${vistaPublicacion.usuario.apellido}</div>
+					<div class="col-md-12">
+						<b>${vistaPublicacion.usuario.nombre}&nbsp;${vistaPublicacion.usuario.apellido}</b>
+					</div>
+
+					<div class="col-md-12">
+						<label class="control-label" style="color: ROYALBLUE;"
+							data-toggle="tooltip"
+							title="La cuenta del usuario fue verificada por un administrador">
+							<span class="glyphicon glyphicon-ok-circle"></span> Usuario
+							Verificado
+						</label>
+					</div>
+
 					<div class="col-md-12">${vistaPublicacion.usuario.puntaje}&nbsp;/5
 						Puntos</div>
-
 				</div>
 				<div class="row col-md-12">
 					<a class="btn btn-info"
