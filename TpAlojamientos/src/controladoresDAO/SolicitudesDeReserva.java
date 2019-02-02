@@ -26,11 +26,13 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		private static final long serialVersionUID = 8651650972239809763L;
 
 		{
-			put("all", "select * from comprobantes");
-			put("insert", String.format("insert into comprobantes set %s , idComprobante=?", camposInsertIntoDB));
-			put("count", "select count(*) as cantidad from comprobantes");
-			put("update", String.format("update comprobantes set %s where idComprobante=?", camposInsertIntoDB));
-			put("get", "select * from comprobantes where idComprobante=?");
+			put("all", "select * from solicitudesDeReservas");
+			put("insert",
+					String.format("insert into solicitudesDeReservas set %s , idComprobante=?", camposInsertIntoDB));
+			put("count", "select count(*) as cantidad from solicitudesDeReservas");
+			put("update",
+					String.format("update solicitudesDeReservas set %s where idComprobante=?", camposInsertIntoDB));
+			put("get", "select * from solicitudesDeReservas where idComprobante=?");
 			put("like", "");
 
 		}
@@ -190,10 +192,9 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		o.setMotivoDecisionPropietario(rs.getString(cCampo.motivoDecisionPropietario));
 		o.setIdEstadoSolicitud(rs.getInt(cCampo.idEstadoSolicitud));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
-		//
-		// int cantDias = Utilitario.getCantOfDays(o.getFechaReservaInicio(),
-		// o.getFechaReservaFin());
-		// o.setCantDiasReserva(cantDias);
+
+		int cantDias = Utilitario.getCantOfDays(o.getFechaReservaInicio(), o.getFechaReservaFin());
+		o.setCantDiasReserva(cantDias);
 		return o;
 	}
 

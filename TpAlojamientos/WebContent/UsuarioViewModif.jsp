@@ -26,8 +26,8 @@
 
 					<div class="form-group ">
 						<div class="col-xs-8">
-							<label class="control-label col-xs-7">Fecha ï¿½ltima
-								Conexiï¿½n: </label>
+							<label class="control-label col-xs-7">Fecha última
+								Conexión: </label>
 							<div class="col-xs-5">
 								<label class="control-label"> <c:out
 										value="${objUsuario.anteriorFechaUltConexion}"></c:out>
@@ -36,8 +36,10 @@
 						</div>
 						<c:if test="${objUsuario.isVerificado() eq true}">
 							<div class="col-xs-4">
-								<label class="control-label pull-right "> <span
-									class="glyphicon glyphicon-ok-circle"></span> Usuario
+								<label class="control-label pull-right"
+									style="color: ROYALBLUE;" data-toggle="tooltip"
+									title="Tu cuenta fue verificada por un administrador">
+									<span class="glyphicon glyphicon-ok-circle"></span> Usuario
 									Verificado
 								</label>
 							</div>
@@ -74,15 +76,6 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-xs-3">Fecha de Nacimiento:
-						</label>
-						<div class="col-xs-9">
-							<input type="date" name="fechaNac" class="form-control"
-								value="${objUsuario.fechaNac}" pattern="^\d{2}-\d{2}-\d{4}$"
-								maxlength="10" placeholder="dd-MM-yyyy" required>
-						</div>
-					</div>
-					<div class="form-group">
 						<label class="control-label col-sm-3">DNI: </label>
 						<div class="col-sm-9">
 							<input type="text" name="dni" class="form-control"
@@ -91,10 +84,28 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="control-label col-xs-3">Fecha de Nacimiento:
+						</label>
+						<div class="col-xs-9">
+							<input type="date" name="fechaNac" class="form-control"
+								value="${objUsuario.fechaNac}" pattern="^\d{2}-\d{2}-\d{4}$"
+								maxlength="10" placeholder="dd-MM-yyyy" required>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="control-label col-sm-3">Mail: </label>
 						<div class="col-sm-9">
 							<input type="email" name="mail" class="form-control"
 								onpaste="return false" value="${objUsuario.mail}" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3">Nro Teléfono: </label>
+						<div class="col-sm-9">
+							<input type="text" name="nroTelefono" class="form-control"
+								onkeypress="return soloNros(event)" onpaste="return false"
+								value="${objUsuario.nroTelefono}">
 						</div>
 					</div>
 					<div class="form-group">
@@ -122,6 +133,12 @@
 						<div class="col-sm-10" align="right">
 							<button class="btn btn-info">Modificar Datos</button>
 						</div>
+
+						<div class="col-sm-10" align="right">
+							<a class="btn btn-default" data-toggle="modal" data-target="#">
+								<span class="glyphicon glyphicon-cog"></span> Cambiar contraseña
+							</a>
+						</div>
 					</div>
 
 				</form>
@@ -129,7 +146,7 @@
 
 			<div class="col-md-6">
 				<h3>Foto del Usuario</h3>
-				<hr/>
+				<hr />
 
 				<div id="fotoPerfil" class="form-group" align="center">
 					<c:if test="${not empty objUsuario.rutaFotoPerfil}">
@@ -149,28 +166,30 @@
 				<div class="row" align="center">
 					<label for="cambio" class="btn btn-info">Cambiar imagen</label>
 				</div>
-				
+
 				<div class="form-group">
 					<div class="col-sm-12" align="right">
-						<form action="UploadFilesServlet" id="formPhotoUpdate"method="post" enctype="multipart/form-data">		
-							<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
-							<input type="hidden" name="accionPOST" value="cambiarImagenUsuario"/>			
+						<form action="UploadFilesServlet" id="formPhotoUpdate"
+							method="post" enctype="multipart/form-data">
+							<input type="file" id="cambio" name="archivo"
+								accept="image/jpeg,image/gif,image/png"
+								style="visibility: hidden;" /> <input type="hidden"
+								name="accionPOST" value="cambiarImagenUsuario" />
 						</form>
 					</div>
 				</div>
-			
+
 			</div>
 		</div>
 
 		<div class="row"></div>
 	</div>
 	<script type="text/javascript">
-		$(function(){
-			$("#cambio").change(function(){
+		$(function() {
+			$("#cambio").change(function() {
 				$("#formPhotoUpdate").submit();
 			});
 		});
-	
 	</script>
 </body>
 </html>

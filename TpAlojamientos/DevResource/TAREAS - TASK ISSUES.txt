@@ -1,12 +1,3 @@
-///////
-elementos para agregar ajax:
--Boton de favoritos.
--Cambio de imagen de perfil del usuario.
-///////
-
-
-
-
 ******* ELEMENTOS A CORREGIR *******
 Solicitudes
 	Terminar la pagina de vista .jsp
@@ -14,17 +5,56 @@ Solicitudes
 Dates
 	ADMIN- Corregir lista nuevos usuarios
 
-
-
 MANEJO DE ARCHIVOS
 Publicaciones
 	Corregir imagenes - Leer por carpeta
 
 Usuario y Publicaciones
 	Subida y copia de imagenes en el proyecto
+	
+SERVICIOS - AltaPublicaciones
+	Verificar porqué guarda un solo servicio	
+
+
+******* A PREPARAR  - PRIORITARIOS *******
+
+SOLICITUDES DE RESERVA
+	- Crear el listado
+	- Crear el alta
+	- Realizar el manejo de notificaciones
+
+MANEJO DE NOTIFICACIONES 
+	A partir de las fecha de UltConexion del usuario y la fecha de UltModificacion/Alta del Perfiles o publicaciones, 
+ 	mostrarlas en un listado aparte para obtener:
+ 	- Los nuevos registros
+ 	- La cantidad de registros: list.size()
+ 
+
+
+
+HERRAMIENTAS EXTERNAS
+	///////
+	elementos para agregar ajax:
+		-Boton de favoritos.
+		-Cambio de imagen de perfil del usuario.
+	///////
+	Agregar Javascript
+		AltaPublicacion (ahora solo están en el servlet)
+		- Si se elige Depto
+		- Si se elige Expensas
+		solReservaAlta.jsp
+		- Fecha minima reserva: la actual
+		- Fecha máxima: según seleccionada en máxima
+		TEXTAREAS
+		- Agregar un span/ Texto que diga cuántos caracteres le quedan al usuario
+	///////
 
 	
 ******* ELEMENTOS DE BAJA PRIORIDAD *******
+listado de publicaciones
+	Se debería arreglar el listado de Grilla/Lista de favoritos para después agregarlo al de MisPublicaciones 
+	- Como ejemplo Revisar _PublicacionesSolicitadas.html
+
 Codigo paquete DAO
 	Se puede modificar los DAO para que los inserts sean sets como los updates
 	Crear una clase con la que se pueda implementar las fuciones readPs y writePs para todas las clases del paquete.
@@ -32,7 +62,9 @@ Codigo paquete DAO
 Favoritos
 	Se debe utilizar POST en vez de GET parameter() usar getAttibute()
 
-
+USUARIO NO LOGUEADO
+	- Limitar funcionalidades
+	- Modificar el viewPublicacion.jsp para que no aparezcan los botones de reserva/ Favoritos
 	
 ******* ELEMENTOS FINALIZADOS *******
 Paginación

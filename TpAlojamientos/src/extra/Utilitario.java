@@ -95,7 +95,7 @@ public class Utilitario {
 	/// *********************** FECHAS ******************************///
 	public static int getCantOfDays(Date fechaInicio, Date fechaFin) {
 		try {
-			long diff = fechaInicio.getTime() - fechaFin.getTime();
+			long diff = fechaFin.getTime() - fechaInicio.getTime();
 			return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 			// long diffDays = diff / (24 * 60 * 60 * 1000) + 1;
 			// (int) diffDays......float days = (diff / (1000*60*60*24));
