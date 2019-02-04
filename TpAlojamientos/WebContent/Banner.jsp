@@ -36,9 +36,9 @@
 		</a> </nav>-->
 		<div class="navbar-header">
 			<a class="navbar-brand" href="Inicio.jsp"
-				style="color: MEDIUMTURQUOISE;"> <img
-				src="imagenes/icon-home.jpg" width="30" height="30"
-				class="d-inline-block align-top" alt="Home">OwnerRental
+				style="color: MEDIUMTURQUOISE;"> <span><img
+					src="imagenes/icon-home.jpg" width="30" height="30"
+					class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
 			</a>
 		</div>
 		<!--
@@ -68,7 +68,8 @@
 					</a></li>
 					<li><a
 						href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
-							class="glyphicon glyphicon-star" /></span>&nbsp;Favoritas</a></li>
+							class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
+							Favoritas </a></li>
 					<li><a href="#"></a></li>
 					<li class="divider"></li>
 
@@ -136,10 +137,12 @@
 								<!-- 										name="btnNuevoUsuario" value="Mi Perfil"></input> -->
 								<!-- 								</form> </a></li> -->
 
-								<li><a href="#"><span class="glyphicon glyphicon-globe" /></span>
-										Ver mi Perfil Público</a></li>
+								<li><a
+									href="PublicacionServlet?accionGET=verPerfilPublicoUsuarioLogueado"><span
+										class="glyphicon glyphicon-globe" /></span> Ver mi Perfil Público</a></li>
 								<li><a href="UsuarioServlet?accionGET=MiPerfil"><span
 										class="glyphicon glyphicon-cog" /></span> Editar mi Perfil</a></li>
+								<li class="divider"></li>
 								<li><a href="UsuarioServlet?accionGET=Logout"><span
 										class="glyphicon glyphicon-off" /></span>&nbsp;Salir</a></li>
 							</ul></li>

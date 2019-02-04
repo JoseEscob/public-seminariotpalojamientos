@@ -104,11 +104,30 @@
 								<c:when test="${objUsuario.verificado}">SI</c:when>
 								<c:otherwise>NO</c:otherwise>
 							</c:choose></td>
-						<td><a href="#" class="btn btn-primary"> <span
-								class="glyphicon glyphicon-edit"></span>
-						</a> <a href="#" class="btn btn-danger"> <span
-								class="glyphicon glyphicon-remove"></span>
-						</a></td>
+						<td>
+							<div>
+								<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
+									<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
+									<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
+								</c:url>
+
+								<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
+									data-toggle="tooltip" title="Ver Perfil"> <span
+									class="glyphicon glyphicon-eye-open"></span>
+								</a>
+							</div>
+							<div>
+								<a href="#" class="btn btn-primary"> <span
+									class="glyphicon glyphicon-edit"></span>
+								</a>
+							</div>
+
+							<div>
+								<a href="#" class="btn btn-danger"> <span
+									class="glyphicon glyphicon-remove"></span>
+								</a>
+							</div>
+						</td>
 					</tr>
 				</c:forEach>
 				<c:forEach items="${listaUsuarios}" var="objUsuario">
@@ -142,11 +161,30 @@
 								<c:when test="${objUsuario.verificado}">SI</c:when>
 								<c:otherwise>NO</c:otherwise>
 							</c:choose></td>
-						<td><a href="#" class="btn btn-primary"> <span
-								class="glyphicon glyphicon-edit"></span>
-						</a> <a href="#" class="btn btn-danger"> <span
-								class="glyphicon glyphicon-remove"></span>
-						</a></td>
+						<td>
+							<div>
+								<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
+									<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
+									<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
+								</c:url>
+
+								<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
+									data-toggle="tooltip" title="Ver Perfil"> <span
+									class="glyphicon glyphicon-eye-open"></span>
+								</a>
+							</div>
+							<div>
+								<a href="#" class="btn btn-primary"> <span
+									class="glyphicon glyphicon-edit"></span>
+								</a>
+							</div>
+
+							<div>
+								<a href="#" class="btn btn-danger"> <span
+									class="glyphicon glyphicon-remove"></span>
+								</a>
+							</div>
+						</td>
 					</tr>
 				</c:forEach>
 
