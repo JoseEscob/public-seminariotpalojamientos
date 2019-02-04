@@ -51,17 +51,16 @@
 
 					</h2>
 				</div>
-				<div class="row col-md-12">
-					<h4>
-						<label class="control-label"> <span
-							class="glyphicon glyphicon-stats" /></span> Puntuación Gral.
-							${objUsuario.puntaje}&nbsp;/5
-						</label>
-					</h4>
-					<div class="form-group"></div>
-				</div>
+				<div class="row col-md-12"></div>
 				<div class="row col-md-12">
 					<div class="col-md-12 col-md-7">
+						<h4>
+							<label class="control-label"> <span
+								class="glyphicon glyphicon-stats" /></span> Puntuación Gral.
+								${objUsuario.puntaje}&nbsp;/5
+							</label>
+						</h4>
+						<div class="form-group"></div>
 						<div class="row col-md-12">
 							<label class="control-label">Contacto</label>
 						</div>

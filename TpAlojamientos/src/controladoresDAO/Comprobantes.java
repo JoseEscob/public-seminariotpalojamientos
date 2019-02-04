@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exceptions.ValidacionException;
 import extra.Conexion;
+import extra.LOG;
 import modelo.Comprobante;
-import modelo.Solicitud;
 
 public class Comprobantes implements Connectable<Comprobante> {
+	private final SolicitudesDeReserva solDeReservaDAO = new SolicitudesDeReserva();
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private final static String camposInsertIntoDB = "idSolicitud=?, idUsuarioHuesped=?, idPublicacion=?"
 			+ ", fechaReservaInicio=?, fechaReservaFin=?, cantPersonas=?, precioFinal=?, fechaAlta=?"
@@ -108,57 +110,74 @@ public class Comprobantes implements Connectable<Comprobante> {
 
 	@Override
 	public boolean insert(Comprobante obj) {
-		if (obj == null) {
-			return false;
-		}
+		LOG.info("Comienza proceso: INSERT Comprobante");
+		String message = null;
 		cn = new Conexion();
 		boolean correcto = false;
-		;
 		try {
+			if (obj == null) {
+				throw new ValidacionException("INSERT Comprobante: el objeto es nulo");
+			}
 
-			Solicitudes solicitudes = new Solicitudes();
-			Solicitud solicitud = new Solicitud();
-			solicitud.setIdSolicitud(obj.getIdSolicitud());
-			if (solicitudes.get(solicitud) == null)
-				return false;
+			if (solDeReservaDAO.getObjectById(obj.getIdSolicitud()) == null) {
+				throw new ValidacionException(
+						"SQL: No existe registro en la tabla 'solicitudesDeReservas' con idSolicitud: "
+								+ obj.getIdSolicitud());
+			}
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_Comprobante(obj, ps);
+			LOG.info("INSERT Comprobante: " + ps.toString());
 			ps.executeUpdate();
 			correcto = true;
+			message = "INSERT Comprobante: Se ejecutó correctamente";
 		} catch (Exception e) {
-			e.printStackTrace();
+			correcto = false;
+			message = e.getMessage();
 		} finally {
+			LOG.info("INSERT Comprobante - Mensaje: " + message);
 			cn.close();
 		}
+		LOG.info("Finaliza proceso: INSERT Comprobante");
 		return correcto;
 	}
 
 	@Override
 	public boolean update(Comprobante obj) {
-		if (obj == null) {
-			return false;
-		}
+		LOG.info("Comienza proceso: UPDATE Comprobante");
+		String message = null;
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
+			if (obj == null) {
+				throw new ValidacionException("UPDATE Comprobante: el objeto es nulo");
+			}
 
-			Solicitudes solicitudes = new Solicitudes();
-			Solicitud solicitud = new Solicitud();
-			solicitud.setIdSolicitud(obj.getIdSolicitud());
-			if (solicitudes.get(solicitud) == null)
-				return false;
+			if (solDeReservaDAO.getObjectById(obj.getIdSolicitud()) == null) {
+				throw new ValidacionException(
+						"SQL: No existe registro en la tabla 'solicitudesDeReservas' con idSolicitud: "
+								+ obj.getIdSolicitud());
+			}
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps = writePs_Comprobante(obj, ps);
-			if (ps.executeUpdate() != 0)
+			LOG.info("UPDATE Comprobante: " + ps.toString());
+			if (ps.executeUpdate() != 0) {
 				correcto = true;
+				message = "UPDATE Comprobante: Se ejecutó correctamente";
+			} else {
+				correcto = true;
+				message = "UPDATE Comprobante: Ocurrió un error";
+			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			correcto = false;
+			message = e.getMessage();
 		} finally {
+			LOG.info("UPDATE Comprobante - Mensaje: " + message);
 			cn.close();
 		}
+		LOG.info("Finaliza proceso: UPDATE Comprobante");
 		return correcto;
 	}
 
@@ -224,5 +243,9 @@ public class Comprobantes implements Connectable<Comprobante> {
 		});
 
 		return listaFiltrada;
+	}
+
+	public void getMaxFechaReservaPublicacion(int idPublicacion) {
+		// TODO Está reservada al día de hoy. Min Fecha - Max Fecha
 	}
 }

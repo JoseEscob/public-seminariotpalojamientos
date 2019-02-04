@@ -1,0 +1,25 @@
+******* A TESTEAR *******
+SOLICITUDES DE RESERVA
+	- Si la cant de personas puede variar que el limite se amplié 
+
+RESERVAS
+	- Un propietario no puede reservar su propio alojamiento
+	
+	HUESPED - Mientras exista reserva
+	- Un usuario no podría reservar una publicación que se encuentra reservada?
+	- No puede programar una reserva que esté dentro de las fechas de otra ya reservada. 
+
+	LISTADOS PUBLICACIONES
+	- Mostrar aviso de que una publicacion esta reservada
+	- Mostrar fechas en las que se encuentra reservada
+	- Se puede utilizar max y min de comprobantes. Pero si hay fechas disponibles de por medio hay que informarlas
+
+IMAGENES
+	- Verificar que al subir imagenes se creen/ sean sobreescritas las existentes (con el mismo nombre)
+
+ADMIN
+	- Informar publicaciones/ usuarios nuevos-modificados
+	- Si se aprueba debe aparecer verificado activado
+	- si se rechaza debe aparecer habilitado desactivado, hasta que sea corregido por el usuario
+
+******* TESTEADOS CON ÉXITO *******

@@ -182,6 +182,16 @@
 					<br>
 				</div>
 				<div class="row col-md-12" align="center">
+					<a class="btn btn-warning" data-toggle="modal"
+						data-target="#formAltaComentario"> <span
+						class="glyphicon glyphicon-envelope"></span> Hacer un comentario/
+						devolución
+					</a>
+				</div>
+				<div class="row col-md-12">
+					<br>
+				</div>
+				<div class="row col-md-12" align="center">
 					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button> href="#formSolReserva" -->
 
 					<a class="btn btn-success btn-lg" data-toggle="modal"
@@ -338,6 +348,27 @@
 					<div class="modal-body">
 						<div class="row">
 							<%@ include file="solReservaAlta.jsp"%>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar/
+							Volver</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" title="FormularioAltaComentario (Modal)">
+			<div class="modal fade" id="formAltaComentario" role="dialog">
+				<!-- <div class="modal-dialog"></div> -->
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<%@ include file="PublicacionComentariosAlta.jsp"%>
 						</div>
 					</div>
 					<div class="modal-footer">

@@ -233,6 +233,19 @@ public class Comentarios implements Connectable<Comentario> {
 		return listaComentarios;
 	}
 
+	public float getPuntuacionPromedioByIdPublicacion(int idPublicacion) {
+		float puntuacionPromedio = 0;
+		double puntuacionTotal = 0d;
+		int cantComentarios = 0;
+		ArrayList<Comentario> listaComentarios = getAllByIdPublicacion(idPublicacion);
+		cantComentarios = listaComentarios.size();
+		if (cantComentarios != 0) {
+			puntuacionTotal = listaComentarios.stream().mapToDouble(item -> item.getPuntaje()).sum();
+			puntuacionPromedio = (float) puntuacionTotal / cantComentarios;
+		}
+		return puntuacionPromedio;
+	}
+
 	public ArrayList<Comentario> getAllByIdUsuario(int idUsuario) {
 		ArrayList<Comentario> listaComentarios = new ArrayList<Comentario>();
 		getAll().forEach(item -> {
@@ -241,4 +254,5 @@ public class Comentarios implements Connectable<Comentario> {
 		});
 		return listaComentarios;
 	}
+
 }

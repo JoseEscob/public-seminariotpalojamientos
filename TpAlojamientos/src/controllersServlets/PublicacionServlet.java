@@ -117,7 +117,12 @@ public class PublicacionServlet extends HttpServlet {
 			case "verPerfilPublicoOtroUsuario":
 				verPerfilPublicoOtroUsuario(request, response);
 				break;
+
+			case "admListaPublicaciones":
+				cargarAdmListaPublicaciones(request, response);
+				break;
 			}
+
 		} catch (ServidorException e) {
 			e.printStackTrace();
 		} catch (CargaViewException e) {
@@ -171,6 +176,27 @@ public class PublicacionServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void cargarAdmListaPublicaciones(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String message = null;
+
+		try {
+			ArrayList<Publicacion> listadoDePublicaciones = new ArrayList<Publicacion>();
+			listadoDePublicaciones = publicacionDAO.getAll();
+			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+			LOG.info(message);
+			paginaJsp = "/admListaPublicaciones.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
+
 	}
 
 	private void cargarComponentesAltaPublicacion(HttpServletRequest request, HttpServletResponse response)
