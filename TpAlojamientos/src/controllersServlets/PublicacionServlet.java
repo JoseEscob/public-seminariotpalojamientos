@@ -102,14 +102,20 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerComentarios":
 				verComentariosPublicacion(request, response);
 				break;
+			case "Buscar":
+				buscarPublicaciones(request, response);
+				break;
 			case "verMisPublicaciones":
 				verMisPublicaciones(request, response);
 				break;
 			case "verMisFavoritosPublicaciones":
 				verMisFavoritosPublicaciones(request, response);
 				break;
-			case "Buscar":
-				buscarPublicaciones(request, response);
+			case "verPerfilPublicoUsuarioLogueado":
+				verPerfilPublicoUsuarioLogueado(request, response);
+				break;
+			case "verPerfilPublicoOtroUsuario":
+				verPerfilPublicoOtroUsuario(request, response);
 				break;
 			}
 		} catch (ServidorException e) {
@@ -204,6 +210,71 @@ public class PublicacionServlet extends HttpServlet {
 		}
 	}
 
+	private void verPerfilPublicoUsuarioLogueado(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		try {
+			// 1- Recuperar valores del formulario JSP
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+			// 2- Validar información obtenida JSP
+			if (objUsuarioLogueado == null) {
+				message = "ERROR: No se pudo recuperar la variable Session: " + Constantes.sessionUser;
+				throw new ValidacionException(message);
+			}
+			// 3- Recuperar info de la DB
+			// obtener listado de publicaciones
+			ArrayList<Publicacion> listadoDePublicaciones = new ArrayList<Publicacion>();
+			listadoDePublicaciones = publicacionDAO.getAllByIdUsuario(objUsuarioLogueado.getIdUsuario());
+
+			message = String.format("Se cargó la lista de Publicaciones del usuario %s %s con éxito",
+					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
+			// // 4- Devolver información recuperada a la jsp
+			request.setAttribute("objUsuario", objUsuarioLogueado);
+			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+			LOG.info(message);
+			paginaJsp = "/UsuarioPerfilPublico.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
+	}
+
+	private void verPerfilPublicoOtroUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		try {
+			// 1- Recuperar y Validar información obtenida JSP
+			if (request.getParameter("idUsuario") == null) {
+				throw new ValidacionException("ERROR: No se pudo recuperar el id del Usuario");
+			}
+			int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+			// 2- Recuperar info de la DB
+			Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuario);
+			if (objUsuario == null) {
+				throw new ValidacionException("ERROR: No se encontraron registros del Usuario con id" + idUsuario);
+			}
+			// obtener listado de publicaciones
+			ArrayList<Publicacion> listadoDePublicaciones = publicacionDAO.getAllByIdUsuario(idUsuario);
+
+			message = String.format("Se cargó la lista de Publicaciones del usuario %s %s con éxito",
+					objUsuario.getNombre(), objUsuario.getApellido());
+			// // 4- Devolver información recuperada a la jsp
+			request.setAttribute("objUsuario", objUsuario);
+			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 5- Informar estado
+			request.setAttribute("message", message);
+			LOG.info(message);
+			paginaJsp = "/UsuarioPerfilPublico.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
+	}
+
 	private void verMisPublicaciones(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
@@ -215,12 +286,12 @@ public class PublicacionServlet extends HttpServlet {
 			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
 
 			// obtener listado de publicaciones
-			ArrayList<Publicacion> listaPublicaciones = new ArrayList<Publicacion>();
-			listaPublicaciones = publicacionDAO.getAllByIdUsuario(objUsuarioLogueado.getIdUsuario());
-
-			request.setAttribute("listaPublicaciones", listaPublicaciones);
-			message = String.format("Se cargó la lista de Publicaciones del usuario %s, %s con éxito",
+			ArrayList<Publicacion> listadoDePublicaciones = new ArrayList<Publicacion>();
+			listadoDePublicaciones = publicacionDAO.getAllByIdUsuario(objUsuarioLogueado.getIdUsuario());
+			message = String.format("Se cargó la lista de Publicaciones del usuario %s %s con éxito",
 					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
+
+			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
@@ -250,17 +321,17 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Favorito> listaFavoritos = new ArrayList<Favorito>();
 			listaFavoritos = favoritosDAO.getAllByIdUsuarioOnlyEnable(objUsuarioLogueado.getIdUsuario());
 			// obtener listado de publicaciones
-			ArrayList<Publicacion> listaPublicaciones = new ArrayList<Publicacion>();
+			ArrayList<Publicacion> listadoDePublicaciones = new ArrayList<Publicacion>();
 
 			listaFavoritos.forEach(item -> {
 				Publicacion objPublicacion = publicacionDAO.getObjectByID(item.getIdPublicacion());
 				if (objPublicacion != null)
-					listaPublicaciones.add(objPublicacion);
+					listadoDePublicaciones.add(objPublicacion);
 			});
-
-			request.setAttribute("listaPublicaciones", listaPublicaciones);
-			message = String.format("Se cargó la lista de favoritos del usuario %s, %s con éxito",
+			message = String.format("Se cargó la lista de favoritos del usuario %s %s con éxito",
 					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
+
+			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {

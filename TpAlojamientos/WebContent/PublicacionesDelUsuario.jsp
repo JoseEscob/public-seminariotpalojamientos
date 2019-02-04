@@ -19,45 +19,13 @@
 			<hr />
 		</div>
 		<c:choose>
-			<c:when test="${empty listaPublicaciones}">
+			<c:when test="${empty listadoDePublicaciones}">
 				<div class="alert alert-info">
 					<h4>No se encontraron publicaciones cargadas</h4>
 				</div>
 			</c:when>
 			<c:otherwise>
-				<div class="row list-group" id="products">
-					<c:forEach items="${listaPublicaciones}" var="objPublicacion">
-						<div class="item  col-xs-4 col-lg-4">
-							<div class="thumbnail">
-								<img class="group list-group-image"
-									src="imagenes/home-not-found.png" alt="" />
-								<!--  <img class="group list-group-image"
-							src="http://placehold.it/400x250/000/fff" alt="" />  {objPublicacion.imagenes[0].rutaImgPublicacion}-->
-								<div class="caption">
-									<h4 class="group inner list-group-item-heading">
-										${objPublicacion.nombre}</h4>
-									<p class="group inner list-group-item-text">${objPublicacion.descripcion}</p>
-									<div class="row">
-										<div class="col-xs-12 col-md-6">
-											<p class="lead">${objPublicacion.precioNoche}</p>
-										</div>
-
-										<c:url value="PublicacionServlet?"
-											var="urlPublicacionGuardada">
-											<c:param name="accionGET" value="VerPublicacion" />
-											<c:param name="idPublicacion"
-												value="${objPublicacion.idPublicacion}" />
-										</c:url>
-
-										<div class="col-xs-12 col-md-6">
-											<a class="btn btn-primary" href="${urlPublicacionGuardada}">Ingresar</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
+				<%@ include file="mostrarListadoDePublicaciones.jsp"%>
 			</c:otherwise>
 		</c:choose>
 	</div>

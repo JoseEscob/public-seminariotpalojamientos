@@ -72,22 +72,23 @@
 						<span class="glyphicon glyphicon-stats" /></span> Puntuación Gral.
 						${vistaPublicacion.publicacion.puntaje}&nbsp;/5
 					</h4>
-					<div class="col-md-6 col-md-12">
-						<label class="control-label"> ID Publicación:
-							${vistaPublicacion.publicacion.idPublicacion} </label>
+					<div class="row">
+						<div class="col-md-6 col-md-12">
+							<label class="control-label"> ID Publicación:
+								${vistaPublicacion.publicacion.idPublicacion} </label>
+						</div>
+						<div class="col-md-6 col-md-12">
+							<c:if
+								test="${vistaPublicacion.publicacion.isVerificado() eq true}">
+								<label class="control-label pull-right"
+									style="color: ROYALBLUE;" data-toggle="tooltip"
+									title="Esta Publicación fue verificada por un administrador">
+									<span class="glyphicon glyphicon-ok-sign"></span> Publicación
+									Verificada
+								</label>
+							</c:if>
+						</div>
 					</div>
-					<div class="col-md-6 col-md-12">
-						<c:if
-							test="${vistaPublicacion.publicacion.isVerificado() eq true}">
-							<label class="control-label pull-right" style="color: ROYALBLUE;"
-								data-toggle="tooltip"
-								title="Esta Publicación fue verificada por un administrador">
-								<span class="glyphicon glyphicon-ok-sign"></span> Publicación
-								Verificada
-							</label>
-						</c:if>
-					</div>
-
 
 					<div class="col-md-12 col-md-12">
 						<label class="control-label"> Fecha publicada:
@@ -95,17 +96,24 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-xs-4">Ubicado en: </label> <label
-						class="control-label col-xs-8">${vistaPublicacion.publicacion.calle}
-						al ${vistaPublicacion.publicacion.altura}</label> <label
-						class="control-label col-xs-4">Partido de: </label> <label
-						class="control-label col-xs-8">${vistaPublicacion.objLocalidad.nombrePartido}</label>
+					<div class="row">
+						<label class="control-label col-xs-4">Ubicado en: </label> <label
+							class="control-label col-xs-8">${vistaPublicacion.publicacion.calle}
+							al ${vistaPublicacion.publicacion.altura}</label>
+					</div>
+					<div class="row">
+						<label class="control-label col-xs-4">Partido de: </label> <label
+							class="control-label col-xs-8">${vistaPublicacion.objLocalidad.nombrePartido}</label>
+					</div>
+					<div class="row">
+						<label class="control-label col-xs-4">Localidad: </label> <label
+							class="control-label col-xs-8">${vistaPublicacion.objLocalidad.nombre}</label>
+					</div>
+					<div class="row">
+						<label class="control-label col-xs-4">Cód. Postal: </label> <label
+							class="control-label col-xs-8">${vistaPublicacion.objLocalidad.codPostal}</label>
+					</div>
 
-					<label class="control-label col-xs-4">Localidad: </label> <label
-						class="control-label col-xs-8">${vistaPublicacion.objLocalidad.nombre}</label>
-
-					<label class="control-label col-xs-4">Cód. Postal: </label> <label
-						class="control-label col-xs-8">${vistaPublicacion.objLocalidad.codPostal}</label>
 				</div>
 				<div class="row col-md-12">
 					<br>
@@ -200,17 +208,31 @@
 						class="media-object img-circle" style="height: 50px; width: 50px;">
 				</div>
 				<div class="row">
-					<div class="col-md-12">${vistaPublicacion.usuario.nombre}&nbsp;${vistaPublicacion.usuario.apellido}</div>
+					<div class="col-md-12">
+						<b>${vistaPublicacion.usuario.nombre}&nbsp;${vistaPublicacion.usuario.apellido}</b>
+					</div>
+					<c:if test="${vistaPublicacion.usuario.isVerificado() eq true}">
+						<div class="col-md-12">
+							<label class="control-label" style="color: ROYALBLUE;"
+								data-toggle="tooltip"
+								title="La cuenta del usuario fue verificada por un administrador">
+								<span class="glyphicon glyphicon-ok-circle"></span> Usuario
+								Verificado
+							</label>
+						</div>
+					</c:if>
 					<div class="col-md-12">${vistaPublicacion.usuario.puntaje}&nbsp;/5
 						Puntos</div>
-
 				</div>
 				<div class="row col-md-12">
-					<a class="btn btn-info"
-						href="PublicacionServlet?accionGET=VerPerfilUsuario&idUsuario=${vistaPublicacion.usuario.idUsuario }">Ver
+					<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
+						<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
+						<c:param name="idUsuario"
+							value="${vistaPublicacion.usuario.idUsuario }" />
+					</c:url>
+					<a class="btn btn-info" href="${urlPerfilPublicoUsuario}">Ver
 						perfil</a>
 				</div>
-
 			</div>
 		</div>
 
