@@ -18,49 +18,9 @@
 	<div class="container">
 		<h2>Test Page</h2>
 		<hr />
+		<button class="btn btn-info" id="add">Añadir</button>
 		
-		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">
-			<input type="file" name="archivo" accept="image/jpeg,image/gif,image/png" multiple/>
-			<input type="hidden" name="accionPOST" value="cargarImagenesPublicacion"/>
-			<input type="hidden" name="idPublicacion" value="1"/>
-				
-			<input type="submit"/>
-		</form> 
-		<div class="row">
-		<h2>${message}</h2>
-		</div>
-		
-		<c:if test="${not empty imagenes}">
-			<form action="TestServlet" method="post">		
-				<c:forEach items="${imagenes }" var="imagen">
-					<img alt="" src="${imagen.rutaImgPublicacion}"  width="200" height="200">
-					<label for="cambio_${imagen }" class="btn btn-info">Cambiar imagen</label>
-					<input type="file" id="cambio_${imagen }" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
-					
-				</c:forEach>
-			</form>
-		</c:if>
-		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">
-			<input type="file" name="archivo" accept="image/jpeg,image/gif,image/png"/>
-			<input type="hidden" name="accionPOST" value="cargarImagen"/>			
-			<input type="submit"/>
-		</form> 
-		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data">		
-				
-			<img alt="" src="${imagen}"  width="200" height="200">
-			<label for="cambio" class="btn btn-info">Cambiar imagen</label>
-			<input type="file" id="cambio" name="archivo" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;"/>
-			<input type="hidden" name="accionPOST" value="cambiarImagen"/>			
-			<input type="hidden" name="sessionUSer" value="3"/>
-			<input type="submit" value="actualizar"/>
-			
-		</form>
-		<div class="row" hidden name="alertms">
-			<div class="col-md-4">			
-				<div class="alert alert-danger">
-					Solo se pueden subir <strong>cuatro</strong> imagenes.
-				</div>
-			</div>
+		<div class="row" id="identificado">
 		</div>
 	</div>
 		
@@ -71,15 +31,22 @@
 	
 	$(function(){
 		
-		/*$("input[type = 'submit']").click(function(e){
-			var $file = $("input[name='archivo']");
-			if(parseInt($file.get(0).files.length) > 4){
-				$("div[name='alertms']").removeAttr("hidden");
-				e.preventDefault();
-			}else{
-				$("div[name='alertms']").attr("hidden");	
-			}
-		});*/
+		$("#add").click(function(){
+			var div = document.createElement("div");
+			div.setAttribute("class", "col-md-3");
+			var img = document.createElement("img");
+			img.setAttribute("alt","alterna");
+			div.appendChild(img);
+			var form = document.createElement("form");
+			form.setAttribute("action", "action");
+			form.setAttribute("method", "method");
+			var submit = document.createElement("input");
+			submit.setAttribute("type","submit");
+			submit.setAttribute("value","quitar");
+			form.appendChild(submit);
+			div.appendChild(form);
+			$("#identificado").append(div);
+		});
 		
 	});
 </script>

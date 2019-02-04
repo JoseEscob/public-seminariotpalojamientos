@@ -25,5 +25,6 @@ public class Constantes {
 	public final static String RUTAFolderFotoUser = "imagenes/usuarios/Usuario_";
 	public final static String RUTAsrcResourcesFotos= "src/resources/imagenes/publicaciones/Publicacion_";
 	public final static String WebContent = ".\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\";
+	public final static String RUTATemporal = "tmp";
 
 }

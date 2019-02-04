@@ -3,7 +3,9 @@ package controllersServlets;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -15,13 +17,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FilenameUtils;
 
+import com.google.gson.Gson;
+
 import extra.Constantes;
 import extra.FileHandler;
 import extra.ORSesion;
 import controladoresDAO.Usuarios;
 import controladoresDAO.Imagenes;
+import controladoresDAO.Publicaciones;
 import modelo.Usuario;
 import modelo.Imagen;
+import modelo.Publicacion;
 
 /**
  * Servlet implementation class UploadFilesServlet
@@ -30,12 +36,11 @@ import modelo.Imagen;
 @MultipartConfig
 public class UploadFilesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private FileHandler fileHandler;
 	private String paginaJsp = "";
 	private Usuarios usuarioDao = new Usuarios();
 	private Imagenes imagenDao = new Imagenes();
-	private List<FileItem> params = null;
-	private List<FileItem> files = null;
-	private FileHandler fileHandler;
+	private Publicaciones publicacionDao = new Publicaciones();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -61,13 +66,10 @@ public class UploadFilesServlet extends HttpServlet {
 		try {
 			
 			//Se inicializan los componentes primarios
-			Initialize(request);
+			fileHandler = new FileHandler(request);
 
-			switch(getParameter(Constantes.accionPOST)) {
+			switch(fileHandler.getParameter(Constantes.accionPOST)) {
 
-				case "cargarImagenesPublicacion":
-					cargarImagenesPublicacion(request, response);
-					break;
 				case "cambiarImagenUsuario":
 					cambiarImagenUsuario(request, response);
 					break;
@@ -76,6 +78,15 @@ public class UploadFilesServlet extends HttpServlet {
 					break;
 				case "cargarImagen":
 					cargarImagen(request, response);
+					break;
+				case "retornaImagenes":
+					retornaImagenes(request, response);
+					break;
+				case "saveTempFiles":
+					saveTempFiles(request, response);
+					break;
+				case "deleteImageTmp":
+					deleteImageTmp(request, response);
 					break;
 				default: break;
 			}
@@ -90,60 +101,23 @@ public class UploadFilesServlet extends HttpServlet {
 	}
 
 	private String getPathFotoUsuario(FileItem item, int idUsuario) {
-		this.makeDir(getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario);
+		FileHandler.MakeDir(getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario);
 		return getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser + idUsuario + File.separator + "fotoUsuario_"+idUsuario + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
 
 	}
 	private String getPathFotosPublicaciones(FileItem item, int idPublicacion, int count) {
-		this.makeDir(getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion);
+		FileHandler.MakeDir(getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion);
 		return getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion + File.separator + count + "." + FilenameUtils.getExtension(new File(item.getName()).getName());
 	}
 	
-	
-	private String getParameter(String paramName) {
 
-		String ret = null;
-		for(FileItem item : this.params) {
-
-			if(item.getFieldName().compareTo(paramName) == 0) {
-				ret = item.getString();
-				break;
-			}
-		}
-
-
-		return ret;
-	}
-	private void makeDir(String pathNameDir) {
-		
-		File uploadDir = new File(pathNameDir);
-		if(!uploadDir.exists()) {
-			uploadDir.mkdir();
-		}
-		
-	}
-	
-	private void Initialize(HttpServletRequest request) throws Exception {
-
-		this.fileHandler = new FileHandler(request);
-		this.params = new ArrayList<FileItem>();
-		this.files = new ArrayList<FileItem>();
-		
-		for(FileItem item : this.fileHandler.getFormItems()) {
-
-			if(item.isFormField())
-				this.params.add(item);
-			else
-				this.files.add(item);
-		}
-	}
 
 	
 	private void cargarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//	getServletContext().getRealPath("") + Constantes.RUTAFolderFotoUser
 
 		int idUsuario = 3;
-		FileItem item = this.files.get(0);
+		FileItem item = fileHandler.getFiles().get(0);
 		String filePath = getPathFotoUsuario(item, idUsuario);
 		
 		File storeFile = new File(filePath);
@@ -168,16 +142,23 @@ public class UploadFilesServlet extends HttpServlet {
 			//Se comprueba si hay una foto existente y si ese archivo aun está.
 			File imagen = new File( getServletContext().getRealPath("") + rutaActual);
 			if(imagen.exists()) {
-				imagen.delete();
-				FileItem item = this.files.get(0);
-				File storeFile = new File( getPathFotoUsuario(item, idUsuario));
-				File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
-				usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
-				request.setAttribute("imagen", sFile.getPath());
-				item.write(storeFile);
-				objUsuario = usuarioDao.get(objUsuario);
-				ORSesion.nuevaSesion(request, objUsuario);
-				
+				File carpeta = new File(imagen.getParent());
+				if(carpeta.isDirectory()) {
+					for(File file : carpeta.listFiles()) {
+						file.delete();
+					}
+					FileItem item = fileHandler.getFiles().get(0);
+					File storeFile = new File( getPathFotoUsuario(item, idUsuario));
+					File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
+					System.out.println(storeFile.getPath());
+					System.out.println(storeFile.getName());
+
+					usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
+					request.setAttribute("imagen", sFile.getPath());
+					item.write(storeFile);
+					objUsuario = usuarioDao.get(objUsuario);
+					ORSesion.nuevaSesion(request, objUsuario);
+				}
 			}
 			
 			request.setAttribute("objUsuario", ORSesion.getUsuarioBySession(request));
@@ -186,32 +167,129 @@ public class UploadFilesServlet extends HttpServlet {
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 	
-	private void cargarImagenesPublicacion(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//if(ORSesion.sesionActiva(request)) {
-			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
-			String idPublicacionString = getParameter("idPublicacion");
-			if(idPublicacionString != null) {
-				int idPublicacion = Integer.parseInt(idPublicacionString);
-				int contador = 0;
-				for(FileItem item : this.files) {
-					contador ++;
-					//Guardamos el archivo en el servidor
-					File storeFile = new File(getPathFotosPublicaciones(item, idPublicacion, contador));
-					item.write(storeFile);
-					
-					//Ahora damos el alta en la base de datos
-					Imagen imagen = new Imagen();
-					imagen.setIdPublicacion(idPublicacion);
-					imagen.setIdImagen(contador);
-					imagen.setHabilitado(true);
-					imagen.setRutaImgPublicacion(Constantes.RUTACarpetaFotosPublicacion + idPublicacion + File.separator + storeFile.getName());
-					imagenDao.insert(imagen);
-					listImagenes.add(imagen);
+	private void retornaImagenes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String temporal = getServletContext().getRealPath("")+Constantes.RUTATemporal;
+		FileHandler.MakeDir(temporal);
+		File temporalFolder = new File(temporal);
+		
+		
+		int contador = temporalFolder.listFiles().length;
+		ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+		for(FileItem item : fileHandler.getFiles()) {
+			contador++;
+			if(contador <= 20) {
+				
+				File storeFile = new File(temporal+File.separator+item.getName());
+				File delete = FileHandler.IfExists(temporal, storeFile.getName());
+				if(delete != null) {
+					delete.delete();
 				}
-				request.setAttribute("imagenes", listImagenes);
+				item.write(storeFile);
+				//Ahora damos el alta en la base de datos
+				Imagen imagen = new Imagen();
+				imagen.setIdImagen(contador);
+				imagen.setHabilitado(true);
+				imagen.setRutaImgPublicacion(Constantes.RUTATemporal+ File.separator + storeFile.getName());
+				listImagenes.add(imagen);
+			}else {
+				resultMap.put("limite", "limite");
+				
 			}
-		//}
-		request.getRequestDispatcher("/InicioAdmin.jsp").forward(request, response);
+		}
+		resultMap.put("cantidadSubida", temporalFolder.listFiles().length);
+		
+		if(fileHandler.existsParameterVaule("readyToDelete")) {
+			FileHandler.DeleteAllFiles(temporal);
+		}
+		
+		resultMap.put("imagenes", listImagenes);
+		
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
+	}
+	
+	private void saveTempFiles(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		if(ORSesion.sesionActiva(request)) {
+			int idUsuario = ORSesion.getUsuarioBySession(request).getIdUsuario();	
+			ArrayList<Publicacion> listPublicacionesUsuario = publicacionDao.getAllByIdUsuario(idUsuario);
+			Publicacion ultimaPublicacion = listPublicacionesUsuario.get(listPublicacionesUsuario.size()-1);
+			
+			
+			if(ultimaPublicacion != null) {
+				int idPublicacion = ultimaPublicacion.getIdPublicacion();
+				String temporal = getServletContext().getRealPath("")+Constantes.RUTATemporal;
+				String newPath = getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion;
+				
+				FileHandler.MakeDir(newPath);
+				File temporalFolder = new File(temporal);
+				
+				ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+				
+				if(temporalFolder.isDirectory()) {
+					int contador = 0;
+					for(File file : temporalFolder.listFiles()) {
+						contador ++;
+						
+						String extension = FilenameUtils.getExtension(new File(file.getName()).getName());
+						File storeFile = new File(newPath+File.separator+contador+"."+extension);
+						
+						File delete = FileHandler.IfExists(newPath, storeFile.getName());
+						if(delete != null)
+							delete.delete();
+						
+						file.renameTo(storeFile);
+						
+						Imagen imagen = new Imagen();
+						imagen.setIdImagen(contador);
+						imagen.setHabilitado(true);
+						imagen.setIdPublicacion(idPublicacion);
+						imagen.setRutaImgPublicacion(new File(Constantes.RUTACarpetaFotosPublicacion+idPublicacion+File.separator+storeFile.getName()).getPath());
+						imagenDao.insert(imagen);
+						listImagenes.add(imagen);
+						
+					}
+					FileHandler.DeleteAllFiles(temporal);
+					request.setAttribute("imagenes", listImagenes);
+					request.getRequestDispatcher("/InicioAdmin.jsp").forward(request, response);
+					
+				}
+				
+				
+			}
+		}
+	}
+	
+	private void deleteImageTmp(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		String imagenString = fileHandler.getParameter("image");
+		String temporal = getServletContext().getRealPath("")+Constantes.RUTATemporal;
+		if(imagenString != null){
+			String[] spl = imagenString.split("\\");
+			FileHandler.MakeDir(temporal);
+			File delete = FileHandler.IfExists(temporal, spl[1]);
+			if(delete != null) {
+				delete.delete();
+			}
+			
+			File temporalFolder = new File(temporal);
+			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+			
+			for(File file : temporalFolder.listFiles()) {
+				
+				Imagen imagen = new Imagen();
+				imagen.setRutaImgPublicacion(Constantes.RUTATemporal+File.separator+file.getName());
+				
+			}
+			resultMap.put("imagenes", listImagenes);
+			resultMap.put("cantidadSubida", temporalFolder.listFiles().length);
+
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
+		}
 	}
 	
 	

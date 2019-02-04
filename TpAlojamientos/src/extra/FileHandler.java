@@ -9,6 +9,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 
 import exceptions.FileHandlerException;
 
@@ -28,7 +30,10 @@ public class FileHandler {
 	private ServletFileUpload upload;
 	private List<FileItem> formItems;
 	private HttpServletRequest request;
-
+	//ini v1.2
+	private ArrayList<FileItem> params;
+	private ArrayList<FileItem> files;
+	//fin v1.2
 	public FileHandler(HttpServletRequest request) throws Exception {
 		this.request = request;
 		this.factory = new DiskFileItemFactory();
@@ -53,13 +58,87 @@ public class FileHandler {
 		if (this.formItems.size() == 0) {
 			throw new FileHandlerException("No se encontraron items en el formulario de entrada.");
 		}
+		
+		//ini v1.2
+		this.params = new ArrayList<FileItem>();
+		this.files = new ArrayList<FileItem>();		
+		for(FileItem item : this.formItems) {
+
+			if(item.isFormField())
+				this.params.add(item);
+			else
+				this.files.add(item);
+		}
+		//fin v1.2
 
 	}
 
 	public List<FileItem> getFormItems() {
 		return this.formItems;
 	}
+	public boolean existsParameterVaule(String valueName) {
+		for(FileItem item : this.params) 
+			if(item.getString().compareTo(valueName) == 0) 
+				return true;
+		return false;
+	}
+	public String getParameter(String paramName) {
+		//funcion agregada en v1.2
+		
+		String ret = null;
+		for(FileItem item : this.params) {
 
+			if(item.getFieldName().compareTo(paramName) == 0) {
+				ret = item.getString();
+				break;
+			}
+		}
+		return ret;
+	}
+	public static void MakeDir(String pathNameDir) {
+		//funcion agregada en v1.2
+
+		File uploadDir = new File(pathNameDir);
+		if(!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+		
+	}
+	public static File IfExists(String path, String fileName) {
+		//funcion agregada en v1.2
+		File f = null;
+		File folder = new File(path);
+		if(folder.isDirectory()) {
+			String[] sp = fileName.split("(?=\\.)");
+			for(File file : folder.listFiles()) {
+				String[] sl = file.getName().toString().split("(?=\\.)");
+				if(sp[0].compareTo(sl[0]) == 0) {
+					f = new File(file.getPath());
+					break;
+				}
+			}
+		}
+		return f;
+	}
+	public static void DeleteAllFiles(String path) {
+		//funcion agregada en v1.2
+		File folder = new File(path);
+		if(folder.isDirectory()) {
+			for(File file: folder.listFiles()) {
+				file.delete();
+			}
+		}
+	}
+	public ArrayList<FileItem> getFiles(){
+		//funcion agregada en v1.2
+
+		return this.files;
+	}
+	public ArrayList<FileItem> getParams(){
+		//funcion agregada en v1.2
+
+		return this.params;
+	}
 
 	/***********************************/
 	public void runTestResize() {

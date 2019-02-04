@@ -185,22 +185,13 @@
 		<div class="row"></div>
 	</div>
 	<script type="text/javascript">
-<<<<<<< HEAD
 		$(function(){
 			$("#cambio").change(function(){
-				$.post("UploadFilesServlet", {},function(result){});
-				//$("#formPhotoUpdate").submit();
-=======
-		$(function() {
-			$("#cambio").change(function() {
+				//$.post("UploadFilesServlet", {},function(result){});
 				$("#formPhotoUpdate").submit();
->>>>>>> refs/heads/external
 			});
 		});
-<<<<<<< HEAD
-		
-=======
->>>>>>> refs/heads/external
+
 	</script>
 </body>
 </html>

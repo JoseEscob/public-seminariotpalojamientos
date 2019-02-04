@@ -13,6 +13,7 @@
 <body>
 	<%@ include file="Banner.jsp"%>
 	<form method="POST" action="PublicacionServlet">
+		<input type="hidden" name="accionPOST" value="nuevaPublicacion">
 		<div class="container">
 			<div class="row">
 				<h2>Registro de Publicaciones</h2>
@@ -40,7 +41,6 @@
 						<noscript>
 							<input type="submit">
 						</noscript>
-						<input type="hidden" name="accionPOST" value="nuevaPublicacion">
 
 						<div class="form-group">
 							<label>Localidad</label> <select id="localidades"

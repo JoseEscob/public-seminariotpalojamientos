@@ -580,7 +580,6 @@ public class PublicacionServlet extends HttpServlet {
 			LOG.info(String.format("Se guardaron %d de %d servicios ingresados", cantArchivosInsertado,
 					listaServicios.size()));
 			// 3.3- Se redirige a la pagina de subida de imagenes
-			request.setAttribute("idPublicacion", idPublicacion);
 
 		} catch (Exception e) {
 			message = e.getMessage();
