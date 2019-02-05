@@ -19,6 +19,8 @@
 			<c:when test="${fn:length(listaComentarios) gt 0}">
 				<h4>
 					<small>Cant. de Comentarios: ${fn:length(listaComentarios)}</small>
+					<br> Acá se listan los comentarios de las personas que alguna
+					vez reservaron este alojamiento
 				</h4>
 			</c:when>
 			<c:otherwise>
@@ -42,7 +44,13 @@
 						</div>
 						<div class="media-body">
 							<h4 class="media-heading">
-								<a> <c:out value="${objComentario.nombreApellidoUsuario}"></c:out>
+								<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
+									<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
+									<c:param name="idUsuario" value="${objComentario.idUsuario}" />
+								</c:url>
+
+								<a href="${urlPerfilPublicoUsuario}"> <c:out
+										value="${objComentario.nombreApellidoUsuario}"></c:out>
 								</a> <small><i> ${objComentario.fechaComentario} </i></small>
 							</h4>
 							<p>

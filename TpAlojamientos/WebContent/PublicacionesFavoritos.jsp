@@ -29,6 +29,8 @@
 	<div class="container">
 		<h2>Mis Publicaciones Favoritas</h2>
 		<hr />
+		<h4>Tenés publicaciones ${fn:length(listadoDePublicaciones)}
+			guardadas. Apuráte todavía están disponibles para reservarlas</h4>
 		<!--Horizantal line divider  <div class="page-header"/> -->
 	</div>
 

@@ -216,6 +216,12 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 	}
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
+	public SolicitudDeReserva getObjectById(int idSolDeReserva) {
+		SolicitudDeReserva objSolicitudDeReserva = getAll().stream()
+				.filter(item -> item.getIdSolicitud() == idSolDeReserva).findFirst().orElse(null);
+		return objSolicitudDeReserva;
+	}
+
 	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioHuesped(int idUsuarioHuesped) {
 		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
 

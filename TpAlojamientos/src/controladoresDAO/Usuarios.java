@@ -206,7 +206,6 @@ public class Usuarios implements Connectable<Usuario> {
 	}
 
 	public boolean updateRutaFotoPerfil(int idUsuario, String rutaFotoPerfil) {
-
 		cn = new Conexion();
 		boolean correcto = false;
 		try {

@@ -100,6 +100,19 @@
 		<div class="row col-md-12">
 			<br>
 		</div>
+
+		<div class="row col-md-12" style="color: red;">
+			<h4>
+				Informar si la cant de Personas puede ser más de lo permitido/
+				cargado <b></b>
+			</h4>
+		</div>
+		<div class="row col-md-12" style="color: red;">
+			<h4>
+				Listado de fechas en las que se encuentra reservada la publicacion:
+				<b>${vistaPublicacion.publicacion.nombre}</b>
+			</h4>
+		</div>
 	</div>
 </body>
 </html>

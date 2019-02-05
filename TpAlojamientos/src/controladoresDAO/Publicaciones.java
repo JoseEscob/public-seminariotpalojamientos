@@ -16,6 +16,7 @@ import modelo.TipoAlojamiento;
 import modelo.Usuario;
 
 public class Publicaciones implements Connectable<Publicacion> {
+	private final Comentarios comentariosDAO = new Comentarios();
 	private static final _DAOConstantesPublicacion cPubli = new _DAOConstantesPublicacion();
 	private static final _DAOConstantesNombreCampos cCampo = new _DAOConstantesNombreCampos();
 	private final static String camposInsertIntoDB = "idUsuario=?, idTipoAlojamiento=?, descripcion=?"
@@ -34,6 +35,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 			put("insert", String.format("INSERT into publicaciones SET  %s , idPublicacion=?", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update", String.format("update publicaciones set %s where idPublicacion=?", camposInsertIntoDB));
+			put("updatePuntuacion", "update publicaciones set puntaje=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("limit", "select * from publicaciones limit ?, ?");
 
@@ -213,6 +215,28 @@ public class Publicaciones implements Connectable<Publicacion> {
 		return this.update(u);
 	}
 
+	public boolean updatePuntuacion(int idPublicacion, float nuevoPuntaje) {
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
+			ps.setFloat(1, nuevoPuntaje);
+			ps.setInt(2, idPublicacion);
+			LOG.info("UPDATE Publicacion - Puntuacion: " + ps.toString());
+			if (ps.executeUpdate() != 0) {
+				LOG.info("UPDATE Publicacion - Puntuacion se ejecutó con éxito");
+				correcto = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+
 	/// ********************* DAO - Métodos READ/ WRITE ********************** ///
 
 	private Publicacion readPs_Publicacion(ResultSet rs) throws SQLException {
@@ -261,7 +285,9 @@ public class Publicaciones implements Connectable<Publicacion> {
 
 		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
 		o.setFechaAlta(rs.getDate(cPubli.fechaUltModificado));
-		o.setPuntaje(rs.getFloat(cPubli.puntaje));
+		// o.setPuntaje(rs.getFloat(cPubli.puntaje));
+		float puntuacionPromedio = comentariosDAO.getPuntuacionPromedioByIdPublicacion(o.getIdPublicacion());
+		o.setPuntaje(puntuacionPromedio);
 		o.setVerificado(rs.getBoolean(cCampo.verificado));
 		o.setHabilitado(rs.getBoolean(cPubli.habilitado));
 

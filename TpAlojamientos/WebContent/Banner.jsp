@@ -59,13 +59,12 @@
 					<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
 							class="glyphicon glyphicon-check" /></span>&nbsp;Todas las
 							publicaciones</a></li>
-					<li><a href="PublicacionServlet?accionGET=verMisPublicaciones"><span
-							class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
-							publicaciones</a></li>
-
 					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
 							class="glyphicon glyphicon-plus"></span>&nbsp;Nueva Publicación
 					</a></li>
+					<li><a href="PublicacionServlet?accionGET=verMisPublicaciones"><span
+							class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
+							Publicaciones</a></li>
 					<li><a
 						href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
 							class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
@@ -101,8 +100,18 @@
 
 
 				</ul></li>
-			<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
-					class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
+
+
+			<li class="dropdown"><a class="dropdown-toggle"
+				data-toggle="dropdown"><span
+					class="glyphicon glyphicon-chevron-down"></span> Admin</a>
+				<ul class="dropdown-menu">
+					<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
+							class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
+					<li><a
+						href="PublicacionServlet?accionGET=admListaPublicaciones"><span
+							class="glyphicon glyphicon-check" /></span> Lista Publicaciones</a></li>
+				</ul></li>
 		</ul>
 		<form class="navbar-form navbar-left" action="/action_page.php">
 			<div class="input-group">
