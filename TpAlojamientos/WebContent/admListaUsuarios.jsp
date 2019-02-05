@@ -27,7 +27,30 @@
 		<h4>
 			<c:out value="${sessionScope.sessionUser.apellido}" />
 		</h4>
-		<table class="table table-hover table-responsive">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs nav-justified">
+					<li class="active" id="ListadoUsuarios">
+						<a href="#s" data-toggle="tab" ><h4>
+								Listado Usuarios
+							</h4></a></li>
+					<li  id="CuadriculaUsuarios" data-toggle="tab"><a href="#s" data-toggle="tab"><h4>
+								Cuadricula Usuarios</h4></a></li>
+				</ul>
+			</div>
+			<div class="row col-md-6">
+				<ul class="nav nav-tabs nav-justified">
+					<li class="active" id="NuevosUsuarios"><a href="#s"
+						data-toggle="tab" ><h4>
+								Nuevos Usuarios&nbsp;<span class="badge">${fn:length(listaUsuariosNuevos)}</span>
+							</h4></a></li>
+					<li id="TodosUsuarios"><a href="#s" data-toggle="tab"><h4>
+								Todos los Usuarios</h4></a></li>
+				</ul>
+			</div>
+		</div>
+
+		<!--table class="table table-hover table-responsive">
 			<c:forEach items="${listaUsuarios}" var="objUsuario">
 				<tr>
 					<td>${objUsuario.idUsuario}</td>
@@ -42,157 +65,101 @@
 						</c:choose></td>
 				</tr>
 			</c:forEach>
-		</table>
-	</div>
-
-	<div class="container">
 		<h3>Lista de Usuarios</h3>
-		<table class="table table-hover table-responsive">
-			<thead>
-				<tr>
-					<th>idUsuario</th>
-					<th>nombre</th>
-					<th>apellido</th>
-					<th>dni</th>
-					<th>mail</th>
-					<th>Fecha Nacimiento</th>
-					<th>Nro Telefono</th>
-					<th>usuario</th>
-					<!--<th>clave</th>-->
-					<th>sexo</th>
-					<!--<th>rutaFotoPerfil</th>-->
-					<th>admin</th>
-					<th>puntaje</th>
-					<th>habilitado</th>
-					<th>FechaAltaUsuario</th>
-					<th>fechaUltConexion</th>
-					<th>fechaUltModificado</th>
-					<th>verificado</th>
-					<!--Masculino, Femenino-->
-					<th scope="col">ACCIONES</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${listaUsuariosNuevos}" var="objUsuario">
-					<tr class="info">
-						<td>${objUsuario.idUsuario}</td>
-						<td>${objUsuario.nombre}</td>
-						<td>${objUsuario.apellido}</td>
-						<td>${objUsuario.dni}</td>
-						<td>${objUsuario.mail}</td>
-						<td>${objUsuario.fechaNac}</td>
-						<td>${objUsuario.nroTelefono}</td>
-						<td>${objUsuario.usuario}</td>
-						<%--<td>${objUsuario.clave}</td> --%>
-						<td><c:choose>
-								<c:when test="${objUsuario.sexo}">
-						Masculino
-						</c:when>
-								<c:otherwise>Femenino</c:otherwise>
-							</c:choose></td>
-						<!--<td>${objUsuario.rutaFotoPerfil}</td>-->
-						<td>${objUsuario.admin}</td>
-						<td>${objUsuario.puntaje}</td>
-						<td><c:choose>
-								<c:when test="${objUsuario.habilitado}">SI</c:when>
-								<c:otherwise>NO</c:otherwise>
-							</c:choose></td>
-						<td>${objUsuario.fechaAlta}</td>
-						<td>${objUsuario.fechaUltConexion}</td>
-						<td>${objUsuario.fechaUltModificado}</td>
-						<td><c:choose>
-								<c:when test="${objUsuario.verificado}">SI</c:when>
-								<c:otherwise>NO</c:otherwise>
-							</c:choose></td>
-						<td>
-							<div>
-								<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
-									<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
-									<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
-								</c:url>
-
-								<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-									data-toggle="tooltip" title="Ver Perfil"> <span
-									class="glyphicon glyphicon-eye-open"></span>
-								</a>
-							</div>
-							<div>
-								<a href="#" class="btn btn-primary"> <span
-									class="glyphicon glyphicon-edit"></span>
-								</a>
-							</div>
-
-							<div>
-								<a href="#" class="btn btn-danger"> <span
-									class="glyphicon glyphicon-remove"></span>
-								</a>
-							</div>
-						</td>
-					</tr>
-				</c:forEach>
-				<c:forEach items="${listaUsuarios}" var="objUsuario">
-					<tr>
-						<td>${objUsuario.idUsuario}</td>
-						<td>${objUsuario.nombre}</td>
-						<td>${objUsuario.apellido}</td>
-						<td>${objUsuario.dni}</td>
-						<td>${objUsuario.mail}</td>
-						<td>${objUsuario.fechaNac}</td>
-						<td>${objUsuario.nroTelefono}</td>
-						<td>${objUsuario.usuario}</td>
-						<%--<td>${objUsuario.clave}</td> --%>
-						<td><c:choose>
-								<c:when test="${objUsuario.sexo}">
-						Masculino
-						</c:when>
-								<c:otherwise>Femenino</c:otherwise>
-							</c:choose></td>
-						<!--<td>${objUsuario.rutaFotoPerfil}</td>-->
-						<td>${objUsuario.admin}</td>
-						<td>${objUsuario.puntaje}</td>
-						<td><c:choose>
-								<c:when test="${objUsuario.habilitado}">SI</c:when>
-								<c:otherwise>NO</c:otherwise>
-							</c:choose></td>
-						<td>${objUsuario.fechaAlta}</td>
-						<td>${objUsuario.fechaUltConexion}</td>
-						<td>${objUsuario.fechaUltModificado}</td>
-						<td><c:choose>
-								<c:when test="${objUsuario.verificado}">SI</c:when>
-								<c:otherwise>NO</c:otherwise>
-							</c:choose></td>
-						<td>
-							<div>
-								<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
-									<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
-									<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
-								</c:url>
-
-								<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-									data-toggle="tooltip" title="Ver Perfil"> <span
-									class="glyphicon glyphicon-eye-open"></span>
-								</a>
-							</div>
-							<div>
-								<a href="#" class="btn btn-primary"> <span
-									class="glyphicon glyphicon-edit"></span>
-								</a>
-							</div>
-
-							<div>
-								<a href="#" class="btn btn-danger"> <span
-									class="glyphicon glyphicon-remove"></span>
-								</a>
-							</div>
-						</td>
-					</tr>
-				</c:forEach>
-
-			</tbody>
-		</table>
+		</table-->
+		<div class="row">
+			<div class="tab-content">
+				<div class="tab-pane active" id="listadoUsuariosNuevos">
+					<table class="table table-hover table-responsive">
+						<%@ include file="headerUsuario.jsp"%>
+						<tbody>
+							<c:forEach items="${listaUsuariosNuevos}" var="objUsuario">
+								<tr class="info">
+								<%@ include file="filaUsuario.jsp"%>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<div class="tab-pane" id="listadoTodosUsuarios">
+					<table class="table table-hover table-responsive">
+					<%@ include file="headerUsuario.jsp"%>
+					
+					<tbody>
+						<c:forEach items="${listaUsuariosNuevos}" var="objUsuario">
+							<tr class="info">
+							<%@ include file="filaUsuario.jsp"%>
+							</tr>
+						</c:forEach>
+						<c:forEach items="${listaUsuarios}" var="objUsuario">
+							<tr>
+								<%@ include file="filaUsuario.jsp"%>
+							</tr>
+						</c:forEach>
+		
+					</tbody>
+				</table>
+				</div>
+				<div class="tab-pane" id="cuadriculaUsuariosNuevos">
+				cuadricula nuevos
+				</div>
+				<div class="tab-pane" id="cuadriculaTodosUsuarios">
+				cuadricula
+				</div>
+			</div>
+		</div>
+		
 	</div>
-
-
-
+	
+	<script type="text/javascript">
+		$(function(){
+			$('#ListadoUsuarios').click(function(){
+				if(checkN("NuevosUsuarios"))
+					activeTab("listadoUsuariosNuevos");
+				if(checkN("TodosUsuarios"))
+					activeTab("listadoTodosUsuarios");
+			});
+			$('#CuadriculaUsuarios').click(function(){
+				if(checkN("NuevosUsuarios"))
+					activeTab("cuadriculaUsuariosNuevos");
+				if(checkN("TodosUsuarios"))
+					activeTab("cuadriculaTodosUsuarios");
+			});
+			$('#NuevosUsuarios').click(function(){	
+				if(checkN("ListadoUsuarios"))
+					activeTab("listadoUsuariosNuevos");
+				if(checkN("CuadriculaUsuarios"))
+					activeTab("cuadriculaUsuariosNuevos");
+			});
+			$('#TodosUsuarios').click(function(){	
+				if(checkN("ListadoUsuarios"))
+					activeTab("listadoTodosUsuarios");
+				if(checkN("CuadriculaUsuarios"))
+					activeTab("cuadriculaTodosUsuarios");
+		
+			});
+			
+			function checkN(nameTab){
+				if($('#'+nameTab).attr('class') != null){
+					var nuevos = $('#'+nameTab).attr('class').split(' ');
+					for(var i = 0; i < nuevos.length; i ++){
+						if(nuevos[i] == "active"){
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			
+			function activeTab(nameTab){
+				$('#listadoUsuariosNuevos').removeClass("active");
+				$('#listadoTodosUsuarios').removeClass("active");
+				$('#cuadriculaUsuariosNuevos').removeClass("active");
+				$('#cuadriculaTodosUsuarios').removeClass("active");
+				$('#'+nameTab).addClass("active");
+			}
+		});
+	</script>
+	
 </body>
 </html>

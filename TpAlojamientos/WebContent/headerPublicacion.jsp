@@ -1,0 +1,31 @@
+<thead>
+	<tr>
+		<th>idPublicacion</th>
+		<th>idUsuario</th>
+		<th>idTipoAlojamiento</th>
+		<th>descripcion</th>
+		<th>idLocalidad</th>
+		<th>codPostal</th>
+		<th>coordenadas</th>
+		<th>calle</th>
+		<th>altura</th>
+		<th>piso</th>
+		<th>dpto</th>
+		<th>supCubierta</th>
+		<th>supDescubierta</th>
+		<th>precioExpensas</th>
+		<th>precioNoche</th>
+		<th>chkPuedeVariarCantPersonas</th>
+		<th>cantPersonas</th>
+		<th>cantAmbientes</th>
+		<th>cantBanios</th>
+		<th>cantHabitaciones</th>
+		<th>aniosAntiguedad</th>
+		<th>fechaAlta</th>
+		<th>fechaUltModificado</th>
+		<th>puntaje</th>
+		<th>verificado</th>
+		<th>habilitado</th>
+		<th scope="col">ACCIONES</th>
+	</tr>
+</thead>

@@ -55,100 +55,13 @@
 					<div class="container">
 						<h3>Lista de Publicaciones</h3>
 						<table class="table table-hover table-responsive">
-							<thead>
-								<tr>
-									<th>idPublicacion</th>
-									<th>idUsuario</th>
-									<th>idTipoAlojamiento</th>
-									<th>descripcion</th>
-									<th>idLocalidad</th>
-									<th>codPostal</th>
-									<th>coordenadas</th>
-									<th>calle</th>
-									<th>altura</th>
-									<th>piso</th>
-									<th>dpto</th>
-									<th>supCubierta</th>
-									<th>supDescubierta</th>
-									<th>precioExpensas</th>
-									<th>precioNoche</th>
-									<th>chkPuedeVariarCantPersonas</th>
-									<th>cantPersonas</th>
-									<th>cantAmbientes</th>
-									<th>cantBanios</th>
-									<th>cantHabitaciones</th>
-									<th>aniosAntiguedad</th>
-									<th>fechaAlta</th>
-									<th>fechaUltModificado</th>
-									<th>puntaje</th>
-									<th>verificado</th>
-									<th>habilitado</th>
-									<th scope="col">ACCIONES</th>
-								</tr>
-							</thead>
+							<%@ include file="headerPublicacion.jsp"%>
+						
 							<tbody>
 								<c:forEach items="${listadoDePublicaciones}"
 									var="objPublicacion">
 									<tr class="info">
-										<td>${objPublicacion.idPublicacion}</td>
-										<td>${objPublicacion.idUsuario}</td>
-										<td>${objPublicacion.idTipoAlojamiento}</td>
-										<td>${objPublicacion.descripcion}</td>
-										<td>${objPublicacion.idLocalidad}</td>
-										<td>${objPublicacion.codPostal}</td>
-										<td>${objPublicacion.coordenadas}</td>
-										<td>${objPublicacion.calle}</td>
-										<td>${objPublicacion.altura}</td>
-										<td>${objPublicacion.piso}</td>
-										<td>${objPublicacion.dpto}</td>
-										<td>${objPublicacion.supCubierta}</td>
-										<td>${objPublicacion.supDescubierta}</td>
-										<td>${objPublicacion.precioExpensas}</td>
-										<td>${objPublicacion.precioNoche}</td>
-										<td>${objPublicacion.chkPuedeVariarCantPersonas}</td>
-										<td>${objPublicacion.cantPersonas}</td>
-										<td>${objPublicacion.cantAmbientes}</td>
-										<td>${objPublicacion.cantBanios}</td>
-										<td>${objPublicacion.cantHabitaciones}</td>
-										<td>${objPublicacion.aniosAntiguedad}</td>
-										<td>${objPublicacion.fechaAlta}</td>
-										<td>${objPublicacion.fechaUltModificado}</td>
-										<td>${objPublicacion.puntaje}</td>
-										<td><c:choose>
-												<c:when test="${objPublicacion.verificado}">SI</c:when>
-												<c:otherwise>NO</c:otherwise>
-											</c:choose></td>
-										<td>
-										<td><c:choose>
-												<c:when test="${objPublicacion.habilitado}">SI</c:when>
-												<c:otherwise>NO</c:otherwise>
-											</c:choose></td>
-										<td>
-											<div>
-												<c:url value="PublicacionServlet?"
-													var="urlPerfilPublicoUsuario">
-													<c:param name="accionGET"
-														value="verPerfilPublicoOtroUsuario" />
-													<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
-												</c:url>
-
-												<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-													data-toggle="tooltip" title="Ver Perfil"> <span
-													class="glyphicon glyphicon-eye-open"></span>
-												</a>
-											</div>
-											<div>
-												<a href="#" class="btn btn-primary"> <span
-													class="glyphicon glyphicon-edit"></span>
-												</a>
-											</div>
-
-											<div>
-												<a href="#" class="btn btn-danger"> <span
-													class="glyphicon glyphicon-remove"></span>
-												</a>
-											</div>
-										</td>
+									<%@ include file="filaPublicacion.jsp"%>
 									</tr>
 								</c:forEach>
 								<c:forEach items="${listadoDePublicaciones}"
@@ -168,7 +81,56 @@
 			</div>
 		</div>
 	</div>
-
+<script type="text/javascript">
+		$(function(){
+			$('#ListadoUsuarios').click(function(){
+				if(checkN("NuevosUsuarios"))
+					activeTab("listadoUsuariosNuevos");
+				if(checkN("TodosUsuarios"))
+					activeTab("listadoTodosUsuarios");
+			});
+			$('#CuadriculaUsuarios').click(function(){
+				if(checkN("NuevosUsuarios"))
+					activeTab("cuadriculaUsuariosNuevos");
+				if(checkN("TodosUsuarios"))
+					activeTab("cuadriculaTodosUsuarios");
+			});
+			$('#NuevosUsuarios').click(function(){	
+				if(checkN("ListadoUsuarios"))
+					activeTab("listadoUsuariosNuevos");
+				if(checkN("CuadriculaUsuarios"))
+					activeTab("cuadriculaUsuariosNuevos");
+			});
+			$('#TodosUsuarios').click(function(){	
+				if(checkN("ListadoUsuarios"))
+					activeTab("listadoTodosUsuarios");
+				if(checkN("CuadriculaUsuarios"))
+					activeTab("cuadriculaTodosUsuarios");
+		
+			});
+			
+			function checkN(nameTab){
+				if($('#'+nameTab).attr('class') != null){
+					var nuevos = $('#'+nameTab).attr('class').split(' ');
+					for(var i = 0; i < nuevos.length; i ++){
+						if(nuevos[i] == "active"){
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			
+			function activeTab(nameTab){
+				$('#listadoUsuariosNuevos').removeClass("active");
+				$('#listadoTodosUsuarios').removeClass("active");
+				$('#cuadriculaUsuariosNuevos').removeClass("active");
+				$('#cuadriculaTodosUsuarios').removeClass("active");
+				$('#'+nameTab).addClass("active");
+			}
+		});
+	</script>
+	
 
 
 </body>
