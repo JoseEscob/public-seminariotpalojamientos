@@ -253,22 +253,15 @@
 				<div class="form-group col-md-8">
 					<div class="col-md-6">
 						<p>
-							Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b>
+							Tipo Alojamiento: <b>${vistaPublicacion.descripcionTipoAlojamiento}</b>
 						</p>
-						<p>
-							Cant. Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b>
-						</p>
-						<p>
-							Cant. Banios: <b>${vistaPublicacion.publicacion.cantBanios}</b>
-						</p>
-						<p>
-							Cant. Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b>
-						</p>
-						<p>
-							Años de Antiguedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b>
-						</p>
-					</div>
-					<div class="col-md-6">
+
+						<c:if
+							test="${vistaPublicacion.publicacion.idTipoAlojamiento eq 3}">
+							<p>
+								Piso : <b>${vistaPublicacion.publicacion.piso}°&nbsp;${vistaPublicacion.publicacion.dpto}</b>
+							</p>
+						</c:if>
 						<p>
 							Superficie Cubierta(m²): <b>${vistaPublicacion.publicacion.supCubierta}</b>
 						</p>
@@ -291,16 +284,36 @@
 							</c:otherwise>
 						</c:choose>
 					</div>
+
+					<div class="col-md-6">
+						<p>
+							Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b>
+						</p>
+						<p>
+							Cant. Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b>
+						</p>
+						<p>
+							Cant. Baños: <b>${vistaPublicacion.publicacion.cantBanios}</b>
+						</p>
+						<p>
+							Cant. Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b>
+						</p>
+						<p>
+							Años de Antiguedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b>
+						</p>
+					</div>
+
 				</div>
 			</div>
 		</div>
-
+		<!-- 
 		<div class="row" title="Test - listado Imagenes extension">
 			Imagenes leidas
 			<c:forEach items="${vistaPublicacion.listaRutaImg}" var="objRutaImg">
 				<label class="control-label col-xs-12">${objRutaImg}</label>
 			</c:forEach>
-		</div>
+		</div> 
+		-->
 
 
 		<div class="row" title="Servicios de la publicación">

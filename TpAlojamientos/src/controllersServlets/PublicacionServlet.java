@@ -30,6 +30,7 @@ import exceptions.ValidacionException;
 import exceptions.CargaViewException;
 import exceptions.LectorDatosException;
 import extra.Constantes;
+import extra.InfoMessage;
 import extra.LOG;
 import extra.ORSesion;
 import extra.Utilitario;
@@ -91,9 +92,6 @@ public class PublicacionServlet extends HttpServlet {
 				break;
 			case "VerPublicaciones":
 				verPublicaciones(request, response);
-				break;
-			case "VerPerfilUsuario":
-				verPerfilUsuario(request, response);
 				break;
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
@@ -528,12 +526,11 @@ public class PublicacionServlet extends HttpServlet {
 		Localidad objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
 		objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
 		// 1.6 DAO recuperar datos de clase Favoritos
-
-		// Favorito objFavorito = favoritosDAO.get(idUsuarioLogueado, idPublicacion);
 		Favorito objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
 		// 1.7 DAO Recuperar servicios de publicación
 		vistaPublicacion.setListaServicios(serviciosDAO.getAllByIdPublicacion(idPublicacion));
-
+		// 1.8 DAO Recuperar descripcion del tipo de alojamiento
+		String descAloj = tipoAlojamientoDAO.getTipoAlojamiento(objPublicacion.getIdTipoAlojamiento()).getDescripcion();
 		// String carpetaImgPublicacion =
 		// imagenDAO.getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
 
@@ -544,6 +541,7 @@ public class PublicacionServlet extends HttpServlet {
 		// Utilitario.getFilenamesFromFolder(carpetaImgPublicacion);
 		ArrayList<String> listaRutaImg = null;
 
+		vistaPublicacion.setDescripcionTipoAlojamiento(descAloj);
 		vistaPublicacion.setListaRutaImg(listaRutaImg);
 		vistaPublicacion.setPublicacion(objPublicacion);
 		vistaPublicacion.setUsuario(objUsuario);
@@ -638,6 +636,7 @@ public class PublicacionServlet extends HttpServlet {
 
 	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException {
+		InfoMessage objInfoMessage = new InfoMessage();
 		String message = null;
 		try {
 			if (!ORSesion.sesionActiva(request)) {
@@ -652,9 +651,7 @@ public class PublicacionServlet extends HttpServlet {
 			// 2.2 Validar con la DB
 			// 3.1- DB: guardar información validada - publicacionDAO
 			if (publicacionDAO.insert(objPublicacion)) {
-				String mensaje = "Publicacion cargada con exito.";
-				request.setAttribute("objMensaje", mensaje);
-
+				message = "Publicacion cargada con exito.";
 			}
 			// 3.2- DB: guardar información - serviciosDAO
 			String[] chklistServicios = request.getParameterValues("chklistServicios");
@@ -678,13 +675,22 @@ public class PublicacionServlet extends HttpServlet {
 					listaServicios.size()));
 			// 3.3- Se redirige a la pagina de subida de imagenes
 
+			// request.setAttribute("objInfoMessage", objInfoMessage);
+			objInfoMessage.setMessage(message);
+			objInfoMessage.setEstado(true);
 		} catch (Exception e) {
-			message = e.getMessage();
+			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("message", message);
-
-			paginaJsp = "/ImagenesPublicacionAlta.jsp";
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado())
+				paginaJsp = "/ImagenesPublicacionAlta.jsp";
+			else {
+				// paginaJsp = "/PublicacionAlta.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=Nuevo";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
@@ -715,6 +721,8 @@ public class PublicacionServlet extends HttpServlet {
 		int piso = 0;
 		String departamento = "";
 		if (idTipoAlojamiento == 3) {
+			String[] listaParametrosDepto = { "piso", "departamento" };
+			Utilitario.validarParametrosObligatoriosDeUnJSP(request, listaParametrosDepto, listaParametrosDepto);
 			piso = Integer.parseInt(request.getParameter("piso"));
 			departamento = request.getParameter("departamento");
 		}
@@ -729,9 +737,19 @@ public class PublicacionServlet extends HttpServlet {
 		int cantidadBanios = Integer.parseInt(request.getParameter("cantidadBaños"));
 		boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
 		int precioExpensas = 0;
-		if (expensas == true)
+		if (expensas == true) {
+			if (request.getParameter("precioExpensas") == null) {
+				throw new ValidacionException(
+						"Por favor, si su publicación tiene expensas, complete el campo obligatorio: precioExpensas");
+			}
 			precioExpensas = Integer.parseInt(request.getParameter("precioExpensas"));
+			if (precioExpensas <= 0)
+				throw new ValidacionException(
+						"Por favor, si su publicación tiene expensas, el precio debe ser mayor a cero");
+		}
 		int precioNoche = Integer.parseInt(request.getParameter("precioNoche"));
+		if (precioNoche <= 0)
+			throw new ValidacionException("Por favor el precio por noche debe ser mayor a cero");
 		int aniosAntiguedad = Integer.parseInt(request.getParameter("aniosAntiguedad"));
 		String descripcion = request.getParameter("descripcion");
 
@@ -767,33 +785,6 @@ public class PublicacionServlet extends HttpServlet {
 		objPublicacion.setVerificado(false);
 		objPublicacion.setHabilitado(true);
 		return objPublicacion;
-	}
-
-	private void verPerfilUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-		// En construccion
-		String idUSuarioString = request.getParameter("idUsuario");
-		if (idUSuarioString != null) {
-			int idUsuario = Integer.parseInt(idUSuarioString);
-			request.setAttribute("idUsuario", idUsuario);
-			Usuario objUsuario = usuarioDAO.getUsuarioById(idUsuario);
-			if (objUsuario != null) {
-				ArrayList<Publicacion> listPublicaciones = publicacionDAO.getAll();
-				ArrayList<Comentario> listComentarios = new ArrayList<Comentario>();
-				for (Publicacion publicacion : listPublicaciones) {
-					if (publicacion.getIdUsuario() == objUsuario.getIdUsuario()) {
-						comentarioDAO.getAllByIdPublicacion(publicacion.getIdPublicacion()).forEach(item -> {
-							if (item.getPuntaje() >= 4)
-								listComentarios.add(item);
-
-						});
-					}
-				}
-			}
-
-		}
-		paginaJsp = "/PerfilView.jsp";
-		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 
 }

@@ -19,6 +19,10 @@
 				<h2>Registro de Publicaciones</h2>
 				<hr />
 			</div>
+
+			<div class="row">
+				<%@ include file="mostrarInfoMessage.jsp"%>
+			</div>
 			<!--Horizantal line divider  <div class="page-header"/> -->
 			<div class="row" title="Ubicación - Zona del Domicilio">
 				<div class="row col-md-12">
@@ -127,7 +131,8 @@
 								required="true" maxlength="2" pattern="\d*">
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" data-toggle="tooltip"
+							title="Si los años de Antigüedad se cargan con cero significa que es un alojamiento a estrenar">
 							<label>Antigüedad en años</label> <input type="text"
 								name="aniosAntiguedad" class="form-control" required="true"
 								maxlength="3" pattern="\d*">
@@ -211,7 +216,8 @@
 
 
 						<div class="col-md-12">
-							<div class="form-group">
+							<div class="form-group" data-toggle="tooltip"
+								title="Si se marca que sí, las reservas podrán ser solicitadas con más cantidad de huéspedes que la cantidad apta de personas para el alojamiento ">
 								<label>Si el Huésped lo desea ¿Puede variar la Cantidad
 									de Personas límite?</label>
 								<div class="col-md-6">

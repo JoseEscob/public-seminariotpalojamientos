@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import controladoresDAO.SolicitudesDeReserva;
 import exceptions.ServidorException;
 import extra.Constantes;
+import extra.InfoMessage;
 import extra.LOG;
 import extra.ORSesion;
 import modelo.SolicitudDeReserva;
@@ -76,12 +77,39 @@ public class SolDeReservaServlet extends HttpServlet {
 			}
 			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
 			switch (accionPOST) {
-			case "verSolEnviadasRecibidas":
-				verSolEnviadasRecibidas(request, response);
+			case "SolReservaAlta":
+				altaSolicitudReserva(request, response);
 				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void altaSolicitudReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		try {
+			// 1- Obtiene valores del JSP ya validados
+			// 2- Validar con la DB
+			// 3- verificar correcto almacenamiento en DB
+			// 4- EXITO
+			objInfoMessage.setMessage(message);
+			objInfoMessage.setEstado(true);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado())
+				paginaJsp = "/solEnviadasRecibidas.jsp";
+			else {
+				paginaJsp = "/solReservaAlta.jsp";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				//response.sendRedirect(paginaJsp);
+			}
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 

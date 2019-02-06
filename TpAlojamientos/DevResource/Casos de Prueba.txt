@@ -22,4 +22,9 @@ ADMIN
 	- Si se aprueba debe aparecer verificado activado
 	- si se rechaza debe aparecer habilitado desactivado, hasta que sea corregido por el usuario
 
+PUBLICACIONES
+	ALTA
+	- Generar una publicación que sea un depto y que pida el piso y depto
+	- Que las superficies descubierta o los años sean ceros y q permita la inserción
+
 ******* TESTEADOS CON ÉXITO *******

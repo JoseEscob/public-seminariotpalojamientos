@@ -52,49 +52,75 @@
 		<div class="row col-md-12">
 			<br>
 		</div>
+
 		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<label>Cantidad de Huéspedes</label> <select class="form-control"
-						name="cmbCantHuespedes">
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-					</select>
+			<form method="post" action="${urlSolReservaAlta}">
+				<div class="col-md-3">
+					<div class="form-group">
+
+						<c:choose>
+							<c:when
+								test="${vistaPublicacion.publicacion.chkPuedeVariarCantPersonas eq false}">
+
+								<label>Cantidad de Huéspedes</label>
+								<select class="form-control" name="cmbCantHuespedes" required>
+									<c:forEach begin="1"
+										end="${vistaPublicacion.publicacion.cantPersonas}"
+										varStatus="loop">
+										<option value="${loop.index}">${loop.index}</option>
+
+									</c:forEach>
+								</select>
+							</c:when>
+							<c:otherwise>
+								<label>Cantidad de Huéspedes</label>
+								<select class="form-control" name="cmbCantHuespedes" required>
+									<c:forEach begin="1" end="20" varStatus="loop">
+										<option value="${loop.index}">${loop.index}</option>s
+								</c:forEach>
+								</select>
+							</c:otherwise>
+						</c:choose>
+
+
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label class="control-label">Fecha de Inicio </label> <input
-						type="date" class="form-control" pattern="^\d{2}-\d{2}-\d{4}$"
-						maxlength="10" placeholder="dd-MM-yyyy" name="fechaInicio"
-						id="fechaInicio" min="return getCurrentDate();" required>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Fecha de Inicio </label> <input
+							type="date" class="form-control" pattern="^\d{2}-\d{2}-\d{4}$"
+							maxlength="10" placeholder="dd-MM-yyyy" name="fechaInicio"
+							id="fechaInicio" min="return getCurrentDate();" required>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<label class="control-label">Fecha de Regreso</label> <input
-						type="date" class="form-control" pattern="^\d{2}-\d{2}-\d{4}$"
-						maxlength="10" placeholder="dd-MM-yyyy" name="fechaFin" required>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Fecha de Regreso</label> <input
+							type="date" class="form-control" pattern="^\d{2}-\d{2}-\d{4}$"
+							maxlength="10" placeholder="dd-MM-yyyy" name="fechaFin" required>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="form-group">
-					<c:url value="PublicacionServlet?" var="urlSolReservaAlta">
-						<c:param name="accionPOST" value="SolReservaAlta" />
-						<c:param name="idPublicacion"
-							value="${vistaPublicacion.publicacion.idPublicacion}" />
-					</c:url>
-					<br>
-					<form method="post" action="${urlSolReservaAlta}">
-						<button class="btn btn-success "
-							onclick="alert(getCurrentDate());">
+				<div class="col-md-3">
+					<div class="form-group">
+						<c:url value="SolDeReservaServlet?" var="urlSolReservaAlta">
+							<c:param name="accionPOST" value="SolReservaAlta" />
+							<c:param name="idPublicacion"
+								value="${vistaPublicacion.publicacion.idPublicacion}" />
+						</c:url>
+						<br>
+
+						<!-- <form method="POST" action="SolDeReservaServlet">  -->
+						<input type="hidden" name="accionPOST" value="SolReservaAlta"></input> <input type="submit" class="btn btn-success"
+							name="btnEnviarSolReserva" value="Enviar solicitud"></input>
+
+						<button class="btn btn-success">
 							<span class="glyphicon glyphicon-send"></span> Enviar solicitud
 							de Reserva
 						</button>
-					</form>
+
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 
 		<div class="row col-md-12">
