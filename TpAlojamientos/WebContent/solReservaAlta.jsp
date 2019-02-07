@@ -49,12 +49,15 @@
 				<h4>Por favor seleccione las fechas de su estadía</h4>
 			</div>
 		</div>
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
 		<div class="row col-md-12">
 			<br>
 		</div>
 
 		<div class="row">
-			<form method="post" action="${urlSolReservaAlta}">
+			<form method="post" action="SolDeReservaServlet">
 				<div class="col-md-3">
 					<div class="form-group">
 
@@ -108,9 +111,17 @@
 								value="${vistaPublicacion.publicacion.idPublicacion}" />
 						</c:url>
 						<br>
+						<!--
+						<c:set var="vistaPublicacion" value="${vistaPublicacion}"
+							scope="request" />
+							
+							
+							<input type="hidden" name="vistaPublicacion" value="${vistaPublicacion}"></input>
+							-->
 
-						<!-- <form method="POST" action="SolDeReservaServlet">  -->
-						<input type="hidden" name="accionPOST" value="SolReservaAlta"></input> <input type="submit" class="btn btn-success"
+						<input type="hidden" name="accionPOST" value="SolReservaAlta"></input>
+
+						<input type="submit" class="btn btn-success"
 							name="btnEnviarSolReserva" value="Enviar solicitud"></input>
 
 						<button class="btn btn-success">

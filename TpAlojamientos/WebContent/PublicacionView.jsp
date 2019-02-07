@@ -13,7 +13,7 @@
 	<%@ include file="Banner.jsp"%>
 	<div class="container">
 		<div class="row">
-			<h4>${message}</h4>
+			<%@ include file="mostrarInfoMessage.jsp"%>
 		</div>
 		<div class="row" title="Ubicación - Publicación">
 

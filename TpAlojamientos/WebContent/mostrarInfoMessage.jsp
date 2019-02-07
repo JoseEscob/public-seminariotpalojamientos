@@ -23,6 +23,9 @@
 				</div>
 			</c:otherwise>
 		</c:choose>
+		<!-- Elimina la session de objInfoMessage  -->
+		<c:remove var="objInfoMessage" />
 	</c:if>
+
 </body>
 </html>

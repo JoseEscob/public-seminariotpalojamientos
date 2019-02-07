@@ -568,8 +568,8 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
 			listImagenes = imagenDAO.getAllByIdPublicacion(idPublicacion);
 			vistaPublicacion.setImagenes(listImagenes);
-			request.setAttribute("vistaPublicacion", vistaPublicacion);
-
+			// request.setAttribute("vistaPublicacion", vistaPublicacion);
+			request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
 
 		} catch (Exception e) {
@@ -758,7 +758,7 @@ public class PublicacionServlet extends HttpServlet {
 		int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 		objPublicacion.setIdPublicacion(idPublicacion);
 		objPublicacion.setIdUsuario(idUsuarioLogueado);
-		objPublicacion.setIdTipoAlojamiento(1);
+		objPublicacion.setIdTipoAlojamiento(idTipoAlojamiento);
 		objPublicacion.setDescripcion(descripcion);
 		objPublicacion.setIdLocalidad(idLocalidad);
 		objPublicacion.setCodPostal(codPostal);

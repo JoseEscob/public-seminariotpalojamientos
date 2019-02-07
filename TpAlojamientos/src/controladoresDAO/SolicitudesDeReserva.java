@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import extra.Conexion;
 import extra.Utilitario;
-import modelo.Solicitud;
 import modelo.SolicitudDeReserva;
 
 public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
@@ -27,12 +26,10 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 
 		{
 			put("all", "select * from solicitudesDeReservas");
-			put("insert",
-					String.format("insert into solicitudesDeReservas set %s , idComprobante=?", camposInsertIntoDB));
+			put("insert", String.format("insert into solicitudesDeReservas set %s", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from solicitudesDeReservas");
-			put("update",
-					String.format("update solicitudesDeReservas set %s where idComprobante=?", camposInsertIntoDB));
-			put("get", "select * from solicitudesDeReservas where idComprobante=?");
+			put("update", String.format("update solicitudesDeReservas set %s where idSolicitud=?", camposInsertIntoDB));
+			put("get", "select * from solicitudesDeReservas where idSolicitud=?");
 			put("like", "");
 
 		}
@@ -121,12 +118,6 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		;
 		try {
 
-			Solicitudes solicitudes = new Solicitudes();
-			Solicitud solicitud = new Solicitud();
-			solicitud.setIdSolicitud(obj.getIdSolicitud());
-			if (solicitudes.get(solicitud) == null)
-				return false;
-
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
 			ps = writePs_SolDeReserva(obj, ps);
 			ps.executeUpdate();
@@ -147,12 +138,6 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
-
-			Solicitudes solicitudes = new Solicitudes();
-			Solicitud solicitud = new Solicitud();
-			solicitud.setIdSolicitud(obj.getIdSolicitud());
-			if (solicitudes.get(solicitud) == null)
-				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
 			ps = writePs_SolDeReserva(obj, ps);
