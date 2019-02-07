@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<textarea name="comentario" maxlength="20" onkeyup="infoRemainChars(event, 'remainChars')"></textarea>
+    <div id="remainChars">Hello</div>
+    
+        
+    <script>
+    	function infoRemainChars(event, idResponseRemainChars) {
+        	var textoIngresado, counter, maxlenghtValue;
+            
+            
+            elementoEvent = event.target;
+            textoIngresado = elementoEvent.value; //event.target.value;
+            maxlenghtValue = elementoEvent.getAttribute('maxlength');
+            
+            counter = (maxlenghtValue - (textoIngresado.length)); 
+            
+            document.getElementById(idResponseRemainChars).textContent = counter + '/' + maxlenghtValue;
+            
+        }
+    
+    
+    
+    
+    	document.getElementById("RemainingChars").innerHTML = "Next!";
+        
+        
+        
+        
+        function countCharacters(e) {  
+          // setup some variables 
+          var textEntered, counter, maxlength;  
+          // get the number of characters in the tweet box 
+          //textEntered = document.getElementById('tweet').value; 
+          elTextArea = document.getElementsByName("comentario")[0];
+          textEntered = elTextArea.value;
+          maxlength = elTextArea.getAttribute('maxlength');
+          // number left = number of characters - our maximum (140) 
+          counter = (maxlength - (textEntered.length)); 
+          // access the div for characters remaining 
+          document.getElementById('charsRemaining').textContent = counter + '/' + maxlength;
+          //document.getElementById('charsRemaining').innerHTML = counter;
+      	}
+        
+        //el = document.getElementById('tweet');       
+        el = document.getElementsByName("comentario")[0];
+		el.addEventListener('keyup', countCharacters, false);
+        
+        
+        
+
+    </script>
+
+</body>
+</html>
