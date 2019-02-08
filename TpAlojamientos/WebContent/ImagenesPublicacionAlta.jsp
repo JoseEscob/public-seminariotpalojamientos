@@ -14,7 +14,6 @@
 
 <div class="container">
 	<div class="row">
-	<h1>En construccion!</h1>
 		<h3>Imagenes de la publicación</h3>
 		<h4>Se pueden seleccionar hasta 20 imagenes</h4>
 		<h5 id="imageCounter">Imagenes 0/20</h5>
@@ -83,7 +82,7 @@
 			            success: function (data) {
 							actualizarCantidad(data.cantidadSubida);
 			            	$.each(data.imagenes, function(index, value){
-			            		$("#newImageRows").append("<div class='col-md-3'> <img src='"+value.rutaImgPublicacion+"' class='img-responsive'><form action='UploadFileServlet' method='post'><input type='submit' class='btn btn-danger' value='Quitar'><input type='hidden' name='accionPOST' value='deleteImageTmp'><input type='hidden' name='image' value='"+value.rutaImgPublicacion+"'></form></div");
+			            		$("#newImageRows").append("<div class='col-md-3'> <img src='"+value.rutaImgPublicacion+"' class='img-responsive'> </div");
 			            		console.log(value.rutaImgPublicacion);
 			            	});
 			            	if(data.limite != null){
@@ -102,10 +101,7 @@
 			$("#imageCounter").empty();
 			$("#imageCounter").append("Imagenes "+cantidad+"/20");
 		}
-		function createImageBlock(value){
-			var Div = Document.createElement("div");
-			Div.
-		}
+		
 	});
 </script>
 

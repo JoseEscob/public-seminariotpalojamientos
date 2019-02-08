@@ -120,6 +120,14 @@ public class FileHandler {
 		}
 		return f;
 	}
+	public static boolean isFolderEmpty(String rutaFolder) {
+		File folder = new File(rutaFolder);
+		if(folder.isDirectory())
+			if(folder.listFiles().length == 0)
+				return true;
+		return false;
+	}
+	
 	public static void DeleteAllFiles(String path) {
 		//funcion agregada en v1.2
 		File folder = new File(path);
@@ -128,6 +136,13 @@ public class FileHandler {
 				file.delete();
 			}
 		}
+	}
+	public static int CountFiles(String path) {
+		//function agregada en v1.3
+		File folder = new File(path);
+		if(folder.isDirectory())
+			return folder.listFiles().length;
+		return 0;
 	}
 	public ArrayList<FileItem> getFiles(){
 		//funcion agregada en v1.2
