@@ -73,8 +73,8 @@ public class UploadFilesServlet extends HttpServlet {
 				case "cambiarImagenUsuario":
 					cambiarImagenUsuario(request, response);
 					break;
-				case "verImagenes":
-					
+				case "cambiarImagenPublicacion":
+					cambiarImagenPublicacion(request, response);
 					break;
 				case "cargarImagen":
 					cargarImagen(request, response);
@@ -87,6 +87,12 @@ public class UploadFilesServlet extends HttpServlet {
 					break;
 				case "deleteImageTmp":
 					deleteImageTmp(request, response);
+					break;
+				case "cargarImagenesEdit":
+					cargarImagenesEdit(request, response);
+					break;
+				case "borrarImagenPublicacion":
+					borrarImagenPublicacion(request, response);
 					break;
 				default: break;
 			}
@@ -150,8 +156,6 @@ public class UploadFilesServlet extends HttpServlet {
 					FileItem item = fileHandler.getFiles().get(0);
 					File storeFile = new File( getPathFotoUsuario(item, idUsuario));
 					File sFile = new File(Constantes.RUTAFolderFotoUser + idUsuario +File.separator+storeFile.getName());
-					System.out.println(storeFile.getPath());
-					System.out.println(storeFile.getName());
 
 					usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
 					request.setAttribute("imagen", sFile.getPath());
@@ -292,7 +296,138 @@ public class UploadFilesServlet extends HttpServlet {
 		}
 	}
 	
+	private void cargarImagenesEdit(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//1-Se verifica que se este editando una publicacion del usuario logueado.
+		//if(ORSesion.sesionActiva(request)) {
+			//2-Se toma el id del usuario logueado.
+			//int idUsuario = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			//3-Se toma el idPublicacion del parametro enviado por un .jsp.
+			//String idPublicacionString = fileHandler.getParameter("idPublicacion");
+			//3.5-Se castea si no es nulo el parametro.
+			int idPublicacion = 13;
+			//if(idPublicacionString != null) {			 
+				//idPublicacion = Integer.parseInt(idPublicacionString);
+				//4-Se buscan las imagenes de la publicacion.
+				ArrayList<Imagen> listImagenesPublicacion = imagenDao.getAllByIdPublicacion(idPublicacion);
+				ArrayList<Imagen> newArrayListImagen = new ArrayList<Imagen>();
+				for(Imagen i : listImagenesPublicacion) {
+					if(i.isHabilitado())
+						newArrayListImagen.add(i);
+				}
+				//5-Si no es nula la lista se envia al formulario de edicion.
+				if(listImagenesPublicacion != null) {
+					request.setAttribute("listImagenes", newArrayListImagen);	
+					paginaJsp = "/ImagenesPublicacionViewModif.jsp";
+					request.setAttribute("imageCounter", FileHandler.CountFiles(getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion));
+					request.setAttribute("idPublicacion", idPublicacion);
+
+				}
+			//}			
+		//}
+		//Se redirige al .jsp.
+		request.getRequestDispatcher(paginaJsp).forward(request, response);
+	}
+	private void cambiarImagenPublicacion(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//0-ResultMap para responder mediante ajax.
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String idImagenString = fileHandler.getParameter("idImagen");
+		String idPublicacionString = fileHandler.getParameter("idPublicacion");
+		System.out.println(fileHandler.getFiles().size());
+		FileItem newImageItem = fileHandler.getFiles().get(0);
+		if(idImagenString != null) {
+			if(idPublicacionString != null) {
+				int idImagen = Integer.parseInt(idImagenString);
+				int idPublicacion = Integer.parseInt(idPublicacionString);
+				
+				String carpeta = getServletContext().getRealPath("");
+				String carpetaImagenes = carpeta+Constantes.RUTACarpetaFotosPublicacion+idPublicacion;
+				
+				Imagen imagen = new Imagen();
+				imagen.setIdImagen(idImagen);
+				imagen.setIdPublicacion(idPublicacion);
+				imagen = imagenDao.get(imagen);
+				
+				File imagenFile = new File(carpeta + File.separator + imagen.getRutaImgPublicacion());
+			
+				File toDelete = FileHandler.IfExists(carpetaImagenes, imagenFile.getName());
+				if(toDelete != null) {
+					if(toDelete.delete())
+						imagen.setHabilitado(false);
+					String newImagePath = getPathFotosPublicaciones(newImageItem, idPublicacion, idImagen);
+					File newImage = new File(newImagePath);
+					System.out.println(newImage.getAbsolutePath());
+					newImageItem.write(newImage);
+					imagen.setRutaImgPublicacion(Constantes.RUTACarpetaFotosPublicacion+idPublicacion+File.separator+newImage.getName());
+					if(FileHandler.IfExists(carpeta+Constantes.RUTACarpetaFotosPublicacion+idPublicacion, newImage.getName()) != null)
+						imagen.setHabilitado(true);
+					imagenDao.update(imagen);
+					resultMap.put("newImage", imagen);
+					
+				}
+				
+				resultMap.put("imageCounter", FileHandler.CountFiles(carpetaImagenes));
+				
+			}
+		}
+		
+		//eliminar imagen o subir una nueva, en ambos casos se elimina el archivo original del disco y se edita el registro de la base de datos
+		
+		
+		//En construccion
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
+	}
 	
+	private void borrarImagenPublicacion(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		//0-ResultMap para responder mediante ajax.
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		
+		String idImagenString = fileHandler.getParameter("idImagen");
+		String idPublicacionString = fileHandler.getParameter("idPublicacion");
+		
+		if(idImagenString != null) {
+			if(idPublicacionString != null) {
+				int idImagen = Integer.parseInt(idImagenString);
+				int idPublicacion = Integer.parseInt(idPublicacionString);
+				
+				String carpeta = getServletContext().getRealPath("");
+				
+				Imagen imagen = new Imagen();
+				imagen.setIdImagen(idImagen);
+				imagen.setIdPublicacion(idPublicacion);
+				imagen = imagenDao.get(imagen);
+				
+				File imagenFile = new File(carpeta+File.separator+imagen.getRutaImgPublicacion());
+				File toDelete = FileHandler.IfExists(carpeta+Constantes.RUTACarpetaFotosPublicacion+idPublicacion, imagenFile.getName());
+				if(toDelete != null)
+					toDelete.delete();
+				
+				resultMap.put("ocultar", idImagen);
+
+				if(FileHandler.isFolderEmpty(carpeta+Constantes.RUTACarpetaFotosPublicacion+idPublicacion))
+					resultMap.put("carpetaVacia", true);
+				
+				imagenDao.remove(imagen);
+				
+				resultMap.put("imageCounter", FileHandler.CountFiles(getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion));
+
+			}
+		}
+		
+		
+		
+		//eliminar imagen o subir una nueva, en ambos casos se elimina el archivo original del disco y se edita el registro de la base de datos
+		
+		
+		//En construccion
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
+	}
 
 	
 }

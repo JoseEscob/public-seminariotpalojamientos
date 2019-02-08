@@ -18,6 +18,14 @@
 	<div class="container">
 		<h2>Test Page</h2>
 		<hr />
+		
+		
+		
+		<form action="UploadFilesServlet" method="post" enctype="multipart/form-data" >
+			<input type="hidden" name="accionPOST" value="cargarImagenesEdit">
+			<input type="submit" name="coso" value="enviar">
+		</form>
+		
 		<button class="btn btn-info" id="add">Añadir</button>
 		
 		<div class="row" id="identificado">
