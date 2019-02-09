@@ -34,9 +34,23 @@ function soloLetras(e) {
 		return false;
 	}
 }
+// 2019
+function infoRemainChars(event, idResponseRemainChars) {
+	var textoIngresado, counter, maxlenghtValue;
+
+	elementoEvent = event.target;
+	textoIngresado = elementoEvent.value; // event.target.value;
+	maxlenghtValue = elementoEvent.getAttribute('maxlength');
+
+	counter = (maxlenghtValue - (textoIngresado.length));
+
+	document.getElementById(idResponseRemainChars).textContent = counter + '/'
+			+ maxlenghtValue;
+
+}
 
 function checkSubmit(e) {
-	//e.preventDefault();
+	// e.preventDefault();
 	if (e && e.keyCode == 13) {
 		document.forms[0].submit();
 		// this.click();

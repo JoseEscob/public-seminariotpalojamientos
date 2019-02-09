@@ -25,9 +25,6 @@
 <body>
 	<nav class="navbar navbar-inverse"> <!-- BEGIN: Menú Superior -->
 	<div class="container-fluid">
-
-
-
 		<!-- Image and text 
 		<nav class="navbar navbar-light bg-light"> <a
 			class="navbar-brand" href="Inicio.jsp"
@@ -37,22 +34,13 @@
 		</a> </nav>-->
 		<div class="navbar-header">
 			<a class="navbar-brand" href="Inicio.jsp"
-				style="color: MEDIUMTURQUOISE;"> <span><img
-					src="imagenes/icon-home.jpg" width="30" height="30"
-					class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
+				title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;">
+				<span><img src="imagenes/icon-home.jpg" width="30"
+					height="30" class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
 			</a>
 		</div>
-		<!--
-		<div class="navbar-header">
-			<a class="navbar-brand" href="Inicio.jsp"
-				title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;"><img
-				alt="Home" src="imagenes/icon-home.jpg"
-				style="width: 100px; height: 80px"> </a>
-		</div>
-		-->
+
 		<ul class="nav navbar-nav">
-
-
 			<li class="dropdown"><a class="dropdown-toggle"
 				data-toggle="dropdown"><span
 					class="glyphicon glyphicon-chevron-down"></span> Publicaciones</a>
@@ -139,14 +127,6 @@
 								${sessionScope.sessionUser.nombre}&nbsp;${sessionScope.sessionUser.apellido}
 						</a>
 							<ul class="dropdown-menu">
-
-								<!-- 						<li><a><span class="glyphicon glyphicon-user" /></span> -->
-								<!-- 								<form method="post" action="UsuarioServlet"> -->
-								<!-- 									<input type="hidden" id="buscarAction" name="buscarAction" -->
-								<!-- 										value="verInfoUsuario"></input> <input type="submit" -->
-								<!-- 										name="btnNuevoUsuario" value="Mi Perfil"></input> -->
-								<!-- 								</form> </a></li> -->
-
 								<li><a
 									href="PublicacionServlet?accionGET=verPerfilPublicoUsuarioLogueado"><span
 										class="glyphicon glyphicon-globe" /></span> Ver mi Perfil Público</a></li>

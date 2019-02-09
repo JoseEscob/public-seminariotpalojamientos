@@ -1,10 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="extra.ConstantesJSP"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type"
+	content="text/html; charset=utf-8; charset=ISO-8859-1">
+<link rel="stylesheet"
+	href="<%=ConstantesJSP.jspPub_PublicacionesListaGrillacss%>" />
 <title></title>
 </head>
 <body>
@@ -17,6 +21,17 @@
 				</div>
 			</c:when>
 			<c:otherwise>
+				<div class="row">
+					<div class="well">
+						<strong>Ver como: </strong>
+						<div class="btn-group">
+							<a href="#" id="list" class="btn btn-default"><span
+								class="glyphicon glyphicon-th-list"> </span>Lista</a> <a href="#"
+								id="grid" class="btn btn-default"><span
+								class="glyphicon glyphicon-th"></span>Grilla</a>
+						</div>
+					</div>
+				</div>
 				<div class="row list-group" id="products">
 					<c:forEach items="${listadoDePublicaciones}" var="objPublicacion">
 						<div class="item  col-xs-4 col-lg-4">
@@ -127,6 +142,20 @@
 		</c:choose>
 
 	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#list').click(function(event) {
+				event.preventDefault();
+				$('#products .item').addClass('list-group-item');
+			});
+			$('#grid').click(function(event) {
+				event.preventDefault();
+				$('#products .item').removeClass('list-group-item');
+				$('#products .item').addClass('grid-group-item');
+			});
+		});
+	</script>
 
 </body>
 </html>

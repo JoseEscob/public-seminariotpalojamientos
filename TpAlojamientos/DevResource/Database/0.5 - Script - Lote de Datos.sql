@@ -115,15 +115,16 @@ INSERT INTO `owner_rental_db`.`favoritos` (`idFavorita`, `idUsuario`, `idPublica
 
 /* ********************** */
 
-INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '1', `descripcion`='Iniciada - Pendiente confirmación', `habilitado` = '1';
-INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '2', `descripcion`='Rechazada', `habilitado` = '1';
-INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '3', `descripcion`='Aceptada/ Confirmada', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '1', `descripcion`='Iniciada - Pendiente de aprobación', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '2', `descripcion`='Rechazada  por Propietario', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '3', `descripcion`='Cancelada por Solicitador', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '4', `descripcion`='Vencida', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `idEstadoSolicitud`= '5', `descripcion`='Aceptada/ Confirmada por Propietario', `habilitado` = '1';
 
 
 
-INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '1', `idUsuarioHuesped` ='3', `idPublicacion` ='3', `fechaReservaInicio` =STR_TO_DATE('04/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('30/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('01/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('05/01/2019','%d/%m/%Y'), `motivoDecisionPropietario` ='Aceptada', `idEstadoSolicitud` ='3', `habilitado` = '1';
-INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '2', `idUsuarioHuesped` ='2', `idPublicacion` ='1', `fechaReservaInicio` =STR_TO_DATE('24/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('28/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('15/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('17/01/2019','%d/%m/%Y'), `motivoDecisionPropietario` ='Aceptada', `idEstadoSolicitud` ='3', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '1', `idUsuarioHuesped` ='3', `idPublicacion` ='3', `fechaReservaInicio` =STR_TO_DATE('04/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('30/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('01/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('05/01/2019','%d/%m/%Y'), `motivoDecisionPropietario` ='Aceptada', `idEstadoSolicitud` ='5', `habilitado` = '1';
+INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '2', `idUsuarioHuesped` ='2', `idPublicacion` ='1', `fechaReservaInicio` =STR_TO_DATE('24/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('28/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('15/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('17/01/2019','%d/%m/%Y'), `motivoDecisionPropietario` ='Aceptada', `idEstadoSolicitud` ='5', `habilitado` = '1';
 
 INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '3', `idUsuarioHuesped` ='4', `idPublicacion` ='1', `fechaReservaInicio` =STR_TO_DATE('24/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('29/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('15/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('','%d/%m/%Y'), `motivoDecisionPropietario` ='', `idEstadoSolicitud` ='1', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '4', `idUsuarioHuesped` ='5', `idPublicacion` ='1', `fechaReservaInicio` =STR_TO_DATE('25/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('30/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAltaSolicitud` =STR_TO_DATE('15/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `fechaDecisionPropietario` =STR_TO_DATE('','%d/%m/%Y'), `motivoDecisionPropietario` ='', `idEstadoSolicitud` ='1', `habilitado` = '1';
@@ -138,3 +139,16 @@ INSERT INTO `owner_rental_db`.`solicitudesDeReservas` 	SET `idSolicitud`= '10', 
 
 INSERT INTO `owner_rental_db`.`comprobantes`	SET `idComprobante`= '1', `idSolicitud` ='1', `idUsuarioHuesped` ='3', `idPublicacion` ='3', `fechaReservaInicio` =STR_TO_DATE('04/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('30/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAlta` =STR_TO_DATE('05/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `habilitado` = '1';
 INSERT INTO `owner_rental_db`.`comprobantes`	SET `idComprobante`= '2', `idSolicitud` ='2', `idUsuarioHuesped` ='2', `idPublicacion` ='1', `fechaReservaInicio` =STR_TO_DATE('24/01/2019','%d/%m/%Y'), `fechaReservaFin` =STR_TO_DATE('29/01/2019','%d/%m/%Y'), `cantPersonas` ='2', `precioFinal` ='1000', `fechaAlta` =STR_TO_DATE('17/01/2019','%d/%m/%Y'), `idUsuarioPropietario` ='1', `habilitado` = '1';
+
+
+
+//////
+UPDATE `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `descripcion`='Iniciada - Pendiente de aprobación', `habilitado` = '1' WHERE `idEstadoSolicitud`= '1';
+UPDATE `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `descripcion`='Rechazada por Propietario', `habilitado` = '1' WHERE `idEstadoSolicitud`= '2';
+UPDATE `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `descripcion`='Cancelada por Solicitador', `habilitado` = '1' WHERE `idEstadoSolicitud`= '3';
+UPDATE `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `descripcion`='Vencida', `habilitado` = '1' WHERE `idEstadoSolicitud`= '4';
+UPDATE `owner_rental_db`.`tiposEstadosSolicitudes` 	SET `descripcion`='Aceptada/ Confirmada por Propietario', `habilitado` = '1' WHERE `idEstadoSolicitud`= '5';
+
+
+UPDATE `owner_rental_db`.`solicitudesdereservas` SET `idEstadoSolicitud` ='5', `habilitado` = '1' WHERE `idSolicitud`= '1';
+UPDATE `owner_rental_db`.`solicitudesdereservas` SET `idEstadoSolicitud` ='5', `habilitado` = '1' WHERE `idSolicitud`= '2';

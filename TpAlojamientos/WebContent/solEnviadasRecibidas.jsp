@@ -37,11 +37,6 @@
 		<div class="row">
 			<div class="tab-content">
 				<div id="solEnviadas" class="tab-pane active">
-
-
-
-
-
 					<div class="container">
 						<div class="row">
 							<br>
@@ -51,56 +46,14 @@
 								<div class="panel-heading">
 									<b>Solictudes Enviadas por Usted - En revisión</b>
 								</div>
-								<div class="panel-body">
-									<div class="col-md-12 col-md-4">
-
-										<div class="container">
-											<table class="table table-hover table-responsive">
-												<thead>
-													<tr>
-														<th>idSolicitud</th>
-														<th>idUsuarioHuesped</th>
-														<th>idPublicacion</th>
-														<th>fechaReservaInicio</th>
-														<th>fechaReservaFin</th>
-														<th>cantDiasReserva</th>
-														<th>cantPersonas</th>
-														<th>precioFinal</th>
-														<th>fechaAltaSolicitud</th>
-														<th>idUsuarioPropietario</th>
-														<th>fechaDecisionPropietario</th>
-														<th>motivoDecisionPropietario</th>
-														<th>idEstadoSolicitud</th>
-														<th>habilitado</th>
-													</tr>
-												</thead>
-												<tbody>
-													<c:forEach items="${listaSolDeReservaEnviada}"
-														var="objSolReserva">
-														<c:if test="${objSolReserva.idEstadoSolicitud eq 1}">
-															<tr>
-																<td>${objSolReserva.idSolicitud}</td>
-																<td>${objSolReserva.idUsuarioHuesped}</td>
-																<td>${objSolReserva.idPublicacion}</td>
-																<td>${objSolReserva.fechaReservaInicio}</td>
-																<td>${objSolReserva.fechaReservaFin}</td>
-																<td>${objSolReserva.cantDiasReserva}</td>
-																<td>${objSolReserva.cantPersonas}</td>
-																<td>${objSolReserva.precioFinal}</td>
-																<td>${objSolReserva.fechaAltaSolicitud}</td>
-																<td>${objSolReserva.idUsuarioPropietario}</td>
-																<td>${objSolReserva.fechaDecisionPropietario}</td>
-																<td>${objSolReserva.motivoDecisionPropietario}</td>
-																<td>${objSolReserva.idEstadoSolicitud}</td>
-																<td>${objSolReserva.habilitado}</td>
-															</tr>
-														</c:if>
-													</c:forEach>
-
-												</tbody>
-											</table>
-										</div>
-
+								<div class="panel-body" style="background: CORNFLOWERBLUE;">
+									<div class="container">
+										<c:forEach items="${listaSolDeReservaEnviada}"
+											var="objSolReserva">
+											<c:if test="${objSolReserva.idEstadoSolicitud eq 1}">
+												<%@ include file="mostrarSolDeReserva.jsp"%>
+											</c:if>
+										</c:forEach>
 									</div>
 								</div>
 							</div>
@@ -110,7 +63,16 @@
 								<div class="panel-heading">
 									<b>Solictudes Enviadas por Usted - Aprobadas</b>
 								</div>
-								<div class="panel-body">Panel Content</div>
+								<div class="panel-body" style="background: MEDIUMAQUAMARINE;">
+									<div class="container">
+										<c:forEach items="${listaSolDeReservaEnviada}"
+											var="objSolReserva">
+											<c:if test="${objSolReserva.idEstadoSolicitud eq 5}">
+												<%@ include file="mostrarSolDeReserva.jsp"%>
+											</c:if>
+										</c:forEach>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -118,7 +80,17 @@
 								<div class="panel-heading">
 									<b>Solictudes Enviadas por Usted - Rechazadas</b>
 								</div>
-								<div class="panel-body">Panel Content</div>
+
+								<div class="panel-body" style="background: LAVENDERBLUSH;">
+									<div class="container">
+										<c:forEach items="${listaSolDeReservaEnviada}"
+											var="objSolReserva">
+											<c:if test="${objSolReserva.idEstadoSolicitud eq 2}">
+												<%@ include file="mostrarSolDeReserva.jsp"%>
+											</c:if>
+										</c:forEach>
+									</div>
+								</div>
 							</div>
 						</div>
 

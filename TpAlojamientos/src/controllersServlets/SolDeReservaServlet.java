@@ -122,13 +122,14 @@ public class SolDeReservaServlet extends HttpServlet {
 				// paginaJsp = "/solEnviadasRecibidas.jsp";
 				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
 				request.getSession().removeAttribute(strVistaPublicacion);
+				response.sendRedirect(paginaJsp);
 			} else {
 				// paginaJsp = "/solReservaAlta.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			}
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 

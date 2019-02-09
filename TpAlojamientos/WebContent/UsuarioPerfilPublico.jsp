@@ -103,8 +103,8 @@
 							</h4></a></li>
 					<!-- <li><a href="#ComentariosDelUsuario" data-toggle="tab"><h4>Comentarios
 								del usuario</h4></a></li>  -->
-					<li><a href="#OpinionesDeOtrosUsuarios" data-toggle="tab"><h4>Opiniones
-								de otros Usuarios</h4></a></li>
+					<!-- <li><a href="#OpinionesDeOtrosUsuarios" data-toggle="tab"><h4>Opiniones
+								de otros Usuarios</h4></a></li>-->
 				</ul>
 			</div>
 			<div class="row col-md-12">

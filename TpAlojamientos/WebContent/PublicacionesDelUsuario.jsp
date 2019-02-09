@@ -17,6 +17,7 @@
 		<div class="row">
 			<h2>Mis publicaciones</h2>
 			<hr />
+
 		</div>
 		<c:choose>
 			<c:when test="${empty listadoDePublicaciones}">
@@ -25,7 +26,12 @@
 				</div>
 			</c:when>
 			<c:otherwise>
-				<%@ include file="mostrarListadoDePublicaciones.jsp"%>
+				<h4>En esta sección se listan las publicaciones que cargaste.
+					Tenés ${fn:length(listadoDePublicaciones)} cargadas</h4>
+				<br>
+				<div class="row container">
+					<%@ include file="mostrarListadoDePublicaciones.jsp"%>
+				</div>
 			</c:otherwise>
 		</c:choose>
 	</div>
