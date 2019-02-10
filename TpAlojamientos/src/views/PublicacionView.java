@@ -20,6 +20,7 @@ public class PublicacionView {
 	private ArrayList<String> listaRutaImg;
 	private Localidad objLocalidad;
 	private Favorito objFavorito;
+	private int cantFavoritos;
 	private ArrayList<Servicio> listaServicios;
 	private String descripcionTipoAlojamiento;
 
@@ -112,6 +113,14 @@ public class PublicacionView {
 
 	public void setDescripcionTipoAlojamiento(String descripcionTipoAlojamiento) {
 		this.descripcionTipoAlojamiento = descripcionTipoAlojamiento;
+	}
+
+	public int getCantFavoritos() {
+		return cantFavoritos;
+	}
+
+	public void setCantFavoritos(int cantFavoritos) {
+		this.cantFavoritos = cantFavoritos;
 	}
 
 }

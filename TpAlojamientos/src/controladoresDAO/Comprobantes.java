@@ -9,6 +9,7 @@ import java.util.HashMap;
 import exceptions.ValidacionException;
 import extra.Conexion;
 import extra.LOG;
+import extra.Utilitario;
 import modelo.Comprobante;
 
 public class Comprobantes implements Connectable<Comprobante> {
@@ -204,6 +205,9 @@ public class Comprobantes implements Connectable<Comprobante> {
 		o.setFechaAlta(rs.getDate(cCampo.fechaAlta));
 		o.setIdUsuarioPropietario(rs.getInt(cCampo.idUsuarioPropietario));
 		o.setHabilitado(rs.getBoolean(cCampo.habilitado));
+
+		int cantDias = Utilitario.getCantOfDays(o.getFechaReservaInicio(), o.getFechaReservaFin());
+		o.setCantDiasReserva(cantDias);
 		return o;
 	}
 
@@ -223,6 +227,11 @@ public class Comprobantes implements Connectable<Comprobante> {
 	}
 
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
+
+	public Comprobante getObjectByIdComprobante(int idComprobante) {
+		return getAll().stream().filter(item -> item.getIdComprobante() == idComprobante).findFirst().orElse(null);
+	}
+
 	public ArrayList<Comprobante> getAllByIdUsuarioHuesped(int idUsuarioHuesped) {
 		ArrayList<Comprobante> listaFiltrada = new ArrayList<Comprobante>();
 

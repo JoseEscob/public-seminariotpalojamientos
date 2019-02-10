@@ -14,6 +14,8 @@ public class Comprobante {
 	private Date fechaAlta;
 	private int idUsuarioPropietario;
 	private boolean habilitado;
+	
+	private int cantDiasReserva;
 
 	public int getIdComprobante() {
 		return idComprobante;
@@ -102,5 +104,14 @@ public class Comprobante {
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
 	}
+	
+	public int getCantDiasReserva() {
+		return cantDiasReserva;
+	}
+
+	public void setCantDiasReserva(int cantDiasReserva) {
+		this.cantDiasReserva = cantDiasReserva;
+	}
+
 
 }

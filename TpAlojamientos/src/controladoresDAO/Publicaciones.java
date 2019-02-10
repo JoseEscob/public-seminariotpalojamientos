@@ -332,6 +332,13 @@ public class Publicaciones implements Connectable<Publicacion> {
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 
 	public Publicacion getObjectByID(int idPublicacion) {
+		Publicacion objPublicacion = new Publicacion();
+		objPublicacion.setIdPublicacion(idPublicacion);
+		objPublicacion = this.get(objPublicacion);
+		return objPublicacion;
+	}
+
+	public Publicacion getObjectByIDLambda(int idPublicacion) {
 		Publicacion obj = new Publicacion();
 		obj = this.getAll().stream().filter(item -> item.getIdPublicacion() == idPublicacion).findFirst().orElse(null);
 		return obj;

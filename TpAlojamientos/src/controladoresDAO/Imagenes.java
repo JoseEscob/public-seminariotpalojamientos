@@ -199,4 +199,17 @@ public class Imagenes implements Connectable<Imagen> {
 		return listaImagenes;
 	}
 
+	public String getPathOfFirstIMGByIdPublicacion(int idPublicacion) {
+		// Imagen objImagen = getAll().stream().filter(item -> item.getIdPublicacion()
+		// == idPublicacion).findFirst()
+		// .orElse(null);
+
+		// return objImagen.getRutaImgPublicacion();
+
+		if (getAllByIdPublicacion(idPublicacion).isEmpty())
+			return null;
+		else
+			return getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
+	}
+
 }

@@ -458,6 +458,9 @@ public class PublicacionServlet extends HttpServlet {
 			objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
 			// 3- Guardar en objeto de la clase
 			vistaPublicacion.setObjFavorito(objFavorito);
+			// 3.1 Actualiza la cantidad de 'likes' en la publicación
+			int cantidadFavoritos = favoritosDAO.getCountByIdPublicacion(idPublicacion);
+			vistaPublicacion.setCantFavoritos(cantidadFavoritos);
 			if (agregaAFavoritos)
 				message = String.format("Se agregó la publicación %d a su lista de favoritos", idPublicacion);
 			else
@@ -509,6 +512,7 @@ public class PublicacionServlet extends HttpServlet {
 			throws LectorDatosException {
 		PublicacionView vistaPublicacion = new PublicacionView();
 		int cantidadComentarios = 0;
+		int cantidadFavoritos = 0;
 		// 1.1 DAO recuperar publicacion
 		Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
 		if (objPublicacion == null)
@@ -526,7 +530,10 @@ public class PublicacionServlet extends HttpServlet {
 		Localidad objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
 		objLocalidad.setNombrePartido(localidadDAO.getNombrePartido(objLocalidad.getIdPartido()));
 		// 1.6 DAO recuperar datos de clase Favoritos
-		Favorito objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
+		Favorito objFavorito = new Favorito();
+		if (idUsuarioLogueado != 0)
+			objFavorito = favoritosDAO.getObjFavoritoByParams(idUsuarioLogueado, idPublicacion);
+		cantidadFavoritos = favoritosDAO.getCountByIdPublicacion(idPublicacion);
 		// 1.7 DAO Recuperar servicios de publicación
 		vistaPublicacion.setListaServicios(serviciosDAO.getAllByIdPublicacion(idPublicacion));
 		// 1.8 DAO Recuperar descripcion del tipo de alojamiento
@@ -546,6 +553,7 @@ public class PublicacionServlet extends HttpServlet {
 		vistaPublicacion.setPublicacion(objPublicacion);
 		vistaPublicacion.setUsuario(objUsuario);
 		vistaPublicacion.setCantComentarios(cantidadComentarios);
+		vistaPublicacion.setCantFavoritos(cantidadFavoritos);
 		vistaPublicacion.setObjLocalidad(objLocalidad);
 		vistaPublicacion.setObjFavorito(objFavorito);
 		return vistaPublicacion;
@@ -563,7 +571,11 @@ public class PublicacionServlet extends HttpServlet {
 			if (request.getParameter("idPublicacion") != null) {
 				idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
 			}
-			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+
+			int idUsuarioLogueado = 0;
+			if (ORSesion.sesionActiva(request)) {
+				idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			}
 			PublicacionView vistaPublicacion = obtenerPublicacionView(idUsuarioLogueado, idPublicacion);
 			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
 			listImagenes = imagenDAO.getAllByIdPublicacion(idPublicacion);

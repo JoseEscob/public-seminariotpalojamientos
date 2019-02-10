@@ -74,8 +74,10 @@
 					</h4>
 					<div class="row">
 						<div class="col-md-6 col-md-12">
-							<label class="control-label"> ID Publicación:
-								${vistaPublicacion.publicacion.idPublicacion} </label>
+							<ul class="list-inline">
+								<li><b>ID Publicación: </b></li>
+								<li><b>${vistaPublicacion.publicacion.idPublicacion} </b></li>
+							</ul>
 						</div>
 						<div class="col-md-6 col-md-12">
 							<c:if
@@ -89,10 +91,13 @@
 							</c:if>
 						</div>
 					</div>
-
-					<div class="col-md-12 col-md-12">
-						<label class="control-label"> Fecha publicada:
-							${vistaPublicacion.publicacion.fechaAlta} </label>
+					<div class="row">
+						<div class="col-md-12 col-md-12">
+							<ul class="list-inline">
+								<li><b>Fecha publicada: </b></li>
+								<li><b>${vistaPublicacion.publicacion.fechaAlta}</b></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class="form-group">
@@ -140,43 +145,69 @@
 							</c:otherwise>
 						</c:choose>
 					</div>
-					<div class="row col-md-6 pull-right">
-						<c:choose>
-							<c:when test="${vistaPublicacion.objFavorito.isHabilitado()}">
-								<c:url value="PublicacionServlet?"
-									var="urlEliminarPublicacionFav">
-									<c:param name="accionPOST" value="GestionarFavoritos" />
-									<c:param name="idPublicacion"
-										value="${vistaPublicacion.publicacion.idPublicacion}" />
-									<c:param name="agregaAFavoritos" value="false" />
-								</c:url>
-								<form method="post" action="${urlEliminarPublicacionFav}">
-									<button class="btn btn-danger" data-toggle="tooltip"
-										title="Esta publicación ya no aparecerá en tu lista de favoritos">
-										<span class="glyphicon glyphicon-heart" /></span>&nbsp;Eliminar de
-										favoritos
-									</button>
-								</form>
-							</c:when>
-							<c:otherwise>
-								<c:url value="PublicacionServlet?"
-									var="urlGuardarPublicacionFav">
-									<c:param name="accionPOST" value="GestionarFavoritos" />
-									<c:param name="idPublicacion"
-										value="${vistaPublicacion.publicacion.idPublicacion}" />
-									<c:param name="agregaAFavoritos" value="true" />
-								</c:url>
-								<form method="post" action="${urlGuardarPublicacionFav}">
-									<button class="btn btn-primary" data-toggle="tooltip"
-										title="Guardar esta publicación para verla más tarde">
-										<span class="glyphicon glyphicon-heart" /></span>&nbsp;Agregar a
-										favoritos
-									</button>
-								</form>
 
-							</c:otherwise>
-						</c:choose>
-					</div>
+					<c:if test="${not empty sessionScope.sessionUser}">
+						<div class="row col-md-6 pull-right">
+							<c:choose>
+								<c:when test="${vistaPublicacion.objFavorito.isHabilitado()}">
+									<c:url value="PublicacionServlet?"
+										var="urlEliminarPublicacionFav">
+										<c:param name="accionPOST" value="GestionarFavoritos" />
+										<c:param name="idPublicacion"
+											value="${vistaPublicacion.publicacion.idPublicacion}" />
+										<c:param name="agregaAFavoritos" value="false" />
+									</c:url>
+									<form method="post" action="${urlEliminarPublicacionFav}">
+										<button class="btn btn-danger" data-toggle="tooltip"
+											title="Esta publicación ya no aparecerá en tu lista de favoritos">
+											<span class="glyphicon glyphicon-heart" /></span>&nbsp;Eliminar de
+											favoritos
+										</button>
+									</form>
+								</c:when>
+								<c:otherwise>
+									<c:url value="PublicacionServlet?"
+										var="urlGuardarPublicacionFav">
+										<c:param name="accionPOST" value="GestionarFavoritos" />
+										<c:param name="idPublicacion"
+											value="${vistaPublicacion.publicacion.idPublicacion}" />
+										<c:param name="agregaAFavoritos" value="true" />
+									</c:url>
+									<form method="post" action="${urlGuardarPublicacionFav}">
+										<button class="btn btn-primary" data-toggle="tooltip"
+											title="Guardar esta publicación para verla más tarde">
+											<span class="glyphicon glyphicon-heart" /></span>&nbsp;Agregar a
+											favoritos
+										</button>
+									</form>
+
+								</c:otherwise>
+							</c:choose>
+
+							<br>
+							<c:choose>
+
+								<c:when test="${vistaPublicacion.cantFavoritos gt 1}">
+									<p>
+										<b>${vistaPublicacion.cantFavoritos}&nbsp;personas
+											agregaron esta publicación a su lista de favoritos</b>
+									</p>
+								</c:when>
+								<c:when test="${vistaPublicacion.cantFavoritos eq 1}">
+									<p>
+										<b>${vistaPublicacion.cantFavoritos}&nbsp;persona agregó
+											esta publicación a sus favoritos</b>
+									</p>
+								</c:when>
+								<c:otherwise>
+
+								</c:otherwise>
+							</c:choose>
+
+						</div>
+
+					</c:if>
+
 				</div>
 				<div class="row col-md-12">
 					<br>
@@ -193,11 +224,25 @@
 				</div>
 				<div class="row col-md-12" align="center">
 					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button> href="#formSolReserva" -->
+					<c:choose>
 
-					<a class="btn btn-success btn-lg" data-toggle="modal"
-						data-target="#formSolReserva"> <span
-						class="glyphicon glyphicon-flag"></span> Solicitar una reserva
-					</a>
+						<c:when test="${empty sessionScope.sessionUser}">
+							<div class="alert alert-info">
+								<h4>Para solicitar una reserva primero debés iniciar tu
+									sesión</h4>
+							</div>
+						</c:when>
+						<c:when
+							test="${vistaPublicacion.usuario.idUsuario eq sessionScope.sessionUser.idUsuario}">
+
+						</c:when>
+						<c:otherwise>
+							<a class="btn btn-success btn-lg" data-toggle="modal"
+								data-target="#formSolReserva"> <span
+								class="glyphicon glyphicon-flag"></span> Solicitar una reserva
+							</a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>

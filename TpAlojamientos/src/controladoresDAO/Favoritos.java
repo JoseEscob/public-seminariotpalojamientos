@@ -25,6 +25,8 @@ public class Favoritos implements Connectable<Favorito> {
 			put("all", "select * from favoritos");
 			put("insert", "insert into favoritos set idFavorita=?, habilitado=?, idUsuario=?, idPublicacion=?");
 			put("count", "select count(*) as cantidad from favoritos");
+			put("countByPublicacion",
+					"select count(*) as cantidad from favoritos where idPublicacion=? and habilitado=true");
 			put("update", "update favoritos set idFavorita=?, habilitado=? where idUsuario=? and idPublicacion=?");
 			put("get", "select * from favoritos where idUsuario=? and idPublicacion=?");
 			put("like", "");
@@ -71,6 +73,27 @@ public class Favoritos implements Connectable<Favorito> {
 			cn.Open();
 			ResultSet rs = cn.query(queries.get("count"));
 
+			if (rs.next()) {
+				cantidad = rs.getInt("cantidad");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return cantidad;
+	}
+
+	public int getCountByIdPublicacion(int idPublicacion) {
+		cn = new Conexion();
+		int cantidad = 0;
+		try {
+			cn.Open();
+			// ResultSet rs = cn.query(queries.get("countByPublicacion"));
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("countByPublicacion"));
+			ps.setInt(1, idPublicacion);
+			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				cantidad = rs.getInt("cantidad");
 			}

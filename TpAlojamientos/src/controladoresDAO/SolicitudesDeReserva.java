@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import extra.Conexion;
@@ -218,6 +219,20 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		return listaFiltrada;
 	}
 
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioHuespedSorted(int idUsuarioHuesped) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
+
+		getAll().forEach(item -> {
+			if (item.getIdUsuarioHuesped() == idUsuarioHuesped)
+				listaFiltrada.add(item);
+		});
+
+		listaFiltrada.sort(
+				Comparator.comparing(item -> item.getIdSolicitud(), Comparator.nullsLast(Comparator.reverseOrder())));
+
+		return listaFiltrada;
+	}
+
 	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietario(int idUsuarioPropietario) {
 		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
 
@@ -228,4 +243,5 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 
 		return listaFiltrada;
 	}
+
 }

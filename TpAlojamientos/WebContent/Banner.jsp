@@ -48,59 +48,71 @@
 					<li><a href="PublicacionServlet?accionGET=VerPublicaciones"><span
 							class="glyphicon glyphicon-check" /></span>&nbsp;Todas las
 							publicaciones</a></li>
-					<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
-							class="glyphicon glyphicon-plus"></span>&nbsp;Nueva Publicación
-					</a></li>
-					<li><a href="PublicacionServlet?accionGET=verMisPublicaciones"><span
-							class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
-							Publicaciones</a></li>
-					<li><a
-						href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
-							class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
-							Favoritas </a></li>
-					<li><a href="#"></a></li>
-					<li class="divider"></li>
+					<c:if test="${not empty sessionScope.sessionUser}">
+						<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
+								class="glyphicon glyphicon-plus"></span>&nbsp;Nueva Publicación
+						</a></li>
+						<li><a
+							href="PublicacionServlet?accionGET=verMisPublicaciones"><span
+								class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
+								Publicaciones</a></li>
+						<li><a
+							href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
+								class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
+								Favoritas </a></li>
+						<li><a href="#"></a></li>
+						<li class="divider"></li>
 
-					<li><a
-						href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
-							Test Comentario</a></li>
+						<li><a
+							href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
+								Test Comentario</a></li>
 
-					<li><a
-						href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
-							class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
+						<li><a
+							href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
+								class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
+					</c:if>
 				</ul></li>
+			<c:if test="${not empty sessionScope.sessionUser}">
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown"><span
+						class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
+					<ul class="dropdown-menu">
 
-			<li class="dropdown"><a class="dropdown-toggle"
-				data-toggle="dropdown"><span
-					class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
-				<ul class="dropdown-menu">
+						<li><c:url value="SolDeReservaServlet?" var="urlSolDeReserva">
+								<c:param name="accionGET" value="verSolEnviadasRecibidas" />
+							</c:url> <a href="${urlSolDeReserva}"> <span
+								class="glyphicon glyphicon-send"></span>&nbsp;Solicitudes de
+								Reserva
+						</a></li>
+						<li class="divider"></li>
+						<li><c:url value="SolDeReservaServlet?"
+								var="urlComprobanteDeReserva">
+								<c:param name="accionGET" value="verComprobanteDeReserva" />
+							</c:url> <a href="${urlComprobanteDeReserva}"> <span
+								class="glyphicon glyphicon-briefcase"></span>&nbsp;Comprobantes
+								de Reservas Aprobadas
+						</a></li>
+						<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
 
-					<li><c:url value="SolDeReservaServlet?" var="urlSolDeReserva">
-							<c:param name="accionGET" value="verSolEnviadasRecibidas" />
-						</c:url> <a href="${urlSolDeReserva}"> <span
-							class="glyphicon glyphicon-send"></span>&nbsp;Solicitudes de
-							Reserva
-					</a></li>
-
-					<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
-
-					<li><a
-						href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
+						<li><a
+							href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
 
 
-				</ul></li>
+					</ul></li>
 
 
-			<li class="dropdown"><a class="dropdown-toggle"
-				data-toggle="dropdown"><span
-					class="glyphicon glyphicon-chevron-down"></span> Admin</a>
-				<ul class="dropdown-menu">
-					<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
-							class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
-					<li><a
-						href="PublicacionServlet?accionGET=admListaPublicaciones"><span
-							class="glyphicon glyphicon-check" /></span> Lista Publicaciones</a></li>
-				</ul></li>
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown"><span
+						class="glyphicon glyphicon-chevron-down"></span> Admin</a>
+					<ul class="dropdown-menu">
+						<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
+								class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
+						<li><a
+							href="PublicacionServlet?accionGET=admListaPublicaciones"><span
+								class="glyphicon glyphicon-check" /></span> Lista Publicaciones</a></li>
+					</ul></li>
+
+			</c:if>
 		</ul>
 		<form class="navbar-form navbar-left" action="/action_page.php">
 			<div class="input-group">
@@ -131,7 +143,7 @@
 									href="PublicacionServlet?accionGET=verPerfilPublicoUsuarioLogueado"><span
 										class="glyphicon glyphicon-globe" /></span> Ver mi Perfil Público</a></li>
 								<li><a href="UsuarioServlet?accionGET=MiPerfil"><span
-										class="glyphicon glyphicon-cog" /></span> Editar mi Perfil</a></li>
+										class="glyphicon glyphicon-cog" /></span> Configurar mi Perfil</a></li>
 								<li class="divider"></li>
 								<li><a href="UsuarioServlet?accionGET=Logout"><span
 										class="glyphicon glyphicon-off" /></span>&nbsp;Salir</a></li>
