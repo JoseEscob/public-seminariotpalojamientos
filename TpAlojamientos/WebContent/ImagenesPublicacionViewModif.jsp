@@ -19,26 +19,26 @@
 		<label for="" class="btn btn-success" onclick="addImages(${idPublicacion})" id="btnAdd">Añadir Imagenes <label for="" style="font-weight: normal;" id="imageCounter">${imageCounter }</label> / 20</label>
 	</div>
 	<div class="row">
-		
-		<c:choose>
-			<c:when test="${not empty listImagenes }">
-				<c:forEach items="${listImagenes }" var="objImagen">
-				
-					<div class="container col-md-6" id="imagen_${objImagen.idImagen }">
-						<img alt="imagen de la publicacion" src="${objImagen.rutaImgPublicacion}" class="img-responsive">
-						<label for="" class="btn btn-primary cimg" id="chn_${objImagen.idImagen }" onclick="onclickCambiarEvent(${objImagen.idImagen},${objImagen.idPublicacion })">Cambiar</label>
-						<label for="" class="btn btn-danger" onclick="eliminarImagen(${objImagen.idImagen},${objImagen.idPublicacion})">Eliminar</label>
+		<div id="resultImages">
+			<c:choose>
+				<c:when test="${not empty listImagenes }">
+					<c:forEach items="${listImagenes }" var="objImagen">
+					
+						<div class="container col-md-6" id="imagen_${objImagen.idImagen }">
+							<img alt="imagen de la publicacion" src="${objImagen.rutaImgPublicacion}" class="img-responsive">
+							<label for="" class="btn btn-primary cimg" id="chn_${objImagen.idImagen }" onclick="onclickCambiarEvent(${objImagen.idImagen},${objImagen.idPublicacion })">Cambiar</label>
+							<label for="" class="btn btn-danger" onclick="eliminarImagen(${objImagen.idImagen},${objImagen.idPublicacion})">Eliminar</label>
+						</div>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<div class="alert alert-info" id="msg" hidden>
+						<h4>No se han encontrado imagenes para esta publiacion.</h4>					
 					</div>
-				</c:forEach>
-			</c:when>
-			<c:otherwise>
-				<div class="alert alert-info">
-					<h4>No se han encontrado imagenes para esta publiacion.</h4>					
-				</div>
-				<label for="" class="btn btn-primary">Cargar Imagenes</label>
-			</c:otherwise>
-			
-		</c:choose>
+				</c:otherwise>
+				
+			</c:choose>
+		</div>
 		<form action="UploadFilesServlet" action="post" enctype="multipart/form-data" id="formImage">
 			<input type="file" name="archivo" id="input_image" accept="image/jpeg,image/gif,image/png" style="visibility: hidden;">
 		</form>
@@ -49,35 +49,46 @@
 			<div class="alert alert-info">
 				<h4>No se han encontrado imagenes para esta publiacion.</h4>					
 			</div>
-			<label for="" class="btn btn-primary">Cargar Imagenes</label>
 		</div>
 	</div>
 
 </div>
 <script type="text/javascript">
 
+	function onclickCambiarEvent(idImagen, idPublicacion){
+		$('#input_image').unbind("change");
+		$('#input_image').change(function(){
+			actualizarImagen(idImagen, idPublicacion);
+		});
+		$('#input_image').focus().trigger("click");
+		
+		
+	}
+	
+	function actualizarTextoLimite(actividad){
+		$('#btnAdd').empty();
+		$('#btnAdd').append("Añadir Imagenes "+actividad+" / 20");
+	}
+
 	function eliminarImagen(idImagen, idPublicacion){
 		ajaxUploadFilesServlet("formImage", "borrarImagenPublicacion", function(result){
 			if(result.carpetaVacia != null){
 				document.getElementById("msgInfo").removeAttribute("hidden");
-
 			}
 			if(result.ocultar != null){
 				document.getElementById("imagen_"+result.ocultar).setAttribute("hidden", true);
-				console.log(result.ocultar);
 			}
 			if(result.imageCounter != null){
-				$('#btnAdd').empty();
-				$('#btnAdd').append("Añadir Imagenes "+result.imageCounter+" / 20");
-						
-				//$('#btnAdd')[0].innerText = "Añadir Imagenes "+result.imageCounter+" / 20";
-
+				actualizarTextoLimite(result.imageCounter);	
+				if(result.imageCounter < 20 && $("#btnAdd").attr("hidden")){
+					$("#btnAdd").removeAttribute("hidden");
+				}
 			}
 			
 		},function(e){},{"idPublicacion": idPublicacion, "idImagen": idImagen});
 	}
-	function actualizarImagen("formImage", idPublicacion){
-		ajaxUploadFilesServlet(idImagen,"cambiarImagenPublicacion", function(result){
+	function actualizarImagen(idImagen, idPublicacion){
+		ajaxUploadFilesServlet("formImage","cambiarImagenPublicacion", function(result){
 			if(result.newImage != null){
 				var obj = document.getElementById("imagen_"+result.newImage.idImagen);
 				obj.children[0].src =result.newImage.rutaImgPublicacion+"?"+(new Date()).getTime();
@@ -88,18 +99,32 @@
 	
 	function cargarNuevasImagenes(idPublicacion){
 		ajaxUploadFilesServlet("formImageMultiple", "subirImagenesPublicacion",function(result){
+			if(result.imageCounter != null){
+				actualizarTextoLimite(result.imageCounter);	
+				if(result.imageCounter >= 20){
+					actualizarTextoLimite(20);	
+					$("#btnAdd").setAttribute("disabled", true);
+					
+				}
+			}
+			if(result.imagenes != null){
+				$('#resultImages').empty();
+				for(var k in result.imagenes){
+					addElement(result.imagenes[k].idImagen, result.imagenes[k].idPublicacion, result.imagenes[k].rutaImgPublicacion);
+				}
+			}
 			
-		}, function(e){},{"idPublicacion", idPublicacion});
+		}, function(e){},{"idPublicacion": idPublicacion});
 	}
 	
 	
 	
 	function ajaxUploadFilesServlet(idForm, functionName, successFunction, errorFunction, dataForAppend){
 		 // Get form
-        var form = $('#'+idForm)[0];
-
+	    var form = $('#'+idForm)[0];
+	
 		// Create an FormData object 
-        var data = new FormData(form);
+	    var data = new FormData(form);
 		
 		if(dataForAppend != null)
 			for(var key in dataForAppend)
@@ -122,33 +147,44 @@
 		
 	}
 	
-	function updateImage(idImagen){
-		var obj = document.getElementById("imagen_"+idImagen);
-		var src = obj.children[0].src;
-		obj.children[0].src = "";
-		obj.children[0].src =src+"?"+(new Date()).getTime();
-	}
-	
-	
-	function onclickCambiarEvent(idImagen, idPublicacion){
-		$('#input_image').unbind("change");
-		$('#input_image').change(function(){
-			actualizarImagen(idImagen, idPublicacion);
-		});
-		$('#input_image').focus().trigger("click");
+	function addElement(idImagen, idPublicacion, src){
+		var div = document.createElement("div");
+		var img = document.createElement("img");
+		var cambiar = document.createElement("label");
+		var eliminar = document.createElement("label");
 		
+		div.setAttribute("class", "container col-md-6");
+		div.setAttribute("id","imagen_"+idImagen);
 		
+		img.setAttribute("class", "img-responsive");
+		img.alt="Imagen de la publicacion";
+		img.src=src;
+		
+		cambiar.setAttribute("class" , "btn btn-primary cimg");
+		cambiar.setAttribute("id", "chn_"+idImagen);
+		cambiar.setAttribute("onclick", "onclickCambiarEvent("+idImagen+","+idPublicacion+")");
+		cambiar.innerText = "Cambiar";
+		
+		eliminar.setAttribute("class", "btn btn-danger");
+		eliminar.setAttribute("onclick", "eliminarImagen("+idImagen+", "+idPublicacion+")");
+		eliminar.innerText="Eliminar";
+		
+		div.appendChild(img);
+		div.appendChild(cambiar);
+		div.appendChild(eliminar);
+
+		$('#resultImages').append(div);
+
 	}
-	
+
 	function addImages(idPublicacion){
 		$('#inputImageMultiple').unbind("change");
 		$('#inputImageMultiple').change(function(){
 			//actualizarImagen(idImagen, idPublicacion);
-			console.log(parseInt($('#imageCounter')[0].innerText)+1);
 			cargarNuevasImagenes(idPublicacion);
 		});
 		$('#inputImageMultiple').focus().trigger("click");
-	}	
+	}		
 </script>
 </body>
 </html>

@@ -94,6 +94,9 @@ public class UploadFilesServlet extends HttpServlet {
 				case "borrarImagenPublicacion":
 					borrarImagenPublicacion(request, response);
 					break;
+				case "subirImagenesPublicacion":
+					subirImagenesPublicacion(request, response);
+					break;
 				default: break;
 			}
 
@@ -424,6 +427,65 @@ public class UploadFilesServlet extends HttpServlet {
 		
 		//En construccion
 
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
+	}
+	
+	private void subirImagenesPublicacion(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> resultMap = new HashMap<String, Object>();	
+		ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
+		String raiz = getServletContext().getRealPath("");
+		
+		String idPublicacionString = fileHandler.getParameter("idPublicacion");
+		if(idPublicacionString != null) {
+			int idPublicacion = Integer.parseInt(idPublicacionString);
+			
+			String carpetaContenedora = raiz+Constantes.RUTACarpetaFotosPublicacion+idPublicacion;
+				
+			int contador = 0;
+			contador = FileHandler.CountFiles(carpetaContenedora);
+			
+			for(FileItem item : fileHandler.getFiles()) {
+				contador ++;
+				if(contador <= 20) {						
+				
+					String extension = FilenameUtils.getExtension(new File(item.getName()).getName());
+					File storeFile = new File(carpetaContenedora+File.separator+contador+"."+extension);
+					
+					File delete = FileHandler.IfExists(carpetaContenedora, storeFile.getName());
+					if(delete != null)
+						delete.delete();
+					
+					item.write(storeFile);
+					
+					Imagen imagen = new Imagen();
+					imagen.setIdImagen(contador);
+					imagen.setHabilitado(true);
+					imagen.setIdPublicacion(idPublicacion);
+					imagen.setRutaImgPublicacion(new File(Constantes.RUTACarpetaFotosPublicacion+idPublicacion+File.separator+storeFile.getName()).getPath());
+					Imagen dbImagen = new Imagen();
+					dbImagen = imagenDao.get(imagen);
+					if(dbImagen != null) 
+						imagenDao.update(imagen);
+					else
+						imagenDao.insert(imagen);
+				}else {
+					resultMap.put("limite", "limite");
+					break;
+				}
+				
+				
+			}	
+			for(Imagen img : imagenDao.getAllByIdPublicacion(idPublicacion)) {
+				if(img.isHabilitado())
+					listImagenes.add(img);
+			}
+			resultMap.put("imagenes", listImagenes);
+			resultMap.put("imageCounter", FileHandler.CountFiles(carpetaContenedora));
+								
+					
+		}		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
