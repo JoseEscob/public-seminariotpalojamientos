@@ -19,6 +19,9 @@
 			<hr />
 
 		</div>
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
 		<c:choose>
 			<c:when test="${empty listadoDePublicaciones}">
 				<div class="alert alert-info">
@@ -27,7 +30,7 @@
 			</c:when>
 			<c:otherwise>
 				<h4>En esta sección se listan las publicaciones que cargaste.
-					Tenés ${fn:length(listadoDePublicaciones)} cargadas</h4>
+					Tenés ${fn:length(listadoDePublicaciones)} cargada/s</h4>
 				<br>
 				<div class="row container">
 					<%@ include file="mostrarListadoDePublicaciones.jsp"%>

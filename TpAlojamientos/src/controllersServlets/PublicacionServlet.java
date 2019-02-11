@@ -93,6 +93,9 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerPublicaciones":
 				verPublicaciones(request, response);
 				break;
+			case "EditarPublicacion":
+				editarPublicacion(request, response);
+				break;
 			case "Nuevo":
 				cargarComponentesAltaPublicacion(request, response);
 				// altaPublicacion(request, response);
@@ -100,7 +103,7 @@ public class PublicacionServlet extends HttpServlet {
 			case "VerComentarios":
 				verComentariosPublicacion(request, response);
 				break;
-			case "Buscar":
+			case "buscarPublicaciones":
 				buscarPublicaciones(request, response);
 				break;
 			case "verMisPublicaciones":
@@ -164,7 +167,8 @@ public class PublicacionServlet extends HttpServlet {
 			case "nuevaPublicacion":
 				nuevaPublicacion(request, response);
 				break;
-			case "read":
+			case "updatePublicacion":
+				updatePublicacion(request, response);
 				break;
 			case "update":
 				break;
@@ -541,7 +545,7 @@ public class PublicacionServlet extends HttpServlet {
 		// String carpetaImgPublicacion =
 		// imagenDAO.getAllByIdPublicacion(idPublicacion).get(0).getRutaImgPublicacion();
 
-		String carpetaImgPublicacion = Constantes.RUTAFolderFotosPublicacion + objPublicacion.getIdPublicacion() + "/";
+		String carpetaImgPublicacion = Constantes.RUTAFolderFotosPublicacion + objPublicacion.getIdPublicacion();
 		// carpetaImgPublicacion =
 		// "C:\\Users\\..\\git\\seminariotpalojamientos\\TpAlojamientos\\WebContent\\imagenes\\publicaciones\\Publicacion_1";
 		// ArrayList<String> listaRutaImg =
@@ -568,6 +572,7 @@ public class PublicacionServlet extends HttpServlet {
 
 		try {
 			// 1- recuperar valores del request y los DAOs
+
 			if (request.getParameter("idPublicacion") != null) {
 				idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
 			}
@@ -641,11 +646,139 @@ public class PublicacionServlet extends HttpServlet {
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
 
-	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		// Modulo de busqueda
+	/**
+	 * Carga los componentes y los datos de una publicación para ser editada
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	private void editarPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// 0- Declaración de variables
+		String message = null;
+
+		int idPublicacion = 0;
+
+		try {
+			// 1- recuperar valores del request y los DAOs
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			if (request.getParameter("idPublicacion") == null) {
+				throw new ServidorException("No se encontró la Publicación con ID: " + idPublicacion);
+			}
+			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+
+			int idUsuarioLogueado = 0;
+			idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			int idUsuarioPropietario = objPublicacion.getIdUsuario();
+
+			if (idUsuarioLogueado != idUsuarioPropietario) {
+				throw new ValidacionException("Usted no es el propietario de esta publicación");
+			}
+			// Cargar datos de los componentes TODO extraer a función
+			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
+			ArrayList<Localidad> listaLocalidades = localidadDAO.getAll();
+			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
+			ArrayList<TipoServicio> listaTipoServicios = new TiposServicios().getAll();
+
+			ArrayList<Servicio> listaServiciosPublicacion = serviciosDAO.getAllByIdPublicacion(idPublicacion);
+			ArrayList<Imagen> listaImagenesPublicacion = imagenDAO.getAllByIdPublicacion(idPublicacion);
+
+			request.setAttribute("listaTiposAlojamientos", listaTiposAlojamientos);
+			request.setAttribute("listaPartidos", listaPartidos);
+			request.setAttribute("listaLocalidades", listaLocalidades);
+			request.setAttribute("listaTipoServicios", listaTipoServicios);
+
+			request.setAttribute("objPublicacion", objPublicacion);
+			request.setAttribute("listaServiciosPublicacion", listaServiciosPublicacion);
+			request.setAttribute("listaImagenesPublicacion", listaImagenesPublicacion);
+			// request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
+			// request.setAttribute("objLocalidad", objLocalidad);
+
+		} catch (Exception e) {
+			message = e.getMessage();
+		} finally {
+			// 4- Informar estado/resultados en interfaz (JSP)
+			request.setAttribute("message", message);
+			paginaJsp = "/PublicacionModif.jsp";
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
 	}
 
+	private void updatePublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idPublicacion = 0;
+		try {
+			// 1- recuperar valores del formulario JSP y validar información obtenida
+			Publicacion objPublicacion = new Publicacion();
+			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
+			// 2- guardar la información en la DB
+			if (!publicacionDAO.update(objPublicacion))
+				throw new ValidacionException("SQL Ocurrió un error al actualizar la publicación " + idPublicacion);
+
+			message = "Publicacion actualizada con exito";
+			// 3.2- DB: guardar información - serviciosDAO
+			String[] chklistServicios = request.getParameterValues("chklistServicios");
+			ArrayList<Servicio> listaServicios = new ArrayList<Servicio>();
+			int idServicio = 0;
+			for (String chkServicio : chklistServicios) {
+				Servicio objServicio = new Servicio();
+				idServicio = Integer.parseInt(chkServicio);
+				objServicio.setIdPublicacion(idPublicacion);
+				objServicio.setIdServicio(idServicio);
+				listaServicios.add(objServicio);
+			}
+			// 3.2.2- verificar correcto almacenamiento en DB
+			int cantArchivosInsertado = 0;
+			for (Servicio objServ : listaServicios) {
+				// Servicios existentes pasar estado
+				// Servicios nuevos insert
+				// if (serviciosDAO.updateServicios(objServ, ))
+				cantArchivosInsertado++;
+			}
+			LOG.info(String.format("Se guardaron %d de %d servicios ingresados", cantArchivosInsertado,
+					listaServicios.size()));
+
+			// request.setAttribute("objInfoMessage", objInfoMessage);
+			message = String.format("Se actualizó la publicación %d con éxito", idPublicacion);
+			objInfoMessage.setMessage(message);
+			objInfoMessage.setEstado(true);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado())
+				paginaJsp = "/PublicacionesDelUsuario.jsp";
+			else {
+				// paginaJsp = "/PublicacionAlta.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=Nuevo";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
+
+	}
+
+	/**
+	 * Da de alta una publicación en la DB
+	 * 
+	 * Datos de publicación, Servicios
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	private void nuevaPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException {
 		InfoMessage objInfoMessage = new InfoMessage();
@@ -662,16 +795,16 @@ public class PublicacionServlet extends HttpServlet {
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2.2 Validar con la DB
 			// 3.1- DB: guardar información validada - publicacionDAO
-			if (publicacionDAO.insert(objPublicacion)) {
-				message = "Publicacion cargada con exito.";
+			if (!publicacionDAO.insert(objPublicacion)) {
+				throw new ValidacionException("SQL Ocurrió un error al guardar la publicación");
 			}
+			message = "Publicacion cargada con exito.";
 			// 3.2- DB: guardar información - serviciosDAO
 			String[] chklistServicios = request.getParameterValues("chklistServicios");
 			ArrayList<Servicio> listaServicios = new ArrayList<Servicio>();
-			Servicio objServicio = new Servicio();
 			int idServicio = 0;
 			for (String chkServicio : chklistServicios) {
-				// Servicio objServicio = new Servicio();
+				Servicio objServicio = new Servicio();
 				idServicio = Integer.parseInt(chkServicio);
 				objServicio.setIdPublicacion(idPublicacion);
 				objServicio.setIdServicio(idServicio);
@@ -799,4 +932,8 @@ public class PublicacionServlet extends HttpServlet {
 		return objPublicacion;
 	}
 
+	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// Modulo de busqueda
+	}
 }

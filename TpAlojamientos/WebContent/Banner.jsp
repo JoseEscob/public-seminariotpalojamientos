@@ -8,8 +8,8 @@
 
 <html>
 <head>
-<meta charset="utf-8" />
-
+<meta http-equiv="Content-Type"
+	content="text/html; charset=utf-8; charset=ISO-8859-1">
 <script src="<%=ConstantesJSP.jspValidar_js%>"></script>
 
 <!-- 1) css, 2)jquery, 3)bootstrap js -->
@@ -114,18 +114,25 @@
 
 			</c:if>
 		</ul>
+		<!-- BEGIN: buscarPublicaciones -->
+		<!--
 		<form class="navbar-form navbar-left" action="/action_page.php">
 			<div class="input-group">
 				<input type="text" class="form-control"
-					placeholder="Buscar alojamiento en..." name="search">
+					placeholder="Buscar alojamiento en..." name="txtBusquedaAlojamiento">
 				<div class="input-group-btn">
 					<button class="btn btn-default" type="submit"
-						title="Te permite realizar una búsqueda">
+						title="Te permite realizar una búsqueda por Zona">
 						<i class="glyphicon glyphicon-search"></i>
 					</button>
 				</div>
 			</div>
 		</form>
+		
+		glyphicon-bell
+		glyphicon-comment
+		-->
+		<!-- END: buscarPublicaciones -->
 		<div class="nav navbar-nav navbar-right">
 			<ul class="nav navbar-nav">
 				<c:choose>

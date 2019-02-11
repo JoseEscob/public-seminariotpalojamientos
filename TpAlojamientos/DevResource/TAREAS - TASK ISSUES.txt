@@ -9,13 +9,13 @@ Dates
 
 MANEJO DE ARCHIVOS
 	Publicaciones
+		Editar Publicación - Imagenes
 		Corregir imagenes - Leer por carpeta
 	
 	Usuario y Publicaciones
 		Subida y copia de imagenes en el proyecto
 	
-SERVICIOS - AltaPublicaciones
-	Verificar porqué guarda un solo servicio	
+
 
 
 ******* A PREPARAR  - PRIORITARIOS *******
@@ -80,3 +80,6 @@ USUARIO NO LOGUEADO
 ******* ELEMENTOS FINALIZADOS *******
 Paginación
 	poder cambiar de pagina y ver los siguientes objetos 
+	
+SERVICIOS - AltaPublicaciones
+	Verificar porqué guarda un solo servicio ("El objServicio no se renovaba. Debe hacer un new por cada inserción")	

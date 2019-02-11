@@ -3,6 +3,7 @@
 Diseño CSS/Bootstrap
 - https://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-list-groups.php
 - https://www.w3schools.com/bootstrap/bootstrap_ref_css_images.asp
+  https://www.w3schools.com/css/css_rwd_viewport.asp
 
 Usuarios
 https://bootsnipp.com/snippets/featured/flat-user-profile-interface-ui
@@ -82,7 +83,7 @@ https://www.codejava.net/java-se/graphics/how-to-resize-images-in-java
 https://stackoverflow.com/questions/15558202/how-to-resize-image-in-java
 https://www.dyclassroom.com/image-processing-project/how-to-read-and-write-image-file-in-java
 https://medium.com/@adigunhammedolalekan/how-to-resize-images-for-better-upload-download-performance-android-development-fb7297f9ec24
-
+https://www.w3schools.com/css/css_rwd_images.asp
 *************FILES************
 https://docs.oracle.com/javaee/6/tutorial/doc/gmhal.html
 https://underc0de.org/foro/java/subir-archivos-con-servlet/

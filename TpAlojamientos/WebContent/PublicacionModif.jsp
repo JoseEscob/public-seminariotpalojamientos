@@ -7,13 +7,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src="<%=ConstantesJSP.jspPub_combosAjax%>"></script>
-<title>Publicación - Alta</title>
+<title>Publicación - Modificación</title>
 </head>
 
 <body>
 	<%@ include file="Banner.jsp"%>
 	<form method="POST" action="PublicacionServlet">
-		<input type="hidden" name="accionPOST" value="nuevaPublicacion">
+		<input type="hidden" name="accionPOST" value="updatePublicacion">
 		<div class="container">
 			<div class="row">
 				<h2>Registro de Publicaciones</h2>
@@ -61,14 +61,15 @@
 								<label class="control-label">Dirección Calle</label> <input
 									type="text" name="calle" class="form-control"
 									onkeypress="return soloLetras(event)" required="true"
-									maxlength="50">
+									maxlength="50" value="${objPublicacion.calle}">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Altura </label> <input type="text" name="altura"
 									class="form-control" onkeypress="return soloNros(event)"
-									onpaste="return false" required="true" maxlength="6">
+									onpaste="return false" required="true" maxlength="6"
+									value="${objPublicacion.altura}">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -76,7 +77,8 @@
 								<label>Código Postal </label> <input type="text"
 									name="codPostal" class="form-control"
 									onkeypress="return soloNros(event)" onpaste="return false"
-									required="true" maxlength="6">
+									required="true" maxlength="6"
+									value="${objPublicacion.codPostal}">
 							</div>
 						</div>
 
@@ -84,7 +86,8 @@
 							<div class="form-group">
 								<label>Piso </label> <input type="text" name="piso"
 									class="form-control" onkeypress="return soloNros(event)"
-									onpaste="return false" maxlength="2" placeholder="4">
+									onpaste="return false" maxlength="2" placeholder="4"
+									value="${objPublicacion.piso}">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -92,7 +95,7 @@
 								<label>Departamento </label> <input type="text"
 									name="departamento" class="form-control"
 									onkeypress="return soloLetras(event)" onpaste="return false"
-									maxlength="1" placeholder="B">
+									maxlength="1" placeholder="B" value="${objPublicacion.dpto}">
 							</div>
 						</div>
 					</div>
@@ -113,6 +116,10 @@
 
 								<c:forEach items="${listaTiposAlojamientos}" var="item">
 									<option value="${item.idTipoAlojamiento}">${item.descripcion}</option>
+									<c:if
+										test="${item.idTipoAlojamiento eq objPublicacion.idTipoAlojamiento}">
+										<option selected value="${item.idTipoAlojamiento}">${item.descripcion}</option>
+									</c:if>
 								</c:forEach>
 							</select>
 						</div>
@@ -121,21 +128,24 @@
 							<label>Superficie Cubierta (m²)</label> <input type="text"
 								name="superficieCubierta" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								required="true" maxlength="2" pattern="\d*">
+								required="true" maxlength="2" pattern="\d*"
+								value="${objPublicacion.supCubierta}">
 						</div>
 
 						<div class="form-group">
 							<label>Superficie Descubierta (m²)</label> <input type="text"
 								name="superficieDescubierta" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								required="true" maxlength="2" pattern="\d*">
+								required="true" maxlength="2" pattern="\d*"
+								value="${objPublicacion.supDescubierta}">
 						</div>
 
 						<div class="form-group" data-toggle="tooltip"
 							title="Si los años de Antigüedad se cargan con cero significa que es un alojamiento a estrenar">
 							<label>Antigüedad en años</label> <input type="text"
-								name="aniosAntiguedad" class="form-control" required="true"
-								maxlength="3" pattern="\d*">
+								name="aniosAntiguedad" class="form-control" required
+								maxlength="3" pattern="\d*"
+								value="${objPublicacion.aniosAntiguedad}">
 						</div>
 					</div>
 
@@ -150,7 +160,8 @@
 											<span class="glyphicon glyphicon-minus"></span>
 										</div>
 									</span> <input type="text" class="form-control text-center" readonly
-										value="1" min="1" max="30" name="cantidadPersonas"> <span
+										min="1" max="30" name="cantidadPersonas"
+										value="${objPublicacion.cantPersonas}"> <span
 										class="input-group-btn data-up">
 										<div class="btn btn-default btn-info" data-dir="up">
 											<span class="glyphicon glyphicon-plus"></span>
@@ -168,7 +179,8 @@
 											<span class="glyphicon glyphicon-minus"></span>
 										</div>
 									</span> <input type="text" class="form-control text-center" readonly
-										value="1" min="1" max="10" name="cantidadAmbientes"> <span
+										min="1" max="10" name="cantidadAmbientes"
+										value="${objPublicacion.cantAmbientes}"> <span
 										class="input-group-btn data-up">
 										<div class="btn btn-default btn-info" data-dir="up">
 											<span class="glyphicon glyphicon-plus"></span>
@@ -186,8 +198,9 @@
 											<span class="glyphicon glyphicon-minus"></span>
 										</div>
 									</span> <input type="text" class="form-control text-center" readonly
-										value="1" min="1" max="20" name="cantidadDormitorios">
-									<span class="input-group-btn data-up">
+										min="1" max="20" name="cantidadDormitorios"
+										value="${objPublicacion.cantHabitaciones}"> <span
+										class="input-group-btn data-up">
 										<div class="btn btn-default btn-info" data-dir="up">
 											<span class="glyphicon glyphicon-plus"></span>
 										</div>
@@ -204,7 +217,8 @@
 											<span class="glyphicon glyphicon-minus"></span>
 										</div>
 									</span> <input type="text" class="form-control text-center" readonly
-										value="1" min="1" max="10" name="cantidadBaños"> <span
+										min="1" max="10" name="cantidadBaños"
+										value="${objPublicacion.cantBanios}"> <span
 										class="input-group-btn data-up">
 										<div class="btn btn-default btn-info" data-dir="up">
 											<span class="glyphicon glyphicon-plus"></span>
@@ -214,37 +228,65 @@
 							</div>
 						</div>
 
-
 						<div class="col-md-12">
 							<div class="form-group" data-toggle="tooltip"
 								title="Si se marca que sí, las reservas podrán ser solicitadas con más cantidad de huéspedes que la cantidad apta de personas para el alojamiento ">
 								<label>Si el Huésped lo desea ¿Puede variar la Cantidad
 									de Personas límite?</label>
-								<div class="col-md-6">
-									<label class="radio-inline"><input type="radio"
-										name="chkPuedeVariarCantPersonas" value="true">Si</label>
-								</div>
-								<div class="col-md-6">
-									<label class="radio-inline"><input type="radio"
-										name="chkPuedeVariarCantPersonas" value="false">No</label>
-								</div>
+
+								<c:choose>
+									<c:when test="${objPublicacion.chkPuedeVariarCantPersonas}">
+										<label class="radio-inline"><input type="radio"
+											name="chkPuedeVariarCantPersonas" value="true" checked>Si</label>
+										<label class="radio-inline"><input type="radio"
+											name="chkPuedeVariarCantPersonas" value="false">No</label>
+									</c:when>
+									<c:otherwise>
+										<label class="radio-inline"><input type="radio"
+											name="chkPuedeVariarCantPersonas" value="true">Si</label>
+										<label class="radio-inline"><input type="radio"
+											name="chkPuedeVariarCantPersonas" value="false" checked>No</label>
+									</c:otherwise>
+								</c:choose>
+
 							</div>
 						</div>
 					</div>
+
 
 					<div class="col-md-4">
 						<!-- Características - Precio  -->
 						<div class="col-md-12">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="radio"><input type="radio"
-										name="chkExpensas" value="false">No tiene expensas</label>
+									<c:choose>
+										<c:when test="${objPublicacion.chkExpensas}">
+
+											<label class="radio-inline"><input type="radio"
+												name="chkExpensas" value="false">No tiene expensas</label>
+										</c:when>
+										<c:otherwise>
+
+											<label class="radio-inline"><input type="radio"
+												name="chkExpensas" value="false" checked>No tiene
+												expensas</label>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="radio"><input type="radio"
-										name="chkExpensas" value="true">Tiene expensas</label>
+									<c:choose>
+										<c:when test="${objPublicacion.chkExpensas}">
+											<label class="radio-inline"><input type="radio"
+												name="chkExpensas" value="true" checked>Tiene
+												expensas</label>
+										</c:when>
+										<c:otherwise>
+											<label class="radio-inline"><input type="radio"
+												name="chkExpensas" value="true">Tiene expensas</label>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
@@ -255,8 +297,8 @@
 								<span class="input-group-addon">$</span> <input type="text"
 									class="form-control" onkeypress="return soloNros(event)"
 									onpaste="return false" name="precioExpensas"
-									value="${obj.precioExpensas}" maxlength="6" aria-label="Pesos">
-								<span class="input-group-addon">.00</span>
+									value="${objPublicacion.precioExpensas}" maxlength="6"
+									aria-label="Pesos"> <span class="input-group-addon">.00</span>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -268,24 +310,32 @@
 								<span class="input-group-addon">$</span> <input type="text"
 									class="form-control" onkeypress="return soloNros(event)"
 									onpaste="return false" name="precioNoche"
-									value="${obj.precioNoche}" required="true" maxlength="6"
-									aria-label="Pesos"> <span class="input-group-addon">.00</span>
+									value="${objPublicacion.precioNoche}" required="true"
+									maxlength="6" aria-label="Pesos"> <span
+									class="input-group-addon">.00</span>
 							</div>
 						</div>
 
 					</div>
-
 				</div>
+
 				<div class="row col-md-12">
 					<div class="form-group col-md-12">
 						<label>Descripción</label>
 						<textarea class="form-control" name="descripcion" id="descripcion"
 							maxlength="300" rows="3" cols="50"
-							placeholder="Breve descripción del alojamiento..."
-							style="resize: none;" pattern="[^()/><\][\\\x22,;|]+"></textarea>
+							placeholder="Breve descripción del alojamiento..." value=""
+							style="resize: none;" pattern="[^()/><\][\\\x22,;|]+">${objPublicacion.descripcion}</textarea>
 					</div>
 				</div>
 			</div>
+
+
+
+
+
+
+
 			<div class="row" id="ServiciosDeLaPublicacion">
 				<div class="row col-md-12">
 					<h3>Servicios - Facilidades</h3>
@@ -293,13 +343,21 @@
 					<p>Seleccione los servicios que ofrece su alojamiento/
 						publicación</p>
 				</div>
-				<div class=" row col-md-12">
+				<div class="row col-md-12">
 					<div class="col-md-4">
 						<c:forEach items="${listaTipoServicios}" var="objTipoServicio">
 							<c:if test="${objTipoServicio.idTipoServicio eq 1}">
 								<div class="form-group">
-									<label class="checkbox"><input type="checkbox"
+								<c:choose>
+								<c:when test="${objTipoServicio.idServicio eq objPublicacion.idTipoAlojamiento}">
+								<label class="checkbox"><input type="checkbox" checked
 										name="chklistServicios" value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label>
+								</c:when>
+								<c:otherwise><label class="checkbox"><input type="checkbox"
+										name="chklistServicios" value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label></c:otherwise>
+								</c:choose>
+								
+									
 								</div>
 							</c:if>
 						</c:forEach>

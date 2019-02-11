@@ -28,3 +28,7 @@ PUBLICACIONES
 	- Que las superficies descubierta o los años sean ceros y q permita la inserción
 
 ******* TESTEADOS CON ÉXITO *******
+
+PUBLICACIONES
+	ALTA
+- Que se almacenen los servicios seleccionados

@@ -23,9 +23,18 @@
 				</div>
 			</c:when>
 			<c:otherwise>
-				<h4>Tenés ${fn:length(listadoDePublicaciones)} publicaciones
-					guardadas como favoritas. Apuráte todavía están disponibles para
-					reservarlas</h4>
+				<c:choose>
+					<c:when test="${fn:length(listadoDePublicaciones) eq 1}">
+						<h4>Tenés ${fn:length(listadoDePublicaciones)} publicación
+							guardada en tu lista de favoritos</h4>
+					</c:when>
+					<c:otherwise>
+						<h4>Tenés ${fn:length(listadoDePublicaciones)} publicaciones
+							guardadas como favoritas. Apuráte todavía están disponibles para
+							reservarlas</h4>
+					</c:otherwise>
+				</c:choose>
+
 				<br>
 				<div class="row container">
 					<%@ include file="mostrarListadoDePublicaciones.jsp"%>

@@ -117,19 +117,34 @@
 										<br>
 									</div>
 									<div class="row">
-										<div class="col-xs-12 col-xs-6">
+										<div class="col-xs-12 col-xs-12">
 											<p class="lead">
 												<b>$&nbsp;${objPublicacion.precioNoche}</b>
 											</p>
 										</div>
+										<c:if
+											test="${objPublicacion.idUsuario eq sessionScope.sessionUser.idUsuario}">
+
+											<div class="col-xs-12 col-xs-6">
+												<c:url value="PublicacionServlet?"
+													var="urlPublicacionEditar">
+													<c:param name="accionGET" value="EditarPublicacion" />
+													<c:param name="idPublicacion"
+														value="${objPublicacion.idPublicacion}" />
+												</c:url>
+												<a class="btn btn-default" href="${urlPublicacionEditar}">
+													<span class="glyphicon glyphicon-pencil"></span>&nbsp;Editar
+												</a>
+											</div>
+										</c:if>
+
 										<div class="col-xs-12 col-xs-6">
-											<c:url value="PublicacionServlet?"
-												var="urlPublicacionGuardada">
+											<c:url value="PublicacionServlet?" var="urlPublicacionVer">
 												<c:param name="accionGET" value="VerPublicacion" />
 												<c:param name="idPublicacion"
 													value="${objPublicacion.idPublicacion}" />
 											</c:url>
-											<a class="btn btn-primary" href="${urlPublicacionGuardada}">Ingresar</a>
+											<a class="btn btn-primary" href="${urlPublicacionVer}">Ingresar</a>
 										</div>
 									</div>
 								</div>
