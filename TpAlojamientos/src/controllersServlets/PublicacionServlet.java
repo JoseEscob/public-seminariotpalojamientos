@@ -681,6 +681,18 @@ public class PublicacionServlet extends HttpServlet {
 				throw new ValidacionException("Usted no es el propietario de esta publicación");
 			}
 			// Cargar datos de los componentes TODO extraer a función
+			
+			Localidad objLocalidad = new Localidad();
+			objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
+			if(objLocalidad != null) {
+				Partido objPartido = new Partido();
+				objPartido = partidosDAO.getPartidoById(objLocalidad.getIdPartido());
+				if(objPartido != null) {
+					request.setAttribute("objLocalidad", objLocalidad);
+					request.setAttribute("objPartido", objPartido);
+				}
+			}
+			
 			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
 			ArrayList<Localidad> listaLocalidades = localidadDAO.getAll();
 			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
@@ -719,6 +731,12 @@ public class PublicacionServlet extends HttpServlet {
 		try {
 			// 1- recuperar valores del formulario JSP y validar información obtenida
 			Publicacion objPublicacion = new Publicacion();
+			
+			//Recupero idPublicacion
+			String idPublicacionString = request.getParameter("idPublicacion");
+			if(idPublicacionString != null)
+				idPublicacion = Integer.parseInt(idPublicacionString);
+			
 			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2- guardar la información en la DB

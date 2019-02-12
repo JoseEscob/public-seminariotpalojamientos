@@ -28,6 +28,8 @@
 		
 	<form method="POST" action="PublicacionServlet">
 		<input type="hidden" name="accionPOST" value="updatePublicacion">
+		<input type="hidden" name="idPublicacion" value="${idPublicacion }">
+		
 
 			<div class="row">
 				<%@ include file="mostrarInfoMessage.jsp"%>
@@ -44,8 +46,15 @@
 							<label>Partido</label> <select id="partidos"
 								class="form-control selectpicker" data-live-search="true"
 								name="partido" required>
-								<option selected value="" disabled>Seleccionar un
-									partido</option>
+								<c:choose>
+									<c:when test="${not empty objPartido }">
+										<option selected value="${objPartido.idPartido }">${objPartido.nombre}</option>
+									</c:when>
+									<c:otherwise>
+										<option selected value="" disabled>Seleccionar un
+											partido</option>
+									</c:otherwise>
+								</c:choose>
 								<c:forEach items="${listaPartidos}" var="item">
 									<option value="${item.idPartido}">${item.nombre}</option>
 								</c:forEach>
@@ -58,9 +67,19 @@
 						<div class="form-group">
 							<label>Localidad</label> <select id="localidades"
 								class="form-control selectpicker" data-live-search="true"
-								name="localidad" disabled required>
-								<option selected value="null" disabled>Se debe
-									seleccionar un partido antes</option>
+								name="localidad" required>
+								<c:choose>
+									<c:when test="${not empty objLocalidad }">
+										<option selected value="${objLocalidad.idLocalidad }">${objLocalidad.nombre}</option>
+									</c:when>
+									<c:otherwise>
+										<option selected value="" disabled>Seleccionar una
+											localidad</option>
+									</c:otherwise>
+								</c:choose>
+								<c:forEach items="${listaLodalicadad}" var="item">
+									<option value="${item.idLocalidad}">${item.nombre}</option>
+								</c:forEach>
 							</select>
 						</div>
 					</div>
