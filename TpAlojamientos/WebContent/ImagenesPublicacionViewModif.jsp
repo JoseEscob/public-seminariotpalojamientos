@@ -17,6 +17,7 @@
 		<h4>Editar imagenes de la publicacion</h4>
 		<hr/>
 		<label for="" class="btn btn-success" onclick="addImages(${idPublicacion})" id="btnAdd">Añadir Imagenes <label for="" style="font-weight: normal;" id="imageCounter">${imageCounter }</label> / 20</label>
+		<hr/>
 	</div>
 	<div class="row">
 		<div id="resultImages">
@@ -24,15 +25,16 @@
 				<c:when test="${not empty listImagenes }">
 					<c:forEach items="${listImagenes }" var="objImagen">
 					
-						<div class="container col-md-6" id="imagen_${objImagen.idImagen }">
+						<div class="container-fluid col-md-6" id="imagen_${objImagen.idImagen }">
 							<img alt="imagen de la publicacion" src="${objImagen.rutaImgPublicacion}" class="img-responsive">
 							<label for="" class="btn btn-primary cimg" id="chn_${objImagen.idImagen }" onclick="onclickCambiarEvent(${objImagen.idImagen},${objImagen.idPublicacion })">Cambiar</label>
 							<label for="" class="btn btn-danger" onclick="eliminarImagen(${objImagen.idImagen},${objImagen.idPublicacion})">Eliminar</label>
+							<hr/>
 						</div>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
-					<div class="alert alert-info" id="msg" hidden>
+					<div class="alert alert-info" id="msg">
 						<h4>No se han encontrado imagenes para esta publiacion.</h4>					
 					</div>
 				</c:otherwise>
@@ -55,38 +57,23 @@
 </div>
 <script type="text/javascript">
 
-	function onclickCambiarEvent(idImagen, idPublicacion){
-		$('#input_image').unbind("change");
-		$('#input_image').change(function(){
-			actualizarImagen(idImagen, idPublicacion);
-		});
-		$('#input_image').focus().trigger("click");
-		
-		
-	}
 	
-	function actualizarTextoLimite(actividad){
-		$('#btnAdd').empty();
-		$('#btnAdd').append("Añadir Imagenes "+actividad+" / 20");
-	}
 
 	function eliminarImagen(idImagen, idPublicacion){
 		ajaxUploadFilesServlet("formImage", "borrarImagenPublicacion", function(result){
-			if(result.carpetaVacia != null){
-				document.getElementById("msgInfo").removeAttribute("hidden");
-			}
-			if(result.ocultar != null){
+			if(result.carpetaVacia != null)
+				mostrarNoSeEncontraronImagenes(true);
+			
+			if(result.ocultar != null)
 				document.getElementById("imagen_"+result.ocultar).setAttribute("hidden", true);
-			}
+			
 			if(result.imageCounter != null){
 				actualizarTextoLimite(result.imageCounter);	
-				if(result.imageCounter < 20 && $("#btnAdd").attr("hidden")){
-					$("#btnAdd").removeAttribute("hidden");
-				}
 			}
 			
 		},function(e){},{"idPublicacion": idPublicacion, "idImagen": idImagen});
 	}
+	
 	function actualizarImagen(idImagen, idPublicacion){
 		ajaxUploadFilesServlet("formImage","cambiarImagenPublicacion", function(result){
 			if(result.newImage != null){
@@ -98,20 +85,24 @@
 	}
 	
 	function cargarNuevasImagenes(idPublicacion){
+		
 		ajaxUploadFilesServlet("formImageMultiple", "subirImagenesPublicacion",function(result){
 			if(result.imageCounter != null){
 				actualizarTextoLimite(result.imageCounter);	
 				if(result.imageCounter >= 20){
 					actualizarTextoLimite(20);	
-					$("#btnAdd").setAttribute("disabled", true);
-					
 				}
 			}
+			
 			if(result.imagenes != null){
+				mostrarNoSeEncontraronImagenes(false);
+
 				$('#resultImages').empty();
 				for(var k in result.imagenes){
 					addElement(result.imagenes[k].idImagen, result.imagenes[k].idPublicacion, result.imagenes[k].rutaImgPublicacion);
 				}
+			}else{
+				mostrarNoSeEncontraronImagenes(true);
 			}
 			
 		}, function(e){},{"idPublicacion": idPublicacion});
@@ -146,6 +137,16 @@
 	        });
 		
 	}
+
+	function onclickCambiarEvent(idImagen, idPublicacion){
+		$('#input_image').unbind("change");
+		$('#input_image').change(function(){
+			actualizarImagen(idImagen, idPublicacion);
+		});
+		$('#input_image').focus().trigger("click");
+		
+		
+	}
 	
 	function addElement(idImagen, idPublicacion, src){
 		var div = document.createElement("div");
@@ -159,6 +160,7 @@
 		img.setAttribute("class", "img-responsive");
 		img.alt="Imagen de la publicacion";
 		img.src=src;
+
 		
 		cambiar.setAttribute("class" , "btn btn-primary cimg");
 		cambiar.setAttribute("id", "chn_"+idImagen);
@@ -182,9 +184,24 @@
 		$('#inputImageMultiple').change(function(){
 			//actualizarImagen(idImagen, idPublicacion);
 			cargarNuevasImagenes(idPublicacion);
+			
 		});
 		$('#inputImageMultiple').focus().trigger("click");
 	}		
+	function actualizarTextoLimite(actividad){
+		$('#btnAdd').empty();
+		$('#btnAdd').append("Añadir Imagenes "+actividad+" / 20");
+	}
+
+	function mostrarNoSeEncontraronImagenes(estado){
+		if(estado && $("#msgInfo").attr("hidden"))
+			document.getElementById("msgInfo").removeAttribute("hidden");
+		else
+			document.getElementById("msgInfo").setAttribute("hidden", true);
+	}
+	
+	
+	
 </script>
 </body>
 </html>
