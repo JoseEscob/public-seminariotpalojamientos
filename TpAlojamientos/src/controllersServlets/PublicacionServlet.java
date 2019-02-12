@@ -30,6 +30,7 @@ import exceptions.ValidacionException;
 import exceptions.CargaViewException;
 import exceptions.LectorDatosException;
 import extra.Constantes;
+import extra.FileHandler;
 import extra.InfoMessage;
 import extra.LOG;
 import extra.ORSesion;
@@ -696,6 +697,7 @@ public class PublicacionServlet extends HttpServlet {
 			request.setAttribute("objPublicacion", objPublicacion);
 			request.setAttribute("listaServiciosPublicacion", listaServiciosPublicacion);
 			request.setAttribute("listaImagenesPublicacion", listaImagenesPublicacion);
+			request.setAttribute("idPublicacion", idPublicacion);
 			// request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
 
@@ -810,6 +812,20 @@ public class PublicacionServlet extends HttpServlet {
 				objServicio.setIdServicio(idServicio);
 				listaServicios.add(objServicio);
 			}
+		
+			ArrayList<Imagen> listImagenesPublicacion = imagenDAO.getAllByIdPublicacion(idPublicacion);
+			ArrayList<Imagen> newArrayListImagen = new ArrayList<Imagen>();
+			//5-Si no es nula la lista se envia al formulario de edicion.
+			if(listImagenesPublicacion != null) {
+				for(Imagen i : listImagenesPublicacion) {
+					if(i.isHabilitado())
+						newArrayListImagen.add(i);
+				}
+				request.setAttribute("listImagenes", newArrayListImagen);	
+				request.setAttribute("imageCounter", FileHandler.CountFiles(getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion));
+				request.setAttribute("idPublicacion", idPublicacion);
+
+			}	
 			// 3.2.2- verificar correcto almacenamiento en DB
 			int cantArchivosInsertado = 0;
 			for (Servicio objServ : listaServicios) {
@@ -829,7 +845,7 @@ public class PublicacionServlet extends HttpServlet {
 			// 5- Informar estado en interfaz (jsp)
 			request.setAttribute("objInfoMessage", objInfoMessage);
 			if (objInfoMessage.getEstado())
-				paginaJsp = "/ImagenesPublicacionAlta.jsp";
+				paginaJsp = "/ImagenesPublicacionViewModif.jsp";
 			else {
 				// paginaJsp = "/PublicacionAlta.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=Nuevo";

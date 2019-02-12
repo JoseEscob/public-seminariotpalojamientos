@@ -12,13 +12,22 @@
 
 <body>
 	<%@ include file="Banner.jsp"%>
+	<div class="container">
+		<div class="row">
+			<h2>Registro de Publicaciones</h2>
+			<hr />
+			<form action="UploadFilesServlet" method="post" enctype="multipart/form-data" >
+				<input type="hidden" name="accionPOST" value="cargarImagenesEdit">
+				<input type="hidden" name="idPublicacion" value="${idPublicacion}">
+				
+				<input type="submit" name="coso" value="Editar imagenes de la publicacion" class="btn btn-primary">
+			</form>
+			<hr />
+		
+		</div>
+		
 	<form method="POST" action="PublicacionServlet">
 		<input type="hidden" name="accionPOST" value="updatePublicacion">
-		<div class="container">
-			<div class="row">
-				<h2>Registro de Publicaciones</h2>
-				<hr />
-			</div>
 
 			<div class="row">
 				<%@ include file="mostrarInfoMessage.jsp"%>
@@ -412,8 +421,9 @@
 				<input type="submit" class="btn btn-success" name="subir"
 					value="Cargar datos">
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
+	
 	<div class="container" id="footer"></div>
 
 

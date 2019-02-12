@@ -301,32 +301,32 @@ public class UploadFilesServlet extends HttpServlet {
 	
 	private void cargarImagenesEdit(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//1-Se verifica que se este editando una publicacion del usuario logueado.
-		//if(ORSesion.sesionActiva(request)) {
+		if(ORSesion.sesionActiva(request)) {
 			//2-Se toma el id del usuario logueado.
-			//int idUsuario = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			int idUsuario = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			//3-Se toma el idPublicacion del parametro enviado por un .jsp.
-			//String idPublicacionString = fileHandler.getParameter("idPublicacion");
+			String idPublicacionString = fileHandler.getParameter("idPublicacion");
 			//3.5-Se castea si no es nulo el parametro.
-			int idPublicacion = 13;
-			//if(idPublicacionString != null) {			 
-				//idPublicacion = Integer.parseInt(idPublicacionString);
+			//int idPublicacion = 13;
+			if(idPublicacionString != null) {			 
+				int idPublicacion = Integer.parseInt(idPublicacionString);
 				//4-Se buscan las imagenes de la publicacion.
 				ArrayList<Imagen> listImagenesPublicacion = imagenDao.getAllByIdPublicacion(idPublicacion);
 				ArrayList<Imagen> newArrayListImagen = new ArrayList<Imagen>();
-				for(Imagen i : listImagenesPublicacion) {
-					if(i.isHabilitado())
-						newArrayListImagen.add(i);
-				}
 				//5-Si no es nula la lista se envia al formulario de edicion.
 				if(listImagenesPublicacion != null) {
+					for(Imagen i : listImagenesPublicacion) {
+						if(i.isHabilitado())
+							newArrayListImagen.add(i);
+					}
 					request.setAttribute("listImagenes", newArrayListImagen);	
 					paginaJsp = "/ImagenesPublicacionViewModif.jsp";
 					request.setAttribute("imageCounter", FileHandler.CountFiles(getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion));
 					request.setAttribute("idPublicacion", idPublicacion);
 
 				}
-			//}			
-		//}
+			}			
+		}
 		//Se redirige al .jsp.
 		request.getRequestDispatcher(paginaJsp).forward(request, response);
 	}
@@ -442,6 +442,7 @@ public class UploadFilesServlet extends HttpServlet {
 			int idPublicacion = Integer.parseInt(idPublicacionString);
 			
 			String carpetaContenedora = raiz+Constantes.RUTACarpetaFotosPublicacion+idPublicacion;
+			FileHandler.MakeDir(carpetaContenedora);
 				
 			int contador = 0;
 			contador = FileHandler.CountFiles(carpetaContenedora);
@@ -485,7 +486,7 @@ public class UploadFilesServlet extends HttpServlet {
 			resultMap.put("imageCounter", FileHandler.CountFiles(carpetaContenedora));
 								
 					
-		}		
+		}
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR

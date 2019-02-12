@@ -16,7 +16,8 @@
 		<h1>En costruccion!</h1>
 		<h4>Editar imagenes de la publicacion</h4>
 		<hr/>
-		<label for="" class="btn btn-success" onclick="addImages(${idPublicacion})" id="btnAdd">Añadir Imagenes <label for="" style="font-weight: normal;" id="imageCounter">${imageCounter }</label> / 20</label>
+		<label for="" class="btn btn-primary" onclick="addImages(${idPublicacion})" id="btnAdd">Añadir Imagenes <label for="" style="font-weight: normal;" id="imageCounter">${imageCounter }</label> / 20</label>
+		<a class="btn btn-success" href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=${idPublicacion}">Finalizar</a>
 		<hr/>
 	</div>
 	<div class="row">
@@ -101,8 +102,6 @@
 				for(var k in result.imagenes){
 					addElement(result.imagenes[k].idImagen, result.imagenes[k].idPublicacion, result.imagenes[k].rutaImgPublicacion);
 				}
-			}else{
-				mostrarNoSeEncontraronImagenes(true);
 			}
 			
 		}, function(e){},{"idPublicacion": idPublicacion});
