@@ -3,7 +3,6 @@ package controllersServlets;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +21,7 @@ import extra.LOG;
 import extra.ORSesion;
 import extra.Utilitario;
 import modelo.Comprobante;
+import modelo.PublicacionReservada;
 import modelo.SolicitudDeReserva;
 import modelo.Usuario;
 import views.PublicacionView;
@@ -91,13 +91,82 @@ public class SolDeReservaServlet extends HttpServlet {
 			}
 			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
 			switch (accionPOST) {
+			case "verFechasDeReservaPublicacion":
+				verFechasDeReservaPublicacion(request, response);
+				break;
 			case "SolReservaAlta":
 				altaSolicitudReserva(request, response);
 				break;
-
+			case "cargarSolDeReservasRecibidasByIdPublicacion":
+				cargarSolDeReservasRecibidasByIdPublicacion(request, response);
+				break;
+			case "validarAprobacionDeSolicitudes":
+				validarAprobacionDeSolicitudes(request, response);
+				break;
+			case "aprobarSolicitudesDeReserva":
+				aprobarSolicitudesDeReserva(request, response);
+				break;
+			case "rechazarSolicitudesDeReserva":
+				rechazarSolicitudesDeReserva(request, response);
+				break;
+			case "cancelarSolicitudDeReserva":
+				cancelarSolicitudDeReserva(request, response);
+				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void verFechasDeReservaPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idPublicacion = 0;
+		try {
+			// 1- Obtiene valores del JSP ya validados
+			if (request.getSession().getAttribute(strVistaPublicacion) == null) {
+				throw new ValidacionException("NULL ERROR - verificar el atributo: " + strVistaPublicacion);
+			}
+			PublicacionView vistaPublicacion = (PublicacionView) request.getSession().getAttribute(strVistaPublicacion);
+			idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
+			// TODO Eliminar codigo de arriba
+
+			ArrayList<PublicacionReservada> listaFechasReservadas = comprobantesDAO
+					.getListadoDeFechasReservaPublicacion(idPublicacion);
+			ArrayList<PublicacionReservada> listaFechasReservadasDesdeHoy = new ArrayList<PublicacionReservada>();
+			java.sql.Date fechaActualSQL = Utilitario.getCurrentDateAndHoursSQL();
+
+			// comparar solo los registros que al día de la fecha estén reservadas
+			listaFechasReservadas.forEach(item -> {
+				if (item.getFechaReservaFin().after(fechaActualSQL))
+					listaFechasReservadasDesdeHoy.add(item);
+			});
+			// for (PublicacionReservada objReserva = listaFechasReserva){
+
+			request.setAttribute("listaFechasReservadasDesdeHoy", listaFechasReservadasDesdeHoy);
+			// 5- Informar estado en interfaz (jsp)
+			message = "Se obtuvo con éxito las fechas de reserva de la publicación: " + idPublicacion;
+			LOG.info(message);
+			objInfoMessage.setMessage(message);
+			objInfoMessage.setEstado(true);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				// paginaJsp = "/solEnviadasRecibidas.jsp";
+				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
+				request.getSession().removeAttribute(strVistaPublicacion);
+				response.sendRedirect(paginaJsp);
+			} else {
+				// paginaJsp = "/solReservaAlta.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 
@@ -178,12 +247,9 @@ public class SolDeReservaServlet extends HttpServlet {
 			throw new ValidacionException("La Fecha de Inicio no puede ser igual a la Fecha de Fin");
 		}
 
-		// 3- Validar que la publicación no esté reservada
-		// TODO
-
-		// 4- Obtener el resto de información necesaria
+		// 3- Obtener el resto de información necesaria
 		PublicacionView vistaPublicacion = (PublicacionView) request.getSession().getAttribute(strVistaPublicacion);
-
+		int idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
 		// 4.1) Validar si puede variar la cantidad de personas
 		boolean chkPuedeVariarCantPersonas = vistaPublicacion.getPublicacion().isChkPuedeVariarCantPersonas();
 		int cantPersonasPermitidas = vistaPublicacion.getPublicacion().getCantPersonas();
@@ -194,18 +260,22 @@ public class SolDeReservaServlet extends HttpServlet {
 				throw new ValidacionException(
 						"Esta publicación no permite superar el límite de personas/ huéspedes establecido");
 		}
+		// 4.2) Validar que la publicación no esté reservada
+		validarQuelaPublicacionNoEsteReservada(idPublicacion, fechaReservaInicio);
+		validarQuelaPublicacionNoEsteReservada(idPublicacion, fechaReservaFin);
 
+		// 5.1- Obtener información necesaria para el presupuesto
 		int precioNoche = vistaPublicacion.getPublicacion().getPrecioNoche();
 		int precioExpensas = vistaPublicacion.getPublicacion().getPrecioExpensas();
 		int cantDiasReserva = Utilitario.getCantOfDays(fechaReservaInicio, fechaReservaFin);
-		// 5- Preparar presupuesto para el precio final
-		int precioFinal = cantDiasReserva * precioNoche + precioExpensas;
-
+		// 5.2- Preparar presupuesto para el precio final
+		// Las expensas solo se cobraran si la cantidad de días supera los 25
+		int precioFinal = cantDiasReserva * precioNoche;
+		if (cantDiasReserva > 25)
+			precioFinal = precioFinal + precioExpensas;
 		// 6- Guardar resto de la información en variables
 		int idSolicitud = solDeReservaDAO.getAll().size() + 1;
 		int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
-		int idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
-
 		String fechaAltaSolicitud = Utilitario.getCurrentDateAndHoursString();
 		int idUsuarioPropietario = vistaPublicacion.getUsuario().getIdUsuario();
 		String fechaDecisionPropietario = null;
@@ -252,7 +322,7 @@ public class SolDeReservaServlet extends HttpServlet {
 			int idUsuarioHuesped;
 			int idUsuarioPropietario;
 			idUsuarioPropietario = idUsuarioHuesped = objUsuarioLogueado.getIdUsuario();
-
+			// 3- Cargar listado de solicitudes enviadas
 			ArrayList<SolicitudDeReserva> listaSolDeReservaEnviada = solDeReservaDAO
 					.getAllByIdUsuarioHuespedSorted(idUsuarioHuesped);
 			ArrayList<SolicitudDeReservaView> listaSolDeReservaView = new ArrayList<SolicitudDeReservaView>();
@@ -263,8 +333,10 @@ public class SolDeReservaServlet extends HttpServlet {
 				objSolReservaView.cargarDatosDePublicacion(objSolReserva.getIdPublicacion());
 				listaSolDeReservaView.add(objSolReservaView);
 			}
-
-			// 3- guardar información en request para su posterior muestra/exposición en JSP
+			// 4- Cargar listado de solicitudes recibidas
+			// TODO: PublicacionSolRecibidaView -> Publicacion, idEstadoSolicitud,
+			// cantSolicitudes
+			// 5- Guardar información en request para su posterior muestra/exposición en JSP
 			request.setAttribute("listaSolDeReservaView", listaSolDeReservaView);
 			// request.setAttribute("listaSolDeReservaRecibida", listaSolDeReservaRecibida);
 		} catch (Exception e) {
@@ -354,4 +426,438 @@ public class SolDeReservaServlet extends HttpServlet {
 			}
 		}
 	}
+
+	private void cargarSolDeReservasRecibidasByIdPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		try {
+			// 1- recuperar valores del request y los DAOs
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			// 1.1 request: idPublicacion
+			if (request.getParameter("idPublicacion") == null) {
+				throw new ServidorException("El parámetro de idPublicacion es null");
+			}
+			int idPublicacion = 0;
+			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			// 1.2 request: infoUsuarioLogueado
+			int idUsuarioPropietario = 0;
+			idUsuarioPropietario = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			// 1.3 DAO: solicitudes por alojamiento
+			ArrayList<SolicitudDeReserva> listaSolDeReservasRecibidasPorPublicacion = solDeReservaDAO
+					.getAllByIdUsuarioPropietarioIdPublicacion(idUsuarioPropietario, idPublicacion);
+
+			// 2- Devolver información al JSP
+			request.setAttribute("listaSolDeReservasRecibidasPorPublicacion",
+					listaSolDeReservasRecibidasPorPublicacion);
+			// 3- Informar estado de transacción
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 3- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/solComprobanteViewDetails.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
+				// idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+	}
+
+	/**
+	 * Devuelve una lista de las solicitudes de reserva seleccionadas en un request
+	 * 
+	 * @throws ValidacionException
+	 */
+	private ArrayList<SolicitudDeReserva> obtenerListaSolDeReservaSeleccionadas(HttpServletRequest request)
+			throws ValidacionException {
+		// 1) Validar datos del request del JSP
+		if (request.getParameterValues("chklistSolSeleccionadas") == null)
+			throw new ValidacionException("Para realizar esta operación debe seleccionar al menos una solicitud");
+		// 2) Obtener los id de las solicitudes de reserva seleccionadas
+		String[] chklistSolSeleccionadas = request.getParameterValues("chklistSolSeleccionadas");
+		ArrayList<Integer> listaIDSolSeleccionadas = new ArrayList<Integer>();
+		for (String chkSolSeleccionada : chklistSolSeleccionadas) {
+			listaIDSolSeleccionadas.add(Integer.parseInt(chkSolSeleccionada));
+		}
+		// 3) Recuperar información de los id seleccionados en una lista de objetos
+		int cantObjSolDeReservaLeidos = 0;
+		ArrayList<SolicitudDeReserva> listaSolDeReservaSeleccionadas = new ArrayList<SolicitudDeReserva>();
+		for (int idSolDeReserva : listaIDSolSeleccionadas) {
+			SolicitudDeReserva objSolDeReserva = new SolicitudDeReserva();
+			objSolDeReserva = solDeReservaDAO.getObjectById(idSolDeReserva);
+			listaSolDeReservaSeleccionadas.add(objSolDeReserva);
+
+			cantObjSolDeReservaLeidos++;
+		}
+		// 4) Informar estado y retornar información procesada
+		LOG.info(String.format("Se obtuvieron %d de %d solicitudes seleccionadas", cantObjSolDeReservaLeidos,
+				listaIDSolSeleccionadas.size()));
+
+		return listaSolDeReservaSeleccionadas;
+	}
+
+	private void validarAprobacionDeSolicitudes(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+
+		try {
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			ArrayList<SolicitudDeReserva> listaSolDeReservaSeleccionadas = obtenerListaSolDeReservaSeleccionadas(
+					request);
+			// 2- Verificar que las fechas de las Solicitudes no se superpongan entre sí
+			// TODO revisar
+			int cantDeSolSeleccionadas = listaSolDeReservaSeleccionadas.size();
+			for (int i = 0; i < cantDeSolSeleccionadas; i++) {
+				SolicitudDeReserva objSolDeReservaAnterior;
+				for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+					objSolDeReservaAnterior = objSolDeReserva;
+					if (objSolDeReserva.getIdSolicitud() != objSolDeReservaAnterior.getIdSolicitud()) {
+
+						Date fechaInicio = objSolDeReservaAnterior.getFechaReservaInicio();
+						Date fechaFin = objSolDeReservaAnterior.getFechaReservaFin();
+
+						boolean estaDentroDelRango = isWithinRange(objSolDeReserva.getFechaReservaInicio(), fechaInicio,
+								fechaFin);
+						if (estaDentroDelRango) {
+							// message = String.format("Lo sentimos la fecha %s no está disponible. La
+							// publicación está reservada desde el %s hasta el %s", fechaAValidar,
+							// objReserva.getFechaReservaInicio(), objReserva.getFechaReservaFin())
+							LOG.info(message);
+							throw new ValidacionException();
+						}
+
+						estaDentroDelRango = isWithinRange(objSolDeReserva.getFechaReservaFin(), fechaInicio, fechaFin);
+						if (estaDentroDelRango) {
+							// message = String.format("Lo sentimos la fecha %s no está disponible. La
+							// publicación está reservada desde el %s hasta el %s", fechaAValidar,
+							// objReserva.getFechaReservaInicio(), objReserva.getFechaReservaFin())
+							LOG.info(message);
+							throw new ValidacionException();
+						}
+
+					}
+				}
+			}
+			// 3- Verificar que las fechas solicitadas no exista una reserva
+			// 4- DB Actualizar la solicitud en 'solicitudesDeReservas'
+			// 4.1 - DB APROBAR: generar registro en 'comprobantes'
+			// 5- Informar estado de transacción
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/solComprobanteViewDetails.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
+				// idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+
+	}
+
+	private void aprobarSolicitudesDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+
+		try {
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			ArrayList<SolicitudDeReserva> listaSolDeReservaSeleccionadas = obtenerListaSolDeReservaSeleccionadas(
+					request);
+			// 2- Validar que sea el usuario propietario quien está realizando la acción
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+				verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
+				// validar que la solicitud siga pendiente de aprobación
+				if (objSolDeReserva.getIdEstadoSolicitud() != 1) {
+					message = String.format("ADVERTENCIA: la solicitud %d ya no está pendiente de aprobación",
+							objSolDeReserva.getIdSolicitud());
+					LOG.info(message);
+				}
+			}
+			// A esta instancia las solicitudes seleccionadas fueron validadas
+			// 3.1 DB Actualizar la solicitud en 'solicitudesDeReservas'
+			int cantSolicitudesActualizadas = 0;
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+				// 3.1.1 Setear objeto antes de realizar la transacción con la DB
+				objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
+				objSolDeReserva.setMotivoDecisionPropietario("Solicitud Aprobada");// TODO: extraer a Constantes
+				objSolDeReserva.setIdEstadoSolicitud(5); // 5=aprobado - Verificar 'tiposEstadosSolicitudes'
+				// 3.1.2 actualizar en DB
+				if (!solDeReservaDAO.update(objSolDeReserva))
+					throw new ValidacionException(
+							"SQL Ocurrió un error al actualizar la solicitud " + objSolDeReserva.getIdSolicitud());
+				cantSolicitudesActualizadas++;
+			}
+			// 3.2 - 'solicitudesDeReservas' Informar estado de transacción
+			message = String.format("APROBACION: Se actualizaron %d de %d solicitudes", cantSolicitudesActualizadas,
+					listaSolDeReservaSeleccionadas.size());
+			LOG.info(message);
+			// 4- generar listado de objetos de comprobantes
+			ArrayList<Comprobante> listaComprobantesAInsertarDB = new ArrayList<Comprobante>();
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+				Comprobante objComprobante = new Comprobante();
+				objComprobante = obtenerDatosDeSolicitudComoComprobante(objSolDeReserva);
+				listaComprobantesAInsertarDB.add(objComprobante);
+			}
+			// 5- 'comprobantes' generar/ insertar registro en DB
+			int cantComprobantesInsertados = 0;
+			for (Comprobante objComprobante : listaComprobantesAInsertarDB) {
+				int idComprobante = comprobantesDAO.getCount() + 1;
+				objComprobante.setIdComprobante(idComprobante);
+				if (!comprobantesDAO.insert(objComprobante)) {
+					message = String.format("SQL Ocurrió un error al insertar el comprobante %d para la solicitud %d",
+							objComprobante.getIdComprobante(), objComprobante.getIdSolicitud());
+					throw new ValidacionException(message);
+				}
+				cantComprobantesInsertados++;
+			}
+			// 6- Informar estado de transacción
+			message = String.format("Se generaron %d de %d comprobante/s de reserva", cantComprobantesInsertados,
+					listaComprobantesAInsertarDB.size());
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/--.jsp";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+				// request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
+				// idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+	}
+
+	private Comprobante obtenerDatosDeSolicitudComoComprobante(SolicitudDeReserva objSolDeReserva) {
+		Comprobante objComprobante = new Comprobante();
+		// setIdComprobante(idComprobante);
+		objComprobante.setIdSolicitud(objSolDeReserva.getIdSolicitud());
+		objComprobante.setIdUsuarioHuesped(objSolDeReserva.getIdUsuarioHuesped());
+		objComprobante.setIdPublicacion(objSolDeReserva.getIdPublicacion());
+		objComprobante.setFechaReservaInicio(objSolDeReserva.getFechaReservaInicio());
+		objComprobante.setFechaReservaFin(objSolDeReserva.getFechaReservaFin());
+		objComprobante.setCantPersonas(objSolDeReserva.getCantPersonas());
+		objComprobante.setPrecioFinal(objSolDeReserva.getPrecioFinal());
+		objComprobante.setFechaAlta(Utilitario.getCurrentDateAndHoursSQL());
+		objComprobante.setIdUsuarioPropietario(objSolDeReserva.getIdUsuarioPropietario());
+		objComprobante.setHabilitado(true);
+		objComprobante.setCantDiasReserva(objSolDeReserva.getCantDiasReserva());
+		return objComprobante;
+	}
+
+	private void verificarQueElUsuarioLogueadoSeaElPropietario(HttpServletRequest request,
+			SolicitudDeReserva objSolDeReserva) throws ValidacionException {
+		// int idPublicacion (por parámetro)
+		// Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+		// int idUsuarioPropietario = objPublicacion.getIdUsuario();
+		int idUsuarioPropietario = objSolDeReserva.getIdUsuarioPropietario();
+		int idUsuarioLogueado = 0;
+		idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+
+		if (idUsuarioLogueado != idUsuarioPropietario) {
+			throw new ValidacionException(
+					"Usted no es el propietario de la publicación con ID: " + objSolDeReserva.getIdPublicacion());
+		}
+	}
+
+	private void rechazarSolicitudesDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+
+		try {
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			ArrayList<SolicitudDeReserva> listaSolDeReservaSeleccionadas = obtenerListaSolDeReservaSeleccionadas(
+					request);
+			// 2- Validar que sea el usuario propietario quien está realizando la acción
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+				verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
+				// validar que la solicitud siga pendiente de aprobación
+				if (objSolDeReserva.getIdEstadoSolicitud() != 1) {
+					message = String.format("ADVERTENCIA: la solicitud %d ya no está pendiente de aprobación",
+							objSolDeReserva.getIdSolicitud());
+					LOG.info(message);
+				}
+			}
+			// A esta instancia las solicitudes seleccionadas fueron validadas
+			// 3.1 DB Actualizar la solicitud en 'solicitudesDeReservas'
+			int cantSolicitudesActualizadas = 0;
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservaSeleccionadas) {
+				// 3.1.1 Setear objeto antes de realizar la transacción con la DB
+				objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
+				objSolDeReserva.setMotivoDecisionPropietario("Solicitud Rechazada por el Propietario");// TODO: extraer
+																										// a Constantes
+				objSolDeReserva.setIdEstadoSolicitud(2); // 2:rechazada - Verificar 'tiposEstadosSolicitudes'
+				// 3.1.2 actualizar en DB
+				if (!solDeReservaDAO.update(objSolDeReserva))
+					throw new ValidacionException(
+							"SQL Ocurrió un error al actualizar la solicitud " + objSolDeReserva.getIdSolicitud());
+				cantSolicitudesActualizadas++;
+			}
+			// 3.2 - 'solicitudesDeReservas' Informar estado de transacción
+			message = String.format("RECHAZO: Se rechazaron %d de %d solicitudes", cantSolicitudesActualizadas,
+					listaSolDeReservaSeleccionadas.size());
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/--.jsp";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+				// request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
+				// idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+
+	}
+
+	private void cancelarSolicitudDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idSolDeReserva = 0;
+		try {
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			if (request.getParameter("idSolDeReserva") == null) {
+				throw new ServidorException("No se encontró la solicitud con ID: " + idSolDeReserva);
+			}
+			idSolDeReserva = Integer.parseInt(request.getParameter("idSolDeReserva"));
+			SolicitudDeReserva objSolDeReserva = solDeReservaDAO.getObjectById(idSolDeReserva);
+			// 2- Validar que sea el usuario propietario sea quien está realizando la acción
+			objSolDeReserva.getIdUsuarioHuesped();
+			// 2.1- Validar que la solicitud siga en estado pendiente de aprobación
+			if (objSolDeReserva.getIdEstadoSolicitud() != 1) {
+				message = String.format("ADVERTENCIA: la solicitud %d ya no está pendiente de aprobación",
+						objSolDeReserva.getIdSolicitud());
+				LOG.info(message);
+			}
+			// 3.1- Setear objeto antes de realizar la transacción con la DB
+			objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
+			objSolDeReserva.setMotivoDecisionPropietario("Cancelada por Solicitador");// TODO: extraer a Constantes
+			objSolDeReserva.setIdEstadoSolicitud(2); // 2:rechazada - Verificar 'tiposEstadosSolicitudes'
+			objSolDeReserva.setHabilitado(false);
+			// 3.2- DB Actualizar la solicitud en 'solicitudesDeReservas'
+			if (!solDeReservaDAO.update(objSolDeReserva))
+				throw new ValidacionException(
+						"SQL Ocurrió un error al actualizar la solicitud " + objSolDeReserva.getIdSolicitud());
+
+			// 4- 'solicitudesDeReservas' Informar estado de transacción
+			message = String.format("La solicitud %d fue cancelada con éxito", objSolDeReserva.getIdSolicitud());
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/--.jsp";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+				// request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
+				// idPublicacion;
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+
+	}
+
+	private void validarQuelaPublicacionNoEsteReservada(int idPublicacion, Date fechaAValidar)
+			throws ValidacionException {
+		// https://stackoverflow.com/questions/883060/how-can-i-determine-if-a-date-is-between-two-dates-in-java
+		// https://www.daniweb.com/programming/web-development/threads/252295/display-table-row-with-a-check-box-and-passing-each-selected-value
+		ArrayList<PublicacionReservada> listaFechasReserva = comprobantesDAO
+				.getListadoDeFechasReservaPublicacion(idPublicacion);
+		// TODO
+		java.sql.Date fechaActualSQL = Utilitario.getCurrentDateAndHoursSQL();
+		String message;
+		for (PublicacionReservada objReserva : listaFechasReserva) {
+			// comparar solo los registros que al día de la fecha estén reservadas
+			if (objReserva.getFechaReservaFin().after(fechaActualSQL)) {
+				boolean estaDentroDelRango = isWithinRange(fechaAValidar, objReserva.getFechaReservaInicio(),
+						objReserva.getFechaReservaFin());
+				if (estaDentroDelRango) {
+					message = String.format(
+							"Lo sentimos la fecha %s no está disponible. La publicación está reservada desde el %s hasta el %s",
+							fechaAValidar, objReserva.getFechaReservaInicio(), objReserva.getFechaReservaFin());
+					throw new ValidacionException(message);
+				}
+			}
+
+		}
+
+	}
+
+	private boolean isWithinRange(Date testDate, Date startDate, Date endDate) {
+		return !(testDate.before(startDate) || testDate.after(endDate));
+	}
+
+	/*
+	 * 10-02 15-02 ------------------------------------------------------ Inicio Fin
+	 * 05-02 Y N (F) 09-02 Y N (F) : Fecha Disponible 05-02 Y N (F) 10-02 N N (T) :
+	 * Fecha NO Disponible 05-02 Y N (F) 12-02 N N (T) : Fecha NO Disponible
+	 * ------------------------------------------------------ 11-02 N N (T) 14-02 N
+	 * N (T) : Fecha NO Disponible 11-02 N N (T) 17-02 N N (T) : Fecha NO Disponible
+	 * 11-02 N N (T) 17-02 N N (T) : Fecha NO Disponible
+	 * 
+	 * 
+	 * 16-02 N Y (F) 13-02 N N (T)
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * ---------------------------------------- Date a, b; // assume these are set
+	 * to something Date d; // the date in question
+	 * 
+	 * return a.compareTo(d) * d.compareTo(b) > 0; // return a.compareTo(d) *
+	 * d.compareTo(b) >= 0;
+	 * 
+	 * ---------------------------
+	 * 
+	 * boolean isWithinRange(Date testDate) { return !(testDate.before(startDate) ||
+	 * testDate.after(endDate)); } //Doesn't seem that awkward to me. Note that I
+	 * wrote it that way instead of
+	 * 
+	 * //return testDate.after(startDate) && testDate.before(endDate);
+	 */
+
 }

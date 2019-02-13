@@ -417,7 +417,7 @@ public class PublicacionServlet extends HttpServlet {
 	private void gestionarFavoritos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String message = null;
-
+		InfoMessage objInfoMessage = new InfoMessage();
 		try {
 			int idPublicacion;
 			boolean agregaAFavoritos = true;
@@ -471,13 +471,22 @@ public class PublicacionServlet extends HttpServlet {
 			else
 				message = String.format("Se eliminó la publicación %d de su lista de favoritos", idPublicacion);
 			request.setAttribute("vistaPublicacion", vistaPublicacion);
+
+			objInfoMessage = new InfoMessage(true, message);
 		} catch (Exception e) {
-			message = e.getMessage();
+			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
-			// 5- Informar estado
-			request.setAttribute("message", message);
-			paginaJsp = "/PublicacionView.jsp";
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/PublicacionView.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "/PublicacionAlta.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=verMisPublicaciones";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
 		}
 	}
 
@@ -658,8 +667,8 @@ public class PublicacionServlet extends HttpServlet {
 	private void editarPublicacion(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- Declaración de variables
+		InfoMessage objInfoMessage = new InfoMessage();
 		String message = null;
-
 		int idPublicacion = 0;
 
 		try {
@@ -681,18 +690,18 @@ public class PublicacionServlet extends HttpServlet {
 				throw new ValidacionException("Usted no es el propietario de esta publicación");
 			}
 			// Cargar datos de los componentes TODO extraer a función
-			
+
 			Localidad objLocalidad = new Localidad();
 			objLocalidad = localidadDAO.getLocalidadById(objPublicacion.getIdLocalidad());
-			if(objLocalidad != null) {
+			if (objLocalidad != null) {
 				Partido objPartido = new Partido();
 				objPartido = partidosDAO.getPartidoById(objLocalidad.getIdPartido());
-				if(objPartido != null) {
+				if (objPartido != null) {
 					request.setAttribute("objLocalidad", objLocalidad);
 					request.setAttribute("objPartido", objPartido);
 				}
 			}
-			
+
 			ArrayList<Partido> listaPartidos = partidosDAO.getAll();
 			ArrayList<Localidad> listaLocalidades = localidadDAO.getAll();
 			ArrayList<TipoAlojamiento> listaTiposAlojamientos = tipoAlojamientoDAO.getAll();
@@ -713,13 +722,22 @@ public class PublicacionServlet extends HttpServlet {
 			// request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
 
+			message = "Se cargó con éxito los componentes de la publicación para ser editada";
+			objInfoMessage = new InfoMessage(true, message);
 		} catch (Exception e) {
-			message = e.getMessage();
+			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
-			// 4- Informar estado/resultados en interfaz (JSP)
-			request.setAttribute("message", message);
-			paginaJsp = "/PublicacionModif.jsp";
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/PublicacionModif.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				// paginaJsp = "/PublicacionAlta.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=verMisPublicaciones";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
 		}
 	}
 
@@ -731,12 +749,12 @@ public class PublicacionServlet extends HttpServlet {
 		try {
 			// 1- recuperar valores del formulario JSP y validar información obtenida
 			Publicacion objPublicacion = new Publicacion();
-			
-			//Recupero idPublicacion
+
+			// Recupero idPublicacion
 			String idPublicacionString = request.getParameter("idPublicacion");
-			if(idPublicacionString != null)
+			if (idPublicacionString != null)
 				idPublicacion = Integer.parseInt(idPublicacionString);
-			
+
 			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2- guardar la información en la DB
@@ -775,15 +793,18 @@ public class PublicacionServlet extends HttpServlet {
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
 			request.setAttribute("objInfoMessage", objInfoMessage);
-			if (objInfoMessage.getEstado())
-				paginaJsp = "/PublicacionesDelUsuario.jsp";
-			else {
+			if (objInfoMessage.getEstado()) {
+				// paginaJsp = "/PublicacionesDelUsuario.jsp";
+				paginaJsp = "PublicacionServlet?accionGET=verMisPublicaciones";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			} else {
 				// paginaJsp = "/PublicacionAlta.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=Nuevo";
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			}
-			request.getRequestDispatcher(paginaJsp).forward(request, response);
+			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 
 	}
@@ -830,20 +851,21 @@ public class PublicacionServlet extends HttpServlet {
 				objServicio.setIdServicio(idServicio);
 				listaServicios.add(objServicio);
 			}
-		
+
 			ArrayList<Imagen> listImagenesPublicacion = imagenDAO.getAllByIdPublicacion(idPublicacion);
 			ArrayList<Imagen> newArrayListImagen = new ArrayList<Imagen>();
-			//5-Si no es nula la lista se envia al formulario de edicion.
-			if(listImagenesPublicacion != null) {
-				for(Imagen i : listImagenesPublicacion) {
-					if(i.isHabilitado())
+			// 5-Si no es nula la lista se envia al formulario de edicion.
+			if (listImagenesPublicacion != null) {
+				for (Imagen i : listImagenesPublicacion) {
+					if (i.isHabilitado())
 						newArrayListImagen.add(i);
 				}
-				request.setAttribute("listImagenes", newArrayListImagen);	
-				request.setAttribute("imageCounter", FileHandler.CountFiles(getServletContext().getRealPath("")+Constantes.RUTACarpetaFotosPublicacion+idPublicacion));
+				request.setAttribute("listImagenes", newArrayListImagen);
+				request.setAttribute("imageCounter", FileHandler.CountFiles(
+						getServletContext().getRealPath("") + Constantes.RUTACarpetaFotosPublicacion + idPublicacion));
 				request.setAttribute("idPublicacion", idPublicacion);
 
-			}	
+			}
 			// 3.2.2- verificar correcto almacenamiento en DB
 			int cantArchivosInsertado = 0;
 			for (Servicio objServ : listaServicios) {
@@ -914,6 +936,16 @@ public class PublicacionServlet extends HttpServlet {
 		int cantidadAmbientes = Integer.parseInt(request.getParameter("cantidadAmbientes"));
 		int cantidadDormitorios = Integer.parseInt(request.getParameter("cantidadDormitorios"));
 		int cantidadBanios = Integer.parseInt(request.getParameter("cantidadBaños"));
+		// Validaciones de campos mayores a cero
+		if (altura <= 0)
+			throw new ValidacionException("La altura de la calle debe ser mayor a cero");
+		if (codPostal <= 0)
+			throw new ValidacionException("El Código Postal debe ser mayor a cero");
+		if (superficieCubierta <= 0)
+			throw new ValidacionException("La Superficie Cubierta debe ser mayor a cero");
+		
+		
+		// 
 		boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
 		int precioExpensas = 0;
 		if (expensas == true) {

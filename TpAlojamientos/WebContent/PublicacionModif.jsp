@@ -16,24 +16,33 @@
 		<div class="row">
 			<h2>Registro de Publicaciones</h2>
 			<hr />
-			<form action="UploadFilesServlet" method="post" enctype="multipart/form-data" >
-				<input type="hidden" name="accionPOST" value="cargarImagenesEdit">
-				<input type="hidden" name="idPublicacion" value="${idPublicacion}">
-				
-				<input type="submit" name="coso" value="Editar imagenes de la publicacion" class="btn btn-primary">
-			</form>
-			<hr />
-		
 		</div>
-		
-	<form method="POST" action="PublicacionServlet">
-		<input type="hidden" name="accionPOST" value="updatePublicacion">
-		<input type="hidden" name="idPublicacion" value="${idPublicacion }">
-		
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
+		<div class="row well">
+			<div class="row col-md-6">
+				<form action="UploadFilesServlet" method="post"
+					enctype="multipart/form-data">
+					<input type="hidden" name="accionPOST" value="cargarImagenesEdit">
+					<input type="hidden" name="idPublicacion" value="${idPublicacion}">
 
-			<div class="row">
-				<%@ include file="mostrarInfoMessage.jsp"%>
+					<input type="submit" name="btnEditarImagenes"
+						value="Editar imagenes de la publicacion" class="btn btn-primary">
+				</form>
 			</div>
+			<div class="row col-md-6">
+				<div class="alert alert-info">
+					<h4>Seleccione esta opción para editar solo las imagenes</h4>
+				</div>
+			</div>
+		</div>
+		<form method="POST" action="PublicacionServlet">
+			<input type="hidden" name="accionPOST" value="updatePublicacion">
+			<input type="hidden" name="idPublicacion" value="${idPublicacion }">
+
+
+
 			<!--Horizantal line divider  <div class="page-header"/> -->
 			<div class="row" title="Ubicación - Zona del Domicilio">
 				<div class="row col-md-12">
@@ -124,6 +133,16 @@
 									name="departamento" class="form-control"
 									onkeypress="return soloLetras(event)" onpaste="return false"
 									maxlength="1" placeholder="B" value="${objPublicacion.dpto}">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">ID Publicación</label> <input
+									type="text" name="calle" class="form-control"
+									onkeypress="return soloNros(event)" readonly
+									maxlength="50" value="${objPublicacion.idPublicacion}">
 							</div>
 						</div>
 					</div>
@@ -376,16 +395,21 @@
 						<c:forEach items="${listaTipoServicios}" var="objTipoServicio">
 							<c:if test="${objTipoServicio.idTipoServicio eq 1}">
 								<div class="form-group">
-								<c:choose>
-								<c:when test="${objTipoServicio.idServicio eq objPublicacion.idTipoAlojamiento}">
-								<label class="checkbox"><input type="checkbox" checked
-										name="chklistServicios" value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label>
-								</c:when>
-								<c:otherwise><label class="checkbox"><input type="checkbox"
-										name="chklistServicios" value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label></c:otherwise>
-								</c:choose>
-								
-									
+									<c:choose>
+										<c:when
+											test="${objTipoServicio.idServicio eq objPublicacion.idTipoAlojamiento}">
+											<label class="checkbox"><input type="checkbox"
+												checked name="chklistServicios"
+												value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label>
+										</c:when>
+										<c:otherwise>
+											<label class="checkbox"><input type="checkbox"
+												name="chklistServicios"
+												value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label>
+										</c:otherwise>
+									</c:choose>
+
+
 								</div>
 							</c:if>
 						</c:forEach>
@@ -442,9 +466,6 @@
 			</div>
 		</form>
 	</div>
-	
-	<div class="container" id="footer"></div>
-
 
 	<script src="<%=ConstantesJSP.jspPub_combosAjax%>"></script>
 </body>

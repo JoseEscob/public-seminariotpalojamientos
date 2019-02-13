@@ -244,4 +244,17 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		return listaFiltrada;
 	}
 
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietarioIdPublicacion(int idUsuarioPropietario,
+			int idPublicacion) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
+
+		getAll().forEach(item -> {
+			if (item.getIdUsuarioPropietario() == idUsuarioPropietario) {
+				if (item.getIdPublicacion() == idPublicacion)
+					listaFiltrada.add(item);
+			}
+		});
+
+		return listaFiltrada;
+	}
 }

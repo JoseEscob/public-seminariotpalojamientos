@@ -11,6 +11,7 @@ import extra.Conexion;
 import extra.LOG;
 import extra.Utilitario;
 import modelo.Comprobante;
+import modelo.PublicacionReservada;
 
 public class Comprobantes implements Connectable<Comprobante> {
 	private final SolicitudesDeReserva solDeReservaDAO = new SolicitudesDeReserva();
@@ -256,5 +257,23 @@ public class Comprobantes implements Connectable<Comprobante> {
 
 	public void getMaxFechaReservaPublicacion(int idPublicacion) {
 		// TODO Está reservada al día de hoy. Min Fecha - Max Fecha
+	}
+	
+	public ArrayList<PublicacionReservada> getListadoDeFechasReservaPublicacion(int idPublicacion) {
+		ArrayList<PublicacionReservada> listaFechasReserva = new ArrayList<PublicacionReservada>();
+
+		for (Comprobante objComprobante : getAll()){
+			if(objComprobante.getIdPublicacion() == idPublicacion){
+				PublicacionReservada objPublicacionReservada = new PublicacionReservada();
+
+				objPublicacionReservada.setIdPublicacion(objComprobante.getIdPublicacion());
+				objPublicacionReservada.setFechaReservaInicio(objComprobante.getFechaReservaInicio());
+				objPublicacionReservada.setFechaReservaFin(objComprobante.getFechaReservaFin());
+
+				listaFechasReserva.add(objPublicacionReservada);
+			}
+		}
+
+		return listaFechasReserva;
 	}
 }
