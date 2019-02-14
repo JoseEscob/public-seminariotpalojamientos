@@ -314,6 +314,12 @@ public class Usuarios implements Connectable<Usuario> {
 		return objUsuario;
 	}
 
+	public Usuario getObjectById(int idUsuario) {
+		Usuario objUsuario = new Usuario();
+		objUsuario.setIdUsuario(idUsuario);
+		return this.get(objUsuario);
+	}
+
 	public Usuario getUsuarioByLogin(String correoUsuario, String claveUsuario) {
 		Usuario objUsuario;
 		objUsuario = this.getAll().stream()
@@ -326,6 +332,11 @@ public class Usuarios implements Connectable<Usuario> {
 		Usuarios usuarioDAO = new Usuarios();
 		Usuario objUsuario = new Usuario();
 		objUsuario = usuarioDAO.getAll().stream().filter(x -> x.getIdUsuario() == idUsuario).findFirst().orElse(null);
+		return objUsuario.getNombre() + " " + objUsuario.getApellido();
+	}
+
+	public String getNombreApellidoByIdUsuario(int idUsuario) {
+		Usuario objUsuario = this.getObjectById(idUsuario);
 		return objUsuario.getNombre() + " " + objUsuario.getApellido();
 	}
 

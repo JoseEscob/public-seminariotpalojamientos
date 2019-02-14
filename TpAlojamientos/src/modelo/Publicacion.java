@@ -2,6 +2,8 @@ package modelo;
 
 import java.sql.Date;
 
+import views.PublicacionInfo;
+
 public class Publicacion {
 	private int idPublicacion;
 	private int idUsuario;
@@ -23,7 +25,7 @@ public class Publicacion {
 	private int precioExpensas;
 	private int precioNoche;
 	private boolean chkPuedeVariarCantPersonas;
-	
+
 	private int cantPersonas;
 	private int cantAmbientes;
 	private int cantBanios;
@@ -35,6 +37,7 @@ public class Publicacion {
 	private float puntaje;
 	private boolean habilitado;
 	private boolean verificado;
+	private PublicacionInfo objPublicacionInfo;
 
 	public int getIdPublicacion() {
 		return idPublicacion;
@@ -247,32 +250,17 @@ public class Publicacion {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return 	"\n idPublicacion["+this.idPublicacion+
-				"]\n idUsuario["+this.idUsuario+
-				"]\n idTipoAlojamiento["+this.idTipoAlojamiento+
-				"]\n nombre["+this.nombre+
-				"]\n descripcion["+this.descripcion+
-				"]\n idLocalidad["+this.idLocalidad+
-				"]\n codPostal["+this.codPostal+
-				"]\n coordenadas["+this.coordenadas+
-				"]\n calle["+this.calle+
-				"]\n altura["+this.altura+
-				"]\n piso["+this.piso+
-				"]\n dpto["+this.dpto+
-				"]\n supCubierta["+this.supCubierta+
-				"]\n supDescubierta["+this.supDescubierta+
-				"]\n chkExpensas["+this.chkExpensas+
-				"]\n precioExpensas["+this.precioExpensas+
-				"]\n precioNoche["+this.precioNoche+
-				"]\n cantPersonas["+this.cantPersonas+
-				"]\n cantAmbientes["+this.cantAmbientes+
-				"]\n cantBanios["+this.cantBanios+
-				"]\n cantHabitaciones["+this.cantHabitaciones+
-				"]\n aniosAntiguedad["+this.aniosAntiguedad+
-				"]\n fechaAlta["+this.fechaAlta+
-				"]\n puntaje["+this.puntaje+
-				"]\n habilitado["+ this.habilitado+
-				"]\n verificado["+this.verificado+"]\n";
+		return "\n idPublicacion[" + this.idPublicacion + "]\n idUsuario[" + this.idUsuario + "]\n idTipoAlojamiento["
+				+ this.idTipoAlojamiento + "]\n nombre[" + this.nombre + "]\n descripcion[" + this.descripcion
+				+ "]\n idLocalidad[" + this.idLocalidad + "]\n codPostal[" + this.codPostal + "]\n coordenadas["
+				+ this.coordenadas + "]\n calle[" + this.calle + "]\n altura[" + this.altura + "]\n piso[" + this.piso
+				+ "]\n dpto[" + this.dpto + "]\n supCubierta[" + this.supCubierta + "]\n supDescubierta["
+				+ this.supDescubierta + "]\n chkExpensas[" + this.chkExpensas + "]\n precioExpensas["
+				+ this.precioExpensas + "]\n precioNoche[" + this.precioNoche + "]\n cantPersonas[" + this.cantPersonas
+				+ "]\n cantAmbientes[" + this.cantAmbientes + "]\n cantBanios[" + this.cantBanios
+				+ "]\n cantHabitaciones[" + this.cantHabitaciones + "]\n aniosAntiguedad[" + this.aniosAntiguedad
+				+ "]\n fechaAlta[" + this.fechaAlta + "]\n puntaje[" + this.puntaje + "]\n habilitado["
+				+ this.habilitado + "]\n verificado[" + this.verificado + "]\n";
 	}
 
 	public boolean isChkPuedeVariarCantPersonas() {
@@ -291,4 +279,16 @@ public class Publicacion {
 		this.fechaUltModificado = fechaUltModificado;
 	}
 
+	public PublicacionInfo getObjPublicacionInfo() {
+		return objPublicacionInfo;
+	}
+
+	public void setObjPublicacionInfo(PublicacionInfo objPublicacionInfo) {
+		this.objPublicacionInfo = objPublicacionInfo;
+	}
+
+	public void iniciarYcargarObjPublicacionInfo() {
+		objPublicacionInfo = new PublicacionInfo();
+		objPublicacionInfo.cargarDatosDePublicacion(idPublicacion, idLocalidad);
+	}
 }

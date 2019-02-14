@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import extra.Conexion;
+import extra.LOG;
 import extra.Utilitario;
 import modelo.SolicitudDeReserva;
 
@@ -17,7 +18,12 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 			+ ", fechaReservaInicio=?, fechaReservaFin=?, cantPersonas=?, precioFinal=?, fechaAltaSolicitud="
 			+ cCampo.sql_STR_TO_DATE_YmdHiS
 			+ ", idUsuarioPropietario=?, fechaDecisionPropietario=?, motivoDecisionPropietario=?, idEstadoSolicitud=?"
-			+ ", habilitado=?, idSolicitud=?";
+			+ ", habilitado=?";
+
+	private final static String camposUpdateDB = "idUsuarioHuesped=?, idPublicacion=?"
+			+ ", fechaReservaInicio=?, fechaReservaFin=?, cantPersonas=?, precioFinal=? "
+			+ ", idUsuarioPropietario=?, fechaDecisionPropietario=?, motivoDecisionPropietario=?, idEstadoSolicitud=?"
+			+ ", habilitado=?";
 
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
@@ -27,9 +33,10 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 
 		{
 			put("all", "select * from solicitudesDeReservas");
-			put("insert", String.format("insert into solicitudesDeReservas set %s", camposInsertIntoDB));
+			put("insert",
+					String.format("insert into solicitudesDeReservas set %s , idSolicitud=?", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from solicitudesDeReservas");
-			put("update", String.format("update solicitudesDeReservas set %s where idSolicitud=?", camposInsertIntoDB));
+			put("update", String.format("update solicitudesDeReservas set %s where idSolicitud=?", camposUpdateDB));
 			put("get", "select * from solicitudesDeReservas where idSolicitud=?");
 			put("like", "");
 
@@ -139,9 +146,12 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		cn = new Conexion();
 		boolean correcto = false;
 		try {
-
+			// 0) Obtener fecha y hora sin el ".0" del final
+			// obj.setFechaAltaSolicitud(obj.getFechaAltaSolicitud().split(".")[1]);
+			// 1) Realizar update
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("update"));
-			ps = writePs_SolDeReserva(obj, ps);
+			ps = writePs_SolDeReservaUpdate(obj, ps);
+			LOG.info("UPDATE SolDeReserva: " + ps.toString());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 
@@ -201,6 +211,24 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		return ps;
 	}
 
+	private PreparedStatement writePs_SolDeReservaUpdate(SolicitudDeReserva obj, PreparedStatement ps)
+			throws SQLException {
+		ps.setInt(1, obj.getIdUsuarioHuesped());
+		ps.setInt(2, obj.getIdPublicacion());
+		ps.setDate(3, obj.getFechaReservaInicio());
+		ps.setDate(4, obj.getFechaReservaFin());
+		ps.setInt(5, obj.getCantPersonas());
+		ps.setInt(6, obj.getPrecioFinal());
+		// ps.setString(7, obj.getFechaAltaSolicitud());
+		ps.setInt(7, obj.getIdUsuarioPropietario());
+		ps.setString(8, obj.getFechaDecisionPropietario());
+		ps.setString(9, obj.getMotivoDecisionPropietario());
+		ps.setInt(10, obj.getIdEstadoSolicitud());
+		ps.setBoolean(11, obj.isHabilitado());
+		ps.setInt(12, obj.getIdSolicitud());
+		return ps;
+	}
+
 	/// ********************* LAMBDA - Métodos de obtención de datos ******** ///
 	public SolicitudDeReserva getObjectById(int idSolDeReserva) {
 		SolicitudDeReserva objSolicitudDeReserva = getAll().stream()
@@ -247,14 +275,31 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietarioIdPublicacion(int idUsuarioPropietario,
 			int idPublicacion) {
 		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
+		Usuarios usuarioDAO = new Usuarios();
 
 		getAll().forEach(item -> {
 			if (item.getIdUsuarioPropietario() == idUsuarioPropietario) {
-				if (item.getIdPublicacion() == idPublicacion)
+				if (item.getIdPublicacion() == idPublicacion) {
+					item.setNombreApellidoHuesped(usuarioDAO.getNombreApellidoByIdUsuario(item.getIdUsuarioHuesped()));
 					listaFiltrada.add(item);
+				}
+
 			}
 		});
 
 		return listaFiltrada;
 	}
+	/*
+	 * static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+	 * Map<Object, Boolean> seen = new ConcurrentHashMap<>(); return t ->
+	 * seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; }
+	 * 
+	 * public static <T> Predicate<T> distinctByKey(Function<? super T, ?>
+	 * keyExtractor) { Set<Object> seen = ConcurrentHashMap.newKeySet(); return t ->
+	 * seen.add(keyExtractor.apply(t)); }
+	 * 
+	 * 
+	 * persons.stream().filter(distinctByKey(Person::getName))
+	 * 
+	 */
 }

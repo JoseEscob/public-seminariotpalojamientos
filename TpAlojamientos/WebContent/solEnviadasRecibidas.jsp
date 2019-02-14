@@ -14,9 +14,22 @@
 				class="pull-right label label-default">:)</span>
 		</h2>
 
-
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
 	</div>
 	<div class="container">
+		<div class="row">
+			<div class="well">
+				<strong>Ver como: </strong>
+				<div class="btn-group">
+					<a href="#" id="list" class="btn btn-default"><span
+						class="glyphicon glyphicon-th-list"> </span>Lista</a> <a href="#"
+						id="grid" class="btn btn-default"><span
+						class="glyphicon glyphicon-th"></span>Grilla</a>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<ul class="nav nav-tabs nav-justified">
 				<li class="active"><a href="#solEnviadas" data-toggle="tab"><h4>Solicitudes
@@ -38,17 +51,7 @@
 			<div class="tab-content">
 				<div id="solEnviadas" class="tab-pane active">
 					<div class="container">
-						<div class="row">
-							<div class="well">
-								<strong>Ver como: </strong>
-								<div class="btn-group">
-									<a href="#" id="list" class="btn btn-default"><span
-										class="glyphicon glyphicon-th-list"> </span>Lista</a> <a href="#"
-										id="grid" class="btn btn-default"><span
-										class="glyphicon glyphicon-th"></span>Grilla</a>
-								</div>
-							</div>
-						</div>
+
 						<div class="row">
 							<br>
 						</div>
@@ -123,9 +126,17 @@
 						<div class="row">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
-									<b>Solictudes Recibidas - En revisión por Ud.</b>
+									<b>Solictudes Recibidas - En revisión por Ud. </b> <span
+										class="badge">${fn:length(listaPublicacionSolReservaRecibidas)}</span>
 								</div>
-								<div class="panel-body"></div>
+								<div class="panel-body">
+									<div class="container row list-group" id="products">
+										<c:forEach items="${listaPublicacionSolReservaRecibidas}"
+											var="objPublicacionReservaRecibida">
+											<%@ include file="mostrarPublicacionSolReservaRecibida.jsp"%>
+										</c:forEach>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="row">

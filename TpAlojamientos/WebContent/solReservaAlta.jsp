@@ -117,12 +117,15 @@
 							
 							
 							<input type="hidden" name="vistaPublicacion" value="${vistaPublicacion}"></input>
-							-->
-
-						<input type="hidden" name="accionPOST" value="SolReservaAlta"></input>
-
+						
 						<input type="submit" class="btn btn-success"
 							name="btnEnviarSolReserva" value="Enviar solicitud"></input>
+						
+						-->
+
+						<input type="hidden" name="accionPOST"
+							value="altaSolicitudReserva"></input>
+
 
 						<button class="btn btn-success">
 							<span class="glyphicon glyphicon-send"></span> Enviar solicitud
@@ -136,6 +139,50 @@
 
 		<div class="row col-md-12">
 			<br>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<c:choose>
+					<c:when
+						test="${vistaPublicacion.publicacion.chkPuedeVariarCantPersonas eq true}">
+						<label class="control-label">Apto para
+							${vistaPublicacion.publicacion.cantPersonas} Personas o más</label>
+					</c:when>
+					<c:otherwise>
+						<label class="control-label">Apto para
+							${vistaPublicacion.publicacion.cantPersonas} Personas</label>
+					</c:otherwise>
+				</c:choose>
+			</div>
+
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Precio por Noche:
+						${vistaPublicacion.publicacion.precioNoche}</label>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<c:choose>
+						<c:when test="${vistaPublicacion.publicacion.precioExpensas eq 0}">
+
+							<label class="control-label">Precio de Expensa:
+								${vistaPublicacion.publicacion.precioExpensas}</label>
+						</c:when>
+						<c:otherwise>
+							<label class="control-label">Precio de Expensa:
+								${vistaPublicacion.publicacion.precioExpensas}</label>
+							<div class="alert alert-info">
+								<h5>Las expensas se cobran si la reserva tiene más de 25
+									días</h5>
+							</div>
+
+						</c:otherwise>
+					</c:choose>
+
+				</div>
+			</div>
+			<div class="col-md-3"></div>
 		</div>
 
 		<div class="row col-md-12" style="color: red;">
@@ -151,5 +198,7 @@
 			</h4>
 		</div>
 	</div>
+
+
 </body>
 </html>

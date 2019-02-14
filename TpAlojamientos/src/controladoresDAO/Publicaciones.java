@@ -347,8 +347,20 @@ public class Publicaciones implements Connectable<Publicacion> {
 	public ArrayList<Publicacion> getAllByIdUsuario(int idUsuario) {
 		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
 		getAll().forEach(item -> {
-			if (item.getIdUsuario() == idUsuario)
+			if (item.getIdUsuario() == idUsuario) {
+				item.iniciarYcargarObjPublicacionInfo();
 				listaFiltrada.add(item);
+			}
+		});
+		return listaFiltrada;
+	}
+
+	public ArrayList<Publicacion> getAllByIdUsuarioOld(int idUsuario) {
+		ArrayList<Publicacion> listaFiltrada = new ArrayList<Publicacion>();
+		getAll().forEach(item -> {
+			if (item.getIdUsuario() == idUsuario) {
+				listaFiltrada.add(item);
+			}
 		});
 		return listaFiltrada;
 	}

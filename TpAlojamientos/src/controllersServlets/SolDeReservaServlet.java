@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controladoresDAO.Comprobantes;
+import controladoresDAO.Publicaciones;
 import controladoresDAO.SolicitudesDeReserva;
 import controladoresDAO.Usuarios;
 import exceptions.ServidorException;
@@ -21,6 +22,7 @@ import extra.LOG;
 import extra.ORSesion;
 import extra.Utilitario;
 import modelo.Comprobante;
+import modelo.Publicacion;
 import modelo.PublicacionReservada;
 import modelo.SolicitudDeReserva;
 import modelo.Usuario;
@@ -38,6 +40,7 @@ public class SolDeReservaServlet extends HttpServlet {
 	private final SolicitudesDeReserva solDeReservaDAO = new SolicitudesDeReserva();
 	private final Usuarios usuariosDAO = new Usuarios();
 	private final Comprobantes comprobantesDAO = new Comprobantes();
+	private final Publicaciones publicacionDAO = new Publicaciones();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -69,6 +72,9 @@ public class SolDeReservaServlet extends HttpServlet {
 			case "verComprobanteDeReserva":
 				verComprobanteDeReserva(request, response);
 				break;
+			case "cargarSolDeReservasRecibidasByIdPublicacion":
+				cargarSolDeReservasRecibidasByIdPublicacion(request, response);
+				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,12 +100,10 @@ public class SolDeReservaServlet extends HttpServlet {
 			case "verFechasDeReservaPublicacion":
 				verFechasDeReservaPublicacion(request, response);
 				break;
-			case "SolReservaAlta":
+			case "altaSolicitudReserva":
 				altaSolicitudReserva(request, response);
 				break;
-			case "cargarSolDeReservasRecibidasByIdPublicacion":
-				cargarSolDeReservasRecibidasByIdPublicacion(request, response);
-				break;
+
 			case "validarAprobacionDeSolicitudes":
 				validarAprobacionDeSolicitudes(request, response);
 				break;
@@ -310,6 +314,7 @@ public class SolDeReservaServlet extends HttpServlet {
 	private void verSolEnviadasRecibidas(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- Declaración de variables
+		InfoMessage objInfoMessage = new InfoMessage();
 		String message = null;
 		try {
 			// 1- recuperar valores del request y los DAOs
@@ -336,14 +341,35 @@ public class SolDeReservaServlet extends HttpServlet {
 			// 4- Cargar listado de solicitudes recibidas
 			// TODO: PublicacionSolRecibidaView -> Publicacion, idEstadoSolicitud,
 			// cantSolicitudes
+			ArrayList<SolicitudDeReserva> listaSolDeReservaRecibida = solDeReservaDAO
+					.getAllByIdUsuarioPropietario(idUsuarioPropietario);
+			ArrayList<Publicacion> listaPublicacionSolReservaRecibidas = new ArrayList<Publicacion>();
+			int idPublicacionAnterior = 0;
+			for (SolicitudDeReserva item : listaSolDeReservaRecibida) {
+				Publicacion objPublicacion = new Publicacion();
+				if (idPublicacionAnterior == 0 || (item.getIdPublicacion() != idPublicacionAnterior)) {
+					if (item.getIdEstadoSolicitud() == 1) {
+						idPublicacionAnterior = item.getIdPublicacion();
+						objPublicacion = publicacionDAO.getObjectByID(idPublicacionAnterior);
+						// 14-02-19 Begin
+						objPublicacion.iniciarYcargarObjPublicacionInfo();
+						// 14-02-19 End
+						listaPublicacionSolReservaRecibidas.add(objPublicacion);
+					}
+				}
+			}
+
 			// 5- Guardar información en request para su posterior muestra/exposición en JSP
 			request.setAttribute("listaSolDeReservaView", listaSolDeReservaView);
+			request.setAttribute("listaPublicacionSolReservaRecibidas", listaPublicacionSolReservaRecibidas);
 			// request.setAttribute("listaSolDeReservaRecibida", listaSolDeReservaRecibida);
+			message = "Se cargó su lista de solicitudes con éxito";
+			objInfoMessage = new InfoMessage(true, message);
 		} catch (Exception e) {
-			message = e.getMessage();
+			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 4- Informar estado/resultados en interfaz (JSP)
-			request.setAttribute("message", message);
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 			paginaJsp = "/solEnviadasRecibidas.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
@@ -449,10 +475,14 @@ public class SolDeReservaServlet extends HttpServlet {
 			ArrayList<SolicitudDeReserva> listaSolDeReservasRecibidasPorPublicacion = solDeReservaDAO
 					.getAllByIdUsuarioPropietarioIdPublicacion(idUsuarioPropietario, idPublicacion);
 
+			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservasRecibidasPorPublicacion) {
+				verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
+			}
 			// 2- Devolver información al JSP
 			request.setAttribute("listaSolDeReservasRecibidasPorPublicacion",
 					listaSolDeReservasRecibidasPorPublicacion);
 			// 3- Informar estado de transacción
+			message = "Se cargaron las solicitudes de la publicación con ID: " + idPublicacion;
 			objInfoMessage = new InfoMessage(true, message);
 		} catch (Exception e) {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
@@ -460,11 +490,10 @@ public class SolDeReservaServlet extends HttpServlet {
 			// 3- Informar estado en interfaz (jsp)
 			request.setAttribute("objInfoMessage", objInfoMessage);
 			if (objInfoMessage.getEstado()) {
-				paginaJsp = "/solComprobanteViewDetails.jsp";
+				paginaJsp = "/solReservaRecibidaPorPublicacion.jsp";
 				request.getRequestDispatcher(paginaJsp).forward(request, response);
 			} else {
-				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
-				// idPublicacion;
+				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			}
@@ -747,15 +776,15 @@ public class SolDeReservaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		InfoMessage objInfoMessage = new InfoMessage();
 		String message = null;
-		int idSolDeReserva = 0;
+		int idSolicitud = 0;
 		try {
 			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
 			// Solicitudes
-			if (request.getParameter("idSolDeReserva") == null) {
-				throw new ServidorException("No se encontró la solicitud con ID: " + idSolDeReserva);
+			if (request.getParameter("idSolicitud") == null) {
+				throw new ServidorException("No se encontró la solicitud con ID: " + idSolicitud);
 			}
-			idSolDeReserva = Integer.parseInt(request.getParameter("idSolDeReserva"));
-			SolicitudDeReserva objSolDeReserva = solDeReservaDAO.getObjectById(idSolDeReserva);
+			idSolicitud = Integer.parseInt(request.getParameter("idSolicitud"));
+			SolicitudDeReserva objSolDeReserva = solDeReservaDAO.getObjectById(idSolicitud);
 			// 2- Validar que sea el usuario propietario sea quien está realizando la acción
 			objSolDeReserva.getIdUsuarioHuesped();
 			// 2.1- Validar que la solicitud siga en estado pendiente de aprobación
@@ -765,9 +794,7 @@ public class SolDeReservaServlet extends HttpServlet {
 				LOG.info(message);
 			}
 			// 3.1- Setear objeto antes de realizar la transacción con la DB
-			objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
-			objSolDeReserva.setMotivoDecisionPropietario("Cancelada por Solicitador");// TODO: extraer a Constantes
-			objSolDeReserva.setIdEstadoSolicitud(2); // 2:rechazada - Verificar 'tiposEstadosSolicitudes'
+			objSolDeReserva.setIdEstadoSolicitud(3); // 3: 'Cancelada por el solicitador'
 			objSolDeReserva.setHabilitado(false);
 			// 3.2- DB Actualizar la solicitud en 'solicitudesDeReservas'
 			if (!solDeReservaDAO.update(objSolDeReserva))
@@ -782,18 +809,10 @@ public class SolDeReservaServlet extends HttpServlet {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("objInfoMessage", objInfoMessage);
-			if (objInfoMessage.getEstado()) {
-				paginaJsp = "/--.jsp";
-				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
-				response.sendRedirect(paginaJsp);
-				// request.getRequestDispatcher(paginaJsp).forward(request, response);
-			} else {
-				// paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" +
-				// idPublicacion;
-				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
-				response.sendRedirect(paginaJsp);
-			}
+			// request.setAttribute("objInfoMessage", objInfoMessage);
+			paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
 		}
 
 	}
@@ -829,16 +848,6 @@ public class SolDeReservaServlet extends HttpServlet {
 	}
 
 	/*
-	 * 10-02 15-02 ------------------------------------------------------ Inicio Fin
-	 * 05-02 Y N (F) 09-02 Y N (F) : Fecha Disponible 05-02 Y N (F) 10-02 N N (T) :
-	 * Fecha NO Disponible 05-02 Y N (F) 12-02 N N (T) : Fecha NO Disponible
-	 * ------------------------------------------------------ 11-02 N N (T) 14-02 N
-	 * N (T) : Fecha NO Disponible 11-02 N N (T) 17-02 N N (T) : Fecha NO Disponible
-	 * 11-02 N N (T) 17-02 N N (T) : Fecha NO Disponible
-	 * 
-	 * 
-	 * 16-02 N Y (F) 13-02 N N (T)
-	 * 
 	 * 
 	 * 
 	 * 

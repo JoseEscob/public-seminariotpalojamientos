@@ -39,7 +39,7 @@
 		</div>
 		<form method="POST" action="PublicacionServlet">
 			<input type="hidden" name="accionPOST" value="updatePublicacion">
-			<input type="hidden" name="idPublicacion" value="${idPublicacion }">
+			<input type="hidden" name="idPublicacion" value="${idPublicacion}">
 
 
 
@@ -141,8 +141,24 @@
 							<div class="form-group">
 								<label class="control-label">ID Publicación</label> <input
 									type="text" name="calle" class="form-control"
-									onkeypress="return soloNros(event)" readonly
-									maxlength="50" value="${objPublicacion.idPublicacion}">
+									onkeypress="return soloNros(event)" readonly maxlength="50"
+									value="${objPublicacion.idPublicacion}">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Fecha de Creación</label> <input
+									type="text" name="calle" class="form-control"
+									onkeypress="return soloNros(event)" readonly maxlength="50"
+									value="${objPublicacion.fechaAlta}">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">Última modificación</label> <input
+									type="text" name="calle" class="form-control"
+									onkeypress="return soloNros(event)" readonly maxlength="50"
+									value="${objPublicacion.fechaUltModificado}">
 							</div>
 						</div>
 					</div>

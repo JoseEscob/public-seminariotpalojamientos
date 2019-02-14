@@ -100,19 +100,36 @@
 					<br>
 				</div>
 				<div class="row">
-					<div class="col-xs-12 col-xs-6">
+					<div class="col-xs-12">
 						<p class="lead">
 							Precio Final &nbsp; <b>$&nbsp;${objSolReservaView.objSolReserva.precioFinal}</b>
 						</p>
 					</div>
-					<div class="col-xs-12 col-xs-6">
-						<c:url value="PublicacionServlet?" var="urlPublicacionGuardada">
-							<c:param name="accionGET" value="VerPublicacion" />
-							<c:param name="idPublicacion"
-								value="${objSolReservaView.objSolReserva.idPublicacion}" />
-						</c:url>
-						<a class="btn btn-primary" href="${urlPublicacionGuardada}">Ver
-							Publicación</a>
+					<div class="col-xs-12">
+						<div class="col-xs-12 col-xs-2 pull-left">
+							<c:if
+								test="${objSolReservaView.objSolReserva.idEstadoSolicitud eq 1}">
+								<form method="post" action="SolDeReservaServlet">
+									<input type="hidden" name="accionPOST"
+										value="cancelarSolicitudDeReserva"></input> <input
+										type="hidden" name="idSolicitud"
+										value="${objSolReservaView.objSolReserva.idSolicitud}">
+									<button class="btn btn-danger">
+										<span class="glyphicon glyphicon-trash"></span>&nbsp;Cancelar
+										Solicitud
+									</button>
+								</form>
+							</c:if>
+						</div>
+						<div class="col-xs-12 col-xs-6 pull-right">
+							<c:url value="PublicacionServlet?" var="urlPublicacionGuardada">
+								<c:param name="accionGET" value="VerPublicacion" />
+								<c:param name="idPublicacion"
+									value="${objSolReservaView.objSolReserva.idPublicacion}" />
+							</c:url>
+							<a class="btn btn-primary" href="${urlPublicacionGuardada}">Ver
+								Publicación</a>
+						</div>
 					</div>
 				</div>
 			</div>

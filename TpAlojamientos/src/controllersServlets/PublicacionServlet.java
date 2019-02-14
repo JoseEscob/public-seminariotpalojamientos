@@ -748,14 +748,12 @@ public class PublicacionServlet extends HttpServlet {
 		int idPublicacion = 0;
 		try {
 			// 1- recuperar valores del formulario JSP y validar información obtenida
-			Publicacion objPublicacion = new Publicacion();
-
-			// Recupero idPublicacion
-			String idPublicacionString = request.getParameter("idPublicacion");
-			if (idPublicacionString != null)
-				idPublicacion = Integer.parseInt(idPublicacionString);
-
-			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+			if (request.getParameter("idPublicacion") == null)
+				throw new ServidorException("Valor null para el parámetro: ID Publicación");
+			
+			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			
+			Publicacion objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2- guardar la información en la DB
 			if (!publicacionDAO.update(objPublicacion))
@@ -833,6 +831,7 @@ public class PublicacionServlet extends HttpServlet {
 			// 2- recuperar valores del formulario JSP y validar información obtenida
 			Publicacion objPublicacion = new Publicacion();
 			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+			objPublicacion.setFechaAlta(Utilitario.getCurrentDateAndHoursSQL());
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2.2 Validar con la DB
 			// 3.1- DB: guardar información validada - publicacionDAO
@@ -990,7 +989,7 @@ public class PublicacionServlet extends HttpServlet {
 		objPublicacion.setCantHabitaciones(cantidadDormitorios);
 		objPublicacion.setAniosAntiguedad(aniosAntiguedad);
 		java.sql.Date currentDateSQL = Utilitario.getCurrentDateAndHoursSQL();
-		objPublicacion.setFechaAlta(currentDateSQL);
+		//objPublicacion.setFechaAlta(currentDateSQL);
 		objPublicacion.setFechaUltModificado(currentDateSQL);
 		objPublicacion.setPuntaje(0);
 		objPublicacion.setVerificado(false);

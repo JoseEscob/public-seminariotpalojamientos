@@ -36,16 +36,29 @@
 					<c:forEach items="${listadoDePublicaciones}" var="objPublicacion">
 						<div class="item  col-xs-4 col-lg-4">
 							<div class="thumbnail">
-								<img class="group list-group-image"
-									src="imagenes/home-not-found.png" alt="" />
-								<!--  <img class="group list-group-image"
-							src="http://placehold.it/400x250/000/fff" alt="" />  {objPublicacion.imagenes[0].rutaImgPublicacion}-->
-
+								<c:choose>
+									<c:when
+										test="${not empty objPublicacion.objPublicacionInfo.publicacionRutaPrimerImagen}">
+										<img class="group list-group-image" width="250" height="200"
+											src="${objPublicacion.objPublicacionInfo.publicacionRutaPrimerImagen}"
+											alt="Imagen de Publicación" />
+									</c:when>
+									<c:otherwise>
+										<img class="group list-group-image"
+											src="imagenes/home-not-found.png" alt="" />
+									</c:otherwise>
+								</c:choose>
 								<div class="caption">
 									<div>
 										<h4 class="group inner list-group-item-heading">
 											<b>${objPublicacion.nombre}</b>
 										</h4>
+									</div>
+									<div>
+										<ul class="list-inline">
+											<li>Zona:</li>
+											<li><b>${objPublicacion.objPublicacionInfo.publicacionPartidoLocalidad}</b></li>
+										</ul>
 									</div>
 									<div>
 										<ul class="list-inline">
