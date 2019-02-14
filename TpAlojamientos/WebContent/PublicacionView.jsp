@@ -21,43 +21,53 @@
 			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
 			<div class="col-md-8">
-				<div id="myCarousel" class="carousel slide col-md-6"
-					data-ride="carousel">
-					<!-- <ol class="carousel-indicators">
-							  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-							  <li data-target="#myCarousel" data-slide-to="1"></li>
-							  <li data-target="#myCarousel" data-slide-to="2"></li>
-					</ol>->
-					<!-- Agregar algun comentario dentro de cada imagen? -->
-					<!-- Wrapper for slides -->
-					<div class="carousel-inner">
-						<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
-							<c:choose>
-								<c:when test="${objImagen.idImagen eq 1 }">
-									<div class="item active">
-										<img src="${objImagen.rutaImgPublicacion}">
-										<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
-									</div>
-								</c:when>
-								<c:otherwise>
-									<div class="item">
-										<img src="${objImagen.rutaImgPublicacion}">
-										<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
-									</div>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					</div>
-
-					<!-- Left and right controls -->
-					<a class="left carousel-control" href="#myCarousel"
-						data-slide="prev"> <span
-						class="glyphicon glyphicon-chevron-left"></span>
-					</a> <a class="right carousel-control" href="#myCarousel"
-						data-slide="next"> <span
-						class="glyphicon glyphicon-chevron-right"></span>
-					</a>
-				</div>
+				<c:choose>
+						<c:when test="${not empty vistaPublicacion.imagenes}">
+							<div id="myCarousel" class="carousel slide col-md-6"
+								data-ride="carousel">
+								<!-- <ol class="carousel-indicators">
+										  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+										  <li data-target="#myCarousel" data-slide-to="1"></li>
+										  <li data-target="#myCarousel" data-slide-to="2"></li>
+								</ol>->
+								<!-- Agregar algun comentario dentro de cada imagen? -->
+								<!-- Wrapper for slides -->
+								<div class="carousel-inner">
+												<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
+													<c:choose>
+														<c:when test="${objImagen.idImagen eq vistaPublicacion.imagenes[0].idImagen }">
+															<div class="item active">
+																<img src="${objImagen.rutaImgPublicacion}">
+																<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+															</div>
+														</c:when>
+														<c:otherwise>
+															<div class="item">
+																<img src="${objImagen.rutaImgPublicacion}">
+																<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+															</div>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+									
+								</div>
+			
+								<!-- Left and right controls -->
+								<a class="left carousel-control" href="#myCarousel"
+									data-slide="prev"> <span
+									class="glyphicon glyphicon-chevron-left"></span>
+								</a> <a class="right carousel-control" href="#myCarousel"
+									data-slide="next"> <span
+									class="glyphicon glyphicon-chevron-right"></span>
+								</a>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="row alert alert-info">
+								No se encontraron imagenes para esta publicacion.
+							</div>
+						</c:otherwise>
+				</c:choose>
 			</div>
 
 			<!--Seccion del propietario a la izquierda-->

@@ -49,7 +49,13 @@ public class PublicacionView {
 	}
 
 	public void setImagenes(ArrayList<Imagen> imagenes) {
-		this.imagenes = imagenes;
+		this.imagenes = new ArrayList<Imagen>();
+		for(Imagen i : imagenes) 
+			if(i.isHabilitado())
+				this.imagenes.add(i);
+		if(this.imagenes.size() == 0)
+			this.imagenes = null;
+		
 	}
 
 	public int getCantComentarios() {

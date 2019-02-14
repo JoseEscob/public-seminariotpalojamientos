@@ -13,8 +13,7 @@
 <div class="container">
 	
 	<div class="row">
-		<h1>En costruccion!</h1>
-		<h4>Editar imagenes de la publicacion</h4>
+		<h4>Imagenes de la publicacion</h4>
 		<hr/>
 		<label for="" class="btn btn-primary" onclick="addImages(${idPublicacion})" id="btnAdd">Añadir Imagenes <label for="" style="font-weight: normal;" id="imageCounter">${imageCounter }</label> / 20</label>
 		<a class="btn btn-success" href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=${idPublicacion}">Finalizar</a>
