@@ -41,7 +41,7 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${listaSolDeReservasRecibidasPorPublicacion}"
-					var="objSolReserva">
+					var="objSolReserva" varStatus="loop">
 					<c:if test="${objSolReserva.idEstadoSolicitud eq 1}">
 						<tr>
 							<td><input type="checkbox" class="checkbox"
@@ -84,26 +84,29 @@
 										data-toggle="tooltip"
 										title="Ver Perfil del usuario solicitador"> <span
 										class="glyphicon glyphicon-eye-open"></span> Ver Perfil
-									</a> <a href="${urlAprobarUnaSolicitud}" class="btn btn-success"
-										data-toggle="tooltip" title="Aprueba la solicitud"> <span
-										class="glyphicon glyphicon-eye-open"></span> Aprobar
-									</a> <a href="${urlRechazarUnaSolicitud}" class="btn btn-danger"
+									</a>
+									<div>
+										<!-- Aprobar Solicitud-->
+										<a href="${urlAprobarUnaSolicitud}" class="btn btn-success"
+											data-toggle="tooltip" title="Aprueba la solicitud"> <span
+											class="glyphicon glyphicon-ok"></span> Aprobar
+										</a> ${loop.index}
+									</div>
+									<div>
+										<!-- Aprobar Solicitud-->
+										<a href="${urlAprobarUnaSolicitud}" name="btnVer" value="${loop.index}"> <span
+											class="glyphicon glyphicon-ok"></span> Ver
+										</a> ${loop.index}
+									</div>
+
+									<a href="${urlRechazarUnaSolicitud}" class="btn btn-danger"
 										data-toggle="tooltip" title="Rechaza la solicitud"> <span
 										class="glyphicon glyphicon-remove-circle"></span> Rechazar
 									</a>
 								</div>
 
-								<div>
-									<!-- Aprobar Solicitud-->
-								</div>
+
 							</td>
-							<!--
-						<td>${objSolReserva.idUsuarioPropietario}</td>
-						<td>${objSolReserva.fechaDecisionPropietario}</td>
-						<td>${objSolReserva.motivoDecisionPropietario}</td>
-						<td>${objSolReserva.idEstadoSolicitud}</td>
-						<td>${objSolReserva.habilitado}</td>
-						-->
 						</tr>
 					</c:if>
 				</c:forEach>
@@ -114,16 +117,47 @@
 
 
 	<div class="container">
+		<c:set var="rowno" value="${param.btnVer - 1}" />
+		${listaSolDeReservasRecibidasPorPublicacion[rowno].idSolicitud}
+		${listaSolDeReservasRecibidasPorPublicacion[rowno].nombreApellidoHuesped}
+	</div>
+
+	<div class="row" title="FormularioAltaComentario (Modal)">
+		<div class="modal fade" id="formAltaComentario" role="dialog">
+			<!-- <div class="modal-dialog"></div> -->
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<%@ include file="PublicacionComentariosAlta.jsp"%>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar/
+						Volver</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div class="container">
 		<div class="row">
 			<div class="col-md-6">
 
 				<div class="row col-md-12" align="center">
-					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button> href="#formSolReserva" -->
+					<!-- <button class="btn btn-success btn-lg">Solicitar una reserva</button> href="#formSolReserva"
 
 					<a class="btn btn-success btn-lg" data-toggle="modal"
 						data-target="#formSolReservaConfirmacion"> <span
 						class="glyphicon glyphicon-flag"></span> Aprobar Solicitudes
 					</a>
+					 -->
 				</div>
 			</div>
 			<!-- SolDeReservaServlet validarAprobacionDeSolicitudes

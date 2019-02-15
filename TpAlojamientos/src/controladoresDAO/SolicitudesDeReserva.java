@@ -261,6 +261,23 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 		return listaFiltrada;
 	}
 
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioHuespedIdPublicacion(int idUsuarioHuesped,
+			int idPublicacion) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
+		java.sql.Date fechaActualSQL = Utilitario.getCurrentDateAndHoursSQL();
+
+		getAll().forEach(item -> {
+			if (item.getIdUsuarioHuesped() == idUsuarioHuesped && item.getIdPublicacion() == idPublicacion) {
+				if (item.getIdEstadoSolicitud() == 1) {
+					if (item.getFechaReservaFin().after(fechaActualSQL))
+						listaFiltrada.add(item);
+				}
+			}
+		});
+
+		return listaFiltrada;
+	}
+
 	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietario(int idUsuarioPropietario) {
 		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
 
@@ -286,7 +303,23 @@ public class SolicitudesDeReserva implements Connectable<SolicitudDeReserva> {
 
 			}
 		});
+		return listaFiltrada;
+	}
 
+	public ArrayList<SolicitudDeReserva> getAllByIdUsuarioPropietarioIdPublicacionPendientes(int idUsuarioPropietario,
+			int idPublicacion) {
+		ArrayList<SolicitudDeReserva> listaFiltrada = new ArrayList<SolicitudDeReserva>();
+		Usuarios usuarioDAO = new Usuarios();
+
+		getAll().forEach(item -> {
+			if (item.getIdUsuarioPropietario() == idUsuarioPropietario) {
+				if (item.getIdPublicacion() == idPublicacion && item.getIdEstadoSolicitud() == 1) {
+					item.setNombreApellidoHuesped(usuarioDAO.getNombreApellidoByIdUsuario(item.getIdUsuarioHuesped()));
+					listaFiltrada.add(item);
+				}
+
+			}
+		});
 		return listaFiltrada;
 	}
 	/*

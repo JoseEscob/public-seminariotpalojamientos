@@ -7,7 +7,8 @@ public class PublicacionReservada {
 	private boolean estaReservada;
 	private Date fechaReservaInicio;
 	private Date fechaReservaFin;
-
+	private int cantDiasReserva;
+	
 	public int getIdPublicacion() {
 		return idPublicacion;
 	}
@@ -38,5 +39,13 @@ public class PublicacionReservada {
 
 	public void setFechaReservaFin(Date fechaReservaFin) {
 		this.fechaReservaFin = fechaReservaFin;
+	}
+
+	public int getCantDiasReserva() {
+		return cantDiasReserva;
+	}
+
+	public void setCantDiasReserva(int cantDiasReserva) {
+		this.cantDiasReserva = cantDiasReserva;
 	}
 }

@@ -1,4 +1,5 @@
 <tr>
+	<td>${objComprobante.idComprobante}</td>
 	<td>${objComprobante.idSolicitud}</td>
 	<td>${objComprobante.idPublicacion}</td>
 	<td>${objComprobante.nombreApellidoPropietario}</td>
@@ -13,8 +14,8 @@
 		<div>
 			<c:url value="SolDeReservaServlet?" var="urlVerComprobante">
 				<c:param name="accionGET" value="verComprobanteDeReserva" />
-				<c:param name="idPublicacion"
-					value="${objComprobante.idPublicacion}" />
+				<c:param name="idComprobante"
+					value="${objComprobante.idComprobante}" />
 			</c:url>
 
 			<a href="${urlVerComprobante}" class="btn btn-default"> <span

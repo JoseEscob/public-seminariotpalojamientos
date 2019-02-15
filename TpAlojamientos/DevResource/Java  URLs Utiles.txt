@@ -27,7 +27,7 @@ Publicacion - Alta
     https://www.w3schools.com/tags/att_form_name.asp
     https://www.w3schools.com/howto/howto_js_form_steps.asp
 
-    
+http://www.javaquizplayer.com/blogposts/jsp-select-and-process-table-row-data-9.html    
     
 ******** FUENTE/ REFERENCIA DE DATOS ********
 Servlets (Session, Application, Attribute vs Parameter)
