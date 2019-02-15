@@ -2,6 +2,8 @@ package modelo;
 
 import java.sql.Date;
 
+import controladoresDAO.Usuarios;
+
 public class Comprobante {
 	private int idComprobante;
 	private int idSolicitud;
@@ -14,8 +16,18 @@ public class Comprobante {
 	private Date fechaAlta;
 	private int idUsuarioPropietario;
 	private boolean habilitado;
-	
+
 	private int cantDiasReserva;
+	private String nombreApellidoHuesped;
+	private String nombreApellidoPropietario;
+	private String nombreAlojamientoYZona;
+
+	public void cargarInfoComprobante() {
+		Usuarios usuarioDAO = new Usuarios();
+		nombreApellidoHuesped = usuarioDAO.getNombreApellidoByIdUsuario(idUsuarioHuesped);
+		nombreApellidoPropietario = usuarioDAO.getNombreApellidoByIdUsuario(idUsuarioPropietario);
+		//nombreAlojamientoYZona = 
+	}
 
 	public int getIdComprobante() {
 		return idComprobante;
@@ -104,7 +116,7 @@ public class Comprobante {
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
 	}
-	
+
 	public int getCantDiasReserva() {
 		return cantDiasReserva;
 	}
@@ -113,5 +125,20 @@ public class Comprobante {
 		this.cantDiasReserva = cantDiasReserva;
 	}
 
+	public String getNombreApellidoHuesped() {
+		return nombreApellidoHuesped;
+	}
+
+	public void setNombreApellidoHuesped(String nombreApellidoHuesped) {
+		this.nombreApellidoHuesped = nombreApellidoHuesped;
+	}
+
+	public String getNombreApellidoPropietario() {
+		return nombreApellidoPropietario;
+	}
+
+	public void setNombreApellidoPropietario(String nombreApellidoPropietario) {
+		this.nombreApellidoPropietario = nombreApellidoPropietario;
+	}
 
 }

@@ -354,8 +354,10 @@ public class PublicacionServlet extends HttpServlet {
 
 			listaFavoritos.forEach(item -> {
 				Publicacion objPublicacion = publicacionDAO.getObjectByID(item.getIdPublicacion());
-				if (objPublicacion != null)
+				if (objPublicacion != null) {
+					objPublicacion.iniciarYcargarObjPublicacionInfo();
 					listadoDePublicaciones.add(objPublicacion);
+				}
 			});
 			message = String.format("Se cargó la lista de favoritos del usuario %s %s con éxito",
 					objUsuarioLogueado.getNombre(), objUsuarioLogueado.getApellido());
@@ -721,14 +723,15 @@ public class PublicacionServlet extends HttpServlet {
 			request.setAttribute("idPublicacion", idPublicacion);
 			// request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
-
-			message = "Se cargó con éxito los componentes de la publicación para ser editada";
-			objInfoMessage = new InfoMessage(true, message);
+			if (request.getAttribute("objInfoMessage") == null) {
+				message = "Se cargó con éxito los componentes de la publicación para ser editada";
+				objInfoMessage = new InfoMessage(true, message);
+			}
 		} catch (Exception e) {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("objInfoMessage", objInfoMessage);
+			// request.setAttribute("objInfoMessage", objInfoMessage);
 			if (objInfoMessage.getEstado()) {
 				paginaJsp = "/PublicacionModif.jsp";
 				request.getRequestDispatcher(paginaJsp).forward(request, response);
@@ -750,10 +753,12 @@ public class PublicacionServlet extends HttpServlet {
 			// 1- recuperar valores del formulario JSP y validar información obtenida
 			if (request.getParameter("idPublicacion") == null)
 				throw new ServidorException("Valor null para el parámetro: ID Publicación");
-			
+
 			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
-			
-			Publicacion objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+
+			Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
+			objPublicacion = getObjectPublicacionByJSPData(request, idPublicacion);
+			// objPublicacion.setFechaAlta(publicacionDAO.getObjectByID(idPublicacion).getFechaAlta());
 			LOG.info("Objeto seteado Publicación: " + objPublicacion.toString());
 			// 2- guardar la información en la DB
 			if (!publicacionDAO.update(objPublicacion))
@@ -790,7 +795,7 @@ public class PublicacionServlet extends HttpServlet {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("objInfoMessage", objInfoMessage);
+
 			if (objInfoMessage.getEstado()) {
 				// paginaJsp = "/PublicacionesDelUsuario.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=verMisPublicaciones";
@@ -798,9 +803,10 @@ public class PublicacionServlet extends HttpServlet {
 				response.sendRedirect(paginaJsp);
 			} else {
 				// paginaJsp = "/PublicacionAlta.jsp";
-				paginaJsp = "PublicacionServlet?accionGET=Nuevo";
+				paginaJsp = "PublicacionServlet?accionGET=EditarPublicacion";
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
-				response.sendRedirect(paginaJsp);
+				editarPublicacion(request, response);
+				// response.sendRedirect(paginaJsp);
 			}
 			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
@@ -942,9 +948,8 @@ public class PublicacionServlet extends HttpServlet {
 			throw new ValidacionException("El Código Postal debe ser mayor a cero");
 		if (superficieCubierta <= 0)
 			throw new ValidacionException("La Superficie Cubierta debe ser mayor a cero");
-		
-		
-		// 
+
+		//
 		boolean expensas = Boolean.parseBoolean(request.getParameter("chkExpensas"));
 		int precioExpensas = 0;
 		if (expensas == true) {
@@ -989,7 +994,7 @@ public class PublicacionServlet extends HttpServlet {
 		objPublicacion.setCantHabitaciones(cantidadDormitorios);
 		objPublicacion.setAniosAntiguedad(aniosAntiguedad);
 		java.sql.Date currentDateSQL = Utilitario.getCurrentDateAndHoursSQL();
-		//objPublicacion.setFechaAlta(currentDateSQL);
+		// objPublicacion.setFechaAlta(currentDateSQL);
 		objPublicacion.setFechaUltModificado(currentDateSQL);
 		objPublicacion.setPuntaje(0);
 		objPublicacion.setVerificado(false);

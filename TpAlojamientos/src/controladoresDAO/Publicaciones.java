@@ -284,7 +284,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 		o.setAniosAntiguedad(rs.getInt(cPubli.aniosAntiguedad));
 
 		o.setFechaAlta(rs.getDate(cPubli.fechaAlta));
-		o.setFechaAlta(rs.getDate(cPubli.fechaUltModificado));
+		o.setFechaUltModificado(rs.getDate(cPubli.fechaUltModificado));
 		// o.setPuntaje(rs.getFloat(cPubli.puntaje));
 		float puntuacionPromedio = comentariosDAO.getPuntuacionPromedioByIdPublicacion(o.getIdPublicacion());
 		o.setPuntaje(puntuacionPromedio);

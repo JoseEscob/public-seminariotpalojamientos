@@ -69,11 +69,17 @@ public class SolDeReservaServlet extends HttpServlet {
 			case "verSolEnviadasRecibidas":
 				verSolEnviadasRecibidas(request, response);
 				break;
-			case "verComprobanteDeReserva":
-				verComprobanteDeReserva(request, response);
-				break;
 			case "cargarSolDeReservasRecibidasByIdPublicacion":
 				cargarSolDeReservasRecibidasByIdPublicacion(request, response);
+				break;
+			case "verFechasDeReservaPublicacion":
+				verFechasDeReservaPublicacion(request, response);
+				break;
+			case "verListadoComprobanteDeReserva":
+				verListadoComprobanteDeReserva(request, response);
+				break;
+			case "verComprobanteDeReserva":
+				verComprobanteDeReserva(request, response);
 				break;
 			}
 		} catch (Exception e) {
@@ -97,13 +103,10 @@ public class SolDeReservaServlet extends HttpServlet {
 			}
 			LOG.info(String.format("%s POST: %s", Constantes.logJSPAccion, accionPOST));
 			switch (accionPOST) {
-			case "verFechasDeReservaPublicacion":
-				verFechasDeReservaPublicacion(request, response);
-				break;
+
 			case "altaSolicitudReserva":
 				altaSolicitudReserva(request, response);
 				break;
-
 			case "validarAprobacionDeSolicitudes":
 				validarAprobacionDeSolicitudes(request, response);
 				break;
@@ -129,12 +132,18 @@ public class SolDeReservaServlet extends HttpServlet {
 		int idPublicacion = 0;
 		try {
 			// 1- Obtiene valores del JSP ya validados
-			if (request.getSession().getAttribute(strVistaPublicacion) == null) {
-				throw new ValidacionException("NULL ERROR - verificar el atributo: " + strVistaPublicacion);
+			/*
+			 * if (request.getSession().getAttribute(strVistaPublicacion) == null) { throw
+			 * new ValidacionException("NULL ERROR - verificar el atributo: " +
+			 * strVistaPublicacion); } PublicacionView vistaPublicacion = (PublicacionView)
+			 * request.getSession().getAttribute(strVistaPublicacion); idPublicacion =
+			 * vistaPublicacion.getPublicacion().getIdPublicacion(); // TODO Eliminar codigo
+			 * de arriba
+			 */
+			if (request.getParameter("idPublicacion") == null) {
+				throw new ServidorException("ERROR NULL Parameters: idPublicacion");
 			}
-			PublicacionView vistaPublicacion = (PublicacionView) request.getSession().getAttribute(strVistaPublicacion);
-			idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
-			// TODO Eliminar codigo de arriba
+			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
 
 			ArrayList<PublicacionReservada> listaFechasReservadas = comprobantesDAO
 					.getListadoDeFechasReservaPublicacion(idPublicacion);
@@ -146,7 +155,6 @@ public class SolDeReservaServlet extends HttpServlet {
 				if (item.getFechaReservaFin().after(fechaActualSQL))
 					listaFechasReservadasDesdeHoy.add(item);
 			});
-			// for (PublicacionReservada objReserva = listaFechasReserva){
 
 			request.setAttribute("listaFechasReservadasDesdeHoy", listaFechasReservadasDesdeHoy);
 			// 5- Informar estado en interfaz (jsp)
@@ -158,19 +166,14 @@ public class SolDeReservaServlet extends HttpServlet {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("objInfoMessage", objInfoMessage);
 			if (objInfoMessage.getEstado()) {
-				// paginaJsp = "/solEnviadasRecibidas.jsp";
-				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
-				request.getSession().removeAttribute(strVistaPublicacion);
-				response.sendRedirect(paginaJsp);
+				paginaJsp = "/PublicacionVerFechasReservadas.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
 			} else {
-				// paginaJsp = "/solReservaAlta.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			}
-			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 
@@ -201,19 +204,15 @@ public class SolDeReservaServlet extends HttpServlet {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			// 5- Informar estado en interfaz (jsp)
-			request.setAttribute("objInfoMessage", objInfoMessage);
 			if (objInfoMessage.getEstado()) {
-				// paginaJsp = "/solEnviadasRecibidas.jsp";
 				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
 				request.getSession().removeAttribute(strVistaPublicacion);
 				response.sendRedirect(paginaJsp);
 			} else {
-				// paginaJsp = "/solReservaAlta.jsp";
 				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
 				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			}
-			// request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 	}
 
@@ -407,6 +406,44 @@ public class SolDeReservaServlet extends HttpServlet {
 			request.setAttribute("message", message);
 			paginaJsp = "/solEnviadasRecibidas.jsp";
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
+		}
+	}
+
+	private void verListadoComprobanteDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		try {
+			// 1- recuperar valores del request y los DAOs
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			// 1.1 request: infoUsuarioLogueado
+			int idUsuarioHuesped;
+			int idUsuarioPropietario;
+			idUsuarioPropietario = idUsuarioHuesped = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			// 2- Obtener listado de comprobantes del usuario logueado, enviadas y recibidas
+			ArrayList<Comprobante> listaComprobantesSolEnviados = new ArrayList<Comprobante>();
+			ArrayList<Comprobante> listaComprobantesSolRecibidos = new ArrayList<Comprobante>();
+			listaComprobantesSolEnviados = comprobantesDAO.getAllByIdUsuarioHuesped(idUsuarioHuesped);
+			listaComprobantesSolRecibidos = comprobantesDAO.getAllByIdUsuarioPropietario(idUsuarioPropietario);
+			// 3- Setear las respuestas al request
+			request.setAttribute("listaComprobantesSolEnviados", listaComprobantesSolEnviados);
+			request.setAttribute("listaComprobantesSolRecibidos", listaComprobantesSolRecibidos);
+			message = "Se cargaron sus listas de comprobantes con éxito";
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "/solComprobanteListadoTabla.jsp";
+				request.getRequestDispatcher(paginaJsp).forward(request, response);
+			} else {
+				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
 		}
 	}
 

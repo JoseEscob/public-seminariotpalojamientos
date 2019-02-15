@@ -18,55 +18,62 @@
 		<div class="row" title="Ubicación - Publicación">
 
 			<h2>${vistaPublicacion.publicacion.nombre}</h2>
+			<div class="h3" style="color: SLATEGRAY;">
+				<ul class="list-inline">
+					<li>Zona: <b>${vistaPublicacion.objLocalidad.nombre}</b></li>
+					<li>Pdo de <b>${vistaPublicacion.objLocalidad.nombrePartido}</b></li>
+					<!-- ${fn:replace(vistaPublicacion.objLocalidad.nombrePartido,"?","")} -->
+				</ul>
+			</div>
 			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
 			<div class="col-md-8">
 				<c:choose>
-						<c:when test="${not empty vistaPublicacion.imagenes}">
-							<div id="myCarousel" class="carousel slide col-md-6"
-								data-ride="carousel">
-								<!-- <ol class="carousel-indicators">
+					<c:when test="${not empty vistaPublicacion.imagenes}">
+						<div id="myCarousel" class="carousel slide col-md-6"
+							data-ride="carousel">
+							<!-- <ol class="carousel-indicators">
 										  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 										  <li data-target="#myCarousel" data-slide-to="1"></li>
 										  <li data-target="#myCarousel" data-slide-to="2"></li>
 								</ol>->
 								<!-- Agregar algun comentario dentro de cada imagen? -->
-								<!-- Wrapper for slides -->
-								<div class="carousel-inner">
-												<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
-													<c:choose>
-														<c:when test="${objImagen.idImagen eq vistaPublicacion.imagenes[0].idImagen }">
-															<div class="item active">
-																<img src="${objImagen.rutaImgPublicacion}">
-																<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
-															</div>
-														</c:when>
-														<c:otherwise>
-															<div class="item">
-																<img src="${objImagen.rutaImgPublicacion}">
-																<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
-															</div>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-									
-								</div>
-			
-								<!-- Left and right controls -->
-								<a class="left carousel-control" href="#myCarousel"
-									data-slide="prev"> <span
-									class="glyphicon glyphicon-chevron-left"></span>
-								</a> <a class="right carousel-control" href="#myCarousel"
-									data-slide="next"> <span
-									class="glyphicon glyphicon-chevron-right"></span>
-								</a>
+							<!-- Wrapper for slides -->
+							<div class="carousel-inner">
+								<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
+									<c:choose>
+										<c:when
+											test="${objImagen.idImagen eq vistaPublicacion.imagenes[0].idImagen }">
+											<div class="item active">
+												<img src="${objImagen.rutaImgPublicacion}">
+												<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="item">
+												<img src="${objImagen.rutaImgPublicacion}">
+												<!-- <img src="imagenes\publicaciones\Publicacion_1\1.jpg" class="img-responsive"> -->
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+
 							</div>
-						</c:when>
-						<c:otherwise>
-							<div class="row alert alert-info">
-								No se encontraron imagenes para esta publicacion.
-							</div>
-						</c:otherwise>
+
+							<!-- Left and right controls -->
+							<a class="left carousel-control" href="#myCarousel"
+								data-slide="prev"> <span
+								class="glyphicon glyphicon-chevron-left"></span>
+							</a> <a class="right carousel-control" href="#myCarousel"
+								data-slide="next"> <span
+								class="glyphicon glyphicon-chevron-right"></span>
+							</a>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="row alert alert-info">No se encontraron imagenes
+							para esta publicación.</div>
+					</c:otherwise>
 				</c:choose>
 			</div>
 
@@ -85,8 +92,8 @@
 					<div class="row">
 						<div class="col-md-6 col-md-12">
 							<ul class="list-inline">
-								<li><b>ID Publicación: </b></li>
-								<li><b>${vistaPublicacion.publicacion.idPublicacion} </b></li>
+								<li><b>ID Publicación:</b></li>
+								<li><b>${vistaPublicacion.publicacion.idPublicacion}</b></li>
 							</ul>
 						</div>
 						<div class="col-md-6 col-md-12">
@@ -106,6 +113,31 @@
 							<ul class="list-inline">
 								<li><b>Fecha publicada: </b></li>
 								<li><b>${vistaPublicacion.publicacion.fechaAlta}</b></li>
+							</ul>
+
+							<ul class="list-inline">
+								<li><b>Tipo de Alojamiento: </b></li>
+								<li><b>${vistaPublicacion.descripcionTipoAlojamiento}</b></li>
+							</ul>
+
+							<ul class="list-inline">
+								<li><b>Antigüedad: </b></li>
+								<c:choose>
+									<c:when
+										test="${vistaPublicacion.publicacion.aniosAntiguedad eq 0}">
+										<li><b>A Estrenar</b></li>
+									</c:when>
+									<c:when
+										test="${vistaPublicacion.publicacion.aniosAntiguedad eq 1}">
+										<li><b>${vistaPublicacion.publicacion.aniosAntiguedad}&nbsp;año</b>
+										</li>
+									</c:when>
+									<c:otherwise>
+										<li><b>${vistaPublicacion.publicacion.aniosAntiguedad}&nbsp;años</b>
+										</li>
+									</c:otherwise>
+								</c:choose>
+
 							</ul>
 						</div>
 					</div>
@@ -129,6 +161,10 @@
 							class="control-label col-xs-8">${vistaPublicacion.objLocalidad.codPostal}</label>
 					</div>
 
+					<div class="row">
+						<a class="col-xs-12 text-center"
+							href="#caracteristicasPublicacion">Ver más características</a>
+					</div>
 				</div>
 				<div class="row col-md-12">
 					<br>
@@ -301,63 +337,120 @@
 			</div>
 		</div>
 
-		<div class="row" title="Características de la publicación">
+		<div class="row" title="Características de la publicación"
+			id="caracteristicasPublicacion">
 			<h3>Características</h3>
 			<hr />
 			<div class="col-md-12">
-				<div class="form-group col-md-8">
-					<div class="col-md-6">
-						<p>
-							Tipo Alojamiento: <b>${vistaPublicacion.descripcionTipoAlojamiento}</b>
-						</p>
 
-						<c:if
-							test="${vistaPublicacion.publicacion.idTipoAlojamiento eq 3}">
+				<div class="col-md-4">
+					<p>
+						Tipo de Alojamiento: <b>${vistaPublicacion.descripcionTipoAlojamiento}</b>
+					</p>
+
+					<c:if test="${vistaPublicacion.publicacion.idTipoAlojamiento eq 3}">
+						<p>
+							Piso : <b>${vistaPublicacion.publicacion.piso}°&nbsp;${vistaPublicacion.publicacion.dpto}</b>
+						</p>
+					</c:if>
+
+
+					<c:choose>
+						<c:when
+							test="${vistaPublicacion.publicacion.aniosAntiguedad eq 0}">
 							<p>
-								Piso : <b>${vistaPublicacion.publicacion.piso}°&nbsp;${vistaPublicacion.publicacion.dpto}</b>
+								Años de Antigüedad: <b>A Estrenar</b>
 							</p>
-						</c:if>
-						<p>
-							Superficie Cubierta(m²): <b>${vistaPublicacion.publicacion.supCubierta}</b>
-						</p>
-						<p>
-							Superficie Descubierta(m²): <b>${vistaPublicacion.publicacion.supDescubierta}</b>
-						</p>
-						<c:choose>
-							<c:when test="${vistaPublicacion.publicacion.chkExpensas}">
-								<p>
-									Tiene expensas : <b>Si</b>
-								</p>
-								<p>
-									Precio expensas: <b>$&nbsp;${vistaPublicacion.publicacion.precioExpensas}</b>
-								</p>
-							</c:when>
-							<c:otherwise>
-								<p>
-									Tiene expensas: <b>No</b>
-								</p>
-							</c:otherwise>
-						</c:choose>
-					</div>
+						</c:when>
+						<c:when
+							test="${vistaPublicacion.publicacion.aniosAntiguedad eq 1}">
+							<p>
+								Años de Antigüedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}&nbsp;año</b>
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p>
+								Años de Antigüedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}&nbsp;años</b>
+							</p>
+						</c:otherwise>
+					</c:choose>
+					<p>
+						Superficie Cubierta: <b>${vistaPublicacion.publicacion.supCubierta}&nbsp;m²</b>
+					</p>
+					<c:choose>
+						<c:when test="${vistaPublicacion.publicacion.supDescubierta eq 0}">
+							<p>Superficie Descubierta: No tiene</p>
+						</c:when>
+						<c:otherwise>
+							<p>
+								Superficie Descubierta: <b>${vistaPublicacion.publicacion.supDescubierta}&nbsp;m²</b>
+							</p>
+						</c:otherwise>
+					</c:choose>
 
-					<div class="col-md-6">
-						<p>
-							Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b>
-						</p>
-						<p>
-							Cant. Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b>
-						</p>
-						<p>
-							Cant. Baños: <b>${vistaPublicacion.publicacion.cantBanios}</b>
-						</p>
-						<p>
-							Cant. Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b>
-						</p>
-						<p>
-							Años de Antiguedad: <b>${vistaPublicacion.publicacion.aniosAntiguedad}</b>
-						</p>
-					</div>
 
+					<c:choose>
+						<c:when test="${vistaPublicacion.publicacion.chkExpensas}">
+							<p>
+								Tiene expensas : <b>Si</b>
+							</p>
+							<p>
+								Precio expensas: <b>$&nbsp;${vistaPublicacion.publicacion.precioExpensas}</b>
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p>
+								Tiene expensas: <b>No</b>
+							</p>
+						</c:otherwise>
+					</c:choose>
+
+
+				</div>
+
+				<div class="col-md-4">
+					<c:choose>
+						<c:when
+							test="${vistaPublicacion.publicacion.chkPuedeVariarCantPersonas eq true}">
+							<p class="text-info" data-toggle="tooltip"
+								title="La publicación está apta para superar
+								la cantidad de personas/ huéspedes establecidas">
+								Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}
+									o más</b>
+							</p>
+						</c:when>
+						<c:otherwise>
+							<p>
+								Cant. Personas: <b>${vistaPublicacion.publicacion.cantPersonas}</b>
+							</p>
+						</c:otherwise>
+					</c:choose>
+
+					<p>
+						Cant. Ambientes: <b>${vistaPublicacion.publicacion.cantAmbientes}</b>
+					</p>
+					<p>
+						Cant. Baños: <b>${vistaPublicacion.publicacion.cantBanios}</b>
+					</p>
+					<p>
+						Cant. Habitaciones: <b>${vistaPublicacion.publicacion.cantHabitaciones}</b>
+					</p>
+				</div>
+
+				<div class="col-md-4">
+					<p>
+						Calle: <b>${vistaPublicacion.publicacion.calle} al
+							${vistaPublicacion.publicacion.altura}</b>
+					</p>
+					<p>
+						Partido: <b>${vistaPublicacion.objLocalidad.nombrePartido}</b>
+					</p>
+					<p>
+						Localidad: <b>${vistaPublicacion.objLocalidad.nombre}</b>
+					</p>
+					<p>
+						Código Postal: <b>${vistaPublicacion.objLocalidad.codPostal}</b>
+					</p>
 				</div>
 			</div>
 		</div>

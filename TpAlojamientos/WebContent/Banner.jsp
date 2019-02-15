@@ -87,8 +87,8 @@
 						<li class="divider"></li>
 						<li><c:url value="SolDeReservaServlet?"
 								var="urlComprobanteDeReserva">
-								<c:param name="accionGET" value="verComprobanteDeReserva" />
-							</c:url> <a href="${urlComprobanteDeReserva}"> <span
+								<c:param name="accionGET" value="verListadoComprobanteDeReserva" />
+							</c:url> <a href="SolDeReservaServlet?accionGET=verListadoComprobanteDeReserva"> <span
 								class="glyphicon glyphicon-briefcase"></span>&nbsp;Comprobantes
 								de Reservas Aprobadas
 						</a></li>
