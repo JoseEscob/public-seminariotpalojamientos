@@ -1,4 +1,5 @@
 <tr>
+	<th>ID Comprobante</th>
 	<th>ID Solicitud</th>
 	<th>ID Publicacion</th>
 	<th>Nombre y apellido del Propietario</th>

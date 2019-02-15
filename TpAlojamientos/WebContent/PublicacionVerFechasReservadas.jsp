@@ -24,7 +24,7 @@
 			</c:when>
 			<c:otherwise>
 				<h4>Cant. de fechas reservadas:
-					${fn:length(listadoDePublicaciones)}</h4>
+					${fn:length(listaFechasReservadasDesdeHoy)}</h4>
 				<br>
 				<table class="table table-hover table-responsive">
 					<thead>
@@ -32,7 +32,7 @@
 							<th>ID Publicacion</th>
 							<th>Reservada Desde</th>
 							<th>Reservada Hasta</th>
-							<!-- <th>Cant. de Días</th>-->
+							<th>Cant. de Días</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -42,7 +42,7 @@
 								<td>${objPublicacionReserva.idPublicacion}</td>
 								<td>${objPublicacionReserva.fechaReservaInicio}</td>
 								<td>${objPublicacionReserva.fechaReservaFin}</td>
-								<!--<td>${objPublicacionReserva.cantDiasReserva}</td>-->
+								<td>${objPublicacionReserva.cantDiasReserva}</td>
 							</tr>
 						</c:forEach>
 

@@ -143,5 +143,27 @@
 		</div>
 	</div>
 
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<h3>${objPublicacion.nombre}</h3>
+				<div class="h4" style="color: SLATEGRAY;">
+					<ul class="list-inline">
+						<li>Zona:</li>
+						<li><b>${objPublicacion.objPublicacionInfo.publicacionPartidoLocalidad}</b></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<c:url value="PublicacionServlet?" var="urlPublicacionVer">
+					<c:param name="accionGET" value="VerPublicacion" />
+					<c:param name="idPublicacion"
+						value="${objComprobante.idPublicacion}" />
+				</c:url>
+				<a class="btn btn-primary" href="${urlPublicacionVer}">Ver
+					Publicación</a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

@@ -258,17 +258,18 @@ public class Comprobantes implements Connectable<Comprobante> {
 	public void getMaxFechaReservaPublicacion(int idPublicacion) {
 		// TODO Está reservada al día de hoy. Min Fecha - Max Fecha
 	}
-	
+
 	public ArrayList<PublicacionReservada> getListadoDeFechasReservaPublicacion(int idPublicacion) {
 		ArrayList<PublicacionReservada> listaFechasReserva = new ArrayList<PublicacionReservada>();
 
-		for (Comprobante objComprobante : getAll()){
-			if(objComprobante.getIdPublicacion() == idPublicacion){
+		for (Comprobante objComprobante : getAll()) {
+			if (objComprobante.getIdPublicacion() == idPublicacion) {
 				PublicacionReservada objPublicacionReservada = new PublicacionReservada();
 
 				objPublicacionReservada.setIdPublicacion(objComprobante.getIdPublicacion());
 				objPublicacionReservada.setFechaReservaInicio(objComprobante.getFechaReservaInicio());
 				objPublicacionReservada.setFechaReservaFin(objComprobante.getFechaReservaFin());
+				objPublicacionReservada.setCantDiasReserva(objComprobante.getCantDiasReserva());
 
 				listaFechasReserva.add(objPublicacionReservada);
 			}

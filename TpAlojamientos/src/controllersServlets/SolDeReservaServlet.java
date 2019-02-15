@@ -99,7 +99,6 @@ public class SolDeReservaServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub doGet(request, response);
 
 		try {
 			String accionPOST = request.getParameter(Constantes.accionPOST);
@@ -138,14 +137,6 @@ public class SolDeReservaServlet extends HttpServlet {
 		int idPublicacion = 0;
 		try {
 			// 1- Obtiene valores del JSP ya validados
-			/*
-			 * if (request.getSession().getAttribute(strVistaPublicacion) == null) { throw
-			 * new ValidacionException("NULL ERROR - verificar el atributo: " +
-			 * strVistaPublicacion); } PublicacionView vistaPublicacion = (PublicacionView)
-			 * request.getSession().getAttribute(strVistaPublicacion); idPublicacion =
-			 * vistaPublicacion.getPublicacion().getIdPublicacion(); // TODO Eliminar codigo
-			 * de arriba
-			 */
 			if (request.getParameter("idPublicacion") == null) {
 				throw new ServidorException("ERROR NULL Parameters: idPublicacion");
 			}
@@ -195,7 +186,7 @@ public class SolDeReservaServlet extends HttpServlet {
 			}
 			PublicacionView vistaPublicacion = (PublicacionView) request.getSession().getAttribute(strVistaPublicacion);
 			idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
-			// TODO Eliminar codigo de arriba
+			// TODO Simplificar codigo de arriba
 			SolicitudDeReserva objSolDeReserva = getObjectSolDeReservaByJSPData(request);
 			// 2- Validar con la DB
 			if (!solDeReservaDAO.insert(objSolDeReserva))
@@ -213,6 +204,7 @@ public class SolDeReservaServlet extends HttpServlet {
 			if (objInfoMessage.getEstado()) {
 				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
 				request.getSession().removeAttribute(strVistaPublicacion);
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 				response.sendRedirect(paginaJsp);
 			} else {
 				paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
@@ -240,7 +232,7 @@ public class SolDeReservaServlet extends HttpServlet {
 		if (request.getSession().getAttribute(strVistaPublicacion) == null) {
 			throw new ValidacionException("NULL ERROR - verificar el atributo: " + strVistaPublicacion);
 		}
-		// 2- Validar que las fechas sean válidas
+		// 2- Validar que las fechas sean válidas/ Disponibles
 		Date fechaReservaInicio = java.sql.Date.valueOf(request.getParameter("fechaInicio").toString());
 		Date fechaReservaFin = java.sql.Date.valueOf(request.getParameter("fechaFin").toString());
 
@@ -259,6 +251,7 @@ public class SolDeReservaServlet extends HttpServlet {
 		// 3- Obtener el resto de información necesaria
 		PublicacionView vistaPublicacion = (PublicacionView) request.getSession().getAttribute(strVistaPublicacion);
 		int idPublicacion = vistaPublicacion.getPublicacion().getIdPublicacion();
+		int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
 		// 4.1) Validar si puede variar la cantidad de personas
 		boolean chkPuedeVariarCantPersonas = vistaPublicacion.getPublicacion().isChkPuedeVariarCantPersonas();
 		int cantPersonasPermitidas = vistaPublicacion.getPublicacion().getCantPersonas();
@@ -269,7 +262,14 @@ public class SolDeReservaServlet extends HttpServlet {
 				throw new ValidacionException(
 						"Esta publicación no permite superar el límite de personas/ huéspedes establecido");
 		}
-		// 4.2) Validar que la publicación no esté reservada
+		// 4.2) Validar que el usuario no haya superado el limite de solicitudes
+		// pendientes para esa publicación
+		final int limiteCantSolicitudesPendientes = 3;
+		int cantSolicitudesPendientes = solDeReservaDAO
+				.getAllByIdUsuarioHuespedIdPublicacion(idUsuarioLogueado, idPublicacion).size();
+		if (cantSolicitudesPendientes >= limiteCantSolicitudesPendientes)
+			throw new ValidacionException("Has superado el límite de solicitudes pendientes para esta publicación");
+		// 4.3) Validar que la publicación no esté reservada
 		validarQuelaPublicacionNoEsteReservada(idPublicacion, fechaReservaInicio);
 		validarQuelaPublicacionNoEsteReservada(idPublicacion, fechaReservaFin);
 
@@ -284,7 +284,7 @@ public class SolDeReservaServlet extends HttpServlet {
 			precioFinal = precioFinal + precioExpensas;
 		// 6- Guardar resto de la información en variables
 		int idSolicitud = solDeReservaDAO.getAll().size() + 1;
-		int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+
 		String fechaAltaSolicitud = Utilitario.getCurrentDateAndHoursString();
 		int idUsuarioPropietario = vistaPublicacion.getUsuario().getIdUsuario();
 		String fechaDecisionPropietario = null;
@@ -319,7 +319,8 @@ public class SolDeReservaServlet extends HttpServlet {
 	private void verSolEnviadasRecibidas(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 0- Declaración de variables
-		InfoMessage objInfoMessage = new InfoMessage();
+		// InfoMessage objInfoMessage = new InfoMessage();
+		InfoMessage objInfoMessage = null;// = new InfoMessage();
 		String message = null;
 		try {
 			// 1- recuperar valores del request y los DAOs
@@ -349,13 +350,15 @@ public class SolDeReservaServlet extends HttpServlet {
 			ArrayList<SolicitudDeReserva> listaSolDeReservaRecibida = solDeReservaDAO
 					.getAllByIdUsuarioPropietario(idUsuarioPropietario);
 			ArrayList<Publicacion> listaPublicacionSolReservaRecibidas = new ArrayList<Publicacion>();
-			int idPublicacionAnterior = 0;
-			for (SolicitudDeReserva item : listaSolDeReservaRecibida) {
+
+			for (SolicitudDeReserva objSolReserva : listaSolDeReservaRecibida) {
 				Publicacion objPublicacion = new Publicacion();
-				if (idPublicacionAnterior == 0 || (item.getIdPublicacion() != idPublicacionAnterior)) {
-					if (item.getIdEstadoSolicitud() == 1) {
-						idPublicacionAnterior = item.getIdPublicacion();
-						objPublicacion = publicacionDAO.getObjectByID(idPublicacionAnterior);
+				boolean existeEnListaPublicaciones = listaPublicacionSolReservaRecibidas.stream()
+						.anyMatch(item -> item.getIdPublicacion() == objSolReserva.getIdPublicacion());
+
+				if (!existeEnListaPublicaciones) {
+					if (objSolReserva.getIdEstadoSolicitud() == 1) {
+						objPublicacion = publicacionDAO.getObjectByID(objSolReserva.getIdPublicacion());
 						// 14-02-19 Begin
 						objPublicacion.iniciarYcargarObjPublicacionInfo();
 						// 14-02-19 End
@@ -369,7 +372,8 @@ public class SolDeReservaServlet extends HttpServlet {
 			request.setAttribute("listaPublicacionSolReservaRecibidas", listaPublicacionSolReservaRecibidas);
 			// request.setAttribute("listaSolDeReservaRecibida", listaSolDeReservaRecibida);
 			message = "Se cargó su lista de solicitudes con éxito";
-			objInfoMessage = new InfoMessage(true, message);
+			if (request.getSession().getAttribute("objInfoMessage") == null)
+				objInfoMessage = new InfoMessage(true, message);
 		} catch (Exception e) {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
@@ -467,18 +471,30 @@ public class SolDeReservaServlet extends HttpServlet {
 			if (!ORSesion.sesionActiva(request)) {
 				throw new ServidorException("No se encontró iniciada la sesión del usuario");
 			}
-			// 2- validar información obtenida objComprobante
-			int idUsuarioHuesped = 0, idUsuarioPropietario = 0;
-			int idComprobante = 1;
+			if (request.getParameter("idComprobante") == null) {
+				throw new ServidorException("ERROR NULL Parameters: idComprobante");
+			}
+			int idComprobante = Integer.parseInt(request.getParameter("idComprobante"));
+			// 2- Obtener información del Comprobante
 			Comprobante objComprobante = comprobantesDAO.getObjectByIdComprobante(idComprobante);
-
+			int idUsuarioHuesped = 0, idUsuarioPropietario = 0;
 			idUsuarioHuesped = objComprobante.getIdUsuarioHuesped();
 			idUsuarioPropietario = objComprobante.getIdUsuarioPropietario();
-
+			// 3- Validar que solo lo vea el usuario propietario o huésped
+			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			if (idUsuarioLogueado != idUsuarioHuesped) {
+				if (idUsuarioLogueado != idUsuarioPropietario)
+					throw new ValidacionException("Usted no puede ver este comprobante");
+			}
+			// 4- Obtener datos de la publicación
+			Publicacion objPublicacion = publicacionDAO.getObjectByID(objComprobante.getIdPublicacion());
+			objPublicacion.iniciarYcargarObjPublicacionInfo();
+			// 5- Guardar los datos en el request para posteriormente mostrarlos
 			request.setAttribute("objComprobante", objComprobante);
 			request.setAttribute("objUsuarioHuesped", usuariosDAO.getUsuarioById(idUsuarioHuesped));
 			request.setAttribute("objUsuarioProp", usuariosDAO.getUsuarioById(idUsuarioPropietario));
-			// 4- EXITO
+			request.setAttribute("objPublicacion", objPublicacion);
+			// 5- EXITO
 			message = "Se cargaron los datos del comprobante de reserva nro: " + objComprobante.getIdComprobante();
 			LOG.info(message);
 			objInfoMessage.setMessage(message);
@@ -519,7 +535,7 @@ public class SolDeReservaServlet extends HttpServlet {
 			idUsuarioPropietario = ORSesion.getUsuarioBySession(request).getIdUsuario();
 			// 1.3 DAO: solicitudes por alojamiento
 			ArrayList<SolicitudDeReserva> listaSolDeReservasRecibidasPorPublicacion = solDeReservaDAO
-					.getAllByIdUsuarioPropietarioIdPublicacion(idUsuarioPropietario, idPublicacion);
+					.getAllByIdUsuarioPropietarioIdPublicacionPendientes(idUsuarioPropietario, idPublicacion);
 
 			for (SolicitudDeReserva objSolDeReserva : listaSolDeReservasRecibidasPorPublicacion) {
 				verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
@@ -879,7 +895,7 @@ public class SolDeReservaServlet extends HttpServlet {
 						objReserva.getFechaReservaFin());
 				if (estaDentroDelRango) {
 					message = String.format(
-							"Lo sentimos la fecha %s no está disponible. La publicación está reservada desde el %s hasta el %s",
+							"Lo sentimos la fecha %s no está disponible. La publicación está reservada desde el %s hasta el %s inclusive",
 							fechaAValidar, objReserva.getFechaReservaInicio(), objReserva.getFechaReservaFin());
 					throw new ValidacionException(message);
 				}
@@ -940,6 +956,10 @@ public class SolDeReservaServlet extends HttpServlet {
 				LOG.info(message);
 				throw new ValidacionException(message);
 			}
+			// 3.0- Validar que la publicación no esté reservada
+			int idPublicacion = objSolDeReserva.getIdPublicacion();
+			validarQuelaPublicacionNoEsteReservada(idPublicacion, objSolDeReserva.getFechaReservaInicio());
+			validarQuelaPublicacionNoEsteReservada(idPublicacion, objSolDeReserva.getFechaReservaFin());
 			// 3.1- Setear objeto antes de realizar la transacción con la DB
 			objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
 			objSolDeReserva.setMotivoDecisionPropietario("Solicitud Aprobada");// TODO: extraer a Constantes
