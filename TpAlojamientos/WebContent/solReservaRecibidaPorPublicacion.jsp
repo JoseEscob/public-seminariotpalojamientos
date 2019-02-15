@@ -54,7 +54,7 @@
 							<td>${objSolReserva.fechaReservaFin}</td>
 							<td>${objSolReserva.cantDiasReserva}</td>
 							<td>${objSolReserva.cantPersonas}</td>
-							<td>${objSolReserva.precioFinal}</td>
+							<td>$&nbsp;${objSolReserva.precioFinal}</td>
 							<td>${objSolReserva.fechaAltaSolicitud}</td>
 
 							<td>
@@ -65,12 +65,34 @@
 										<c:param name="idUsuario"
 											value="${objSolReserva.idUsuarioHuesped}" />
 									</c:url>
-
+									<c:url value="SolDeReservaServlet?"
+										var="urlAprobarUnaSolicitud">
+										<c:param name="accionGET" value="aprobarUnaSolicitudDeReserva" />
+										<c:param name="idSolicitud"
+											value="${objSolReserva.idSolicitud}" />
+									</c:url>
+									<c:url value="SolDeReservaServlet?"
+										var="urlRechazarUnaSolicitud">
+										<c:param name="accionGET"
+											value="rechazarUnaSolicitudDeReserva" />
+										<c:param name="idSolicitud"
+											value="${objSolReserva.idSolicitud}" />
+									</c:url>
+								</div>
+								<div class="btn-group">
 									<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-										data-toggle="tooltip" title="Ver Perfil"> <span
+										data-toggle="tooltip"
+										title="Ver Perfil del usuario solicitador"> <span
 										class="glyphicon glyphicon-eye-open"></span> Ver Perfil
+									</a> <a href="${urlAprobarUnaSolicitud}" class="btn btn-success"
+										data-toggle="tooltip" title="Aprueba la solicitud"> <span
+										class="glyphicon glyphicon-eye-open"></span> Aprobar
+									</a> <a href="${urlRechazarUnaSolicitud}" class="btn btn-danger"
+										data-toggle="tooltip" title="Rechaza la solicitud"> <span
+										class="glyphicon glyphicon-remove-circle"></span> Rechazar
 									</a>
 								</div>
+
 								<div>
 									<!-- Aprobar Solicitud-->
 								</div>

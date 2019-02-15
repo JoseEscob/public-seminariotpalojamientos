@@ -7,7 +7,7 @@
 	<td>${objComprobante.fechaReservaFin}</td>
 	<td>${objComprobante.cantDiasReserva}</td>
 	<td>${objComprobante.cantPersonas}</td>
-	<td>${objComprobante.precioFinal}</td>
+	<td>$&nbsp;${objComprobante.precioFinal}</td>
 	<td>${objComprobante.fechaAlta}</td>
 	<td>
 		<div>

@@ -75,6 +75,12 @@ public class SolDeReservaServlet extends HttpServlet {
 			case "verFechasDeReservaPublicacion":
 				verFechasDeReservaPublicacion(request, response);
 				break;
+			case "aprobarUnaSolicitudDeReserva":
+				aprobarUnaSolicitudDeReserva(request, response);
+				break;
+			case "rechazarUnaSolicitudDeReserva":
+				rechazarUnaSolicitudDeReserva(request, response);
+				break;
 			case "verListadoComprobanteDeReserva":
 				verListadoComprobanteDeReserva(request, response);
 				break;
@@ -427,7 +433,10 @@ public class SolDeReservaServlet extends HttpServlet {
 			ArrayList<Comprobante> listaComprobantesSolRecibidos = new ArrayList<Comprobante>();
 			listaComprobantesSolEnviados = comprobantesDAO.getAllByIdUsuarioHuesped(idUsuarioHuesped);
 			listaComprobantesSolRecibidos = comprobantesDAO.getAllByIdUsuarioPropietario(idUsuarioPropietario);
-			// 3- Setear las respuestas al request
+			// 3- Obtener más información de los comprobantes
+			listaComprobantesSolEnviados.forEach(item -> item.cargarInfoComprobante());
+			listaComprobantesSolRecibidos.forEach(item -> item.cargarInfoComprobante());
+			// 4- Setear las respuestas al request
 			request.setAttribute("listaComprobantesSolEnviados", listaComprobantesSolEnviados);
 			request.setAttribute("listaComprobantesSolRecibidos", listaComprobantesSolRecibidos);
 			message = "Se cargaron sus listas de comprobantes con éxito";
@@ -906,4 +915,131 @@ public class SolDeReservaServlet extends HttpServlet {
 	 * //return testDate.after(startDate) && testDate.before(endDate);
 	 */
 
+	private void aprobarUnaSolicitudDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idSolicitud = 0;
+		try {
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			if (request.getParameter("idSolicitud") == null) {
+				throw new ServidorException("No se encontró la solicitud con ID: " + idSolicitud);
+			}
+			idSolicitud = Integer.parseInt(request.getParameter("idSolicitud"));
+			SolicitudDeReserva objSolDeReserva = solDeReservaDAO.getObjectById(idSolicitud);
+			// 2- Validar que sea el usuario propietario sea quien está realizando la acción
+			verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
+			// 2.1- Validar que la solicitud siga en estado pendiente de aprobación
+			if (objSolDeReserva.getIdEstadoSolicitud() != 1) {
+				message = String.format("ADVERTENCIA: la solicitud %d ya no está pendiente de aprobación",
+						objSolDeReserva.getIdSolicitud());
+				LOG.info(message);
+				throw new ValidacionException(message);
+			}
+			// 3.1- Setear objeto antes de realizar la transacción con la DB
+			objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
+			objSolDeReserva.setMotivoDecisionPropietario("Solicitud Aprobada");// TODO: extraer a Constantes
+			objSolDeReserva.setIdEstadoSolicitud(5); // 5=aprobado - Verificar 'tiposEstadosSolicitudes'
+			// 3.2- DB Actualizar la solicitud en 'solicitudesDeReservas'
+			if (!solDeReservaDAO.update(objSolDeReserva))
+				throw new ValidacionException(
+						"SQL Ocurrió un error al actualizar la solicitud " + objSolDeReserva.getIdSolicitud());
+
+			// 4- 'solicitudesDeReservas' Informar estado de transacción
+			message = String.format("La solicitud %d fue aprobada con éxito", objSolDeReserva.getIdSolicitud());
+			// 5- Comprobante - 'comprobantes' generar/ insertar registro en DB
+			Comprobante objComprobante = new Comprobante();
+			objComprobante = obtenerDatosDeSolicitudComoComprobante(objSolDeReserva);
+			int idComprobante = comprobantesDAO.getCount() + 1;
+			objComprobante.setIdComprobante(idComprobante);
+			if (!comprobantesDAO.insert(objComprobante)) {
+				message = String.format("SQL Ocurrió un error al insertar el comprobante %d para la solicitud %d",
+						objComprobante.getIdComprobante(), objComprobante.getIdSolicitud());
+				throw new ValidacionException(message);
+			}
+			// 6- Informar estado de transacción
+			message = String.format("APROBACIÓN ÉXITOSA: Se generó el comprobante %d para la solicitud de reserva %d ",
+					objComprobante.getIdComprobante(), objComprobante.getIdSolicitud());
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				paginaJsp = "SolDeReservaServlet?accionGET=verListadoComprobanteDeReserva#ComprobantesSolRecibidas";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			} else {
+				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+	}
+
+	private void rechazarUnaSolicitudDeReserva(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idSolicitud = 0;
+		try {
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se encontró iniciada la sesión del usuario");
+			}
+			// 1- Obtener información del JSP (Solicitudes seleccionados) y de las
+			// Solicitudes
+			if (request.getParameter("idSolicitud") == null) {
+				throw new ServidorException("No se encontró la solicitud con ID: " + idSolicitud);
+			}
+			idSolicitud = Integer.parseInt(request.getParameter("idSolicitud"));
+			SolicitudDeReserva objSolDeReserva = solDeReservaDAO.getObjectById(idSolicitud);
+			// 2- Validar que sea el usuario propietario sea quien está realizando la acción
+			verificarQueElUsuarioLogueadoSeaElPropietario(request, objSolDeReserva);
+			// 2.1- Validar que la solicitud siga en estado pendiente de aprobación
+			if (objSolDeReserva.getIdEstadoSolicitud() != 1) {
+				message = String.format("ADVERTENCIA: la solicitud %d ya no está pendiente de aprobación",
+						objSolDeReserva.getIdSolicitud());
+				LOG.info(message);
+				throw new ValidacionException(message);
+			}
+			// 3.1- Setear objeto antes de realizar la transacción con la DB
+			objSolDeReserva.setFechaDecisionPropietario(Utilitario.getCurrentDateAndHoursString());
+			objSolDeReserva.setMotivoDecisionPropietario("Solicitud Rechazada");// TODO: extraer
+																				// a Constantes
+			objSolDeReserva.setIdEstadoSolicitud(3); // 3=rechazado- Verificar 'tiposEstadosSolicitudes'
+			// 3.2- DB Actualizar la solicitud en 'solicitudesDeReservas'
+			if (!solDeReservaDAO.update(objSolDeReserva))
+				throw new ValidacionException("SQL Ocurrió un error al actualizar la solicitud " + idSolicitud);
+
+			// 4- 'solicitudesDeReservas' Informar estado de transacción
+			message = String.format("La solicitud %d fue rechazada con éxito", idSolicitud);
+
+			// 6- Informar estado de transacción
+			message = String.format("RECHAZO ÉXITOSO: Se rechazó la solicitud %d con éxito", idSolicitud);
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			request.setAttribute("objInfoMessage", objInfoMessage);
+			if (objInfoMessage.getEstado()) {
+				// paginaJsp =
+				// "SolDeReservaServlet?accionGET=verListadoComprobanteDeReserva#ComprobantesSolRecibidas";
+				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			} else {
+				paginaJsp = "SolDeReservaServlet?accionGET=verSolEnviadasRecibidas";
+				request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+				response.sendRedirect(paginaJsp);
+			}
+		}
+	}
 }
