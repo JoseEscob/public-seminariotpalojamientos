@@ -17,15 +17,15 @@
 		</div>
 		<div class="jumbotron">
 			<h1>Alojamientos en Bs As</h1>
-			<p>Descubrí nuestro catálogo de alojamientos en Buenos Aires que
-				ofrecen nuestros usuarios</p>
+			<p>Descubrí nuestro catálogo de alojamientos que ofrecen nuestros
+				usuarios</p>
 
-			<button class="btn-lg btn-primary"
+			<a class="btn-lg btn-primary"
 				href="PublicacionServlet?accionGET=VerPublicaciones"
-				data-toggle="tooltip" title="">
-				<span class="glyphicon glyphicon-check" /></span> &nbsp;Ver publicaciones
-				de alojamientos
-			</button>
+				data-toggle="tooltip" title=""> <span
+				class="glyphicon glyphicon-check" /></span>&nbsp;Ver publicaciones de
+				alojamientos
+			</a>
 		</div>
 		<div class="jumbotron" style="background-color: white;">
 			<h1>Publicá tu alojamiento</h1>

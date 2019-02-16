@@ -5,161 +5,85 @@
 
 <html>
 <head>
-<title>Listado</title>
+<title>Admin - Lista de Usuarios</title>
 </head>
 <body>
-	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->
 	<%@ include file="Banner.jsp"%>
 
 	<div class="container">
+		<h2>Admin - Lista de Usuarios</h2>
 		<h4>
 			<c:out value="${sessionUser.fechaUltConexion}" />
 		</h4>
 		<c:choose>
-			<c:when test="${fn:length(listaUsuariosNuevos) gt 0}">
-				<h4>Cant. de Usuarios nuevos: ${fn:length(listaUsuariosNuevos)}</h4>
+			<c:when test="${fn:length(listaUsuarios) gt 0}">
+				<h4>Cant. de Usuarios: ${fn:length(listaUsuarios)}</h4>
 			</c:when>
 			<c:otherwise>
-				<h4>No se encontraron nuevos usuario</h4>
+				<h4>No se encontraron registros de usuarios</h4>
 			</c:otherwise>
 		</c:choose>
-
-		<h4>
-			<c:out value="${sessionScope.sessionUser.apellido}" />
-		</h4>
 		<div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs nav-justified">
-					<li class="active" id="ListadoUsuarios">
-						<a href="#s" data-toggle="tab" ><h4>
-								Listado Usuarios
-							</h4></a></li>
-					<li  id="CuadriculaUsuarios" data-toggle="tab"><a href="#s" data-toggle="tab"><h4>
-								Cuadricula Usuarios</h4></a></li>
-				</ul>
-			</div>
-			<div class="row col-md-6">
-				<ul class="nav nav-tabs nav-justified">
-					<li class="active" id="NuevosUsuarios"><a href="#s"
-						data-toggle="tab" ><h4>
-								Nuevos Usuarios&nbsp;<span class="badge">${fn:length(listaUsuariosNuevos)}</span>
-							</h4></a></li>
-					<li id="TodosUsuarios"><a href="#s" data-toggle="tab"><h4>
-								Todos los Usuarios</h4></a></li>
-				</ul>
-			</div>
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<div class="row">
+			<ul class="nav nav-tabs nav-justified">
+				<li class="active"><a href="#ListadoUsuariosNoVerificados"
+					data-toggle="tab"><h4>
+							Usuarios No Verificados&nbsp;<span class="badge"></span>
+						</h4></a></li>
+				<li><a href="#ListadoUsuariosVerificados" data-toggle="tab"><h4>
+							Usuarios Verificados&nbsp;<span class="badge"></span>
+						</h4></a></li>
+			</ul>
 		</div>
 
-		<!--table class="table table-hover table-responsive">
-			<c:forEach items="${listaUsuarios}" var="objUsuario">
-				<tr>
-					<td>${objUsuario.idUsuario}</td>
-					<td><c:choose>
-							<c:when
-								test="${sessionUser.fechaUltConexion gt objUsuario.fechaAlta}">
-								<h4>Mayor</h4>
-							</c:when>
-							<c:otherwise>
-								<h4>menor</h4>
-							</c:otherwise>
-						</c:choose></td>
-				</tr>
-			</c:forEach>
-		<h3>Lista de Usuarios</h3>
-		</table-->
+		<div class="row col-md-12">
+			<br>
+		</div>
 		<div class="row">
 			<div class="tab-content">
-				<div class="tab-pane active" id="listadoUsuariosNuevos">
-					<table class="table table-hover table-responsive">
-						<%@ include file="headerUsuario.jsp"%>
-						<tbody>
-							<c:forEach items="${listaUsuariosNuevos}" var="objUsuario">
-								<tr class="info">
-								<%@ include file="filaUsuario.jsp"%>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+				<div id="ListadoUsuariosNoVerificados" class="tab-pane active">
+					<div class="container">
+						<table class="table table-hover table-responsive">
+							<%@ include file="headerUsuario.jsp"%>
+							<tbody>
+								<c:forEach items="${listaUsuarios}" var="objUsuario">
+									<c:if test="${objUsuario.verificado eq false}">
+										<tr>
+											<%@ include file="filaUsuario.jsp"%>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="tab-pane" id="listadoTodosUsuarios">
-					<table class="table table-hover table-responsive">
-					<%@ include file="headerUsuario.jsp"%>
-					
-					<tbody>
-						<c:forEach items="${listaUsuariosNuevos}" var="objUsuario">
-							<tr class="info">
-							<%@ include file="filaUsuario.jsp"%>
-							</tr>
-						</c:forEach>
-						<c:forEach items="${listaUsuarios}" var="objUsuario">
-							<tr>
-								<%@ include file="filaUsuario.jsp"%>
-							</tr>
-						</c:forEach>
-		
-					</tbody>
-				</table>
-				</div>
-				<div class="tab-pane" id="cuadriculaUsuariosNuevos">
-				cuadricula nuevos
-				</div>
-				<div class="tab-pane" id="cuadriculaTodosUsuarios">
-				cuadricula
+				<div id="ListadoUsuariosVerificados" class="tab-pane">
+					<div class="container">
+						<table class="table table-hover table-responsive">
+							<%@ include file="headerUsuario.jsp"%>
+							<tbody>
+								<c:forEach items="${listaUsuarios}" var="objUsuario">
+									<c:if test="${objUsuario.verificado eq true}">
+										<tr class="info">
+											<%@ include file="filaUsuario.jsp"%>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
-		
 	</div>
-	
-	<script type="text/javascript">
-		$(function(){
-			$('#ListadoUsuarios').click(function(){
-				if(checkN("NuevosUsuarios"))
-					activeTab("listadoUsuariosNuevos");
-				if(checkN("TodosUsuarios"))
-					activeTab("listadoTodosUsuarios");
-			});
-			$('#CuadriculaUsuarios').click(function(){
-				if(checkN("NuevosUsuarios"))
-					activeTab("cuadriculaUsuariosNuevos");
-				if(checkN("TodosUsuarios"))
-					activeTab("cuadriculaTodosUsuarios");
-			});
-			$('#NuevosUsuarios').click(function(){	
-				if(checkN("ListadoUsuarios"))
-					activeTab("listadoUsuariosNuevos");
-				if(checkN("CuadriculaUsuarios"))
-					activeTab("cuadriculaUsuariosNuevos");
-			});
-			$('#TodosUsuarios').click(function(){	
-				if(checkN("ListadoUsuarios"))
-					activeTab("listadoTodosUsuarios");
-				if(checkN("CuadriculaUsuarios"))
-					activeTab("cuadriculaTodosUsuarios");
-		
-			});
-			
-			function checkN(nameTab){
-				if($('#'+nameTab).attr('class') != null){
-					var nuevos = $('#'+nameTab).attr('class').split(' ');
-					for(var i = 0; i < nuevos.length; i ++){
-						if(nuevos[i] == "active"){
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-			
-			function activeTab(nameTab){
-				$('#listadoUsuariosNuevos').removeClass("active");
-				$('#listadoTodosUsuarios').removeClass("active");
-				$('#cuadriculaUsuariosNuevos').removeClass("active");
-				$('#cuadriculaTodosUsuarios').removeClass("active");
-				$('#'+nameTab).addClass("active");
-			}
-		});
-	</script>
-	
+
+
+
 </body>
 </html>

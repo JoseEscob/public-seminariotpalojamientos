@@ -123,6 +123,10 @@ public class PublicacionServlet extends HttpServlet {
 			case "admListaPublicaciones":
 				cargarAdmListaPublicaciones(request, response);
 				break;
+			case "admGestionarVerificacionPublicacion":
+				admGestionarVerificacionPublicacion(request, response);
+				break;
+
 			}
 
 		} catch (ServidorException e) {
@@ -187,6 +191,10 @@ public class PublicacionServlet extends HttpServlet {
 		String message = null;
 
 		try {
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+			if (!objUsuarioLogueado.isAdmin())
+				throw new ValidacionException("Usted no tiene permisos para realizar esta accción");
+
 			ArrayList<Publicacion> listadoDePublicaciones = new ArrayList<Publicacion>();
 			listadoDePublicaciones = publicacionDAO.getAll();
 			request.setAttribute("listadoDePublicaciones", listadoDePublicaciones);
@@ -200,6 +208,56 @@ public class PublicacionServlet extends HttpServlet {
 			request.getRequestDispatcher(paginaJsp).forward(request, response);
 		}
 
+	}
+
+	private void admGestionarVerificacionPublicacion(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		InfoMessage objInfoMessage = new InfoMessage();
+		try {
+			// 0- Verificar que sea un usuario administrador
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+			if (!objUsuarioLogueado.isAdmin())
+				throw new ValidacionException("Usted no tiene permisos para realizar esta accción");
+			// 1- recuperar valores del request y los DAOs
+			if (request.getParameter("verificado") == null) {
+				throw new ServidorException("El parámetro 'verificado' es null");
+			}
+			boolean verificadoPorAdmin = Boolean.valueOf(request.getParameter("verificado").toString());
+			if (request.getParameter("idPublicacion") == null) {
+				throw new ServidorException("El parámetro 'idPublicacion' es null");
+			}
+			// 2- Validar existencia del usuario
+			int idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			if (publicacionDAO.getObjectByID(idPublicacion) == null)
+				throw new ServidorException("No se encontraron registros de la Publicación con ID " + idPublicacion);
+			// 3- Actualizar en DB
+			if (verificadoPorAdmin) {
+				if (!publicacionDAO.updateVerificado(idPublicacion, true))
+					throw new ServidorException(
+							"SQL error al ejecutar el 'updateVerificado' para la publicación con ID " + idPublicacion);
+
+				message = "Se marcó como verificado la publicación con ID " + idPublicacion;
+			} else {
+				if (!publicacionDAO.updateVerificado(idPublicacion, false))
+					throw new ServidorException(
+							"SQL error al ejecutar el 'updateVerificado' para la publicación con ID " + idPublicacion);
+
+				message = "Se marcó como NO verificado la publicación con ID " + idPublicacion;
+
+			}
+
+			if (request.getAttribute("objInfoMessage") == null) {
+
+				objInfoMessage = new InfoMessage(true, message);
+			}
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			paginaJsp = "PublicacionServlet?accionGET=admListaPublicaciones";
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
+		}
 	}
 
 	private void cargarComponentesAltaPublicacion(HttpServletRequest request, HttpServletResponse response)

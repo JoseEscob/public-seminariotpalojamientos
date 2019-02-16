@@ -11,11 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controladoresDAO.Usuarios;
+import exceptions.ServidorException;
 import exceptions.ValidacionException;
 import extra.Constantes;
+import extra.InfoMessage;
 import extra.LOG;
 import extra.Utilitario;
 import extra.ORSesion;
+import modelo.Publicacion;
 import modelo.Usuario;
 
 /**
@@ -45,6 +48,9 @@ public class UsuarioServlet extends HttpServlet {
 				break;
 			case "admListaUsuarios":
 				cargarAdmListaUsuarios(request, response);
+				break;
+			case "admGestionarVerificacionUsuarios":
+				admGestionarVerificacionUsuarios(request, response);
 				break;
 			}
 		}
@@ -167,7 +173,6 @@ public class UsuarioServlet extends HttpServlet {
 
 		try {
 			// 1- Recuperar valores del formulario JSP
-			// user = (Usuario) request.getSession().getAttribute(Constantes.sessionUser);
 			objUsuario = ORSesion.getUsuarioBySession(request);
 			// 2- Validar información obtenida JSP
 			if (objUsuario == null) {
@@ -175,14 +180,6 @@ public class UsuarioServlet extends HttpServlet {
 				LOG.info(message);
 				throw new ValidacionException(message);
 			}
-			// 3- Recuperar info de la DB
-			// objUsuario = usuarioDAO.get(objUsuario);
-			// if (objUsuario == null)
-			// throw new ValidacionException(
-			// "SQL: Ocurrió un error al recuperar usuario con id" +
-			// objUsuario.getIdUsuario());
-			// // 4- Devolver información recuperada a la jsp
-			// ORSesion.nuevaSesion(request, objUsuario);
 			request.setAttribute("objUsuario", objUsuario);
 		} catch (Exception e) {
 			message = e.getMessage();
@@ -231,8 +228,6 @@ public class UsuarioServlet extends HttpServlet {
 				if (!objUsuario.isAdmin())
 					paginaJsp = "/Inicio.jsp";
 				else {
-					// request.setAttribute("usuariosBajoPuntaje", usuariosBajoPuntaje());
-					// request.setAttribute("publicacionesBajoPuntaje", publicacionesBajoPuntaje());
 					paginaJsp = "/InicioAdmin.jsp";
 				}
 			}
@@ -277,22 +272,25 @@ public class UsuarioServlet extends HttpServlet {
 
 		try {
 			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
-			String fechaUltConexion = objUsuarioLogueado.getFechaUltConexion();
+			if (!objUsuarioLogueado.isAdmin())
+				throw new ValidacionException("Usted no tiene permisos para realizar esta accción");
+			// String fechaUltConexion = objUsuarioLogueado.getFechaUltConexion();
 			// ArrayList<Usuario> listaUsuarios = usuarioDAO
 			// .getListaNuevosUsuarios(objUsuarioLogueado.getFechaUltConexion());//
 			// usuarioDAO.getListaUsuarios_SortByFechaAlta();
 
 			ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
-			ArrayList<Usuario> listaUsuariosNuevos = new ArrayList<Usuario>();
-			usuarioDAO.getAll().forEach(item -> {
-				if (item.getFechaAlta().compareTo(fechaUltConexion) > 0)
-					listaUsuariosNuevos.add(item);
-				else
-					listaUsuarios.add(item);
-			});
+			listaUsuarios = usuarioDAO.getAll();
+			// ArrayList<Usuario> listaUsuariosNuevos = new ArrayList<Usuario>();
+			// usuarioDAO.getAll().forEach(item -> {
+			// if (item.getFechaAlta().compareTo(fechaUltConexion) > 0)
+			// listaUsuariosNuevos.add(item);
+			// else
+			// listaUsuarios.add(item);
+			// });
 
 			request.setAttribute("listaUsuarios", listaUsuarios);
-			request.setAttribute("listaUsuariosNuevos", listaUsuariosNuevos);
+			// request.setAttribute("listaUsuariosNuevos", listaUsuariosNuevos);
 		} catch (Exception e) {
 			message = e.getMessage();
 		} finally {
@@ -300,6 +298,56 @@ public class UsuarioServlet extends HttpServlet {
 			paginaJsp = "/admListaUsuarios.jsp";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(paginaJsp);
 			dispatcher.forward(request, response);
+		}
+	}
+
+	private void admGestionarVerificacionUsuarios(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		InfoMessage objInfoMessage = new InfoMessage();
+		try {
+			// 0- Verificar que sea un usuario administrador
+			Usuario objUsuarioLogueado = ORSesion.getUsuarioBySession(request);
+			if (!objUsuarioLogueado.isAdmin())
+				throw new ValidacionException("Usted no tiene permisos para realizar esta accción");
+			// 1- recuperar valores del request y los DAOs
+			if (request.getParameter("verificado") == null) {
+				throw new ServidorException("El parámetro 'verificado' es null");
+			}
+			boolean verificadoPorAdmin = Boolean.valueOf(request.getParameter("verificado").toString());
+			if (request.getParameter("idUsuario") == null) {
+				throw new ServidorException("El ID del usuario es null");
+			}
+			// 2- Validar existencia del usuario
+			int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+			if (usuarioDAO.getObjectById(idUsuario) == null)
+				throw new ServidorException("No se encontraron registros del usuario con ID " + idUsuario);
+			// 3- Actualizar en DB
+			if (verificadoPorAdmin) {
+				if (!usuarioDAO.updateVerificado(idUsuario, true))
+					throw new ServidorException(
+							"SQL error al ejecutar el 'updateVerificado' para el usuario con ID " + idUsuario);
+
+				message = "Se marcó como verificado al usuario con ID " + idUsuario;
+			} else {
+				if (!usuarioDAO.updateVerificado(idUsuario, false))
+					throw new ServidorException(
+							"SQL error al ejecutar el 'updateVerificado' para el usuario con ID " + idUsuario);
+
+				message = "Se marcó como NO verificado al usuario con ID " + idUsuario;
+
+			}
+
+			if (request.getAttribute("objInfoMessage") == null) {
+
+				objInfoMessage = new InfoMessage(true, message);
+			}
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			paginaJsp = "UsuarioServlet?accionGET=admListaUsuarios";
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
 		}
 	}
 

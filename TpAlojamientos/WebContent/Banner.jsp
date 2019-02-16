@@ -49,69 +49,70 @@
 							class="glyphicon glyphicon-check" /></span>&nbsp;Todas las
 							publicaciones</a></li>
 					<c:if test="${not empty sessionScope.sessionUser}">
-						<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
-								class="glyphicon glyphicon-plus"></span>&nbsp;Nueva Publicación
-						</a></li>
-						<li><a
-							href="PublicacionServlet?accionGET=verMisPublicaciones"><span
-								class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
-								Publicaciones</a></li>
-						<li><a
-							href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
-								class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
-								Favoritas </a></li>
-						<li><a href="#"></a></li>
-						<li class="divider"></li>
-
-						<li><a
-							href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
-								Test Comentario</a></li>
-
-						<li><a
-							href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
-								class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
+						<c:if test="${not sessionScope.sessionUser.admin}">
+							<li><a href="PublicacionServlet?accionGET=Nuevo"> <span
+									class="glyphicon glyphicon-plus"></span>&nbsp;Nueva Publicación
+							</a></li>
+							<li><a
+								href="PublicacionServlet?accionGET=verMisPublicaciones"><span
+									class="glyphicon glyphicon glyphicon-th" /></span>&nbsp;Mis
+									Publicaciones</a></li>
+							<li><a
+								href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
+									class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
+									Favoritas </a></li>
+							<li><a href="#"></a></li>
+							<li class="divider"></li>
+							<!-- <li><a href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
+								Test Comentario</a></li> 
+							<li><a
+								href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span
+									class="glyphicon glyphicon-check" /></span> Ver publicacion</a></li>
+							-->
+						</c:if>
 					</c:if>
 				</ul></li>
 			<c:if test="${not empty sessionScope.sessionUser}">
-				<li class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown"><span
-						class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
-					<ul class="dropdown-menu">
+				<c:choose>
+					<c:when test="${not sessionScope.sessionUser.admin}">
 
-						<li><c:url value="SolDeReservaServlet?" var="urlSolDeReserva">
-								<c:param name="accionGET" value="verSolEnviadasRecibidas" />
-							</c:url> <a href="${urlSolDeReserva}"> <span
-								class="glyphicon glyphicon-send"></span>&nbsp;Solicitudes de
-								Reserva
-						</a></li>
-						<li class="divider"></li>
-						<li><c:url value="SolDeReservaServlet?"
-								var="urlComprobanteDeReserva">
-								<c:param name="accionGET" value="verListadoComprobanteDeReserva" />
-							</c:url> <a href="SolDeReservaServlet?accionGET=verListadoComprobanteDeReserva"> <span
-								class="glyphicon glyphicon-briefcase"></span>&nbsp;Comprobantes
-								de Reservas Aprobadas
-						</a></li>
-						<li><a href="SolicitudServlet?accionGET=SolicitudesReserva">Reserva</a></li>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown"><span
+								class="glyphicon glyphicon-chevron-down"></span> Solicitudes</a>
+							<ul class="dropdown-menu">
 
-						<li><a
-							href="SolicitudServlet?accionGET=SolicitudesAlojamiento">Alojamiento</a></li>
-
-
-					</ul></li>
-
-
-				<li class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown"><span
-						class="glyphicon glyphicon-chevron-down"></span> Admin</a>
-					<ul class="dropdown-menu">
-						<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
-								class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
-						<li><a
-							href="PublicacionServlet?accionGET=admListaPublicaciones"><span
-								class="glyphicon glyphicon-check" /></span> Lista Publicaciones</a></li>
-					</ul></li>
-
+								<li><c:url value="SolDeReservaServlet?"
+										var="urlSolDeReserva">
+										<c:param name="accionGET" value="verSolEnviadasRecibidas" />
+									</c:url> <a href="${urlSolDeReserva}"> <span
+										class="glyphicon glyphicon-send"></span>&nbsp;Solicitudes de
+										Reserva
+								</a></li>
+								<li class="divider"></li>
+								<li><c:url value="SolDeReservaServlet?"
+										var="urlComprobanteDeReserva">
+										<c:param name="accionGET"
+											value="verListadoComprobanteDeReserva" />
+									</c:url> <a
+									href="SolDeReservaServlet?accionGET=verListadoComprobanteDeReserva">
+										<span class="glyphicon glyphicon-briefcase"></span>&nbsp;Comprobantes
+										de Reservas Aprobadas
+								</a></li>
+							</ul></li>
+					</c:when>
+					<c:otherwise>
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown"><span
+								class="glyphicon glyphicon-chevron-down"></span> Admin</a>
+							<ul class="dropdown-menu">
+								<li><a href="UsuarioServlet?accionGET=admListaUsuarios"><span
+										class="glyphicon glyphicon-check" /></span> Lista Usuarios</a></li>
+								<li><a
+									href="PublicacionServlet?accionGET=admListaPublicaciones"><span
+										class="glyphicon glyphicon-check" /></span> Lista Publicaciones</a></li>
+							</ul></li>
+					</c:otherwise>
+				</c:choose>
 			</c:if>
 		</ul>
 		<!-- BEGIN: buscarPublicaciones -->

@@ -22,39 +22,51 @@
 <td>${objPublicacion.fechaAlta}</td>
 <td>${objPublicacion.fechaUltModificado}</td>
 <td>${objPublicacion.puntaje}</td>
-<td>
-	<c:choose>
+<td><c:choose>
 		<c:when test="${objPublicacion.verificado}">SI</c:when>
 		<c:otherwise>NO</c:otherwise>
-	</c:choose>
-</td>
+	</c:choose></td>
 <td>
-<td>
-	<c:choose>
+<td><c:choose>
 		<c:when test="${objPublicacion.habilitado}">SI</c:when>
 		<c:otherwise>NO</c:otherwise>
-	</c:choose>
-</td>
+	</c:choose></td>
 <td>
 	<div>
-		<c:url value="PublicacionServlet?" var="urlPerfilPublicoUsuario">
-			<c:param name="accionGET" value="verPerfilPublicoOtroUsuario" />
-			<c:param name="idUsuario" value="${objUsuario.idUsuario}" />
+		<c:url value="PublicacionServlet?" var="urlVerPublicacion">
+			<c:param name="accionGET" value="VerPublicacion" />
+			<c:param name="idPublicacion" value="${objPublicacion.idPublicacion}" />
 		</c:url>
 
-		<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-			data-toggle="tooltip" title="Ver Perfil"> <span
+		<a href="${urlVerPublicacion}" class="btn btn-default"
+			data-toggle="tooltip" title="Ver Publicación"> <span
 			class="glyphicon glyphicon-eye-open"></span>
 		</a>
 	</div>
 	<div>
-		<a href="#" class="btn btn-primary"> <span
-			class="glyphicon glyphicon-edit"></span>
+		<c:url value="PublicacionServlet?" var="urlVerificadoTrue">
+			<c:param name="accionGET" value="admGestionarVerificacionPublicacion" />
+			<c:param name="verificado" value="true" />
+			<c:param name="idPublicacion" value="${objPublicacion.idPublicacion}" />
+		</c:url>
+
+		<a href="${urlVerificadoTrue}" class="btn btn-primary"
+			data-toggle="tooltip" title="Marcar como verificado"> <span
+			class="glyphicon glyphicon-ok-circle"></span>
 		</a>
+
 	</div>
 
 	<div>
-		<a href="#" class="btn btn-danger"> <span
+
+		<c:url value="PublicacionServlet?" var="urlVerificadoFalse">
+			<c:param name="accionGET" value="admGestionarVerificacionPublicacion" />
+			<c:param name="verificado" value="false" />
+			<c:param name="idPublicacion" value="${objPublicacion.idPublicacion}" />
+		</c:url>
+
+		<a href="${urlVerificadoFalse}" class="btn btn-danger"
+			data-toggle="tooltip" title="Marcar como no verificado"> <span
 			class="glyphicon glyphicon-remove"></span>
 		</a>
 	</div>

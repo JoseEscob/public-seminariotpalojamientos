@@ -5,133 +5,82 @@
 
 <html>
 <head>
-<title>Listado</title>
+<title>Admin - Lista de Publicaciones</title>
 </head>
 <body>
-	<!-- Al incluir el banner me parece q ya incluye lo del HEAD y los script del final -->
 	<%@ include file="Banner.jsp"%>
 
 	<div class="container">
-		<h4>
-			<c:out value="${sessionScope.sessionUser.apellido}" />
-		</h4>
-		<h4>
-			<c:out value="${sessionUser.fechaUltConexion}" />
-		</h4>
+		<h2>Admin - Lista de Publicaciones</h2>
 		<c:choose>
 			<c:when test="${fn:length(listadoDePublicaciones) gt 0}">
-				<h4>Cant. de Publicaciones:
-					${fn:length(listadoDePublicaciones)}</h4>
+				<h4>Cant. de Usuarios: ${fn:length(listadoDePublicaciones)}</h4>
 			</c:when>
 			<c:otherwise>
-				<h4>No se encontraron nuevas Publicaciones</h4>
+				<h4>No se encontraron registros de Publicaciones</h4>
 			</c:otherwise>
 		</c:choose>
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
 	</div>
 
+	<div class="container">
 
-	<div class="row">
-		<div class="row col-md-12">
+		<div class="row">
 			<ul class="nav nav-tabs nav-justified">
-				<li class="active"><a href="#ListadoPublicaciones"
+				<li class="active"><a href="#ListadoNoVerificados"
 					data-toggle="tab"><h4>
-							Listado Publicaciones&nbsp;<span class="badge">${fn:length(listadoDePublicaciones)}</span>
+							Publicaciones No Verificadas&nbsp;<span class="badge"></span>
 						</h4></a></li>
-				<li><a href="#CuadriculaPublicaciones" data-toggle="tab"><h4>Cuadricula
-							Publicaciones</h4></a></li>
+				<li><a href="#ListadoVerificados" data-toggle="tab"><h4>
+							Publicaciones Verificadas&nbsp;<span class="badge"></span>
+						</h4></a></li>
 			</ul>
 		</div>
+
 		<div class="row col-md-12">
+			<br>
+		</div>
+		<div class="row">
 			<div class="tab-content">
-
-				<div class="tab-pane" id="CuadriculaPublicaciones">
-					<br>
-					<%@ include file="mostrarListadoDePublicaciones.jsp"%>
-				</div>
-
-				<div class="tab-pane active" id="ListadoPublicaciones">
-
-
+				<div id="ListadoNoVerificados" class="tab-pane active">
 					<div class="container">
-						<h3>Lista de Publicaciones</h3>
 						<table class="table table-hover table-responsive">
 							<%@ include file="headerPublicacion.jsp"%>
-						
 							<tbody>
 								<c:forEach items="${listadoDePublicaciones}"
 									var="objPublicacion">
-									<tr class="info">
-									<%@ include file="filaPublicacion.jsp"%>
-									</tr>
+									<c:if test="${objPublicacion.verificado eq false}">
+										<tr>
+											<%@ include file="filaPublicacion.jsp"%>
+										</tr>
+									</c:if>
 								</c:forEach>
-								<c:forEach items="${listadoDePublicaciones}"
-									var="objPublicacion">
-									<tr>
-
-									</tr>
-								</c:forEach>
-
 							</tbody>
 						</table>
 					</div>
-
-
-
+				</div>
+				<div id="ListadoVerificados" class="tab-pane">
+					<div class="container">
+						<table class="table table-hover table-responsive">
+							<%@ include file="headerPublicacion.jsp"%>
+							<tbody>
+								<c:forEach items="${listadoDePublicaciones}"
+									var="objPublicacion">
+									<c:if test="${objPublicacion.verificado eq true}">
+										<tr class="info">
+											<%@ include file="filaPublicacion.jsp"%>
+										</tr>
+									</c:if>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-<script type="text/javascript">
-		$(function(){
-			$('#ListadoUsuarios').click(function(){
-				if(checkN("NuevosUsuarios"))
-					activeTab("listadoUsuariosNuevos");
-				if(checkN("TodosUsuarios"))
-					activeTab("listadoTodosUsuarios");
-			});
-			$('#CuadriculaUsuarios').click(function(){
-				if(checkN("NuevosUsuarios"))
-					activeTab("cuadriculaUsuariosNuevos");
-				if(checkN("TodosUsuarios"))
-					activeTab("cuadriculaTodosUsuarios");
-			});
-			$('#NuevosUsuarios').click(function(){	
-				if(checkN("ListadoUsuarios"))
-					activeTab("listadoUsuariosNuevos");
-				if(checkN("CuadriculaUsuarios"))
-					activeTab("cuadriculaUsuariosNuevos");
-			});
-			$('#TodosUsuarios').click(function(){	
-				if(checkN("ListadoUsuarios"))
-					activeTab("listadoTodosUsuarios");
-				if(checkN("CuadriculaUsuarios"))
-					activeTab("cuadriculaTodosUsuarios");
-		
-			});
-			
-			function checkN(nameTab){
-				if($('#'+nameTab).attr('class') != null){
-					var nuevos = $('#'+nameTab).attr('class').split(' ');
-					for(var i = 0; i < nuevos.length; i ++){
-						if(nuevos[i] == "active"){
-							return true;
-						}
-					}
-				}
-				return false;
-			}
-			
-			function activeTab(nameTab){
-				$('#listadoUsuariosNuevos').removeClass("active");
-				$('#listadoTodosUsuarios').removeClass("active");
-				$('#cuadriculaUsuariosNuevos').removeClass("active");
-				$('#cuadriculaTodosUsuarios').removeClass("active");
-				$('#'+nameTab).addClass("active");
-			}
-		});
-	</script>
-	
-
 
 </body>
 </html>

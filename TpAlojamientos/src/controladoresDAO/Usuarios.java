@@ -35,6 +35,7 @@ public class Usuarios implements Connectable<Usuario> {
 			put("updateFechaUltConexion", String.format("update usuarios set fechaUltConexion= %s  where idUsuario=?",
 					cCampo.sql_STR_TO_DATE_YmdHiS));
 			put("updateRutaFotoPerfil", "update usuarios set rutaFotoPerfil= ?  where idUsuario=?");
+			put("updateVerificado", "update usuarios set verificado= ?  where idUsuario=?");
 		}
 	};
 
@@ -215,6 +216,25 @@ public class Usuarios implements Connectable<Usuario> {
 			ps.setString(1, rutaFotoPerfil);
 			ps.setInt(2, idUsuario);
 			LOG.info("UPDATE RutaFotoPerfil - Usuarios: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+
+	public boolean updateVerificado(int idUsuario, boolean verificado) {
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateVerificado"));
+
+			ps.setBoolean(1, verificado);
+			ps.setInt(2, idUsuario);
+			LOG.info("UPDATE Verificado - Usuarios: " + ps.toString());
 			if (ps.executeUpdate() != 0)
 				correcto = true;
 		} catch (Exception e) {

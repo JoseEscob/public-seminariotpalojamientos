@@ -36,6 +36,7 @@ public class Publicaciones implements Connectable<Publicacion> {
 			put("count", "select count(*) as cantidad from publicaciones");
 			put("update", String.format("update publicaciones set %s where idPublicacion=?", camposInsertIntoDB));
 			put("updatePuntuacion", "update publicaciones set puntaje=? where idPublicacion=?");
+			put("updateVerificado", "update publicaciones set verificado=? where idPublicacion=?");
 			put("get", "select * from publicaciones where idPublicacion=?");
 			put("limit", "select * from publicaciones limit ?, ?");
 
@@ -229,6 +230,25 @@ public class Publicaciones implements Connectable<Publicacion> {
 				correcto = true;
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+
+	public boolean updateVerificado(int idPublicacion, boolean verificado) {
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateVerificado"));
+
+			ps.setBoolean(1, verificado);
+			ps.setInt(2, idPublicacion);
+			LOG.info("UPDATE Verificado - Publicacion: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
