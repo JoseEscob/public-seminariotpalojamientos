@@ -145,38 +145,40 @@ public class UploadFilesServlet extends HttpServlet {
 	}
 
 	private void cambiarImagenUsuario(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 
 		if (ORSesion.sesionActiva(request)) {
 
 			Usuario objUsuario = ORSesion.getUsuarioBySession(request);
 			int idUsuario = objUsuario.getIdUsuario();
 			String rutaActual = usuarioDao.getRutaFotoPerfil_Usuario(idUsuario);
+			String base = getServletContext().getRealPath("");
+			String folderUser = base+Constantes.RUTAFolderFotoUser+idUsuario;
+			
 
 			// Se comprueba si hay una foto existente y si ese archivo aun está.
-			File imagen = new File(getServletContext().getRealPath("") + rutaActual);
-			if (imagen.exists()) {
-				File carpeta = new File(imagen.getParent());
-				if (carpeta.isDirectory()) {
-					for (File file : carpeta.listFiles()) {
-						file.delete();
-					}
-					FileItem item = fileHandler.getFiles().get(0);
-					File storeFile = new File(getPathFotoUsuario(item, idUsuario));
-					File sFile = new File(
-							Constantes.RUTAFolderFotoUser + idUsuario + File.separator + storeFile.getName());
-
-					usuarioDao.updateRutaFotoPerfil(idUsuario, sFile.getPath());
-					request.setAttribute("imagen", sFile.getPath());
-					item.write(storeFile);
-					objUsuario = usuarioDao.get(objUsuario);
-					ORSesion.nuevaSesion(request, objUsuario);
-				}
+			FileHandler.MakeDir(folderUser);
+			
+			File imagen = FileHandler.IfExists(folderUser, (new File(base+File.separator+rutaActual).getName()));
+			if(imagen != null) {
+				imagen.delete();
+				FileItem item = fileHandler.getFiles().get(0);
+				File storeFile = new File(getPathFotoUsuario(item, idUsuario));
+				usuarioDao.updateRutaFotoPerfil(idUsuario, Constantes.RUTAFolderFotoUser+idUsuario + File.separator + storeFile.getName());
+				resultMap.put("newImage",Constantes.RUTAFolderFotoUser+idUsuario + File.separator + storeFile.getName());
+				item.write(storeFile);
+				objUsuario = usuarioDao.get(objUsuario);
+				ORSesion.nuevaSesion(request, objUsuario);
+				
 			}
 
 			request.setAttribute("objUsuario", ORSesion.getUsuarioBySession(request));
 			paginaJsp = "/UsuarioViewModif.jsp";
 		}
-		request.getRequestDispatcher(paginaJsp).forward(request, response);
+		
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().append(new Gson().toJson(resultMap)); // <----- AJAX RESPONDE SIN REDIRIGIR
 	}
 
 	private void retornaImagenes(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@page import="java.util.Date" %>
 
 <!DOCTYPE html>
 <html>
@@ -168,7 +169,7 @@
 						<!-- <img class="img-rounded" alt=" " width="60" height="60"
 								src="<c:url value='${url.currentModule}/${rutaDefaultFoto}'/>" />
 							 -->
-						<img class="img-rounded" alt=" " width="250" height="250"
+						<img class="img-rounded" alt=" " width="250" height="250" id="fotoUsuarioImg"
 							src="${rutaDefaultFoto}" />
 
 					</c:if>
@@ -183,8 +184,7 @@
 							method="post" enctype="multipart/form-data">
 							<input type="file" id="cambio" name="archivo"
 								accept="image/jpeg,image/gif,image/png"
-								style="visibility: hidden;" /> <input type="hidden"
-								name="accionPOST" value="cambiarImagenUsuario" />
+								style="visibility: hidden;" /> 
 						</form>
 					</div>
 				</div>
@@ -195,10 +195,34 @@
 		<div class="row"></div>
 	</div>
 	<script type="text/javascript">
+
+
 		$(function(){
 			$("#cambio").change(function(){
-				//$.post("UploadFilesServlet", {},function(result){});
-				$("#formPhotoUpdate").submit();
+			 	var form = $('#formPhotoUpdate')[0];
+				
+			    var data = new FormData(form);
+
+				data.append("accionPOST", "cambiarImagenUsuario");
+				
+				 $.ajax({
+				          type: "POST",
+				          enctype: 'multipart/form-data',
+				          url: "UploadFilesServlet",
+				          data: data,
+				          processData: false,
+				          contentType: false,
+				          cache: false,
+				          timeout: 600000,
+				          success: function(result){
+				       	  	if(result.newImage != null){				       	  
+					       	  	var obj = document.getElementById("fotoPerfil");
+								obj.children[0].src =result.newImage+"?"+(new Date()).getTime();
+				  			}
+				          },
+				          error: function(e){}
+				      });
+					
 			});
 		});
 
