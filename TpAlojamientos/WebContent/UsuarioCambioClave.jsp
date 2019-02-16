@@ -23,6 +23,13 @@
 							onpaste="return false">
 					</div>
 				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Vuelva a ingresar la contraseña actual</label> <input type="password"
+							name="claveActual2" class="form-control" maxlength="20"
+							onpaste="return false">
+					</div>
+				</div>
 				<div class="col-md-6">
 					<div class="form-group">
 						<label>Nueva contraseña </label> <input type="password"
@@ -37,13 +44,7 @@
 							onpaste="return false">
 					</div>
 				</div>
-				<div class="col-md-12">
-					<div class="form-group">
-						<label>Contraseña Actual</label> <input type="password"
-							name="claveActual" class="form-control" maxlength="20"
-							onpaste="return false">
-					</div>
-				</div>
+			
 
 				<div class="col-md-12" align="center">
 					<input type="hidden" name="accionPOST" value="cambiarClaveUsuario">

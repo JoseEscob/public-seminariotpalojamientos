@@ -360,20 +360,40 @@ public class UsuarioServlet extends HttpServlet {
 		InfoMessage objInfoMessage = new InfoMessage();
 		try {
 			// 0- Verificar que esté logueado
-			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			Usuario usuario = ORSesion.getUsuarioBySession(request);
+			if(usuario == null)
+				throw new ServidorException("No se pudo encontrar la sesion del usuario.");
+			int idUsuarioLogueado = usuario.getIdUsuario();
+			
 			// 1- recuperar valores del request y los DAOs
+			if(request.getParameter("claveActual") == null)
+				throw new ServidorException("El parametro 'Contraseña Actual' no pudo llegar al servidor.");
+			if(request.getParameter("claveActual2") == null)
+				throw new ServidorException("El parametro 'Vuelva a ingresar la contraseña actual' no pudo llegar al servidor.");
 			if (request.getParameter("claveUno") == null) {
-				throw new ServidorException("El parámetro 'verificado' es null");
+				throw new ServidorException("El parametro 'Nueva Contraseña' no pudo llegar al servidor.");
 			}
 			if (request.getParameter("claveDos") == null) {
-				throw new ServidorException("El ID del usuario es null");
+				throw new ServidorException("El parametro 'Repita Contraseña' no pudo llegar al servidor.");
 			}
 			String claveUno = request.getParameter("claveUno").toString();
 			String claveDos = request.getParameter("claveDos").toString();
+			String actualUno = request.getParameter("claveActual").toString();
+			String actualDos = request.getParameter("claveActual2").toString();
+			
 			// 2- Validar existencia del usuario
 			if (!claveUno.equals(claveDos)) {
-				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
+				throw new ValidacionException("Las claves NUEVAS ingresadas no coinciden.");
 			}
+			if(!actualUno.equals(actualDos))
+				throw new ValidacionException("Las claves ACTUALES ingresadas no coinciden.");
+			
+			if(!actualUno.equals(usuario.getClave()) || !actualDos.equals(usuario.getClave()))
+				throw new ValidacionException("La clave ACTUAL no es correcta.");
+			
+			if(actualUno.equals(claveUno) || actualUno.equals(claveDos) || actualDos.equals(claveUno) || actualDos.equals(claveDos) || claveUno.equals(usuario.getClave()) || claveDos.equals(usuario.getClave()))
+				throw new ValidacionException("La clave NUEVA debe ser distinta a la ACTUAL.");
+			
 			// 3- Actualizar en DB
 			if (!usuarioDAO.updateClave(idUsuarioLogueado, claveUno))
 				throw new ServidorException("SQL error al actualizar la clave del usuario con ID " + idUsuarioLogueado);
