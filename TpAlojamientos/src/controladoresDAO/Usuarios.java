@@ -36,6 +36,7 @@ public class Usuarios implements Connectable<Usuario> {
 					cCampo.sql_STR_TO_DATE_YmdHiS));
 			put("updateRutaFotoPerfil", "update usuarios set rutaFotoPerfil= ?  where idUsuario=?");
 			put("updateVerificado", "update usuarios set verificado= ?  where idUsuario=?");
+			put("updatePassUser", "update usuarios set clave=? where idUsuario=?");
 		}
 	};
 
@@ -225,7 +226,26 @@ public class Usuarios implements Connectable<Usuario> {
 		}
 		return correcto;
 	}
+	
+	public boolean updateClave(int idUsuario, String password) {
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updatePassUser"));
 
+			ps.setString(1, password);
+			ps.setInt(2, idUsuario);
+			LOG.info("UPDATE Contraseña - Usuarios: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+	
 	public boolean updateVerificado(int idUsuario, boolean verificado) {
 		cn = new Conexion();
 		boolean correcto = false;
