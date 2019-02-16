@@ -25,9 +25,9 @@
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">
-						<label>Vuelva a ingresar la contraseña actual</label> <input type="password"
-							name="claveActual2" class="form-control" maxlength="20"
-							onpaste="return false">
+						<label>Vuelva a ingresar la contraseña actual</label> <input
+							type="password" name="claveActual2" class="form-control"
+							maxlength="20" onpaste="return false">
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -39,12 +39,12 @@
 				</div>
 				<div class="col-md-6">
 					<div class="form-group">
-						<label>Repita contraseña </label> <input type="password"
+						<label>Repita la nueva contraseña </label> <input type="password"
 							name="claveDos" class="form-control" maxlength="20"
 							onpaste="return false">
 					</div>
 				</div>
-			
+
 
 				<div class="col-md-12" align="center">
 					<input type="hidden" name="accionPOST" value="cambiarClaveUsuario">

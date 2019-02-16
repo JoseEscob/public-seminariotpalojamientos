@@ -21,7 +21,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<form accept-charset="UTF-8" action="" method="POST">
+				<form action="PublicacionServlet" method="POST">
+					<!--  accept-charset="UTF-8"  -->
 					<div class="media">
 						<div class="media-left media-middle">
 							<img src="${sessionScope.sessionUser.rutaFotoPerfil}"
@@ -35,8 +36,8 @@
 							</div>
 
 
-							<div class="col-md-6 col-md-12">
-								<div class="form-group">
+							<div class="col-md-12">
+								<div class="form-group col-md-6">
 									<label>Puntaje</label> <select class="form-control"
 										name="cmbPuntaje" required>
 										<option value="1">1</option>
@@ -47,11 +48,19 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-md-6 col-md-12">
+							<div class="col-md-12">
 								<textarea class="form-control" name="comentarioDescripcion"
+									maxlength="300" rows="3" cols="50"
 									placeholder="Ingresá tu comentario..." style="resize: none;"></textarea>
-								<button class="btn btn-info" type="submit">Guardar</button>
-								<input type="submit" value="Submit">
+							</div>
+							<div class="col-md-12">
+								<br> <input type="hidden" name="idPublicacion"
+									value="${vistaPublicacion.publicacion.idPublicacion}">
+							</div>
+							<div class="col-md-12" align="center">
+								<input type="hidden" name="accionPOST"
+									value="guardarComentarioUsuario"> <input type="submit"
+									class="btn btn-primary" name="btnComentario" value="Guardar ">
 							</div>
 						</div>
 					</div>

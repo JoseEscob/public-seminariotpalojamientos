@@ -61,9 +61,10 @@
 								href="PublicacionServlet?accionGET=verMisFavoritosPublicaciones"><span
 									class="glyphicon glyphicon-star" /></span>&nbsp;Mis Publicaciones
 									Favoritas </a></li>
+							<!-- 
 							<li><a href="#"></a></li>
 							<li class="divider"></li>
-							<!-- <li><a href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
+							<li><a href="PublicacionServlet?accionGET=VerComentarios&idPublicacion=1">
 								Test Comentario</a></li> 
 							<li><a
 								href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=1"><span

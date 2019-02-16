@@ -27,12 +27,12 @@
 			</div>
 			<hr />
 			<!--Seccion de las imagenes de la publicacion-->
-			<div class="col-md-8">
+			<div class="col-md-8" align="center">
 				<c:choose>
 					<c:when test="${not empty vistaPublicacion.imagenes}">
-						<div id="myCarousel" class="carousel slide col-md-6"
+						<div id="myCarousel" class="carousel slide col-md-10"
 							data-ride="carousel">
-							<!-- <ol class="carousel-indicators">
+							<!-- <ol class="carousel-indicators" col-md-6>
 										  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
 										  <li data-target="#myCarousel" data-slide-to="1"></li>
 										  <li data-target="#myCarousel" data-slide-to="2"></li>

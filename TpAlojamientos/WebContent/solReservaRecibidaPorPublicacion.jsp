@@ -18,7 +18,7 @@
 		<table class="table table-hover table-responsive">
 			<thead>
 				<tr>
-					<th>Check</th>
+					<!--<th>Check</th>-->
 					<th>ID Solicitud</th>
 					<th>Nombre y apellido del solicitador</th>
 					<th>ID Publicacion</th>
@@ -44,9 +44,11 @@
 					var="objSolReserva" varStatus="loop">
 					<c:if test="${objSolReserva.idEstadoSolicitud eq 1}">
 						<tr>
+							<!--
 							<td><input type="checkbox" class="checkbox"
 								name="chklistSolSeleccionadas"
 								value="${objSolReserva.idSolicitud}"></td>
+							-->
 							<td>${objSolReserva.idSolicitud}</td>
 							<td>${objSolReserva.nombreApellidoHuesped}</td>
 							<td>${objSolReserva.idPublicacion}</td>
@@ -79,30 +81,35 @@
 											value="${objSolReserva.idSolicitud}" />
 									</c:url>
 								</div>
-								<div class="btn-group">
-									<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
-										data-toggle="tooltip"
-										title="Ver Perfil del usuario solicitador"> <span
-										class="glyphicon glyphicon-eye-open"></span> Ver Perfil
-									</a>
-									<div>
+								<div class="btn-group ">
+									<div class="btn">
+										<a href="${urlPerfilPublicoUsuario}" class="btn btn-default"
+											data-toggle="tooltip"
+											title="Ver Perfil del usuario solicitador"> <span
+											class="glyphicon glyphicon-eye-open"></span> Ver Perfil
+										</a>
+									</div>
+									<div class="btn">
 										<!-- Aprobar Solicitud-->
 										<a href="${urlAprobarUnaSolicitud}" class="btn btn-success"
 											data-toggle="tooltip" title="Aprueba la solicitud"> <span
 											class="glyphicon glyphicon-ok"></span> Aprobar
-										</a> ${loop.index}
+										</a>
 									</div>
-									<div>
-										<!-- Aprobar Solicitud-->
+									<!--<div>
+									${loop.index}
+										 Aprobar Solicitud
 										<a href="${urlAprobarUnaSolicitud}" name="btnVer" value="${loop.index}"> <span
 											class="glyphicon glyphicon-ok"></span> Ver
 										</a> ${loop.index}
 									</div>
-
-									<a href="${urlRechazarUnaSolicitud}" class="btn btn-danger"
-										data-toggle="tooltip" title="Rechaza la solicitud"> <span
-										class="glyphicon glyphicon-remove-circle"></span> Rechazar
-									</a>
+									-->
+									<div class="btn">
+										<a href="${urlRechazarUnaSolicitud}" class="btn btn-danger"
+											data-toggle="tooltip" title="Rechaza la solicitud"> <span
+											class="glyphicon glyphicon-remove-circle"></span> Rechazar
+										</a>
+									</div>
 								</div>
 
 

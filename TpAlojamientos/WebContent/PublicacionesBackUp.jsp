@@ -13,24 +13,23 @@
 	<div class="container">
 		<h2>Publicaciones</h2>
 		<c:if test="${fn:length(publicaciones) gt 1 }">
-			<h4>Se encontraron ${cantPublicaciones} publicaciones</h4>
-			<!--<h5>
+			<h5>
 				Se encontraron
 				<c:out value="${fn:length(publicaciones)}" />
 				publicaciones.
-			</h5>-->
+			</h5>
 		</c:if>
 		<hr />
-		<div class="col-md-12">
+		<div class="col-md-3">Filtros</div>
+		<div class="col-md-9">
 			<!--Foreach, para la paginacion hay que traer primero todos los datos, despues dividirlo por la cantidad de registros que vamos a mostrar y te daria la cantidad de paginas-->
 			<c:choose>
 				<c:when test="${fn:length(publicaciones) gt 0}">
 					<c:forEach items="${publicaciones}" var="vistaPublicacion">
 						<div class="row">
 							<div class="col-md-6">
-								<div
-									id="carousel_${vistaPublicacion.publicacion.idPublicacion }"
-									class="carousel slide col-md-10" data-ride="carousel">
+								<div id="carousel_${vistaPublicacion.publicacion.idPublicacion }" class="carousel slide col-md-6"
+									data-ride="carousel">
 
 									<!-- <ol class="carousel-indicators">
 									  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -40,8 +39,7 @@
 									<!-- Agregar algun comentario dentro de cada imagen? -->
 									<!-- Wrapper for slides -->
 									<div class="carousel-inner">
-										<c:forEach items="${vistaPublicacion.imagenes}"
-											var="objImagen">
+										<c:forEach items="${vistaPublicacion.imagenes}" var="objImagen">
 											<c:choose>
 												<c:when test="${objImagen.idImagen eq 1 }">
 													<div class="item active">
@@ -60,12 +58,10 @@
 									</div>
 
 									<!-- Left and right controls -->
-									<a class="left carousel-control"
-										href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
+									<a class="left carousel-control" href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
 										data-slide="prev"> <span
 										class="glyphicon glyphicon-chevron-left"></span>
-									</a> <a class="right carousel-control"
-										href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
+									</a> <a class="right carousel-control" href="#carousel_${vistaPublicacion.publicacion.idPublicacion }"
 										data-slide="next"> <span
 										class="glyphicon glyphicon-chevron-right"></span>
 									</a>
@@ -73,11 +69,8 @@
 							</div>
 							<div class="col-md-6">
 								<h3>${vistaPublicacion.publicacion.nombre}</h3>
-								<br>							
-								
-								<%@ include file="PublicacionDetalleGralListado.jsp"%>
-								
-								
+								<hr />
+								{datos de la publicacion} {puntuacion}
 								<div class="row container">
 									<a class="btn btn-info"
 										href="PublicacionServlet?accionGET=VerPublicacion&idPublicacion=${vistaPublicacion.publicacion.idPublicacion}">Ver

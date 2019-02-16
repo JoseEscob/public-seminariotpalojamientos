@@ -19,6 +19,9 @@ public class Usuarios implements Connectable<Usuario> {
 			+ cCampo.sql_STR_TO_DATE_YmdHiS + ", fechaUltConexion = " + cCampo.sql_STR_TO_DATE_YmdHiS
 			+ ", fechaUltModificado= " + cCampo.sql_STR_TO_DATE_YmdHiS + ", verificado=?, habilitado=?, nroTelefono=?";
 
+	private final static String camposUpdateDB = "nombre=?, apellido=?, dni=?, mail=?, fechaNac=?"
+			+ ", sexo=?, verificado=?, habilitado=?, nroTelefono=?";
+
 	private static HashMap<String, String> queries = new HashMap<String, String>() {
 		/**
 		 * 
@@ -30,6 +33,7 @@ public class Usuarios implements Connectable<Usuario> {
 			put("insert", String.format("INSERT into usuarios SET  %s , idUsuario=?", camposInsertIntoDB));
 			put("count", "select count(*) as cantidad from usuarios");
 			put("update", String.format("update usuarios SET  %s where idUsuario=?", camposInsertIntoDB));
+			put("updateUsuario", String.format("update usuarios SET %s where idUsuario=?", camposUpdateDB));
 			put("get", "select * from usuarios where idUsuario=?");
 			put("like", "");
 			put("updateFechaUltConexion", String.format("update usuarios set fechaUltConexion= %s  where idUsuario=?",
@@ -184,6 +188,30 @@ public class Usuarios implements Connectable<Usuario> {
 		return this.update(u);
 	}
 
+	public boolean updateUsuario(Usuario obj) {
+		if (obj == null) {
+			return false;
+		}
+		cn = new Conexion();
+		boolean correcto = false;
+		try {
+			PreparedStatement ps = cn.Open().prepareStatement(queries.get("updateUsuario"));
+
+			ps = writePs_UsuarioUPDATE(obj, ps);
+
+			LOG.info("UPDATE Usuarios: " + ps.toString());
+			if (ps.executeUpdate() != 0)
+				correcto = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.info(e.getMessage());
+		} finally {
+			cn.close();
+		}
+		return correcto;
+	}
+
 	public boolean updateFechaUltConexion(Usuario obj) {
 		if (obj == null) {
 			return false;
@@ -226,7 +254,7 @@ public class Usuarios implements Connectable<Usuario> {
 		}
 		return correcto;
 	}
-	
+
 	public boolean updateClave(int idUsuario, String password) {
 		cn = new Conexion();
 		boolean correcto = false;
@@ -245,7 +273,7 @@ public class Usuarios implements Connectable<Usuario> {
 		}
 		return correcto;
 	}
-	
+
 	public boolean updateVerificado(int idUsuario, boolean verificado) {
 		cn = new Conexion();
 		boolean correcto = false;
@@ -317,6 +345,21 @@ public class Usuarios implements Connectable<Usuario> {
 		ps.setBoolean(16, obj.isHabilitado());
 		ps.setString(17, obj.getNroTelefono());
 		ps.setInt(18, obj.getIdUsuario());
+		return ps;
+	}
+
+	private PreparedStatement writePs_UsuarioUPDATE(Usuario obj, PreparedStatement ps) throws SQLException {
+		ps.setString(1, obj.getNombre());
+		ps.setString(2, obj.getApellido());
+		ps.setString(3, obj.getDni());
+		ps.setString(4, obj.getMail());
+		ps.setDate(5, obj.getFechaNac());
+		ps.setBoolean(6, obj.isSexo());
+		// ps.setString(7, obj.getFechaUltModificado());
+		ps.setBoolean(7, obj.isVerificado());
+		ps.setBoolean(8, obj.isHabilitado());
+		ps.setString(9, obj.getNroTelefono());
+		ps.setInt(10, obj.getIdUsuario());
 		return ps;
 	}
 

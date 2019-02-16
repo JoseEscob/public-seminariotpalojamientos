@@ -18,7 +18,6 @@ import extra.InfoMessage;
 import extra.LOG;
 import extra.Utilitario;
 import extra.ORSesion;
-import modelo.Publicacion;
 import modelo.Usuario;
 
 /**
@@ -69,8 +68,8 @@ public class UsuarioServlet extends HttpServlet {
 			case "nuevo":
 				altaUsuario(request, response);
 				break;
-			case "editar":
-				// buscarPorNombre(request, response);
+			case "modificarDatosUsuario":
+				modificarDatosUsuario(request, response);
 				break;
 			case "verInfoUsuario":
 				verInfoUsuario(request, response);
@@ -79,6 +78,63 @@ public class UsuarioServlet extends HttpServlet {
 				cambiarClaveUsuario(request, response);
 				break;
 			}
+		}
+	}
+
+	private void modificarDatosUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		try {
+			// 1- Obtiene valores del JSP ya validados
+			String[] listaNombreParametrosUsuario = { "nombre", "apellido", "mail", "dni", "fechaNac", "rdbSexo" };
+			String[] listaNombreCampos = { "nombre", "apellido", "mail", "dni", "fecha Nacimiento", "Sexo" };
+
+			Utilitario.validarParametrosObligatoriosDeUnJSP(request, listaNombreParametrosUsuario, listaNombreCampos);
+
+			Usuario objUsuario = ORSesion.getUsuarioBySession(request);
+
+			String nombre = request.getParameter("nombre").toString();
+			String apellido = request.getParameter("apellido").toString();
+			String mail = request.getParameter("mail").toString();
+			String dni = request.getParameter("dni").toString();
+			// java.sql.Date fechaNac =
+			// java.sql.Date.valueOf(request.getParameter("fechaNac").toString());
+			boolean sexo = Boolean.valueOf(request.getParameter("rdbSexo"));
+
+			// if (!Utilitario.esMayorDeEdad(fechaNac.toString())) {
+			// throw new ValidacionException("El usuario debe ser mayor de edad");
+			// }
+
+			String nroTelefono = null;
+			if (request.getParameter("nroTelefono") != null)
+				nroTelefono = request.getParameter("nroTelefono").toString();
+
+			// 2- guardar informacion validada
+			objUsuario.setNombre(nombre);
+			objUsuario.setApellido(apellido);
+			objUsuario.setMail(mail);
+			objUsuario.setDni(dni);
+			// objUsuario.setFechaNac(fechaNac);
+			objUsuario.setSexo(sexo);
+			objUsuario.setNroTelefono(nroTelefono);
+			// ByDefault
+			String currentDateString = Utilitario.getCurrentDateAndHoursString();
+			objUsuario.setFechaUltModificado(currentDateString);
+			objUsuario.setVerificado(false);
+			// 3- verificar correcto almacenamiento en DB
+			if (!usuarioDAO.updateUsuario(objUsuario))
+				throw new ValidacionException("SQL: Ocurrió un error al actualizar los datos del usuario");
+
+			// 4- EXITO
+			message = "Se modificaron los datos con éxito";
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			paginaJsp = "UsuarioServlet?accionGET=MiPerfil";
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
 		}
 	}
 
@@ -361,15 +417,16 @@ public class UsuarioServlet extends HttpServlet {
 		try {
 			// 0- Verificar que esté logueado
 			Usuario usuario = ORSesion.getUsuarioBySession(request);
-			if(usuario == null)
+			if (usuario == null)
 				throw new ServidorException("No se pudo encontrar la sesion del usuario.");
 			int idUsuarioLogueado = usuario.getIdUsuario();
-			
+
 			// 1- recuperar valores del request y los DAOs
-			if(request.getParameter("claveActual") == null)
+			if (request.getParameter("claveActual") == null)
 				throw new ServidorException("El parametro 'Contraseña Actual' no pudo llegar al servidor.");
-			if(request.getParameter("claveActual2") == null)
-				throw new ServidorException("El parametro 'Vuelva a ingresar la contraseña actual' no pudo llegar al servidor.");
+			if (request.getParameter("claveActual2") == null)
+				throw new ServidorException(
+						"El parametro 'Vuelva a ingresar la contraseña actual' no pudo llegar al servidor.");
 			if (request.getParameter("claveUno") == null) {
 				throw new ServidorException("El parametro 'Nueva Contraseña' no pudo llegar al servidor.");
 			}
@@ -380,20 +437,22 @@ public class UsuarioServlet extends HttpServlet {
 			String claveDos = request.getParameter("claveDos").toString();
 			String actualUno = request.getParameter("claveActual").toString();
 			String actualDos = request.getParameter("claveActual2").toString();
-			
+
 			// 2- Validar existencia del usuario
 			if (!claveUno.equals(claveDos)) {
 				throw new ValidacionException("Las claves NUEVAS ingresadas no coinciden.");
 			}
-			if(!actualUno.equals(actualDos))
+			if (!actualUno.equals(actualDos))
 				throw new ValidacionException("Las claves ACTUALES ingresadas no coinciden.");
-			
-			if(!actualUno.equals(usuario.getClave()) || !actualDos.equals(usuario.getClave()))
+
+			if (!actualUno.equals(usuario.getClave()) || !actualDos.equals(usuario.getClave()))
 				throw new ValidacionException("La clave ACTUAL no es correcta.");
-			
-			if(actualUno.equals(claveUno) || actualUno.equals(claveDos) || actualDos.equals(claveUno) || actualDos.equals(claveDos) || claveUno.equals(usuario.getClave()) || claveDos.equals(usuario.getClave()))
+
+			if (actualUno.equals(claveUno) || actualUno.equals(claveDos) || actualDos.equals(claveUno)
+					|| actualDos.equals(claveDos) || claveUno.equals(usuario.getClave())
+					|| claveDos.equals(usuario.getClave()))
 				throw new ValidacionException("La clave NUEVA debe ser distinta a la ACTUAL.");
-			
+
 			// 3- Actualizar en DB
 			if (!usuarioDAO.updateClave(idUsuarioLogueado, claveUno))
 				throw new ServidorException("SQL error al actualizar la clave del usuario con ID " + idUsuarioLogueado);

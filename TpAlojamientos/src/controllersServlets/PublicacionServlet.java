@@ -672,6 +672,7 @@ public class PublicacionServlet extends HttpServlet {
 	private void verPublicaciones(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException, CargaViewException {
 		int cantidadComentarios = 0;
+		int cantPublicaciones = publicacionDAO.getCount();
 		PaginacionView pagination = PaginacionView.crearPaginacion(request.getParameter("Pagina"),
 				publicacionDAO.getCount());
 
@@ -688,7 +689,7 @@ public class PublicacionServlet extends HttpServlet {
 				Publicacion objPublicacion = publicacionDAO.getObjectByID(idPublicacion);
 				if (objPublicacion != null) {
 					request.setAttribute("publicacion", objPublicacion);
-
+					objPublicacion.iniciarYcargarObjPublicacionInfo();
 					vistaPublicacion.setPublicacion(objPublicacion);
 					// Buscamos los datos del usuario de la publicacion
 					Usuario objUsuario = usuarioDAO.getUsuarioById(objPublicacion.getIdUsuario());
@@ -711,6 +712,7 @@ public class PublicacionServlet extends HttpServlet {
 		} // Validaciones del else?
 		request.setAttribute("publicaciones", listaPublicacionView);
 		request.setAttribute("paginacion", pagination);
+		request.setAttribute("cantPublicaciones", cantPublicaciones);
 
 		paginaJsp = "/Publicaciones.jsp";
 		request.getRequestDispatcher(paginaJsp).forward(request, response);

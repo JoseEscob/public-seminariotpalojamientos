@@ -412,10 +412,9 @@
 							<c:if test="${objTipoServicio.idTipoServicio eq 1}">
 								<div class="form-group">
 									<c:choose>
-										<c:when
-											test="${objTipoServicio.idServicio eq objPublicacion.idTipoAlojamiento}">
+										<c:when test="${false}">
 											<label class="checkbox"><input type="checkbox"
-												checked name="chklistServicios"
+												name="chklistServicios" checked
 												value="${objTipoServicio.idServicio}">${objTipoServicio.descripcion}</label>
 										</c:when>
 										<c:otherwise>

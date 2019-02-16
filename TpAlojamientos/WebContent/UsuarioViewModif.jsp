@@ -10,14 +10,13 @@
 </head>
 <body>
 	<%@ include file="Banner.jsp"%>
-	<div class="row">
-		<%@ include file="mostrarInfoMessage.jsp"%>
-	</div>
-
 	<div class="container">
 		<h2>Perfil del Usuario</h2>
 		<hr />
 		<!--Horizantal line divider  <div class="page-header"/> -->
+		<div class="row">
+			<%@ include file="mostrarInfoMessage.jsp"%>
+		</div>
 	</div>
 
 
@@ -25,8 +24,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h3>Datos Personales</h3>
-				<form class="form-horizontal" action="">
-
+				<form class="form-horizontal" action="UsuarioServlet" method="post">
 					<div class="form-group ">
 						<div class="col-xs-8">
 							<label class="control-label col-xs-7">Fecha última
@@ -77,7 +75,7 @@
 						<div class="col-xs-9">
 							<input type="text" name="nombre" class="form-control"
 								value="${objUsuario.nombre}"
-								onkeypress="return soloLetras(event)" required>
+								onkeypress="return soloLetras(event)" maxlength="50" required>
 						</div>
 					</div>
 					<div class="form-group">
@@ -85,7 +83,7 @@
 						<div class="col-xs-9">
 							<input type="text" name="apellido" class="form-control"
 								onkeypress="return soloLetras(event)"
-								value="${objUsuario.apellido}" required>
+								value="${objUsuario.apellido}" maxlength="50" required>
 						</div>
 					</div>
 					<div class="form-group">
@@ -93,7 +91,7 @@
 						<div class="col-sm-9">
 							<input type="text" name="dni" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="${objUsuario.dni}" required>
+								value="${objUsuario.dni}" maxlength="10" required>
 						</div>
 					</div>
 					<div class="form-group">
@@ -118,7 +116,7 @@
 						<div class="col-sm-9">
 							<input type="text" name="nroTelefono" class="form-control"
 								onkeypress="return soloNros(event)" onpaste="return false"
-								value="${objUsuario.nroTelefono}">
+								value="${objUsuario.nroTelefono}" maxlength="20">
 						</div>
 					</div>
 					<div class="form-group">
@@ -143,20 +141,24 @@
 					</div>
 
 					<div class="form-group">
-						<div class="col-sm-10" align="right">
-							<button class="btn btn-info">Modificar Datos</button>
-						</div>
-
-						<div class="col-sm-10" align="right">
-							<a class="btn btn-default" data-toggle="modal"
-								data-target="#formCambioClave"> <span
-								class="glyphicon glyphicon-cog"></span> Cambiar contraseña
-							</a>
+						<div class="col-md-12" align="center">
+							<div>
+								<input type="hidden" name="accionPOST"
+									value="modificarDatosUsuario">
+							</div>
+							<div>
+								<input type="submit" class="btn btn-info"
+									name="btnModificarDatosUsuario" value="Modificar Datos">
+							</div>
 						</div>
 					</div>
 
 				</form>
+
+
+
 			</div>
+
 
 			<div class="col-md-6">
 				<h3>Foto del Usuario</h3>
@@ -191,7 +193,14 @@
 						</form>
 					</div>
 				</div>
-
+				<div class="form-group">
+					<div class="col-sm-12" align="center">
+						<a class="btn btn-default" data-toggle="modal"
+							data-target="#formCambioClave"> <span
+							class="glyphicon glyphicon-cog"></span> Cambiar contraseña
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 

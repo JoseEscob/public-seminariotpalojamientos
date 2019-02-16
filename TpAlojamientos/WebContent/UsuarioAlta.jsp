@@ -128,7 +128,7 @@
 								<div class="input-group">
 									<label class="label">Nro de Teléfono</label> <input
 										class="input--style-4" onkeypress="return soloNros(event)"
-										type="text" name="nroTelefono">
+										type="text" name="nroTelefono" maxlength="20">
 								</div>
 							</div>
 						</div>
