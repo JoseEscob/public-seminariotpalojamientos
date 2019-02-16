@@ -75,6 +75,9 @@ public class UsuarioServlet extends HttpServlet {
 			case "verInfoUsuario":
 				verInfoUsuario(request, response);
 				break;
+			case "cambiarClaveUsuario":
+				cambiarClaveUsuario(request, response);
+				break;
 			}
 		}
 	}
@@ -346,6 +349,45 @@ public class UsuarioServlet extends HttpServlet {
 			objInfoMessage = new InfoMessage(false, e.getMessage());
 		} finally {
 			paginaJsp = "UsuarioServlet?accionGET=admListaUsuarios";
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
+		}
+	}
+
+	private void cambiarClaveUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String message = null;
+		InfoMessage objInfoMessage = new InfoMessage();
+		try {
+			// 0- Verificar que esté logueado
+			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			// 1- recuperar valores del request y los DAOs
+			if (request.getParameter("claveUno") == null) {
+				throw new ServidorException("El parámetro 'verificado' es null");
+			}
+			if (request.getParameter("claveDos") == null) {
+				throw new ServidorException("El ID del usuario es null");
+			}
+			String claveUno = request.getParameter("claveUno").toString();
+			String claveDos = request.getParameter("claveDos").toString();
+			// 2- Validar existencia del usuario
+			if (!claveUno.equals(claveDos)) {
+				throw new ValidacionException("Las claves son diferentes. Por favor revisar que sean identicas");
+			}
+			// 3- Actualizar en DB
+			if (!usuarioDAO.updateClave(idUsuarioLogueado, claveUno))
+				throw new ServidorException("SQL error al actualizar la clave del usuario con ID " + idUsuarioLogueado);
+
+			message = "Se cambió la clave con éxito";
+
+			if (request.getAttribute("objInfoMessage") == null) {
+
+				objInfoMessage = new InfoMessage(true, message);
+			}
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			paginaJsp = "UsuarioServlet?accionGET=MiPerfil";
 			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
 			response.sendRedirect(paginaJsp);
 		}
