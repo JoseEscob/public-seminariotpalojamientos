@@ -287,7 +287,7 @@ public class UsuarioServlet extends HttpServlet {
 				if (!objUsuario.isAdmin())
 					paginaJsp = "/Inicio.jsp";
 				else {
-					paginaJsp = "/InicioAdmin.jsp";
+					paginaJsp = "/InicioAdministrador.jsp";
 				}
 			}
 

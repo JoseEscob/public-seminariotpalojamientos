@@ -19,7 +19,8 @@ public class Comentarios implements Connectable<Comentario> {
 
 		{
 			put("all", "select * from comentarios");
-			put("insert", "insert into comentarios values(?,?,?,?,?,default)");
+			put("insert",
+					"insert into comentarios set descripcion=?, puntaje=?, fechaComentario=?, habilitado=?, idUsuario=?, idPublicacion=?");
 			put("count", "select count(*) as cantidad from comentarios");
 			put("update",
 					"update comentarios set descripcion=?, puntaje=?, fechaComentario=?, habilitado=? where idUsuario=? and idPublicacion=?");
@@ -134,12 +135,18 @@ public class Comentarios implements Connectable<Comentario> {
 				return false;
 
 			PreparedStatement ps = cn.Open().prepareStatement(queries.get("insert"));
-			ps.setInt(1, obj.getIdUsuario());
-			ps.setInt(2, obj.getIdPublicacion());
-			ps.setString(3, obj.getDescripcion());
-			ps.setDate(4, obj.getFechaComentario());
-			ps.setInt(5, obj.getPuntaje());
-			ps.setBoolean(6, obj.isHabilitado());
+			// ps.setInt(1, obj.getIdUsuario());
+			// ps.setInt(2, obj.getIdPublicacion());
+			// ps.setString(3, obj.getDescripcion());
+			// ps.setDate(4, obj.getFechaComentario());
+			// ps.setInt(5, obj.getPuntaje());
+			// ps.setBoolean(6, obj.isHabilitado());
+			ps.setString(1, obj.getDescripcion());
+			ps.setInt(2, obj.getPuntaje());
+			ps.setDate(3, obj.getFechaComentario());
+			ps.setBoolean(4, obj.isHabilitado());
+			ps.setInt(5, obj.getIdUsuario());
+			ps.setInt(6, obj.getIdPublicacion());
 			ps.executeUpdate();
 			correcto = true;
 

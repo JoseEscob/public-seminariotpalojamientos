@@ -33,11 +33,30 @@
 			class="d-inline-block align-top" alt="Home"> OwnerRental
 		</a> </nav>-->
 		<div class="navbar-header">
-			<a class="navbar-brand" href="Inicio.jsp"
-				title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;">
-				<span><img src="imagenes/icon-home.jpg" width="30"
-					height="30" class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
-			</a>
+			<c:choose>
+				<c:when test="${sessionScope.sessionUser.admin}">
+					<a class="navbar-brand" href="InicioAdministrador.jsp"
+						title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;">
+						<span><img src="imagenes/icon-home.jpg" width="30"
+							height="30" class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
+					</a>
+				</c:when>
+				<c:when test="${empty sessionScope.sessionUser}">
+					<a class="navbar-brand" href="IniciarSesion.jsp"
+						title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;">
+						<span><img src="imagenes/icon-home.jpg" width="30"
+							height="30" class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
+					</a>
+				</c:when>
+				<c:otherwise>
+					<a class="navbar-brand" href="Inicio.jsp"
+						title="Ir a la página de Inicio" style="color: MEDIUMTURQUOISE;">
+						<span><img src="imagenes/icon-home.jpg" width="30"
+							height="30" class="d-inline-block align-top" alt="Home"></span>&nbsp;OwnerRental
+					</a>
+				</c:otherwise>
+
+			</c:choose>
 		</div>
 
 		<ul class="nav navbar-nav">

@@ -1,6 +1,7 @@
 package controllersServlets;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 
 import controladoresDAO.Partidos;
 import controladoresDAO.Comentarios;
+import controladoresDAO.Comprobantes;
 import controladoresDAO.Favoritos;
 import controladoresDAO.Localidades;
 import controladoresDAO.Publicaciones;
@@ -36,6 +38,7 @@ import extra.LOG;
 import extra.ORSesion;
 import extra.Utilitario;
 import modelo.Comentario;
+import modelo.Comprobante;
 import modelo.Favorito;
 import modelo.Imagen;
 import modelo.Localidad;
@@ -64,6 +67,8 @@ public class PublicacionServlet extends HttpServlet {
 	private final Favoritos favoritosDAO = new Favoritos();
 	private final TiposAlojamientos tipoAlojamientoDAO = new TiposAlojamientos();
 	private final Servicios serviciosDAO = new Servicios();
+
+	private final Comprobantes comprobantesDAO = new Comprobantes();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -175,7 +180,8 @@ public class PublicacionServlet extends HttpServlet {
 			case "updatePublicacion":
 				updatePublicacion(request, response);
 				break;
-			case "update":
+			case "guardarComentarioUsuario":
+				guardarComentarioUsuario(request, response);
 				break;
 			case "delete":
 				break;
@@ -655,7 +661,11 @@ public class PublicacionServlet extends HttpServlet {
 			ArrayList<Imagen> listImagenes = new ArrayList<Imagen>();
 			listImagenes = imagenDAO.getAllByIdPublicacion(idPublicacion);
 			vistaPublicacion.setImagenes(listImagenes);
-			// request.setAttribute("vistaPublicacion", vistaPublicacion);
+			boolean tieneReservaVigente = comprobantesDAO.tieneReservaIdUsuarioHuesped(idUsuarioLogueado);
+			// validar cantidad de comentarios ya realizados
+			boolean puedeHacerComentario = tieneReservaVigente;
+
+			request.setAttribute("puedeHacerComentario", puedeHacerComentario);
 			request.getSession().setAttribute("vistaPublicacion", vistaPublicacion);
 			// request.setAttribute("objLocalidad", objLocalidad);
 
@@ -1065,5 +1075,67 @@ public class PublicacionServlet extends HttpServlet {
 	private void buscarPublicaciones(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		// Modulo de busqueda
+	}
+
+	private void guardarComentarioUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		InfoMessage objInfoMessage = new InfoMessage();
+		String message = null;
+		int idPublicacion = 0;
+		try {
+			// 1- recuperar valores del formulario JSP y validar información obtenida
+			if (!ORSesion.sesionActiva(request)) {
+				throw new ServidorException("No se inició la sesión del usuario");
+			}
+
+			if (request.getParameter("idPublicacion") == null)
+				throw new ServidorException("Valor null para el parámetro: ID Publicación");
+
+			if (request.getParameter("cmbPuntaje") == null)
+				throw new ServidorException("Valor null para el parámetro: cmbPuntaje");
+
+			if (request.getParameter("comentarioDescripcion") == null)
+				throw new ServidorException("Valor null para el parámetro: comentarioDescripcion");
+
+			int idUsuarioLogueado = ORSesion.getUsuarioBySession(request).getIdUsuario();
+			idPublicacion = Integer.parseInt(request.getParameter("idPublicacion"));
+			int puntaje = Integer.parseInt(request.getParameter("cmbPuntaje"));
+			String descripcion = request.getParameter("comentarioDescripcion").toString();
+			Date fechaComentario = Utilitario.getCurrentDateAndHoursSQL();
+			// 2- Validar información
+			if (descripcion.length() > 300)
+				throw new ValidacionException("Se superó el límite de caracteres de un comentario");
+
+			// 2.1- validar existencia de reserva
+			boolean tieneReservaVigente = comprobantesDAO.tieneReservaIdUsuarioHuesped(idUsuarioLogueado);
+			if (!tieneReservaVigente)
+				throw new ValidacionException("El usuario no tiene una reserva vigente para realizar el comentario");
+			// 3- Guardar en un objeto para ser insertado en DB
+			Comentario objComentario = new Comentario();
+			objComentario.setIdUsuario(idUsuarioLogueado);
+			objComentario.setIdPublicacion(idPublicacion);
+			objComentario.setDescripcion(descripcion);
+			objComentario.setFechaComentario(fechaComentario);
+			objComentario.setPuntaje(puntaje);
+			// 4- Guardar registro en DB y validar respuesta
+			if (!comentarioDAO.insert(objComentario))
+				throw new ValidacionException("SQL no se pudo guardar el registro del comentario");
+
+			float puntuacionPromedio = comentarioDAO.getPuntuacionPromedioByIdPublicacion(idPublicacion);
+			if (!publicacionDAO.updatePuntuacion(idPublicacion, puntuacionPromedio))
+				throw new ValidacionException(
+						"SQL no se pudo actualizar la puntuación de la publicación con ID " + idPublicacion);
+			// 5- EXITO
+			message = "Se guardó su devolución. Puede consultarlo en los comentarios";
+			LOG.info(message);
+			objInfoMessage = new InfoMessage(true, message);
+		} catch (Exception e) {
+			objInfoMessage = new InfoMessage(false, e.getMessage());
+		} finally {
+			// 5- Informar estado en interfaz (jsp)
+			paginaJsp = "PublicacionServlet?accionGET=VerPublicacion&idPublicacion=" + idPublicacion;
+			request.getSession().setAttribute("objInfoMessage", objInfoMessage);
+			response.sendRedirect(paginaJsp);
+		}
 	}
 }

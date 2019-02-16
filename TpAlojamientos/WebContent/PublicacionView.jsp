@@ -185,9 +185,10 @@
 								</form>
 							</c:when>
 							<c:otherwise>
-								<button class="btn btn-default"
+								<!-- <button class="btn btn-default"
 									title="Esta publicación aún no tiene comentarios. Dejá el tuyo">Dejar
 									un Comentario</button>
+								 -->
 							</c:otherwise>
 						</c:choose>
 					</div>
@@ -258,13 +259,17 @@
 				<div class="row col-md-12">
 					<br>
 				</div>
+
 				<div class="row col-md-12" align="center">
-					<a class="btn btn-warning" data-toggle="modal"
-						data-target="#formAltaComentario"> <span
-						class="glyphicon glyphicon-envelope"></span> Hacer un comentario/
-						devolución
-					</a>
+					<c:if test="${puedeHacerComentario eq true }">
+						<a class="btn btn-warning" data-toggle="modal"
+							data-target="#formAltaComentario"> <span
+							class="glyphicon glyphicon-envelope"></span> Hacer un comentario/
+							devolución
+						</a>
+					</c:if>
 				</div>
+
 				<div class="row col-md-12">
 					<br>
 				</div>

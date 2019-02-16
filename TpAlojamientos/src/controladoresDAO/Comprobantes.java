@@ -277,4 +277,41 @@ public class Comprobantes implements Connectable<Comprobante> {
 
 		return listaFechasReserva;
 	}
+
+	public boolean tieneReservaIdUsuarioHuespedDentroDeFechasReserva(int idUsuarioHuesped) {
+		java.sql.Date fechaActualSQL = Utilitario.getCurrentDateAndHoursSQL();
+		boolean tieneReservaVigente = false;
+
+		for (Comprobante item : getAll()) {
+			if (item.getIdUsuarioHuesped() == idUsuarioHuesped) {
+				if (item.getFechaReservaFin().equals(fechaActualSQL)
+						|| item.getFechaReservaFin().after(fechaActualSQL)) {
+					if (item.getFechaReservaInicio().equals(fechaActualSQL)
+							|| item.getFechaReservaInicio().before(fechaActualSQL))
+						tieneReservaVigente = true;
+				}
+			}
+
+		}
+
+		return tieneReservaVigente;
+	}
+
+	public boolean tieneReservaIdUsuarioHuesped(int idUsuarioHuesped) {
+		java.sql.Date fechaActualSQL = Utilitario.getCurrentDateAndHoursSQL();
+		boolean tieneReservaVigente = false;
+
+		for (Comprobante item : getAll()) {
+			if (item.getIdUsuarioHuesped() == idUsuarioHuesped) {
+
+				if (item.getFechaReservaInicio().equals(fechaActualSQL)
+						|| item.getFechaReservaInicio().before(fechaActualSQL))
+					tieneReservaVigente = true;
+
+			}
+
+		}
+
+		return tieneReservaVigente;
+	}
 }
